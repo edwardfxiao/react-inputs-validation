@@ -1,0 +1,22 @@
+{
+  "presets": [
+    "es2015",
+    "stage-0",
+    "react"
+  ],
+  "env":
+  {
+    "development":
+    {
+
+    },
+    "production":
+    {
+
+    },
+    "lib":
+    {
+      "plugins": ["css-modules-transform"]
+    },
+  }
+}

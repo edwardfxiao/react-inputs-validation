@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+  font-size: 100%;
+}
+
+.radiobox__wrapper label:before{
+  border-color: #000;
+}
+.radiobox__wrapper.checked label:before{
+  background-color: #000!important;
+}

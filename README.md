@@ -34,14 +34,16 @@
 
 ### validationOption props
 
-|  Props 	    |   	    |  Type 	|  Description 	|  Default 	|
-|---	        |---	    |---	|---	|---	|
-|name   	    |Optional |   	|   	|   	|
-|check   	    |Optional |   	|   	|   	|
-|required   	|Optional |   	|   	|   	|
-|showMsg      |Optional |   	|   	|   	|
-|msgOnSuccess |Optional |   	|   	|   	|
-|msgOnError   |Optional |   	|   	|   	|
+
+|  Props       |          |  Type  |  Description                                                                 |  Default|
+|---           |---       |---     |---                                                                           |---      |
+|name          |*Opt.*  |String |To display in Error message. i.e Please select a ${name}.                                                             |none       |
+|check         |*Opt.*  |Bool | To determin if you need to validate.                                                    |none       |
+|required      |*Opt.*  |Bool   | To determin if it is required.        |none       |
+|showMsg       |*Opt.*  |Bool   | Display the error message or not.  |none    |
+|msgOnSuccess  |*Opt.*  |String  |Show the success message if it is provied.|none    |
+|msgOnError    |*Opt.*  |String  |Show your custom error message no matter what when it has error if it is provied. |none    |
+
 
 
 ```js

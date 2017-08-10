@@ -3,6 +3,7 @@
 # Event & Usage
 ### Select
 
+
 |  Props                            |          |  Type                |  Description                                                                                               |  Default|
 |---                                |---       |---                   |---                                                                                                         |---      |
 |**options**                      |**Req.**|**Array of Object(s)**    |select option list [{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]                                 |[]       |
@@ -10,8 +11,8 @@
 |name                             |*Opt.*  |String                    |                                                                                                            |""       |
 |value                            |*Opt.*  |String                    |                                                                                                            |""       |
 |disabled                         |*Opt.*  |Bool                      |                                                                                                            |false    |
-|**validate**                     |**Opt.**|**Bool**                  |If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.                                                                                                            |false    |
-|**validationgCallback**          |**Opt.**|**Func**                  |Return the validation result which is a bool value                                                                                                         |**none**     |
+|**validate**                     |**Opt.**|**Bool**                  |**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.**                                                                                                            |**false**    |
+|**validationgCallback**          |**Opt.**|**Func**                  |**Return the validation result which is a bool value**                                                                                                         |**none**     |
 |classNameSelect                  |*Opt.*  |String                    |                                                                                                            |""       |
 |classNameWrapper                 |*Opt.*  |String                    |                                                                                                            |""       |
 |classNameContainer               |*Opt.*  |String                    |                                                                                                            |""       |

@@ -2,33 +2,34 @@
 
 # Event & Usage
 ### Select
-|  Props                            |                 |  Type            |  Description                                                                                               |  Default|
-|---                                |---              |---               |---                                                                                                         |---      |
-|options                            |<h4>Required</h4>|Array of Object(s)|select option list [{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]                                 |[]       |
-|id                                 |Optional         |String            |                                                                                                            |""       |
-|name                               |Optional         |String            |                                                                                                            |""       |
-|value                              |Optional         |String            |                                                                                                            |""       |
-|disabled                           |Optional         |Bool              |                                                                                                            |false    |
-|<h4>validate</h4>                  |Optional         |Bool              |                                                                                                            |false    |
-|<h4>validationgCallback</h4>       |Optional         |Func              |                                                                                                            |none     |
-|classNameSelect                    |Optional         |String            |                                                                                                            |""       |
-|classNameWrapper                   |Optional         |String            |                                                                                                            |""       |
-|classNameContainer                 |Optional         |String            |                                                                                                            |""       |
-|classNameSelectOptionsContainer    |Optional         |String            |                                                                                                            |""       |
-|classNameSelectOptionsItem         |Optional         |String            |                                                                                                            |""       |
-|customStyleSelect                  |Optional         |Object            |                                                                                                            |{}       |
-|customStyleWrapper                 |Optional         |Object            |                                                                                                            |{}       |
-|customStyleContainer               |Optional         |Object            |                                                                                                            |{}       |
-|customStyleSelectOptionsContainer  |Optional         |Object            |                                                                                                            |{}       |
-|customStyleSelectOptionsItem       |Optional         |Object            |                                                                                                            |{}       |
-|<h4>onBlur</h4>                    |Optional         |Func              |                                                                                                            |none     |
-|<h4>onChange</h4>                  |Optional         |Func              |                                                                                                            |()=>{}   |
-|onFocus                            |Optional         |Func              |                                                                                                            |none     |
-|onClick                            |Optional         |Func              |                                                                                                            |none     |
-|locale                             |Optional         |String            |                                                                                                            |"en-US"  |
-|selectHtml                         |Optional         |String            |                                                                                                            |none     |
-|selectOptionsItemHtml              |Optional         |String            |                                                                                                            |none     |
-|<h3>validationOption</h3>          |<h4>Required</h4>|Object            |                                                                                                            |{}       |
+
+|  Props                          |             |  Type            |  Description                                                                                               |  Default|
+|---                              |---          |---               |---                                                                                                         |---      |
+|<h4>options</h4>                 |<h4>Req.</h4>|Array of Object(s)|select option list [{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]                                 |[]       |
+|id                               |Opt.         |String            |                                                                                                            |""       |
+|name                             |Opt.         |String            |                                                                                                            |""       |
+|value                            |Opt.         |String            |                                                                                                            |""       |
+|disabled                         |Opt.         |Bool              |                                                                                                            |false    |
+|<h4>validate</h4>                |Opt.         |Bool              |                                                                                                            |false    |
+|<h4>validationgCallback</h4>     |Opt.         |Func              |                                                                                                            |none     |
+|classNameSelect                  |Opt.         |String            |                                                                                                            |""       |
+|classNameWrapper                 |Opt.         |String            |                                                                                                            |""       |
+|classNameContainer               |Opt.         |String            |                                                                                                            |""       |
+|classNameSelectOptionsContainer  |Opt.         |String            |                                                                                                            |""       |
+|classNameSelectOptionsItem       |Opt.         |String            |                                                                                                            |""       |
+|customStyleSelect                |Opt.         |Object            |                                                                                                            |{}       |
+|customStyleWrapper               |Opt.         |Object            |                                                                                                            |{}       |
+|customStyleContainer             |Opt.         |Object            |                                                                                                            |{}       |
+|customStyleSelectOptionsContainer|Opt.         |Object            |                                                                                                            |{}       |
+|customStyleSelectOptionsItem     |Opt.         |Object            |                                                                                                            |{}       |
+|<h4>onBlur</h4>                  |Opt.         |Func              |                                                                                                            |none     |
+|<h4>onChange</h4>                |Opt.         |Func              |                                                                                                            |()=>{}   |
+|onFocus                          |Opt.         |Func              |                                                                                                            |none     |
+|onClick                          |Opt.         |Func              |                                                                                                            |none     |
+|locale                           |Opt.         |String            |                                                                                                            |"en-US"  |
+|selectHtml                       |Opt.         |String            |                                                                                                            |none     |
+|selectOptionsItemHtml            |Opt.         |String            |                                                                                                            |none     |
+|<h3>validationOption</h3>        |<h4>Req.</h4>|Object            |                                                                                                            |{}       |
 
 ### validationOption props
 

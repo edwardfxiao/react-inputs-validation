@@ -5,30 +5,30 @@
 
 |  Props 	                          |   	        |  Type 	|  Description 	|  Default 	|
 |---	                              |---	        |---	|---	|---	|
-|options   	                        |Required   	|String   	        |   	|   	|
-|id   	                            |Optional   	|String   	        |   	|   	|
-|value   	                          |Optional   	|Bool   	          |   	|   	|
-|disabled   	                      |Optional   	|Bool   	          |   	|   	|
-|validate   	                      |Optional   	|Optional   	      |   	|   	|
-|validationgCallback   	            |Optional   	|Array of Object(s) |   	|   	|
-|classNameSelect   	                |Optional   	|String   	        |   	|   	|
-|classNameWrapper   	              |Optional   	|String   	        |   	|   	|
-|classNameContainer   	            |Optional   	|String   	        |   	|   	|
-|classNameSelectOptionsContainer   	|Optional   	|String   	        |   	|   	|
-|classNameSelectOptionsItem   	    |Optional   	|String   	        |   	|   	|
-|customStyleSelect   	              |Optional   	|Object   	        |   	|   	|
-|customStyleWrapper   	            |Optional   	|Object   	        |   	|   	|
-|customStyleContainer   	          |Optional   	|Object   	        |   	|   	|
-|customStyleSelectOptionsContainer  |Optional   	|Object   	        |   	|   	|
-|customStyleSelectOptionsItem   	  |Optional   	|Object   	        |   	|   	|
-|onBlur   	                        |Required   	|Func   	          |   	|   	|
-|onChange   	                      |Required   	|Func   	          |   	|   	|
-|onFocus   	                        |Optional   	|Func   	          |   	|   	|
-|onClick   	                        |Optional   	|Func   	          |   	|   	|
-|locale   	                        |Optional   	|String   	        |   	|   	|
-|selectHtml   	                    |Optional   	|String   	        |   	|   	|
-|selectOptionsItemHtml   	          |Optional   	|String   	        |   	|   	|
-|<h3>validationOption</h3>   	      |Required   	|Object   	        |   	|   	|
+|options   	                        |Required   	|Array of Object(s) |   	|[]   	|
+|id   	                            |Optional   	|String   	        |   	|none   	|
+|value   	                          |Optional   	|Bool   	          |   	|""   	|
+|disabled   	                      |Optional   	|Bool   	          |   	|false   	|
+|validate   	                      |Optional   	|Optional   	      |   	|false   	|
+|validationgCallback   	            |Optional   	|Func               |   	|none   	|
+|classNameSelect   	                |Optional   	|String   	        |   	|""   	|
+|classNameWrapper   	              |Optional   	|String   	        |   	|""   	|
+|classNameContainer   	            |Optional   	|String   	        |   	|""   	|
+|classNameSelectOptionsContainer   	|Optional   	|String   	        |   	|""   	|
+|classNameSelectOptionsItem   	    |Optional   	|String   	        |   	|""   	|
+|customStyleSelect   	              |Optional   	|Object   	        |   	|{}   	|
+|customStyleWrapper   	            |Optional   	|Object   	        |   	|{}   	|
+|customStyleContainer   	          |Optional   	|Object   	        |   	|{}   	|
+|customStyleSelectOptionsContainer  |Optional   	|Object   	        |   	|{}   	|
+|customStyleSelectOptionsItem   	  |Optional   	|Object   	        |   	|{}   	|
+|onBlur   	                        |Optional   	|Func   	          |   	|none   	|
+|onChange   	                      |Optional   	|Func   	          |   	|()=>{}   	|
+|onFocus   	                        |Optional   	|Func   	          |   	|none   	|
+|onClick   	                        |Optional   	|Func   	          |   	|none   	|
+|locale   	                        |Optional   	|String   	        |   	|"en-US"   	|
+|selectHtml   	                    |Optional   	|String   	        |   	|none   	|
+|selectOptionsItemHtml   	          |Optional   	|String   	        |   	|none   	|
+|<h3>validationOption</h3>   	      |Required   	|Object   	        |   	|{}   	|
 
 ### validationOption props
 

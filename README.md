@@ -5,7 +5,7 @@
 
 |  Props                          |             |  Type            |  Description                                                                                               |  Default|
 |---                              |---          |---               |---                                                                                                         |---      |
-|<h4>options</h4>                 |<h4>Req.</h4>|Array of Object(s)|select option list [{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]                                 |[]       |
+|`options`                 |<h4>Req.</h4>|Array of Object(s)|select option list [{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]                                 |[]       |
 |id                               |Opt.         |String            |                                                                                                            |""       |
 |name                             |Opt.         |String            |                                                                                                            |""       |
 |value                            |Opt.         |String            |                                                                                                            |""       |

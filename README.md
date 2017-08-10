@@ -5,32 +5,31 @@
 
 |  Props                          |             |  Type            |  Description                                                                                               |  Default|
 |---                              |---          |---               |---                                                                                                         |---      |
-|`options`                 |<h4>Req.</h4>|Array of Object(s)|select option list [{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]                                 |[]       |
-|id                               |Opt.         |String            |                                                                                                            |""       |
-|name                             |Opt.         |String            |                                                                                                            |""       |
-|value                            |Opt.         |String            |                                                                                                            |""       |
-|disabled                         |Opt.         |Bool              |                                                                                                            |false    |
-|<h4>validate</h4>                |Opt.         |Bool              |                                                                                                            |false    |
-|<h4>validationgCallback</h4>     |Opt.         |Func              |                                                                                                            |none     |
-|classNameSelect                  |Opt.         |String            |                                                                                                            |""       |
-|classNameWrapper                 |Opt.         |String            |                                                                                                            |""       |
-|classNameContainer               |Opt.         |String            |                                                                                                            |""       |
-|classNameSelectOptionsContainer  |Opt.         |String            |                                                                                                            |""       |
-|classNameSelectOptionsItem       |Opt.         |String            |                                                                                                            |""       |
-|customStyleSelect                |Opt.         |Object            |                                                                                                            |{}       |
-|customStyleWrapper               |Opt.         |Object            |                                                                                                            |{}       |
-|customStyleContainer             |Opt.         |Object            |                                                                                                            |{}       |
-|customStyleSelectOptionsContainer|Opt.         |Object            |                                                                                                            |{}       |
-|customStyleSelectOptionsItem     |Opt.         |Object            |                                                                                                            |{}       |
-|<h4>onBlur</h4>                  |Opt.         |Func              |                                                                                                            |none     |
-|<h4>onChange</h4>                |Opt.         |Func              |                                                                                                            |()=>{}   |
-|onFocus                          |Opt.         |Func              |                                                                                                            |none     |
-|onClick                          |Opt.         |Func              |                                                                                                            |none     |
-|locale                           |Opt.         |String            |                                                                                                            |"en-US"  |
-|selectHtml                       |Opt.         |String            |                                                                                                            |none     |
-|selectOptionsItemHtml            |Opt.         |String            |                                                                                                            |none     |
-|<h3>validationOption</h3>        |<h4>Req.</h4>|Object            |                                                                                                            |{}       |
-
+|**options**                      |*Req.*|Array of Object(s)|select option list [{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]                                 |[]       |
+|id                               |*Opt.*|String            |                                                                                                            |""       |
+|name                             |*Opt.*|String            |                                                                                                            |""       |
+|value                            |*Opt.*|String            |                                                                                                            |""       |
+|disabled                         |*Opt.*|Bool              |                                                                                                            |false    |
+|**validate**                     |*Opt.*|Bool              |                                                                                                            |false    |
+|**validationgCallback**          |*Opt.*|Func              |                                                                                                            |none     |
+|classNameSelect                  |*Opt.*|String            |                                                                                                            |""       |
+|classNameWrapper                 |*Opt.*|String            |                                                                                                            |""       |
+|classNameContainer               |*Opt.*|String            |                                                                                                            |""       |
+|classNameSelectOptionsContainer  |*Opt.*|String            |                                                                                                            |""       |
+|classNameSelectOptionsItem       |*Opt.*|String            |                                                                                                            |""       |
+|customStyleSelect                |*Opt.*|Object            |                                                                                                            |{}       |
+|customStyleWrapper               |*Opt.*|Object            |                                                                                                            |{}       |
+|customStyleContainer             |*Opt.*|Object            |                                                                                                            |{}       |
+|customStyleSelectOptionsContainer|*Opt.*|Object            |                                                                                                            |{}       |
+|customStyleSelectOptionsItem     |*Opt.*|Object            |                                                                                                            |{}       |
+|**onBlur**                       |*Opt.*|Func              |                                                                                                            |none     |
+|**onChange**                     |*Opt.*|Func              |                                                                                                            |()=>{}   |
+|onFocus                          |*Opt.*|Func              |                                                                                                            |none     |
+|onClick                          |*Opt.*|Func              |                                                                                                            |none     |
+|locale                           |*Opt.*|String            |                                                                                                            |"en-US"  |
+|selectHtml                       |*Opt.*|String            |                                                                                                            |none     |
+|selectOptionsItemHtml            |*Opt.*|String            |                                                                                                            |none     |
+|<h3>validationOption</h3>        |*Req.*|Object            |                                                                                                            |{}       |
 ### validationOption props
 
 |  Props 	    |   	    |  Type 	|  Description 	|  Default 	|

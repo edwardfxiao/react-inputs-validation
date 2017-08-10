@@ -3,7 +3,6 @@
 # Event & Usage
 ### Select
 
-
 |  Props                            |          |  Type                |  Description                                                                                               |  Default|
 |---                                |---       |---                   |---                                                                                                         |---      |
 |**options**                      |**Req.**|**Array of Object(s)**    |select option list [{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]                                 |[]       |
@@ -12,7 +11,7 @@
 |value                            |*Opt.*  |String                    |                                                                                                            |""       |
 |disabled                         |*Opt.*  |Bool                      |                                                                                                            |false    |
 |**validate**                     |**Opt.**|**Bool**                  |If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.                                                                                                            |false    |
-|**validationgCallback**          |**Opt.**|**Func**                  |Return the validation result. Which is a bool value                                                                                                         |none     |
+|**validationgCallback**          |**Opt.**|**Func**                  |Return the validation result which is a bool value                                                                                                         |**none**     |
 |classNameSelect                  |*Opt.*  |String                    |                                                                                                            |""       |
 |classNameWrapper                 |*Opt.*  |String                    |                                                                                                            |""       |
 |classNameContainer               |*Opt.*  |String                    |                                                                                                            |""       |
@@ -23,15 +22,14 @@
 |customStyleContainer             |*Opt.*  |Object                    |                                                                                                            |{}       |
 |customStyleSelectOptionsContainer|*Opt.*  |Object                    |                                                                                                            |{}       |
 |customStyleSelectOptionsItem     |*Opt.*  |Object                    |                                                                                                            |{}       |
-|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |none     |
-|**onChange**                     |**Opt.**|**Func**                  |                                                                                                            |()=>{}   |
+|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
+|**onChange**                     |**Req.**|**Func**                  |                                                                                                            |**()=>{}**   |
 |onFocus                          |*Opt.*  |Func                      |                                                                                                            |none     |
 |onClick                          |*Opt.*  |Func                      |                                                                                                            |none     |
 |locale                           |*Opt.*  |String                    |Error message display. Current options are ['zh-CN', 'en-US']                                                                                                            |"en-US"  |
-|selectHtml                       |*Opt.*  |String                    |The custom html that will display when user choose. Use it if you think the default html is ugly.                                                                                                            |none     |
-|selectOptionsItemHtml            |*Opt.*  |String                    |The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.                                                                                                            |none     |
+|selectHtml                       |*Opt.*  |String                    |The custom html that will display when user choose. Create your own if you think the default html is ugly.                                                                                                            |none     |
+|selectOptionsItemHtml            |*Opt.*  |String                    |The custom select options item html that will display in dropdown list. Creat your own it if you think the default html is ugly.                                                                                                            |none     |
 |**validationOption**                          |*Req.*  |**Object**                      |**validationOption is very important, it is an object contains {required, showMsg, msgOnSuccess, msgOnError}, detail please see below**                                                                                                            |**{}**     |
-
 
 ### validationOption props
 

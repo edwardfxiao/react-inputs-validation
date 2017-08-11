@@ -66,7 +66,7 @@ class Index extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.validating == false && nextProps.validating == true) {
+    if (this.props.validate == false && nextProps.validate == true) {
       this.check();
     }
     if (String(this.props.value) != String(nextProps.value)) {
@@ -365,7 +365,7 @@ Index.propTypes = {
   name: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   disabled: PropTypes.bool,
-  validating: PropTypes.bool,
+  validate: PropTypes.bool,
   options: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func,

@@ -24,15 +24,12 @@ class Index extends React.Component {
     this.pageClick = this.pageClick.bind(this);
   }
 
-  // componentDidUpdate(prevProps, { checked }) {
-  //   if (!checked && this.state.checked) {
-  //     this.setState({ err: false });
-  //   }
-  // }
-
   componentWillReceiveProps(nextProps) {
-    if (this.props.validating == false && nextProps.validating == true) {
+    if (this.props.validate == false && nextProps.validate == true) {
       this.check();
+    }
+    if (this.props.checked != nextProps.checked) {
+      this.setState({ checked: nextProps.checked });
     }
   }
 
@@ -197,9 +194,9 @@ class Index extends React.Component {
         tabIndex={tabIndex}
         className={wrapperClass}
         style={customStyleWrapper}
-        onFocus={this.onFocus}
         onClick={this.onClick}
         onBlur={this.onBlur}
+        onFocus={this.onFocus}
         ref={ref => (this.wrapper = ref)}
       >
         <div className={containerClass} style={customStyleContainer}>
@@ -263,7 +260,7 @@ Index.propTypes = {
   checked: PropTypes.bool,
   disabled: PropTypes.bool,
   labelHtml: PropTypes.element,
-  validating: PropTypes.bool,
+  validate: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func,
   onBlur: PropTypes.func,

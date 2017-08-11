@@ -271,7 +271,6 @@ Index.propTypes = {
   tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
   name: PropTypes.string,
-  type: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   validate: PropTypes.bool,

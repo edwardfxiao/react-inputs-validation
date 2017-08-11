@@ -11,3 +11,30 @@ body {
 .radiobox__wrapper.checked label:before {
   background-color: #000!important;
 }
+
+:global .icon {
+  color: #7eb4ef;
+}
+
+.my-button {
+  font-size: 14px;
+}
+
+.my-button__red {
+  color: #fff;
+  border-radius: 2px;
+  background: #ff5a57;
+  padding: 10px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.sub-section-title-wrapper {
+  padding: 2%;
+}
+
+.sub-section-title {
+  background: #7eb4ef;
+  color: #fff;
+  padding: 5px;
+}

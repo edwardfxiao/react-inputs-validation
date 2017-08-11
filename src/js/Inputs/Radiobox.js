@@ -12,6 +12,8 @@ class Index extends React.Component {
     this.state = {};
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
   }
 
   onChange() {
@@ -22,6 +24,21 @@ class Index extends React.Component {
   onClick() {
     const { onClick } = this.props;
     onClick && onClick();
+  }
+
+  onBlur() {
+    const { onBlur } = this.props;
+    if (onBlur) {
+      onBlur();
+    }
+  }
+
+  onFocus() {
+    this.focus = true;
+    const { onFocus } = this.props;
+    if (onFocus) {
+      onFocus();
+    }
   }
 
   render() {
@@ -66,7 +83,14 @@ class Index extends React.Component {
     );
 
     return (
-      <div tabIndex={tabIndex} className={wrapperClass} style={customStyleWrapper}>
+      <div
+        tabIndex={tabIndex}
+        className={wrapperClass}
+        style={customStyleWrapper}
+        onClick={this.onClick}
+        onBlur={this.onBlur}
+        onFocus={this.onFocus}
+      >
         <div className={containerClass} style={customStyleContainer}>
           <input
             id={id}
@@ -80,7 +104,7 @@ class Index extends React.Component {
             style={customStyleInput}
             ref={ref => (this.input = ref)}
           />
-          <label htmlFor={id} className={labelClass} onClick={this.onClick}>
+          <label htmlFor={id} className={labelClass}>
             {labelHtml}
           </label>
         </div>
@@ -117,6 +141,8 @@ Index.propTypes = {
   labelHtml: PropTypes.element,
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
   locale: PropTypes.string,
   classNameWrapper: PropTypes.string,
   classNameContainer: PropTypes.string,

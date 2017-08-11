@@ -8,8 +8,8 @@ let STYLES = {};
 try {
   STYLES = require('./styles.css');
 } catch (ex) {}
-const TYPE = 'textbox';
-const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'phone'];
+const TYPE = 'textarea';
+const VALIDATE_OPTION_TYPE_LIST = ['string'];
 
 class Index extends React.Component {
   constructor(props) {
@@ -76,9 +76,7 @@ class Index extends React.Component {
       check,
       length,
       regMsg,
-      compare,
       required,
-      phoneCountry,
       msgOnSuccess
     } = validationOption;
     if (!check) {
@@ -86,7 +84,7 @@ class Index extends React.Component {
     }
     if (type) {
       if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) != -1) {
-        const Msg = Message[locale][TYPE][type];
+        const Msg = Message[locale][TYPE];
         const value = inputValue || this.input.value;
         let nameText = name ? name : '';
         let msg = '';
@@ -136,55 +134,6 @@ class Index extends React.Component {
               }
             }
           }
-          // CHECK NUMBER
-          if (type == VALIDATE_OPTION_TYPE_LIST[1]) {
-            if (!Validator[type](value)) {
-              this.handleCheckEnd(true, Msg.invalid(nameText));
-              return;
-            }
-            if (min || max) {
-              if (min && max) {
-                if (!Validator[type](value, min, max)) {
-                  this.handleCheckEnd(true, Msg.inBetween(nameText)(min)(max));
-                  return;
-                }
-              } else {
-                if (min) {
-                  if (!Validator[type](value, min)) {
-                    this.handleCheckEnd(true, Msg.lessThan(nameText)(min));
-                    return;
-                  }
-                }
-                if (max) {
-                  if (!Validator[type](value, 0, max)) {
-                    this.handleCheckEnd(true, Msg.greaterThan(nameText)(max));
-                    return;
-                  }
-                }
-              }
-            }
-            if (length) {
-              if (String(value).length != length) {
-                this.handleCheckEnd(true, Msg.lengthEqual(nameText)(length));
-                return;
-              }
-            }
-          }
-          // CHECK PHONE
-          if (type == VALIDATE_OPTION_TYPE_LIST[2]) {
-            const region = phoneCountry ? phoneCountry : locale;
-            if (!Validator[type](value, region)) {
-              this.handleCheckEnd(true, Msg.invalid(nameText));
-              return;
-            }
-          }
-          // CHECK EQUAL
-          if (compare && compare != '') {
-            if (value != compare) {
-              this.handleCheckEnd(true, Msg.twoInputsNotEqual());
-              return;
-            }
-          }
         }
         if (msgOnSuccess) {
           this.setState({ successMsg: msgOnSuccess });
@@ -213,7 +162,6 @@ class Index extends React.Component {
       tabIndex,
       id,
       name,
-      type,
       value,
       disabled,
       placeholder,
@@ -230,7 +178,7 @@ class Index extends React.Component {
 
     const wrapperClass = cx(
       classNameWrapper,
-      STYLES['textbox__wrapper'],
+      STYLES['textarea__wrapper'],
       err && STYLES['error'],
       successMsg && !err && STYLES['success'],
       disabled && STYLES['disabled']
@@ -238,7 +186,7 @@ class Index extends React.Component {
 
     const containerClass = cx(
       classNameContainer,
-      STYLES['textbox__container'],
+      STYLES['textarea__container'],
       err && STYLES['error'],
       successMsg && !err && STYLES['success'],
       disabled && STYLES['disabled']
@@ -246,7 +194,7 @@ class Index extends React.Component {
 
     const inputClass = cx(
       classNameInput,
-      STYLES['textbox__input'],
+      STYLES['textarea__input'],
       err && STYLES['error'],
       successMsg && !err && STYLES['success'],
       disabled && STYLES['disabled']
@@ -265,11 +213,10 @@ class Index extends React.Component {
     return (
       <div className={wrapperClass} style={customStyleWrapper}>
         <div className={containerClass} style={customStyleContainer}>
-          <input
+          <textarea
             tabIndex={tabIndex}
             id={id}
             name={name}
-            type={type}
             value={value}
             disabled={disabled}
             onBlur={this.onBlur}
@@ -292,7 +239,6 @@ Index.defaultProps = {
   tabIndex: -1,
   id: '',
   name: '',
-  type: 'text',
   value: '',
   disabled: false,
   validate: false,
@@ -312,12 +258,10 @@ Index.defaultProps = {
     min: 0,
     length: 0,
     check: true,
-    compare: '',
     msgOnError: '',
     showMsg: false,
     required: false,
-    msgOnSuccess: '',
-    phoneCountry: 'en-US'
+    msgOnSuccess: ''
   },
   locale: 'en-US',
   onChange: () => {}

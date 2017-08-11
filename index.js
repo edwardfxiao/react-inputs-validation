@@ -1,3 +1,5 @@
-var PickyDateTime = require('./lib/components/PickyDateTime/index.js').default;
-require('./dist/css/index_stylesheet.css');
-module.exports = PickyDateTime;
+var ReactInputsValidation = require('./lib/components/index.js');
+require('./lib/react-inputs-validation.min.css');
+exports.Textbox = ReactInputsValidation.Textbox;
+exports.Radiobox = ReactInputsValidation.Radiobox;
+exports.Checkbox = ReactInputsValidation.Checkbox;

@@ -25,6 +25,14 @@ const TEXT_BOX_VALIDATION_EN_US = {
   twoInputsNotEqual: () => `two inputs are not equal`
 };
 
+const SELECT_VALIDATION_ZH_CN = {
+  empty: name => `请选择一个${name}`
+};
+
+const SELECT_VALIDATION_EN_US = {
+  empty: name => `Please select a ${getEnglishName(name)}`
+};
+
 const CHECK_BOX_VALIDATION_ZH_CN = {
   unchecked: name => `${name}必须勾选`
 };
@@ -41,7 +49,8 @@ const message = {
     },
     radiobox: {},
     checkbox: CHECK_BOX_VALIDATION_ZH_CN,
-    textarea: {}
+    select: SELECT_VALIDATION_ZH_CN,
+    textarea: TEXT_BOX_VALIDATION_ZH_CN
   },
   'en-US': {
     textbox: {
@@ -51,7 +60,8 @@ const message = {
     },
     radiobox: {},
     checkbox: CHECK_BOX_VALIDATION_EN_US,
-    textarea: {}
+    select: SELECT_VALIDATION_EN_US,
+    textarea: TEXT_BOX_VALIDATION_EN_US
   }
 };
 

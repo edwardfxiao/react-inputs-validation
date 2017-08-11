@@ -26,6 +26,7 @@ class Index extends React.Component {
 
   render() {
     const {
+      tabIndex,
       id,
       name,
       value,
@@ -65,7 +66,7 @@ class Index extends React.Component {
     );
 
     return (
-      <div className={wrapperClass} style={customStyleWrapper}>
+      <div tabIndex={tabIndex} className={wrapperClass} style={customStyleWrapper}>
         <div className={containerClass} style={customStyleContainer}>
           <input
             id={id}
@@ -89,6 +90,7 @@ class Index extends React.Component {
 }
 
 Index.defaultProps = {
+  tabIndex: -1,
   id: '',
   name: '',
   value: '',
@@ -106,6 +108,7 @@ Index.defaultProps = {
 };
 
 Index.propTypes = {
+  tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,

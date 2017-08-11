@@ -21,11 +21,34 @@ class Index extends React.Component {
     this.onClick = this.onClick.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
+    this.pageClick = this.pageClick.bind(this);
   }
+
+  // componentDidUpdate(prevProps, { checked }) {
+  //   if (!checked && this.state.checked) {
+  //     this.setState({ err: false });
+  //   }
+  // }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.validating == false && nextProps.validating == true) {
       this.check();
+    }
+  }
+
+  componentDidMount() {
+    if (document.addEventListener) {
+      window.addEventListener('mousedown', this.pageClick, false);
+    } else {
+      document.attachEvent('onmousedown', this.pageClick);
+    }
+  }
+
+  componentWillUnmount() {
+    if (document.removeEventListener) {
+      window.removeEventListener('mousedown', this.pageClick, false);
+    } else {
+      document.detachEvent('onmousedown', this.pageClick);
     }
   }
 
@@ -41,7 +64,12 @@ class Index extends React.Component {
     }
   }
 
+  toggleChecked(checked) {
+    this.setState({ checked });
+  }
+
   onClick() {
+    this.onChange();
     const { onClick } = this.props;
     onClick && onClick();
   }
@@ -54,7 +82,18 @@ class Index extends React.Component {
     }
   }
 
+  pageClick(e) {
+    if (this.wrapper.contains(e.target)) {
+      return;
+    }
+    if (this.focus) {
+      this.onBlur();
+      this.focus = false;
+    }
+  }
+
   onFocus() {
+    this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
       this.check();
@@ -74,9 +113,9 @@ class Index extends React.Component {
         this.handleCheckEnd(true, Msg.unchecked(name ? name : ''));
         return;
       }
-      if (msgOnSuccess) {
-        this.setState({ successMsg: msgOnSuccess });
-      }
+    }
+    if (msgOnSuccess) {
+      this.setState({ successMsg: msgOnSuccess });
     }
   }
 
@@ -91,6 +130,7 @@ class Index extends React.Component {
 
   render() {
     const {
+      tabIndex,
       id,
       name,
       value,
@@ -98,12 +138,10 @@ class Index extends React.Component {
       labelHtml,
       classNameWrapper,
       classNameContainer,
-      classNameBox,
-      classNameInput,
+      classNameInputBox,
       customStyleWrapper,
       customStyleContainer,
-      customStyleBox,
-      customStyleInput,
+      customStyleInputBox,
       validationOption
     } = this.props;
 
@@ -112,6 +150,7 @@ class Index extends React.Component {
     const wrapperClass = cx(
       classNameWrapper,
       STYLES['checkbox__wrapper'],
+      checked && STYLES['checked'],
       err && STYLES['error'],
       successMsg && !err && STYLES['success'],
       disabled && STYLES['disabled']
@@ -120,24 +159,17 @@ class Index extends React.Component {
     const containerClass = cx(
       classNameContainer,
       STYLES['checkbox__container'],
+      checked && STYLES['checked'],
       err && STYLES['error'],
       successMsg && !err && STYLES['success'],
       disabled && STYLES['disabled']
     );
 
     const boxClass = cx(
-      classNameBox,
+      classNameInputBox,
       STYLES['checkbox__box'],
       err && STYLES['error'],
       checked && STYLES['checked'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
-
-    const inputClass = cx(
-      classNameInput,
-      STYLES['checkbox__input'],
-      err && STYLES['error'],
       successMsg && !err && STYLES['success'],
       disabled && STYLES['disabled']
     );
@@ -161,30 +193,31 @@ class Index extends React.Component {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (
-      <div className={wrapperClass} style={customStyleWrapper}>
-        <div
-          className={containerClass}
-          style={customStyleContainer}
-          onClick={this.onClick}
-        >
-          <div className={boxClass} style={customStyleBox}>
+      <div
+        tabIndex={tabIndex}
+        className={wrapperClass}
+        style={customStyleWrapper}
+        onFocus={this.onFocus}
+        onClick={this.onClick}
+        onBlur={this.onBlur}
+        ref={ref => (this.wrapper = ref)}
+      >
+        <div className={containerClass} style={customStyleContainer}>
+          <div className={boxClass} style={customStyleInputBox}>
             <div className={STYLES['box']} />
             <input
               id={id}
               name={name}
               type="checkbox"
+              className={STYLES['checkbox__input']}
               value={value}
               checked={checked}
               disabled={disabled}
-              className={inputClass}
               onChange={this.onChange}
-              onBlur={this.onBlur}
-              onFocus={this.onFocus}
-              style={customStyleInput}
               ref={ref => (this.input = ref)}
             />
           </div>
-          <label htmlFor={id} className={labelClass}>
+          <label className={labelClass}>
             {labelHtml}
           </label>
         </div>
@@ -195,6 +228,7 @@ class Index extends React.Component {
 }
 
 Index.defaultProps = {
+  tabIndex: -1,
   id: '',
   name: '',
   value: '',
@@ -203,11 +237,11 @@ Index.defaultProps = {
   labelHtml: undefined,
   classNameInput: '',
   classNameWrapper: '',
-  classNameBox: '',
+  classNameInputBox: '',
   classNameContainer: '',
   customStyleInput: {},
   customStyleWrapper: {},
-  customStyleBox: {},
+  customStyleInputBox: {},
   customStyleContainer: {},
   validationOption: {
     name: '',
@@ -217,11 +251,12 @@ Index.defaultProps = {
     required: false,
     msgOnSuccess: ''
   },
-  locale: 'zh-CN',
+  locale: 'en-US',
   onChange: () => {}
 };
 
 Index.propTypes = {
+  tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
@@ -237,12 +272,10 @@ Index.propTypes = {
   locale: PropTypes.string,
   classNameWrapper: PropTypes.string,
   classNameContainer: PropTypes.string,
-  classNameBox: PropTypes.string,
-  classNameInput: PropTypes.string,
+  classNameInputBox: PropTypes.string,
   customStyleWrapper: PropTypes.object,
   customStyleContainer: PropTypes.object,
-  customStyleBox: PropTypes.object,
-  customStyleInput: PropTypes.object,
+  customStyleInputBox: PropTypes.object,
   validationgCallback: PropTypes.func
 };
 

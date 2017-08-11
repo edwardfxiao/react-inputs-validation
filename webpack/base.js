@@ -57,7 +57,7 @@ var config = (module.exports = {
       },
       {
         test: /\.css$/,
-        include: /node_modules/,
+        include: [/node_modules/, path.join(PATH.ROOT_PATH, '/lib')],
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -86,7 +86,7 @@ var config = (module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, path.join(PATH.ROOT_PATH, '/lib')],
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -171,7 +171,7 @@ var config = (module.exports = {
       page: 'index',
       filename: 'index.html',
       hash: false,
-      customStyle: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+      // customStyle: 'https://fonts.googleapis.com/icon?family=Material+Icons',
       chunksSortMode: function(chunk1, chunk2) {
         var orders = ['common', 'index'];
         var order1 = orders.indexOf(chunk1.names[0]);

@@ -1,7 +1,7 @@
 # react-inputs-validation
 
 A react inputs validation component.
-# <img src="http://cdn.edwardxiao.com/react-inputs-validation.gif" />
+# <img src="http://cdn.edwardxiao.com/gif5%E6%96%B0%E6%96%87%E4%BB%B6.gif" />
 
 # Online Demo
 Please check the online <a href="https://edwardfhsiao.github.io/react-inputs-validation/">demo example https://edwardfhsiao.github.io/react-inputs-validation/</a>

@@ -1,8 +1,29 @@
 # react-inputs-validation
-[Checkbox](#Checkbox)
 
-# Event & Usage
-### Textbox
+# Online Demo
+Please check the online <a href="https://edwardfhsiao.github.io/react-inputs-validation/">demo example https://edwardfhsiao.github.io/react-inputs-validation/</a>
+
+# Docs Link
+[Textbox](#Textbox)
+[Radiobox](#Radiobox)
+[Checkbox](#Checkbox)
+[Select](#Select)
+[Textarea](#Textarea)
+
+# Installation
+```sh
+npm install react-inputs-validation --save
+```
+# Donate
+<a href="https://www.paypal.me/XIAOMENGXIAO/0.99" target="_blank" alt="PayPal Donate">Thanks for donating me a donut!&nbsp;&nbsp;⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</a>
+
+# Browser support
+Tested on IE9+ and Chrome and Safari(10.0.3)
+
+# Docs
+
+### <a name="Textbox"></a>Textbox
+
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str   |                                             |  -1        |
@@ -84,7 +105,10 @@
 />
 ```
 
-### Radiobox
+
+
+### <a name="Radiobox"></a>Radiobox
+
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str   |                                             |  -1        |
@@ -153,6 +177,11 @@
   }}
 />
 ```
+
+
+
+
+
 
 ### <a name="Checkbox"></a>Checkbox
 
@@ -227,7 +256,10 @@
 />
 ```
 
-### Select
+
+
+
+### <a name="Select"></a>Select
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
@@ -318,7 +350,11 @@
 />
 ```
 
-### Textarea
+
+
+
+
+### <a name="Textarea"></a>Textarea
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |

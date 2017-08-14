@@ -1,5 +1,8 @@
 # react-inputs-validation
 
+A react inputs validation component.
+# <img src="http://cdn.edwardxiao.com/react-inputs-validation.gif" />
+
 # Online Demo
 Please check the online <a href="https://edwardfhsiao.github.io/react-inputs-validation/">demo example https://edwardfhsiao.github.io/react-inputs-validation/</a>
 
@@ -68,6 +71,8 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 
 
 ```js
+import { Textbox } from 'react-inputs-validation';
+
 <Textbox
   tabIndex="1" //Optional.[String or Number].Default: -1.
   id={'Name'} //Optional.[String].Default: "".  Input ID.
@@ -145,6 +150,8 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
 ```js
+import { Radiobox } from 'react-inputs-validation';
+
 <Radiobox
   tabIndex={2} //Optional.[String or Number].Default: -1.
   id="job" //Optional.[String].Default: "".  Input ID.
@@ -220,6 +227,8 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 ```js
+import { Checkbox } from 'react-inputs-validation';
+
 <Checkbox
   tabIndex="5" //Optional.[String or Number].Default: -1.
   id={'agreement'} //Optional.[String].Default: "".  Input ID.
@@ -303,6 +312,8 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 
 
 ```js
+import { Select } from 'react-inputs-validation';
+
 <Select
   tabIndex="6" //Optional.[String or Number].Default: -1.
   id={'movie'} //Optional.[String].Default: "". Input ID.
@@ -397,6 +408,8 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
 ```js
+import { Textarea } from 'react-inputs-validation';
+
 <Textarea
   tabIndex="7" //Optional.[String or Number].Default: -1.
   id="description" //Optional.[String].Default: "".  Textarea ID.

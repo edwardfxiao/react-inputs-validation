@@ -2,12 +2,45 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Message from './message';
+import { LOCALE_OPTION_LIST } from './const';
 let STYLES = {};
 try {
   STYLES = require('./styles.css');
 } catch (ex) {}
-
 const TYPE = 'checkbox';
+const getDefaultValidationOption = obj => {
+  let {
+    name,
+    check,
+    required,
+    showMsg,
+    locale,
+    msgOnError,
+    msgOnSuccess
+  } = obj;
+  if (!locale) {
+    locale = LOCALE_OPTION_LIST[0];
+  } else {
+    if (LOCALE_OPTION_LIST.indexOf(locale) == -1) {
+      locale = LOCALE_OPTION_LIST[0];
+    }
+  }
+  name = name ? name : '';
+  check = check ? check : true;
+  showMsg = showMsg ? showMsg : true;
+  required = required ? required : true;
+  msgOnSuccess = msgOnSuccess ? msgOnSuccess : '';
+  msgOnError = msgOnError ? msgOnError : '';
+  return {
+    name,
+    check,
+    showMsg,
+    required,
+    locale,
+    msgOnError,
+    msgOnSuccess
+  };
+};
 class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -99,8 +132,13 @@ class Index extends React.Component {
   }
 
   check() {
-    const { validationOption, locale } = this.props;
-    const { name, check, required, msgOnSuccess } = validationOption;
+    const {
+      name,
+      check,
+      locale,
+      required,
+      msgOnSuccess
+    } = getDefaultValidationOption(this.props.validationOption);
     if (!check) {
       return;
     }
@@ -114,11 +152,12 @@ class Index extends React.Component {
     if (msgOnSuccess) {
       this.setState({ successMsg: msgOnSuccess });
     }
+    this.handleCheckEnd(false, msgOnSuccess);
   }
 
   handleCheckEnd(err, msg) {
-    if (this.props.validationOption.msgOnError) {
-      msg = this.props.validationOption.msgOnError;
+    if (getDefaultValidationOption(this.props.validationOption).msgOnError) {
+      msg = getDefaultValidationOption(this.props.validationOption).msgOnError;
     }
     this.setState({ err, msg });
     const { validationgCallback } = this.props;
@@ -183,10 +222,14 @@ class Index extends React.Component {
     const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
 
     let msgHtml;
-    if (validationOption.showMsg && err && msg) {
+    if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (validationOption.showMsg && !err && successMsg) {
+    if (
+      getDefaultValidationOption(validationOption).showMsg &&
+      !err &&
+      successMsg
+    ) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (
@@ -240,15 +283,7 @@ Index.defaultProps = {
   customStyleWrapper: {},
   customStyleInputBox: {},
   customStyleContainer: {},
-  validationOption: {
-    name: '',
-    check: true,
-    msgOnError: '',
-    showMsg: false,
-    required: false,
-    msgOnSuccess: ''
-  },
-  locale: 'en-US',
+  validationOption: {},
   onChange: () => {}
 };
 

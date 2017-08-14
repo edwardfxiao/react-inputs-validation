@@ -13,28 +13,206 @@ import {
   Select
 } from '../src/js/Inputs';
 
-var markdown = `
-# Check Empty:
-
+const markdownTextboxEmptyExample = `
 \`\`\`javascript
-                    <Textbox
-                      tabIndex="1" //Optional.[String or Number].Default: -1.
-                      id={'Name'} //Optional.[String].Default: "".  Input ID.
-                      name="Name" //Optional.[String].Default: "". Input name.
-                      type="text" //Optional.[String].Default: "text". Input type [text, password, phone, number].
-                      value={name} //Optional.[String].Default: "".
-                      disabled={false} //Optional.[Bool].Default: false.
-                      placeholder="Place your name here ^-^" //Optional.[String].Default: "".
-                      onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
-                      onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-                      validationOption={{
-                        name: 'Name', //Optional.[String].Default: none. To display in Error message. i.e Please enter your ${name}.
-                        check: true, //Optional.[Bool].Default: none. To determin if you need to validate.
-                        required: true, //Optional.[Bool].Default: none. To determin if it is required.
-                        type: 'string', //Optional.[String].Default: none. Validation type, options are ['string', 'number', 'phone'].
-                        showMsg: true //Optional.[Bool].Default: none. Display the error message or not.
-                      }}
-                    />
+import { Textbox } from 'react-inputs-validation';
+
+<Textbox
+  tabIndex="1" //Optional.[String or Number].Default: -1.
+  id={'Name'} //Optional.[String].Default: "".  Input ID.
+  name="Name" //Optional.[String].Default: "". Input name.
+  type="text" //Optional.[String].Default: "text". Input type [text, password, phone, number].
+  value={name} //Optional.[String].Default: "".
+  placeholder="Place your name here ^-^" //Optional.[String].Default: "".
+  onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  validationOption={{
+    name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your {name}.
+    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+  }}
+/>
+\`\`\`
+`;
+
+const markdownTextboxRegexExample = `
+\`\`\`javascript
+import { Textbox } from 'react-inputs-validation';
+
+<Textbox
+  tabIndex="1" //Optional.[String or Number].Default: -1.
+  id={'Name'} //Optional.[String].Default: "".  Input ID.
+  name="Name" //Optional.[String].Default: "". Input name.
+  type="text" //Optional.[String].Default: "text". Input type [text, password, number].
+  value={nameRg} //Optional.[String].Default: "".
+  placeholder="Place your name here ^-^" //Optional.[String].Default: "".
+  onChange={name => this.setState({ nameRg })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  validationOption={{
+    reg: /^\d{5}$/, //Optional.[Bool].Default: "" Custom regex.
+    regMsg: 'failed in reg.test(value)' //Optional.[String].Default: "" Custom regex error message.
+  }}
+/>
+\`\`\`
+`;
+
+const markdownTextboxPhoneExample = `
+\`\`\`javascript
+import { Textbox } from 'react-inputs-validation';
+
+<Textbox
+  tabIndex="1" //Optional.[String or Number].Default: -1.
+  id={'Phone'} //Optional.[String].Default: "".  Input ID.
+  name="Phone" //Optional.[String].Default: "". Input name.
+  type="number" //Optional.[String].Default: "text". Input type [text, password, number].
+  value={name} //Optional.[String].Default: "".
+  placeholder="Place your phone number here ^-^" //Optional.[String].Default: "".
+  onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  validationOption={{
+    type: 'phone', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+    phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
+  }}
+/>
+\`\`\`
+`;
+
+const markdownTextboxNumberExample = `
+\`\`\`javascript
+import { Textbox } from 'react-inputs-validation';
+
+<Textbox
+  tabIndex="1" //Optional.[String or Number].Default: -1.
+  id={'Number'} //Optional.[String].Default: "".  Input ID.
+  name="Number" //Optional.[String].Default: "". Input name.
+  type="number" //Optional.[String].Default: "text". Input type [text, password, number].
+  value={number} //Optional.[String].Default: "".
+  placeholder="Place your number here ^-^" //Optional.[String].Default: "".
+  onChange={number => this.setState({ number })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  validationOption={{
+    type: 'number', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+    min: 10, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
+    max: 100 //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
+  }}
+/>
+\`\`\`
+`;
+
+const markdownRadioboxEmptyExample = `
+\`\`\`javascript
+import { Radiobox } from 'react-inputs-validation';
+
+<Radiobox
+  tabIndex={2} //Optional.[String or Number].Default: -1.
+  id="job" //Optional.[String].Default: "".  Input ID.
+  name="job" //Optional.[String].Default: "". Input name.
+  value={job} //Optional.[String].Default: "".
+  optionList={[
+    { id: 'engineer', name: 'engineer' },
+    { id: 'teacher', name: 'teacher' },
+    { id: 'student', name: 'student' }
+  ]}
+  customStyleContainer={{
+    display: 'flex',
+    justifyContent: 'flex-start'
+  }} //Optional.[Object].Default: {}.
+  customStyleOptionListItem={{ marginRight: '20px' }} //Optional.[Object].Default: {}.
+  onChange={job => this.setState({ job })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={() => {}} //Optional.[Func].Default: none.
+  validationOption={{
+    name: 'job', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+  }}
+/>
+\`\`\`
+`;
+
+const markdownCheckboxEmptyExample = `
+\`\`\`javascript
+import { Checkbox } from 'react-inputs-validation';
+
+<Checkbox
+  tabIndex="5" //Optional.[String or Number].Default: -1.
+  id={'agreement'} //Optional.[String].Default: "".  Input ID.
+  name={'agreement'} //Optional.[String].Default: "". Input name
+  value={agreement} //Required.[String].Default: "".
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onChange={agreement => this.setState({ agreement })} //Required.[Func].Default: () => {}. Will return the value.
+  labelHtml={
+    <div style={{ color: '#4a4a4a', marginTop: '2px' }}>
+      agree?
+    </div>
+  } //Required.[Html].Default: none.
+  validationOption={{
+    name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
+    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+  }}
+/>
+\`\`\`
+`;
+
+const markdownSelectEmptyExample = `
+\`\`\`javascript
+import { Select } from 'react-inputs-validation';
+
+<Select
+  tabIndex="6" //Optional.[String or Number].Default: -1.
+  id={'movie'} //Optional.[String].Default: "". Input ID.
+  name={'movie'} //Optional.[String].Default: "". Input name.
+  value={movie} //Optional.[String].Default: "".
+  optionList={[
+    { id: '', name: 'Please Select a movie' },
+    { id: 0, name: 'Twin Peaks' },
+    { id: 1, name: 'Lion King' },
+    { id: 2, name: 'American Beauty' }
+  ]} //Required.[Array of Object(s)].Default: [].
+  onChange={movie => this.setState({ movie })} //Optional.[Func].Default: () => {}. Will return the value.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
+  // selectOptionListItemHtml={MOVIE_OPTIONS_LIST.map(
+  //   (i, k) => {
+  //     return (
+  //       <div
+  //         key={k}
+  //         onClick={() => {
+  //           this.handleMovieChange(i.id);
+  //         }}
+  //       >
+  //         <span className="icon icon-person" />{i.name}
+  //       </div>
+  //     );
+  //   }
+  // )} //Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
+  validationOption={{
+    name: 'movie', //Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
+    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+  }}
+/>
+\`\`\`
+`;
+
+const markdownTextareaEmptyExample = `
+\`\`\`javascript
+import { Textarea } from 'react-inputs-validation';
+
+<Textarea
+  tabIndex="1" //Optional.[String or Number].Default: -1.
+  id="description" //Optional.[String].Default: "".  Textarea ID.
+  name="description" //Optional.[String].Default: "". Input name.
+  value={description} //Optional.[String].Default: "".
+  placeholder="Place your description here ^-^" //Optional.[String].Default: "".
+  onChange={description => this.setState({ description })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  validationOption={{
+    name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your {name}.
+    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+  }}
+/>
 \`\`\`
 `;
 
@@ -55,7 +233,11 @@ CodeBlock.propTypes = {
 };
 
 // import { Textbox, Radiobox, Checkbox, Select } from '../index.js';
-const JOB_OPTIONS_LIST = ['engineer', 'teacher', 'student'];
+const JOB_OPTIONS_LIST = [
+  { id: 'engineer', name: 'engineer' },
+  { id: 'teacher', name: 'teacher' },
+  { id: 'student', name: 'student' }
+];
 const MOVIE_OPTIONS_LIST = [
   { id: '', name: 'Please Select a movie' },
   { id: 0, name: 'Twin Peaks' },
@@ -67,6 +249,9 @@ class Index extends Component {
     super(props);
     this.state = {
       name: '',
+      nameRg: '',
+      phone: '',
+      number: '',
       description: '',
       job: '',
       movie: '',
@@ -112,7 +297,17 @@ class Index extends Component {
   }
 
   render() {
-    const { name, description, job, agreement, movie, validate } = this.state;
+    const {
+      name,
+      nameRg,
+      phone,
+      number,
+      description,
+      job,
+      agreement,
+      movie,
+      validate
+    } = this.state;
     const rowStyle = {
       display: 'flex',
       alignItems: 'flex-start',
@@ -136,12 +331,12 @@ class Index extends Component {
       verticalAlign: 'middle'
     };
 
-    let movieItem;
-    MOVIE_OPTIONS_LIST.filter(i => {
-      if (String(i.id) == String(movie)) {
-        movieItem = i;
-      }
-    });
+    // let movieItem;
+    // MOVIE_OPTIONS_LIST.filter(i => {
+    //   if (String(i.id) == String(movie)) {
+    //     movieItem = i;
+    //   }
+    // });
 
     return (
       <div style={{ padding: '10px' }}>
@@ -151,48 +346,314 @@ class Index extends Component {
               Basic Usage
             </h1>
           </div>
+
           <div>
             <div className={STYLES['sub-section-title-wrapper']}>
               <div className={STYLES['sub-section-title']}>Textbox</div>
             </div>
-            <div style={rowWrapperStyle}>
-              <div>
-                <div style={rowStyle}>
-                  <div
-                    style={{ ...labelStyle, flex: '3 3 0', marginTop: '3px' }}
-                  >
-                    <span style={labelContentStyle}>Check Empty:</span>
-                  </div>
-                  <div style={{ flex: '6 6 0' }}>
-                    <Textbox
-                      tabIndex="1" //Optional.[String or Number].Default: -1.
-                      id={'Name'} //Optional.[String].Default: "".  Input ID.
-                      name="Name" //Optional.[String].Default: "". Input name.
-                      type="text" //Optional.[String].Default: "text". Input type [text, password, phone, number].
-                      value={name} //Optional.[String].Default: "".
-                      disabled={false} //Optional.[Bool].Default: false.
-                      placeholder="Place your name here ^-^" //Optional.[String].Default: "".
-                      onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
-                      onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-                      validationOption={{
-                        name: 'Name', //Optional.[String].Default: none. To display in Error message. i.e Please enter your ${name}.
-                        check: true, //Optional.[Bool].Default: none. To determin if you need to validate.
-                        required: true, //Optional.[Bool].Default: none. To determin if it is required.
-                        type: 'string', //Optional.[String].Default: none. Validation type, options are ['string', 'number', 'phone'].
-                        showMsg: true //Optional.[Bool].Default: none. Display the error message or not.
-                      }}
-                    />
-                  </div>
+
+            <div style={{ overflow: 'auto', padding: '2%' }}>
+              <div className={STYLES['block']}>
+                <div>
+                  <h1>Validate Textbox Empty by onBlur Example:</h1>
+                  <Textbox
+                    tabIndex="1" //Optional.[String or Number].Default: -1.
+                    id={'Name'} //Optional.[String].Default: "".  Input ID.
+                    name="Name" //Optional.[String].Default: "". Input name.
+                    type="text" //Optional.[String].Default: "text". Input type [text, password, number].
+                    value={name} //Optional.[String].Default: "".
+                    disabled={false} //Optional.[Bool].Default: false.
+                    placeholder="Place your name here ^-^" //Optional.[String].Default: "".
+                    onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    validationOption={{
+                      name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+                      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                      required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+                    }}
+                  />
+                  <br />
                 </div>
-                <div style={rowStyle}>
-                  <Markdown source={markdown} renderers={{ CodeBlock }} />
+                <div>
+                  <Markdown
+                    source={markdownTextboxEmptyExample}
+                    renderers={{ CodeBlock }}
+                  />
                 </div>
               </div>
             </div>
+
+            <div style={{ overflow: 'auto', padding: '2%' }}>
+              <div className={STYLES['block']}>
+                <div>
+                  <h1>Validate Textbox Regex by onBlur Example:</h1>
+                  <Textbox
+                    tabIndex="1" //Optional.[String or Number].Default: -1.
+                    id={'Name'} //Optional.[String].Default: "".  Input ID.
+                    name="Name" //Optional.[String].Default: "". Input name.
+                    type="text" //Optional.[String].Default: "text". Input type [text, password, number].
+                    value={nameRg} //Optional.[String].Default: "".
+                    disabled={false} //Optional.[Bool].Default: false.
+                    placeholder="Place your name here ^-^" //Optional.[String].Default: "".
+                    onChange={nameRg => this.setState({ nameRg })} //Required.[Func].Default: () => {}. Will return the value.
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    validationOption={{
+                      reg: /^\d{5}$/, //Optional.[Bool].Default: "" Custom regex.
+                      regMsg: 'failed in reg.test(${value})' //Optional.[String].Default: "" Custom regex error message.
+                    }}
+                  />
+                  <br />
+                </div>
+                <div>
+                  <Markdown
+                    source={markdownTextboxRegexExample}
+                    renderers={{ CodeBlock }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div style={{ overflow: 'auto', padding: '2%' }}>
+              <div className={STYLES['block']}>
+                <div>
+                  <h1>Validate Textbox Phone format by onBlur Example:</h1>
+                  <Textbox
+                    tabIndex="1" //Optional.[String or Number].Default: -1.
+                    id={'Phone'} //Optional.[String].Default: "".  Input ID.
+                    name="Phone" //Optional.[String].Default: "". Input name.
+                    type="number" //Optional.[String].Default: "text". Input type [text, password, number].
+                    value={phone} //Optional.[String].Default: "".
+                    placeholder="Place your phone number here ^-^" //Optional.[String].Default: "".
+                    onChange={phone => this.setState({ phone })} //Required.[Func].Default: () => {}. Will return the value.
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    validationOption={{
+                      type: 'phone', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+                      phoneCountry: 'en-US' //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
+                    }}
+                  />
+                  <br />
+                </div>
+                <div>
+                  <Markdown
+                    source={markdownTextboxPhoneExample}
+                    renderers={{ CodeBlock }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div style={{ overflow: 'auto', padding: '2%' }}>
+              <div className={STYLES['block']}>
+                <div>
+                  <h1>Validate Textbox Number by onBlur Example:</h1>
+                  <Textbox
+                    tabIndex="1" //Optional.[String or Number].Default: -1.
+                    id={'Number'} //Optional.[String].Default: "".  Input ID.
+                    name="Number" //Optional.[String].Default: "". Input name.
+                    type="number" //Optional.[String].Default: "text". Input type [text, password, number].
+                    value={number} //Optional.[String].Default: "".
+                    placeholder="Place your number here ^-^" //Optional.[String].Default: "".
+                    onChange={number => this.setState({ number })} //Required.[Func].Default: () => {}. Will return the value.
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    validationOption={{
+                      type: 'number', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+                      min: 10, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
+                      max: 100 //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
+                    }}
+                  />
+                  <br />
+                </div>
+                <div>
+                  <Markdown
+                    source={markdownTextboxNumberExample}
+                    renderers={{ CodeBlock }}
+                  />
+                </div>
+              </div>
+            </div>
+
           </div>
+
+          <div>
+            <div className={STYLES['sub-section-title-wrapper']}>
+              <div className={STYLES['sub-section-title']}>Radiobox</div>
+            </div>
+
+            <div style={{ overflow: 'auto', padding: '2%' }}>
+              <div className={STYLES['block']}>
+                <div>
+                  <h1>Validate Radiobox Empty by onBlur Example:</h1>
+                  <Radiobox
+                    tabIndex={2} //Optional.[String or Number].Default: -1.
+                    id="job" //Optional.[String].Default: "".  Input ID.
+                    name="job" //Optional.[String].Default: "". Input name.
+                    value={job} //Optional.[String].Default: "".
+                    optionList={[
+                      { id: 'engineer', name: 'engineer' },
+                      { id: 'teacher', name: 'teacher' },
+                      { id: 'student', name: 'student' }
+                    ]}
+                    customStyleContainer={{
+                      display: 'flex',
+                      justifyContent: 'flex-start'
+                    }} //Optional.[Object].Default: {}.
+                    customStyleOptionListItem={{ marginRight: '20px' }} //Optional.[Object].Default: {}.
+                    onChange={job => this.setState({ job })} //Required.[Func].Default: () => {}. Will return the value.
+                    onBlur={() => {}} //Optional.[Func].Default: none.
+                    validationOption={{
+                      name: 'job', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+                      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                      required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+                    }}
+                  />
+                  <br />
+                </div>
+                <div>
+                  <Markdown
+                    source={markdownRadioboxEmptyExample}
+                    renderers={{ CodeBlock }}
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div>
+            <div className={STYLES['sub-section-title-wrapper']}>
+              <div className={STYLES['sub-section-title']}>Checkbox</div>
+            </div>
+
+            <div style={{ overflow: 'auto', padding: '2%' }}>
+              <div className={STYLES['block']}>
+                <div>
+                  <h1>Validate Checkbox Empty by onBlur Example:</h1>
+                  <Checkbox
+                    tabIndex="5" //Optional.[String or Number].Default: -1.
+                    id={'agreement'} //Optional.[String].Default: "".  Input ID.
+                    name={'agreement'} //Optional.[String].Default: "". Input name
+                    value={agreement} //Required.[String].Default: "".
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    onChange={agreement => this.setState({ agreement })} //Required.[Func].Default: () => {}. Will return the value.
+                    labelHtml={
+                      <div style={{ color: '#4a4a4a', marginTop: '2px' }}>
+                        agree?
+                      </div>
+                    } //Required.[Html].Default: none.
+                    validationOption={{
+                      name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
+                      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                      required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+                    }}
+                  />
+                  <br />
+                </div>
+                <div>
+                  <Markdown
+                    source={markdownCheckboxEmptyExample}
+                    renderers={{ CodeBlock }}
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div>
+            <div className={STYLES['sub-section-title-wrapper']}>
+              <div className={STYLES['sub-section-title']}>Select</div>
+            </div>
+
+            <div style={{ overflow: 'auto', padding: '2%' }}>
+              <div className={STYLES['block']}>
+                <div>
+                  <h1>Validate Select Empty by onBlur Example:</h1>
+                  <Select
+                    tabIndex="6" //Optional.[String or Number].Default: -1.
+                    id={'movie'} //Optional.[String].Default: "". Input ID.
+                    name={'movie'} //Optional.[String].Default: "". Input name.
+                    value={movie} //Optional.[String].Default: "".
+                    optionList={[
+                      { id: '', name: 'Please Select a movie' },
+                      { id: 0, name: 'Twin Peaks' },
+                      { id: 1, name: 'Lion King' },
+                      { id: 2, name: 'American Beauty' }
+                    ]} //Required.[Array of Object(s)].Default: [].
+                    onChange={movie => this.setState({ movie })} //Optional.[Func].Default: () => {}. Will return the value.
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
+                    // selectOptionListItemHtml={MOVIE_OPTIONS_LIST.map(
+                    //   (i, k) => {
+                    //     return (
+                    //       <div
+                    //         key={k}
+                    //         onClick={() => {
+                    //           this.handleMovieChange(i.id);
+                    //         }}
+                    //       >
+                    //         <span className="icon icon-person" />{i.name}
+                    //       </div>
+                    //     );
+                    //   }
+                    // )} //Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
+                    validationOption={{
+                      name: 'movie', //Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
+                      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                      required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+                    }}
+                  />
+                  <br />
+                </div>
+                <div>
+                  <Markdown
+                    source={markdownSelectEmptyExample}
+                    renderers={{ CodeBlock }}
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div>
+            <div className={STYLES['sub-section-title-wrapper']}>
+              <div className={STYLES['sub-section-title']}>Textarea</div>
+            </div>
+
+            <div style={{ overflow: 'auto', padding: '2%' }}>
+              <div className={STYLES['block']}>
+                <div>
+                  <h1>Validate Textarea Empty by onBlur Example:</h1>
+                  <Textarea
+                    tabIndex="1" //Optional.[String or Number].Default: -1.
+                    id="description" //Optional.[String].Default: "".  Textarea ID.
+                    name="description" //Optional.[String].Default: "". Textarea name.
+                    value={description} //Optional.[String].Default: "".
+                    placeholder="Place your description here ^-^" //Optional.[String].Default: "".
+                    onChange={description => this.setState({ description })} //Required.[Func].Default: () => {}. Will return the value.
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    validationOption={{
+                      name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+                      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                      required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+                    }}
+                  />
+                  <br />
+                </div>
+                <div>
+                  <Markdown
+                    source={markdownTextareaEmptyExample}
+                    renderers={{ CodeBlock }}
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
         <br />
-        <div style={{ padding: '10px', border: '1px solid #e5e5e5' }}>
+        <div style={{ minHeight: '1000px', padding: '10px', border: '1px solid #e5e5e5' }}>
           <h1>
             Example form
           </h1>
@@ -214,7 +675,7 @@ class Index extends Component {
                       tabIndex="1" //Optional.[String or Number].Default: -1.
                       id={'Name'} //Optional.[String].Default: "".  Input ID.
                       name="Name" //Optional.[String].Default: "". Input name.
-                      type="text" //Optional.[String].Default: "text". Input type [text, password, phone, number].
+                      type="text" //Optional.[String].Default: "text". Input type [text, password, number].
                       value={name} //Optional.[String].Default: "".
                       disabled={false} //Optional.[Bool].Default: false.
                       placeholder="Place your name here ^-^" //Optional.[String].Default: "".
@@ -229,24 +690,24 @@ class Index extends Component {
                       customStyleContainer={{}} //Optional.[Object].Default: {}.
                       onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
                       onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-                      onFocus={() => {}} //Optional.[Func].Default: none.
-                      onClick={() => {}} //Optional.[Func].Default: none.
-                      locale="en-US" //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+                      // onFocus={() => {}} //Optional.[Func].Default: none.
+                      // onClick={() => {}} //Optional.[Func].Default: none.
                       validationOption={{
-                        name: 'Name', //Optional.[String].Default: none. To display in Error message. i.e Please enter your ${name}.
-                        check: true, //Optional.[Bool].Default: none. To determin if you need to validate.
-                        required: true, //Optional.[Bool].Default: none. To determin if it is required.
-                        type: 'string', //Optional.[String].Default: none. Validation type, options are ['string', 'number', 'phone'].
-                        showMsg: true, //Optional.[Bool].Default: none. Display the error message or not.
-                        min: 2, //Optional.[Number].Default: none. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
-                        max: 10, //Optional.[Number].Default: none. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
-                        length: 2, //Optional.[Number].Default: none. Validation of exact length of the value.
-                        compare: '3', //Optional.[String].Default: none. Compare this value to 3 to see if they are equal.
-                        reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: none. Custom regex.
-                        regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: none. Custom regex error message.
-                        phoneCountry: 'en-US', //Optional.[String].Default: none. Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
-                        msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: none. Show your custom error message no matter what when it has error if it is provied.
-                        msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: none. Show your custom success message no matter what when it has error if it is provied.
+                        name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+                        check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                        required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+                        // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+                        // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
+                        // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
+                        // max: 10, //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
+                        // length: 2, //Optional.[Number].Default: 0. Validation of exact length of the value.
+                        // compare: '3', //Optional.[String].Default: "" Compare this value to 3 to see if they are equal.
+                        // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "" Custom regex.
+                        // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "" Custom regex error message.
+                        // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+                        // phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
+                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what when it has error if it is provied.
+                        // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
                   </div>
@@ -267,38 +728,41 @@ class Index extends Component {
                     <span style={labelContentStyle}>job</span>
                   </div>
                   <div style={{ flex: '6 6 0', display: 'flex' }}>
-                    {JOB_OPTIONS_LIST.map((i, k) => {
-                      return (
-                        <div
-                          style={{ flex: '1 1 0', textAlign: 'center' }}
-                          key={k}
-                        >
-                          <Radiobox
-                            tabIndex={2 + k} //Optional.[String or Number].Default: -1.
-                            id={`job-${k}`} //Optional.[String].Default: "".  Input ID.
-                            name={`job-${k}`} //Optional.[String].Default: "". Input name.
-                            checked={job == i ? true : false} //Required.[Bool].Default: false.
-                            disabled={false} //Optional.[Bool].Default: false.
-                            value={i} //Optional.[String].Default: "".
-                            classNameInput="" //Optional.[String].Default: "".
-                            classNameWrapper="" //Optional.[String].Default: "".
-                            classNameContainer="" //Optional.[String].Default: "".
-                            customStyleInput={{}} //Optional.[Object].Default: {}.
-                            customStyleWrapper={{}} //Optional.[Object].Default: {}.
-                            customStyleContainer={{}} //Optional.[Object].Default: {}.
-                            labelHtml={
-                              <div style={{ color: '#4a4a4a' }}>
-                                {i}
-                              </div>
-                            } //Required.[Html].Default: none.
-                            onChange={job => this.setState({ job })} //Required.[Func].Default: () => {}. Will return the value.
-                            onBlur={() => {}} //Optional.[Func].Default: none.
-                            onFocus={() => {}} //Optional.[Func].Default: none.
-                            onClick={() => {}} //Optional.[Func].Default: none.
-                          />
-                        </div>
-                      );
-                    })}
+                    <Radiobox
+                      tabIndex={2} //Optional.[String or Number].Default: -1.
+                      id="job" //Optional.[String].Default: "".  Input ID.
+                      name="job" //Optional.[String].Default: "". Input name.
+                      disabled={false} //Optional.[Bool].Default: false.
+                      value={job} //Optional.[String].Default: "".
+                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
+                      validationgCallback={res =>
+                        this.setState({ hasJobError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
+                      optionList={JOB_OPTIONS_LIST}
+                      classNameInput="" //Optional.[String].Default: "".
+                      classNameWrapper="" //Optional.[String].Default: "".
+                      classNameContainer="" //Optional.[String].Default: "".
+                      classNameOptionListItem="" //Optional.[String].Default: "".
+                      customStyleInput={{}} //Optional.[Object].Default: {}.
+                      customStyleWrapper={{}} //Optional.[Object].Default: {}.
+                      customStyleContainer={{
+                        display: 'flex',
+                        justifyContent: 'flex-start'
+                      }} //Optional.[Object].Default: {}.
+                      customStyleOptionListItem={{ marginRight: '20px' }} //Optional.[Object].Default: {}.
+                      onChange={job => this.setState({ job })} //Required.[Func].Default: () => {}. Will return the value.
+                      onBlur={() => {}} //Optional.[Func].Default: none.
+                      // onFocus={() => {}} //Optional.[Func].Default: none.
+                      // onClick={() => {}} //Optional.[Func].Default: none.
+                      validationOption={{
+                        name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+                        check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                        required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+                        // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
+                        // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+                        // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -321,8 +785,8 @@ class Index extends Component {
                       tabIndex="5" //Optional.[String or Number].Default: -1.
                       id={'agreement'} //Optional.[String].Default: "".  Input ID.
                       name={'agreement'} //Optional.[String].Default: "". Input name
-                      value={agreement} //Required.[String].Default: false.
-                      checked={agreement} //Optional.[Bool].Default: false.
+                      value={agreement} //Required.[String].Default: "".
+                      checked={false} //Required.[Bool].Default: false.
                       disabled={false} //Optional.[Bool].Default: false.
                       validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
                       validationgCallback={res =>
@@ -337,22 +801,22 @@ class Index extends Component {
                       customStyleInputBox={{}} //Optional.[Object].Default: {}.
                       customStyleContainer={{}} //Optional.[Object].Default: {}.
                       onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-                      onFocus={() => {}} //Optional.[Func].Default: none.
-                      onClick={() => {}} //Optional.[Func].Default: none.
+                      // onFocus={() => {}} //Optional.[Func].Default: none.
+                      // onClick={() => {}} //Optional.[Func].Default: none.
                       onChange={agreement => this.setState({ agreement })} //Required.[Func].Default: () => {}. Will return the value.
                       labelHtml={
                         <div style={{ color: '#4a4a4a', marginTop: '2px' }}>
                           agree?
                         </div>
                       } //Required.[Html].Default: none.
-                      locale="en-US" //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
                       validationOption={{
-                        name: 'agreement', //Optional.[String].Default: none. To display in Error message. i.e Please check the ${name}.
-                        check: true, //Optional.[Bool].Default: none. To determin if you need to validate.
-                        required: true, //Optional.[Bool].Default: none. To determin if it is required.
-                        showMsg: true, //Optional.[Bool].Default: none. Display the error message or not.
-                        msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: none. Show your custom error message no matter what when it has error if it is provied.
-                        msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: none. Show your custom success message no matter what when it has error if it is provied.
+                        name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
+                        check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                        required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+                        // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
+                        // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+                        // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
                   </div>
@@ -381,42 +845,44 @@ class Index extends Component {
                       validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
                       validationgCallback={res =>
                         this.setState({ hasMovieError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
-                      options={MOVIE_OPTIONS_LIST} //Required.[Array of Object(s)].Default: [].
+                      optionList={MOVIE_OPTIONS_LIST} //Required.[Array of Object(s)].Default: [].
                       classNameSelect="" //Optional.[String].Default: "".
                       classNameWrapper="" //Optional.[String].Default: "".
                       classNameContainer="" //Optional.[String].Default: "".
-                      classNameSelectOptionsContainer="" //Optional.[String].Default: "".
-                      classNameSelectOptionsItem="" //Optional.[String].Default: "".
+                      classNameOptionListContainer="" //Optional.[String].Default: "".
+                      classNameOptionListItem="" //Optional.[String].Default: "".
                       customStyleSelect={{}} //Optional.[Object].Default: {}.
                       customStyleWrapper={{}} //Optional.[Object].Default: {}.
                       customStyleContainer={{}} //Optional.[Object].Default: {}.
-                      customStyleSelectOptionsContainer={{}} //Optional.[Object].Default: {}.
-                      customStyleSelectOptionsItem={{}} //Optional.[Object].Default: {}.
+                      customStyleOptionListContainer={{}} //Optional.[Object].Default: {}.
+                      customStyleOptionListItem={{}} //Optional.[Object].Default: {}.
                       onChange={movie => this.setState({ movie })} //Optional.[Func].Default: () => {}. Will return the value.
                       onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-                      onFocus={() => {}} //Optional.[Func].Default: none.
-                      onClick={() => {}} //Optional.[Func].Default: none.
-                      locale="en-US" //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
-                      selectHtmla={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
-                      selectOptionsItemHtmla={MOVIE_OPTIONS_LIST.map((i, k) => {
-                        return (
-                          <div
-                            key={k}
-                            onClick={() => {
-                              this.handleMovieChange(i.id);
-                            }}
-                          >
-                            <span className="icon icon-person" />{i.name}
-                          </div>
-                        );
-                      })} //Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
+                      // onFocus={() => {}} //Optional.[Func].Default: none.
+                      // onClick={() => {}} //Optional.[Func].Default: none.
+                      // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
+                      // selectOptionListItemHtml={MOVIE_OPTIONS_LIST.map(
+                      //   (i, k) => {
+                      //     return (
+                      //       <div
+                      //         key={k}
+                      //         onClick={() => {
+                      //           this.handleMovieChange(i.id);
+                      //         }}
+                      //       >
+                      //         <span className="icon icon-person" />{i.name}
+                      //       </div>
+                      //     );
+                      //   }
+                      // )} //Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
                       validationOption={{
-                        name: 'movie', //Optional.[String].Default: none. To display in Error message. i.e Please select a ${name}.
-                        check: true, //Optional.[Bool].Default: none. To determin if you need to validate.
-                        required: true, //Optional.[Bool].Default: none. To determin if it is required.
-                        showMsg: true, //Optional.[Bool].Default: none. Display the error message or not.
-                        msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: none. Show your custom error message no matter what when it has error if it is provied.
-                        msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: none. Show your custom success message no matter what when it has error if it is provied.
+                        name: 'movie', //Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
+                        check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                        required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+                        // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
+                        // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+                        // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
                   </div>
@@ -438,8 +904,8 @@ class Index extends Component {
                   <div style={{ flex: '6 6 0' }}>
                     <Textarea
                       tabIndex="7" //Optional.[String or Number].Default: -1.
-                      id="description" //Optional.[String].Default: "".  Input ID.
-                      name="description" //Optional.[String].Default: "". Input name.
+                      id="description" //Optional.[String].Default: "".  Textarea ID.
+                      name="description" //Optional.[String].Default: "". Textarea name.
                       value={description} //Optional.[String].Default: "".
                       disabled={false} //Optional.[Bool].Default: false.
                       placeholder="Place your description here ^-^" //Optional.[String].Default: "".
@@ -457,22 +923,22 @@ class Index extends Component {
                       customStyleContainer={{}} //Optional.[Object].Default: {}.
                       onChange={description => this.setState({ description })} //Required.[Func].Default: () => {}. Will return the value.
                       onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-                      onFocus={() => {}} //Optional.[Func].Default: none.
-                      onClick={() => {}} //Optional.[Func].Default: none.
-                      locale="en-US" //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+                      // onFocus={() => {}} //Optional.[Func].Default: none.
+                      // onClick={() => {}} //Optional.[Func].Default: none.
                       validationOption={{
-                        name: 'Description', //Optional.[String].Default: none. To display in Error message. i.e Please enter your ${name}.
-                        check: true, //Optional.[Bool].Default: none. To determin if you need to validate.
-                        required: true, //Optional.[Bool].Default: none. To determin if it is required.
-                        type: 'string', //Optional.[String].Default: none. Validation type, options are ['string', 'number', 'phone'].
-                        showMsg: true, //Optional.[Bool].Default: none. Display the error message or not.
-                        min: 2, //Optional.[Number].Default: none. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
-                        max: 10, //Optional.[Number].Default: none. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
-                        length: 2, //Optional.[Number].Default: none. Validation of exact length of the value.
-                        reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: none. Custom regex.
-                        regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: none. Custom regex error message.
-                        msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: none. Show your custom error message no matter what when it has error if it is provied.
-                        msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: none. Show your custom success message no matter what when it has error if it is provied.
+                        name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+                        check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                        required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+                        type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+                        // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
+                        // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+                        // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
+                        // max: 10, //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
+                        // length: 2, //Optional.[Number].Default: 0. Validation of exact length of the value.
+                        // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "". Custom regex.
+                        // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "". Custom regex error message.
+                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+                        // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
                   </div>

@@ -4,13 +4,76 @@ import cx from 'classnames';
 import { toCamelCase } from './utils';
 import Message from './message';
 import Validator from './validator';
+import { LOCALE_OPTION_LIST } from './const';
 let STYLES = {};
 try {
   STYLES = require('./styles.css');
 } catch (ex) {}
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'phone'];
-
+const getDefaultValidationOption = obj => {
+  let {
+    reg,
+    min,
+    max,
+    type,
+    name,
+    check,
+    length,
+    regMsg,
+    compare,
+    required,
+    showMsg,
+    locale,
+    phoneCountry,
+    msgOnError,
+    msgOnSuccess
+  } = obj;
+  if (!locale) {
+    locale = LOCALE_OPTION_LIST[0];
+  } else {
+    if (LOCALE_OPTION_LIST.indexOf(locale) == -1) {
+      locale = LOCALE_OPTION_LIST[0];
+    }
+  }
+  if (!phoneCountry) {
+    phoneCountry = LOCALE_OPTION_LIST[0];
+  } else {
+    if (LOCALE_OPTION_LIST.indexOf(phoneCountry) == -1) {
+      phoneCountry = LOCALE_OPTION_LIST[0];
+    }
+  }
+  reg = reg ? reg : '';
+  min = min ? min : 0;
+  max = max ? max : 0;
+  type = type ? type : 'string';
+  name = name ? name : '';
+  check = check ? check : true;
+  showMsg = showMsg ? showMsg : true;
+  length = length ? length : 0;
+  regMsg = regMsg ? regMsg : '';
+  compare = compare ? compare : '';
+  required = required ? required : true;
+  msgOnError = msgOnError ? msgOnError : '';
+  msgOnSuccess = msgOnSuccess ? msgOnSuccess : '';
+  return {
+    reg,
+    min,
+    max,
+    type,
+    name,
+    check,
+    length,
+    regMsg,
+    locale,
+    compare,
+    required,
+    showMsg,
+    phoneCountry,
+    msgOnError,
+    msgOnSuccess
+  };
+};
 class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -66,7 +129,7 @@ class Index extends React.Component {
   }
 
   check(inputValue) {
-    const { validationOption, locale } = this.props;
+    const { validationOption } = this.props;
     const {
       reg,
       min,
@@ -76,11 +139,12 @@ class Index extends React.Component {
       check,
       length,
       regMsg,
+      locale,
       compare,
       required,
       phoneCountry,
       msgOnSuccess
-    } = validationOption;
+    } = getDefaultValidationOption(validationOption);
     if (!check) {
       return;
     }
@@ -172,8 +236,7 @@ class Index extends React.Component {
           }
           // CHECK PHONE
           if (type == VALIDATE_OPTION_TYPE_LIST[2]) {
-            const region = phoneCountry ? phoneCountry : locale;
-            if (!Validator[type](value, region)) {
+            if (!Validator[type](value, phoneCountry)) {
               this.handleCheckEnd(true, Msg.invalid(nameText));
               return;
             }
@@ -189,6 +252,7 @@ class Index extends React.Component {
         if (msgOnSuccess) {
           this.setState({ successMsg: msgOnSuccess });
         }
+        this.handleCheckEnd(false, msgOnSuccess);
       } else {
         console.error(
           `The valid ${toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`
@@ -200,8 +264,8 @@ class Index extends React.Component {
   }
 
   handleCheckEnd(err, msg) {
-    if (err && this.props.validationOption.msgOnError) {
-      msg = this.props.validationOption.msgOnError;
+    if (err && getDefaultValidationOption(this.props.validationOption).msgOnError) {
+      msg = getDefaultValidationOption(this.props.validationOption).msgOnError;
     }
     this.setState({ err, msg });
     const { validationgCallback } = this.props;
@@ -256,10 +320,14 @@ class Index extends React.Component {
     const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
 
     let msgHtml;
-    if (validationOption.showMsg && err && msg) {
+    if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (validationOption.showMsg && !err && successMsg) {
+    if (
+      getDefaultValidationOption(validationOption).showMsg &&
+      !err &&
+      successMsg
+    ) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (
@@ -303,23 +371,7 @@ Index.defaultProps = {
   customStyleInput: {},
   customStyleWrapper: {},
   customStyleContainer: {},
-  validationOption: {
-    reg: '',
-    regMsg: '',
-    type: '',
-    name: '',
-    max: 0,
-    min: 0,
-    length: 0,
-    check: true,
-    compare: '',
-    msgOnError: '',
-    showMsg: false,
-    required: false,
-    msgOnSuccess: '',
-    phoneCountry: 'en-US'
-  },
-  locale: 'en-US',
+  validationOption: {},
   onChange: () => {}
 };
 
@@ -339,7 +391,6 @@ Index.propTypes = {
   customStyleWrapper: PropTypes.object,
   customStyleContainer: PropTypes.object,
   validationOption: PropTypes.object,
-  locale: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,

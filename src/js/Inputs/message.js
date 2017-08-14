@@ -36,8 +36,17 @@ const SELECT_VALIDATION_EN_US = {
 const CHECK_BOX_VALIDATION_ZH_CN = {
   unchecked: name => `${name}必须勾选`
 };
+
 const CHECK_BOX_VALIDATION_EN_US = {
   unchecked: name => `${getEnglishName(name)}must be checked`
+};
+
+const RADIO_BOX_VALIDATION_ZH_CN = {
+  empty: name => `必须勾选一个${name}`
+};
+
+const RADIO_BOX_VALIDATION_EN_US = {
+  empty: name => `Please choose one ${getEnglishName(name)}`
 };
 
 const message = {
@@ -47,7 +56,7 @@ const message = {
       number: TEXT_BOX_VALIDATION_ZH_CN,
       phone: TEXT_BOX_VALIDATION_ZH_CN
     },
-    radiobox: {},
+    radiobox: RADIO_BOX_VALIDATION_ZH_CN,
     checkbox: CHECK_BOX_VALIDATION_ZH_CN,
     select: SELECT_VALIDATION_ZH_CN,
     textarea: TEXT_BOX_VALIDATION_ZH_CN
@@ -58,7 +67,7 @@ const message = {
       number: TEXT_BOX_VALIDATION_EN_US,
       phone: TEXT_BOX_VALIDATION_EN_US
     },
-    radiobox: {},
+    radiobox: RADIO_BOX_VALIDATION_EN_US,
     checkbox: CHECK_BOX_VALIDATION_EN_US,
     select: SELECT_VALIDATION_EN_US,
     textarea: TEXT_BOX_VALIDATION_EN_US

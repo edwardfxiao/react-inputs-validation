@@ -1,0 +1,37 @@
+|Props                             |       |Type    |Description                                  |Default     |
+|---                               |---    |---     |---                                          |  ---       |
+|tabIndex                          |  Opt  |  Str   |                                             |  -1        |
+|id                                |  Opt  |  Str   |                                             |  ""        |
+|name                              |  Opt  |  Str   |                                             |  ""        |
+|type                              |  Opt  |  Str   |                                             |  "text"    |
+|value                             |  Opt  |  Str   |                                             |  ""        |
+|disabled                          |  Opt  |  Bool  |                                             |  false     |
+|placeholder                       |  Opt  |  Str   |                                             |  ""        |
+|**validate**                      |**Opt**|**Bool**|                                             |**false**   |
+|**validationgCallback**           |**Opt**|**Func**|                                             |**none**    |
+|classNameInput                    |  Opt  |  Str   |                                             |  ""        |
+|classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
+|classNameContainer                |  Opt  |  Str   |                                             |  ""        |
+|customStyleInput                  |  Opt  |  Obj   |                                             |  {}        |
+|customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
+|customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
+|**onChange**                      |**Req**|**Func**|                                             |**() => {}**|
+|**onBlur**                        |**Opt**|**Func**|                                             |**none**    |
+|onFocus                           |  Opt  |  Func  |                                             |  none      |
+|onClick                           |  Opt  |  Func  |                                             |  none      |
+|**validationOption**              |**Opt**|**obj** |                                             |**{}**      |
+|**validationOption.name**         |**Opt**|**Str** |                                             |**""**      |
+|**validationOption.check**        |**Opt**|**Bool**|                                             |**true**    |
+|**validationOption.required**     |**Opt**|**Bool**|                                             |**true**    |
+|**validationOption.type**         |**Opt**|**Str** |                                             |**"string"**|
+|**validationOption.showMsg**      |**Opt**|**Bool**|                                             |**true**    |
+|**validationOption.min**          |**Opt**|**Numb**|                                             |**0**       |
+|**validationOption.max**          |**Opt**|**Numb**|                                             |**0**       |
+|**validationOption.length**       |**Opt**|**Numb**|                                             |**0**       |
+|**validationOption.compare**      |**Opt**|**Str** |                                             |**""**      |
+|**validationOption.reg**          |**Opt**|**Bool**|                                             |**""**      |
+|**validationOption.regMsg**       |**Opt**|**Str** |                                             |**""**      |
+|**validationOption.locale**       |**Opt**|**Str** |                                             |**"en-US"** |
+|**validationOption.phoneCountry** |**Opt**|**Str** |                                             |**"en-US"** |
+|**validationOption.msgOnError**   |**Opt**|**Str** |                                             |**""**      |
+|**validationOption.msgOnSuccess** |**Opt**|**Str** |                                             |**""**      |

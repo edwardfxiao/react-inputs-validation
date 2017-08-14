@@ -1,24 +1,99 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Message from './message';
+import { LOCALE_OPTION_LIST } from './const';
 let STYLES = {};
 try {
   STYLES = require('./styles.css');
 } catch (ex) {}
-
+const TYPE = 'radiobox';
+const getDefaultValidationOption = obj => {
+  let {
+    name,
+    check,
+    required,
+    showMsg,
+    locale,
+    msgOnError,
+    msgOnSuccess
+  } = obj;
+  if (!locale) {
+    locale = LOCALE_OPTION_LIST[0];
+  } else {
+    if (LOCALE_OPTION_LIST.indexOf(locale) == -1) {
+      locale = LOCALE_OPTION_LIST[0];
+    }
+  }
+  name = name ? name : '';
+  check = check ? check : true;
+  showMsg = showMsg ? showMsg : true;
+  required = required ? required : true;
+  msgOnError = msgOnError ? msgOnError : '';
+  msgOnSuccess = msgOnSuccess ? msgOnSuccess : '';
+  return {
+    name,
+    check,
+    showMsg,
+    required,
+    locale,
+    msgOnError,
+    msgOnSuccess
+  };
+};
+const isValidateValue = value => {
+  value = String(value);
+  if (value == '' || value == 'null' || value == 'undefined') {
+    return true;
+  } else {
+    return false;
+  }
+};
 class Index extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      err: false,
+      msg: '',
+      successMsg: undefined
+    };
+    if (!props.optionList.length) {
+      console.error(
+        'Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
+      );
+      return;
+    } else {
+      props.optionList.map(i => {
+        if (typeof i.name == 'undefined' || typeof i.id == 'undefined') {
+          console.error(
+            'Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
+          );
+        }
+        return;
+      });
+    }
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.onBlur = this.onBlur.bind(this);
   }
 
-  onChange() {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.validate == false && nextProps.validate == true) {
+      this.check();
+    }
+    if (this.props.value != nextProps.value) {
+      if (this.state.err) {
+        this.setState({ err: false });
+      } else {
+        this.setState({ successMsg: undefined });
+      }
+    }
+  }
+
+  onChange(val) {
     const { onChange } = this.props;
-    onChange && onChange(this.input.value);
+    onChange && onChange(val);
   }
 
   onClick() {
@@ -29,6 +104,7 @@ class Index extends React.Component {
   onBlur() {
     const { onBlur } = this.props;
     if (onBlur) {
+      this.check();
       onBlur();
     }
   }
@@ -41,49 +117,158 @@ class Index extends React.Component {
     }
   }
 
+  check(val = null) {
+    let { value } = this.props;
+    if (val != null) {
+      value = val;
+    }
+    const {
+      name,
+      check,
+      required,
+      locale,
+      msgOnSuccess
+    } = getDefaultValidationOption(this.props.validationOption);
+    if (!check) {
+      return;
+    }
+    const Msg = Message[locale][TYPE];
+    let nameText = name ? name : '';
+    if (required) {
+      if (isValidateValue(value)) {
+        this.handleCheckEnd(true, Msg.empty(nameText));
+        return;
+      }
+    }
+    if (msgOnSuccess) {
+      this.setState({ successMsg: msgOnSuccess });
+    }
+    this.handleCheckEnd(false, msgOnSuccess);
+  }
+
+  handleCheckEnd(err, msg) {
+    if (getDefaultValidationOption(this.props.validationOption).msgOnError) {
+      msg = getDefaultValidationOption(this.props.validationOption).msgOnError;
+    }
+    this.setState({ err, msg });
+    const { validationgCallback } = this.props;
+    validationgCallback && validationgCallback(err);
+  }
+
   render() {
     const {
       tabIndex,
       id,
       name,
       value,
-      checked,
       disabled,
-      labelHtml,
+      optionList,
       classNameWrapper,
       classNameContainer,
       classNameInput,
+      classNameOptionListItem,
       customStyleWrapper,
       customStyleContainer,
-      customStyleInput
+      customStyleInput,
+      customStyleOptionListItem,
+      validationOption
     } = this.props;
+
+    const { err, msg, successMsg } = this.state;
 
     const wrapperClass = cx(
       classNameWrapper,
+      err && STYLES['error'],
+      successMsg && !err && STYLES['success'],
       STYLES['radiobox__wrapper'],
       disabled && STYLES['disabled']
     );
 
     const containerClass = cx(
       classNameContainer,
+      err && STYLES['error'],
+      successMsg && !err && STYLES['success'],
       STYLES['radiobox__container'],
       disabled && STYLES['disabled']
     );
 
     const inputClass = cx(
       classNameInput,
+      err && STYLES['error'],
+      successMsg && !err && STYLES['success'],
       STYLES['radiobox__input'],
       disabled && STYLES['disabled']
     );
 
     const labelClass = cx(
+      err && STYLES['error'],
+      successMsg && !err && STYLES['success'],
       STYLES['radiobox__label'],
-      checked && STYLES['checked'],
       disabled && STYLES['disabled']
     );
 
+    const optionListItemClass = cx(
+      classNameOptionListItem,
+      err && STYLES['error'],
+      successMsg && !err && STYLES['success'],
+      STYLES['radiobox__item'],
+      disabled && STYLES['disabled']
+    );
+
+    const errMsgClass = cx(STYLES['msg'], err && STYLES['error']);
+    const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
+
+    let msgHtml;
+    if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
+      msgHtml = <div className={errMsgClass}>{msg}</div>;
+    }
+    if (
+      getDefaultValidationOption(validationOption).showMsg &&
+      !err &&
+      successMsg
+    ) {
+      msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+    }
+
+    let optionHtml;
+    if (optionList.length) {
+      optionHtml = optionList.map((i, k) => {
+        let checked = String(i.id) == String(value) ? true : false;
+        return (
+          <div
+            className={optionListItemClass}
+            style={customStyleOptionListItem}
+            key={k}
+          >
+            <input
+              id={`${id}-${k}`}
+              name={name}
+              type="radio"
+              value={value}
+              checked={checked}
+              disabled={disabled}
+              className={
+                checked ? `${STYLES['checked']} ${inputClass}` : `${inputClass}`
+              }
+              onChange={() => this.onChange(i.id)}
+              style={customStyleInput}
+            />
+            <label
+              htmlFor={`${id}-${k}`}
+              className={
+                checked ? `${STYLES['checked']} ${labelClass}` : `${labelClass}`
+              }
+            >
+              {i.name}
+            </label>
+          </div>
+        );
+      });
+    }
+
     return (
       <div
+        id={id}
         tabIndex={tabIndex}
         className={wrapperClass}
         style={customStyleWrapper}
@@ -92,22 +277,9 @@ class Index extends React.Component {
         onFocus={this.onFocus}
       >
         <div className={containerClass} style={customStyleContainer}>
-          <input
-            id={id}
-            name={name}
-            type="radio"
-            value={value}
-            checked={checked}
-            disabled={disabled}
-            className={inputClass}
-            onChange={this.onChange}
-            style={customStyleInput}
-            ref={ref => (this.input = ref)}
-          />
-          <label htmlFor={id} className={labelClass}>
-            {labelHtml}
-          </label>
+          {optionHtml}
         </div>
+        {msgHtml}
       </div>
     );
   }
@@ -118,16 +290,18 @@ Index.defaultProps = {
   id: '',
   name: '',
   value: '',
-  checked: false,
   disabled: false,
-  labelHtml: undefined,
+  optionList: [],
   classNameInput: '',
   classNameWrapper: '',
   classNameContainer: '',
+  classNameOptionListItem: '',
   customStyleInput: {},
   customStyleWrapper: {},
   customStyleContainer: {},
-  locale: 'zh-CN',
+  customStyleOptionListItem: {},
+  validate: false,
+  validationOption: {},
   onChange: () => {}
 };
 
@@ -136,20 +310,23 @@ Index.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
-  checked: PropTypes.bool,
   disabled: PropTypes.bool,
-  labelHtml: PropTypes.element,
+  optionList: PropTypes.array,
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
-  locale: PropTypes.string,
+  validate: PropTypes.bool,
+  validationOption: PropTypes.object,
   classNameWrapper: PropTypes.string,
   classNameContainer: PropTypes.string,
   classNameInput: PropTypes.string,
+  classNameOptionListItem: PropTypes.string,
   customStyleWrapper: PropTypes.object,
   customStyleContainer: PropTypes.object,
-  customStyleInput: PropTypes.object
+  customStyleInput: PropTypes.object,
+  customStyleOptionListItem: PropTypes.object,
+  validationgCallback: PropTypes.func
 };
 
 export default Index;

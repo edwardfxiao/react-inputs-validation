@@ -2,12 +2,45 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Message from './message';
+import { LOCALE_OPTION_LIST } from './const';
 let STYLES = {};
 try {
   STYLES = require('./styles.css');
 } catch (ex) {}
-
 const TYPE = 'select';
+const getDefaultValidationOption = obj => {
+  let {
+    name,
+    check,
+    required,
+    showMsg,
+    locale,
+    msgOnError,
+    msgOnSuccess
+  } = obj;
+  if (!locale) {
+    locale = LOCALE_OPTION_LIST[0];
+  } else {
+    if (LOCALE_OPTION_LIST.indexOf(locale) == -1) {
+      locale = LOCALE_OPTION_LIST[0];
+    }
+  }
+  name = name ? name : '';
+  check = check ? check : true;
+  showMsg = showMsg ? showMsg : true;
+  required = required ? required : true;
+  msgOnSuccess = msgOnSuccess ? msgOnSuccess : '';
+  msgOnError = msgOnError ? msgOnError : '';
+  return {
+    name,
+    check,
+    showMsg,
+    required,
+    locale,
+    msgOnError,
+    msgOnSuccess
+  };
+};
 const isValidateValue = value => {
   value = String(value);
   if (value == '' || value == 'null' || value == 'undefined') {
@@ -27,16 +60,16 @@ class Index extends React.Component {
       msg: '',
       successMsg: undefined
     };
-    if (!props.options.length) {
+    if (!props.optionList.length) {
       console.error(
-        'Please provide valid options. i.e options=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
+        'Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
       );
       return;
     } else {
-      props.options.map(i => {
+      props.optionList.map(i => {
         if (typeof i.name == 'undefined' || typeof i.id == 'undefined') {
           console.error(
-            'Please provide valid options. i.e options=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
+            'Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
           );
         }
         return;
@@ -130,8 +163,13 @@ class Index extends React.Component {
     if (val != null) {
       value = val;
     }
-    const { validationOption, locale } = this.props;
-    const { name, check, required, msgOnSuccess } = validationOption;
+    const {
+      name,
+      check,
+      required,
+      locale,
+      msgOnSuccess
+    } = getDefaultValidationOption(this.props.validationOption);
     if (!check) {
       return;
     }
@@ -146,11 +184,12 @@ class Index extends React.Component {
     if (msgOnSuccess) {
       this.setState({ successMsg: msgOnSuccess });
     }
+    this.handleCheckEnd(false, msgOnSuccess);
   }
 
   handleCheckEnd(err, msg) {
-    if (this.props.validationOption.msgOnError) {
-      msg = this.props.validationOption.msgOnError;
+    if (getDefaultValidationOption(this.props.validationOption).msgOnError) {
+      msg = getDefaultValidationOption(this.props.validationOption).msgOnError;
     }
     this.setState({ err, msg });
     const { validationgCallback } = this.props;
@@ -162,21 +201,21 @@ class Index extends React.Component {
       tabIndex,
       id,
       name,
-      options,
+      optionList,
       disabled,
       classNameWrapper,
       classNameContainer,
       classNameSelect,
-      classNameSelectOptionsContainer,
-      classNameSelectOptionsItem,
-      classNameDropdownIconOptionsItem,
+      classNameOptionListContainer,
+      classNameOptionListItem,
+      classNameDropdownIconOptionListItem,
       customStyleWrapper,
       customStyleContainer,
       customStyleSelect,
-      customStyleSelectOptionsContainer,
-      customStyleSelectOptionsItem,
+      customStyleOptionListContainer,
+      customStyleOptionListItem,
       selectHtml,
-      selectOptionsItemHtml,
+      selectOptionListItemHtml,
       validationOption
     } = this.props;
 
@@ -215,8 +254,8 @@ class Index extends React.Component {
       disabled && STYLES['disabled']
     );
 
-    const selectOptionsContainerClass = cx(
-      classNameSelectOptionsContainer,
+    const selectOptionListContainerClass = cx(
+      classNameOptionListContainer,
       STYLES['select__options-container'],
       err && STYLES['error'],
       show && STYLES['show'],
@@ -224,8 +263,8 @@ class Index extends React.Component {
       disabled && STYLES['disabled']
     );
 
-    const selectOptionsItemClass = cx(
-      classNameSelectOptionsItem,
+    const selectOptionListItemClass = cx(
+      classNameOptionListItem,
       STYLES['select__options-item'],
       err && STYLES['error'],
       successMsg && !err && STYLES['success'],
@@ -233,7 +272,7 @@ class Index extends React.Component {
     );
 
     const dropdownIconClass = cx(
-      classNameDropdownIconOptionsItem,
+      classNameDropdownIconOptionListItem,
       STYLES['select__dropdown-icon']
     );
 
@@ -241,33 +280,37 @@ class Index extends React.Component {
     const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
 
     let msgHtml;
-    if (validationOption.showMsg && err && msg) {
+    if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (validationOption.showMsg && !err && successMsg) {
+    if (
+      getDefaultValidationOption(validationOption).showMsg &&
+      !err &&
+      successMsg
+    ) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
-    let optionsHtml;
+    let optionListHtml;
     let item;
-    options.filter(i => {
+    optionList.filter(i => {
       if (String(i.id) == String(value)) {
         item = i;
       }
     });
-    if (options.length) {
-      if (selectOptionsItemHtml) {
-        optionsHtml = selectOptionsItemHtml;
+    if (optionList.length) {
+      if (selectOptionListItemHtml) {
+        optionListHtml = selectOptionListItemHtml;
       } else {
-        optionsHtml = options.map((i, k) => {
+        optionListHtml = optionList.map((i, k) => {
           return (
             <div
               className={
                 String(i.id) == String(value)
-                  ? `${selectOptionsItemClass} ${STYLES['active']}`
-                  : `${selectOptionsItemClass}`
+                  ? `${selectOptionListItemClass} ${STYLES['active']}`
+                  : `${selectOptionListItemClass}`
               }
               key={k}
-              style={customStyleSelectOptionsItem}
+              style={customStyleOptionListItem}
               onClick={() => {
                 this.onChange(i.id);
               }}
@@ -318,10 +361,10 @@ class Index extends React.Component {
             {selectorHtml}
           </div>
           <div
-            className={selectOptionsContainerClass}
-            style={customStyleSelectOptionsContainer}
+            className={selectOptionListContainerClass}
+            style={customStyleOptionListContainer}
           >
-            {optionsHtml}
+            {optionListHtml}
           </div>
         </div>
         {msgHtml}
@@ -336,26 +379,18 @@ Index.defaultProps = {
   name: '',
   value: '',
   disabled: false,
-  options: [],
+  optionList: [],
   classNameWrapper: '',
   classNameContainer: '',
-  classNameSelectOptionsItem: '',
-  classNameSelectOptionsContainer: '',
-  classNameDropdownIconOptionsItem: '',
+  classNameOptionListItem: '',
+  classNameOptionListContainer: '',
+  classNameDropdownIconOptionListItem: '',
   customStyleWrapper: {},
   customStyleContainer: {},
-  customStyleSelectOptionsItem: {},
-  customStyleSelectOptionsContainer: {},
+  customStyleOptionListItem: {},
+  customStyleOptionListContainer: {},
   customStyleDropdownIcon: {},
-  validationOption: {
-    name: '',
-    check: true,
-    msgOnError: '',
-    showMsg: false,
-    required: false,
-    msgOnSuccess: ''
-  },
-  locale: 'en-US',
+  validationOption: {},
   onChange: () => {}
 };
 
@@ -366,7 +401,7 @@ Index.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   disabled: PropTypes.bool,
   validate: PropTypes.bool,
-  options: PropTypes.array.isRequired,
+  optionList: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func,
   onBlur: PropTypes.func,
@@ -374,19 +409,19 @@ Index.propTypes = {
   validationOption: PropTypes.object,
   locale: PropTypes.string,
   selectHtml: PropTypes.element,
-  selectOptionsItemHtml: PropTypes.array,
+  selectOptionListItemHtml: PropTypes.array,
   classNameWrapper: PropTypes.string,
   classNameContainer: PropTypes.string,
   classNameSelect: PropTypes.string,
-  classNameSelectOptionsContainer: PropTypes.string,
-  classNameDropdownIconOptionsItem: PropTypes.string,
-  classNameSelectOptionsItem: PropTypes.string,
+  classNameOptionListContainer: PropTypes.string,
+  classNameDropdownIconOptionListItem: PropTypes.string,
+  classNameOptionListItem: PropTypes.string,
   customStyleWrapper: PropTypes.object,
   customStyleContainer: PropTypes.object,
   customStyleSelect: PropTypes.object,
-  customStyleSelectOptionsContainer: PropTypes.object,
+  customStyleOptionListContainer: PropTypes.object,
   customStyleDropdownIcon: PropTypes.object,
-  customStyleSelectOptionsItem: PropTypes.object,
+  customStyleOptionListItem: PropTypes.object,
   validationgCallback: PropTypes.func
 };
 

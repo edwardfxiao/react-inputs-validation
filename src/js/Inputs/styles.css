@@ -52,6 +52,7 @@ select {
 
 
 
+
 /*TEXTBOX*/
 
 .textbox__wrapper,
@@ -162,6 +163,7 @@ input[type=text].textbox__input.disabled {
 
 
 
+
 /*TEXTAREA*/
 
 .textarea__wrapper,
@@ -233,6 +235,7 @@ textarea.textarea__input.disabled {
 
 
 
+
 /*RADIOBOX*/
 
 .radiobox__wrapper,
@@ -279,8 +282,19 @@ input[type="radio"] {
 }
 
 .radiobox__label.checked:before {
-  background-color: #e5e5e5;
+  background-color: #4a4a4a;
   box-shadow: inset 0 0 0 4px #f4f4f4;
+}
+
+.radiobox__item {
+  width: auto
+}
+
+.radiobox__item.success .radiobox__label.checked:before{
+  border-color: #2fca6f;
+}
+.radiobox__item.error .radiobox__label:before{
+  border-color: #ff5a57;
 }
 
 
@@ -379,12 +393,14 @@ input[type="checkbox"] {
 
 
 
+
 /*SELECT*/
 
 .select__wrapper,
 .select__wrapper *:focus {
   outline: 0;
 }
+
 
 
 

@@ -82,3 +82,73 @@
   }}
 />
 ```
+
+### Radiobox
+|Props                             |       |Type    |Description                                  |Default     |
+|---                               |---    |---     |---                                          |  ---       |
+|tabIndex                          |  Opt  |  Str   |                                             |  -1        |
+|id                                |  Opt  |  Str   |                                             |  ""        |
+|name                              |  Opt  |  Str   |                                             |  ""        |
+|value                             |  Opt  |  Str   |                                             |  ""        |
+|disabled                          |  Opt  |  Bool  |                                             |  false     |
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.**|**false**   |
+|**validationgCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
+|**optionList**                    |**Req**|**Array**|[{id: 'teacher', name: 'teacher']           |[]
+|classNameInput                    |  Opt  |  Str   |                                             |  ""        |
+|classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
+|classNameContainer                |  Opt  |  Str   |                                             |  ""        |
+|classNameOptionListItem           |  Opt  |  Str   |                                             |  ""        |
+|customStyleInput                  |  Opt  |  Obj   |                                             |  {}        |
+|customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
+|customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
+|customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
+|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
+|**onChange**                      |**Req.**|**Func**                  |**() => {}. Will return the value.**|**()=>{}**   |
+|onFocus                           |*Opt.*  |Func                      |                                                                                                            |none     |
+|onClick                           |*Opt.*  |Func                      |                                                                                                            |none     |
+|**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
+|**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
+|**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
+|**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
+|**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
+|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.**|**"en-US"** |
+|**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
+|**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
+
+```js
+<Radiobox
+  tabIndex={2} //Optional.[String or Number].Default: -1.
+  id="job" //Optional.[String].Default: "".  Input ID.
+  name="job" //Optional.[String].Default: "". Input name.
+  disabled={false} //Optional.[Bool].Default: false.
+  value={job} //Optional.[String].Default: "".
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
+  validationgCallback={res =>
+    this.setState({ hasJobError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
+  optionList={JOB_OPTIONS_LIST}
+  classNameInput="" //Optional.[String].Default: "".
+  classNameWrapper="" //Optional.[String].Default: "".
+  classNameContainer="" //Optional.[String].Default: "".
+  classNameOptionListItem="" //Optional.[String].Default: "".
+  customStyleInput={{}} //Optional.[Object].Default: {}.
+  customStyleWrapper={{}} //Optional.[Object].Default: {}.
+  customStyleContainer={{
+    display: 'flex',
+    justifyContent: 'flex-start'
+  }} //Optional.[Object].Default: {}.
+  customStyleOptionListItem={{ marginRight: '20px' }} //Optional.[Object].Default: {}.
+  onChange={job => this.setState({ job })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={() => {}} //Optional.[Func].Default: none.
+  // onFocus={() => {}} //Optional.[Func].Default: none.
+  // onClick={() => {}} //Optional.[Func].Default: none.
+  validationOption={{
+    name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+    // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
+    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+    // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+    // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+  }}
+/>
+```

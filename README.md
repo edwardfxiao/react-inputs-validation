@@ -1,4 +1,5 @@
 # react-inputs-validation
+[Checkbox](#Checkbox)
 
 # Event & Usage
 ### Textbox

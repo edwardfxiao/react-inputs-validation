@@ -5,9 +5,13 @@ Please check the online <a href="https://edwardfhsiao.github.io/react-inputs-val
 
 # Docs Link
 [Textbox](#Textbox)
+
 [Radiobox](#Radiobox)
+
 [Checkbox](#Checkbox)
+
 [Select](#Select)
+
 [Textarea](#Textarea)
 
 # Installation

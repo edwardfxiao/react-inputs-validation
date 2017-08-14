@@ -154,7 +154,8 @@
 />
 ```
 
-### Checkbox
+### <a name="Checkbox"></a>Checkbox
+
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |

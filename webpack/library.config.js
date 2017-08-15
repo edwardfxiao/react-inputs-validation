@@ -96,7 +96,6 @@ const config = {
                   require('postcss-import')({
                     root: loader.resourcePath
                   }),
-                  require('lost'),
                   require('autoprefixer')(),
                   require('cssnano')()
                 ]

@@ -10,7 +10,7 @@ const stylelintRules = require('../stylelint.config.js');
 var config = (module.exports = {
   context: PATH.ROOT_PATH,
   entry: {
-    index: PATH.ROOT_PATH + 'example/index.js',
+    index: PATH.ROOT_PATH + 'example/index.js'
   },
   module: {
     rules: [
@@ -32,7 +32,16 @@ var config = (module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)\??.*$/,
-        use: [{ loader: 'url-loader?limit=8192&name=font/[name].[ext]' }]
+        use: [
+          {
+            loader: 'url-loader?limit=8192&name=font/[name].[ext]',
+            query: {
+              // outputPath: 'assets/',
+              // publicPath: 'http://localhost:8080/',
+              // emitFile: true
+            }
+          }
+        ]
       },
       {
         test: /\.(jpe?g|png|gif|svg)\??.*$/,

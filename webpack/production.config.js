@@ -6,7 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const config = _.merge(base, {
   devtool: 'cheap-source-map',
   output: {
-    publicPath: '/',
+    publicPath: './dist/',
     filename: '[name].js'
   }
 });

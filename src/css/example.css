@@ -1,0 +1,48 @@
+@import './icon.css';
+body {
+  margin: 0;
+  font-size: 100%;
+  padding: 10px;
+}
+
+.radiobox__wrapper label:before {
+  border-color: #000;
+}
+
+.radiobox__wrapper.checked label:before {
+  background-color: #000!important;
+}
+
+:global .icon {
+  color: #7eb4ef;
+}
+
+.my-button {
+  font-size: 14px;
+}
+
+.my-button__red {
+  color: #fff;
+  border-radius: 2px;
+  background: #ff5a57;
+  padding: 10px;
+  margin: 0 auto;
+  text-align: center;
+  cursor: pointer;
+}
+
+.sub-section-title-wrapper {
+  padding: 2%;
+}
+
+.sub-section-title {
+  background: #7eb4ef;
+  color: #fff;
+  padding: 30px;
+  font-size: 32px;
+}
+
+.block {
+  box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.75);
+  padding: 2%;
+}

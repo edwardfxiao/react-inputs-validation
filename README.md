@@ -4,7 +4,7 @@ A react inputs validation component.
 # <img src="http://cdn.edwardxiao.com/react-inputs.gif" />
 
 # Online Demo
-Please check the online <a href="https://edwardfhsiao.github.io/react-inputs-validation/">demo example https://edwardfhsiao.github.io/react-inputs-validation/</a>
+Please check the online <a href="https://edwardfhsiao.github.io/react-inputs-validation/">DEMO EXAMPLE</a>
 
 # Docs Link
 [Textbox](#Textbox)

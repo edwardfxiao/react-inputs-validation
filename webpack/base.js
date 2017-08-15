@@ -84,7 +84,6 @@ var config = (module.exports = {
                   require('postcss-import')({
                     root: loader.resourcePath
                   }),
-                  require('lost'),
                   require('autoprefixer')(),
                   require('cssnano')()
                 ]
@@ -115,7 +114,6 @@ var config = (module.exports = {
                   require('postcss-import')({
                     root: loader.resourcePath
                   }),
-                  require('lost'),
                   require('autoprefixer')(),
                   require('cssnano')()
                 ]

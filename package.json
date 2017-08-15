@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "0.0.1",
+  "version": "0.0.13",
   "description": "a react inputs validation component",
   "main": "index.js",
   "repository": {
@@ -34,26 +34,12 @@
     "server_prod": "node_modules/.bin/webpack-dev-server --config ./webpack/production.config.js"
   },
   "dependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-polyfill": "^6.7.4",
-    "classnames": "^2.2.5",
-    "font-awesome": "^4.7.0",
-    "lost": "^8.0.0",
-    "object-assign": "^4.1.0",
-    "open-color": "^1.5.1",
-    "prismjs": "^1.6.0",
-    "prop-types": "^15.5.6",
-    "react": "^15.3.2",
-    "react-addons-css-transition-group": "^15.4.2",
-    "react-addons-shallow-compare": "^15.5.2",
-    "react-addons-update": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-markdown": "^2.5.0",
-    "react-newline-to-break": "^1.0.6",
     "validator": "^8.0.0"
   },
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^1.0.2",
+    "babel-cli": "^6.24.1",
+    "babel-polyfill": "^6.7.4",
     "babel-core": "^6.2.1",
     "babel-loader": "^6.1.0",
     "babel-plugin-css-modules-transform": "^1.2.7",
@@ -61,6 +47,7 @@
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
+    "classnames": "^2.2.5",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.2",
     "empty-module": "^0.0.2",
@@ -72,9 +59,12 @@
     "html-webpack-plugin": "^2.28.0",
     "lodash": "^4.14.0",
     "node-sass": "^4.5.0",
+    "prop-types": "^15.5.6",
     "postcss-cssnext": "^2.9.0",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.6",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
     "sass-loader": "^6.0.2",
     "style-loader": "^0.13.2",
     "stylelint": "^7.2.0",
@@ -82,7 +72,6 @@
     "url-loader": "^0.5.7",
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.6.1",
-    "webpack-manifest-plugin": "^1.0.0",
-    "yargs": "^8.0.2"
+    "webpack-manifest-plugin": "^1.0.0"
   }
 }

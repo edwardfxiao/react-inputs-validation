@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import Markdown from 'react-markdown';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
-import STYLES from '../src/css/example.css';
+import STYLES from './index.css';
 import {
   Textbox,
   Textarea,

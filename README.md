@@ -40,8 +40,8 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
-|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.**|**false**   |
-|**validationgCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
+|**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |classNameInput                    |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
@@ -58,9 +58,9 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
 |**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number', 'phone'].**|**"string"**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
-|**validationOption.min**          |**Opt**|**Numb**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
-|**validationOption.max**          |**Opt**|**Numb**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
-|**validationOption.length**       |**Opt**|**Numb**|**Validation of exact length of the value.**|**0**       |
+|**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
+|**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
+|**validationOption.length**       |**Opt**|**Num**|**Validation of exact length of the value.**|**0**       |
 |**validationOption.compare**      |**Opt**|**Str** |**Compare this value to 3 to see if they are equal.**|**""**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
@@ -81,8 +81,8 @@ import { Textbox } from 'react-inputs-validation';
   value={name} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
   placeholder="Place your name here ^-^" //Optional.[String].Default: "".
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-  validationgCallback={res =>
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validationCallback={res =>
     this.setState({ hasNameError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
   classNameInput="" //Optional.[String].Default: "".
   classNameWrapper="" //Optional.[String].Default: "".
@@ -125,9 +125,9 @@ import { Textbox } from 'react-inputs-validation';
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
-|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.**|**false**   |
-|**validationgCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
-|**optionList**                    |**Req**|**Array**|[{id: 'teacher', name: 'teacher']           |[]
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
+|**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
+|**optionList**                    |**Req**|**Array**|**[{id: 'teacher', name: 'teacher']**           |**[]**
 |classNameInput                    |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
@@ -158,8 +158,8 @@ import { Radiobox } from 'react-inputs-validation';
   name="job" //Optional.[String].Default: "". Input name.
   disabled={false} //Optional.[Bool].Default: false.
   value={job} //Optional.[String].Default: "".
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-  validationgCallback={res =>
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validationCallback={res =>
     this.setState({ hasJobError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
   optionList={JOB_OPTIONS_LIST}
   classNameInput="" //Optional.[String].Default: "".
@@ -205,8 +205,8 @@ import { Radiobox } from 'react-inputs-validation';
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |checked                           |  Opt  |  Bool  |                                             |  false      |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
-|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.**|**false**   |
-|**validationgCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
+|**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameInputBox                 |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
@@ -236,8 +236,8 @@ import { Checkbox } from 'react-inputs-validation';
   value={agreement} //Required.[String].Default: "".
   checked={false} //Optional.[Bool].Default: false.
   disabled={false} //Optional.[Bool].Default: false.
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-  validationgCallback={res =>
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validationCallback={res =>
     this.setState({
       hasAgreementError: res,
       validate: false
@@ -283,8 +283,8 @@ import { Checkbox } from 'react-inputs-validation';
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |**validate**                      |**Opt**|**Bool**|                                             |**false**   |
-|**validationgCallback**           |**Opt**|**Func**|                                             |**none**    |
-|**optionList**                    |**Req**|**Array**|[{id: '1', name: 'Twin Peaks']              |[]          |
+|**validationCallback**           |**Opt**|**Func**|                                             |**none**    |
+|**optionList**                    |**Req**|**Array**|**[{id: '1', name: 'Twin Peaks']**              |**[]**          |
 |classNameSelect                   |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
@@ -299,8 +299,8 @@ import { Checkbox } from 'react-inputs-validation';
 |**onBlur**                        |**Opt**|**Func**|                                             |**none**    |
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
-|**selectHtml**                    |**Opt**|**Html**|The custom html that will display when user choose. Use it if you think the default html is ugly.|**none**    |
-|**selectOptionListItemHtml**      |**Opt**|**Html**|The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.|**none**    |
+|**selectHtml**                    |**Opt**|**Html**|**The custom html that will display when user choose. Use it if you think the default html is ugly.**|**none**    |
+|**selectOptionListItemHtml**      |**Opt**|**Html**|**The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.**|**none**    |
 |**validationOption**              |**Opt**|**obj** |                                             |**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -320,8 +320,8 @@ import { Select } from 'react-inputs-validation';
   name={'movie'} //Optional.[String].Default: "". Input name.
   value={movie} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-  validationgCallback={res =>
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validationCallback={res =>
     this.setState({ hasMovieError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
   optionList={MOVIE_OPTIONS_LIST} //Required.[Array of Object(s)].Default: [].
   classNameSelect="" //Optional.[String].Default: "".
@@ -380,8 +380,8 @@ import { Select } from 'react-inputs-validation';
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
-|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.**|**false**   |
-|**validationgCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
+|**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |classNameInput                    |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
@@ -398,9 +398,9 @@ import { Select } from 'react-inputs-validation';
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
 |**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number', 'phone'].**|**"string"**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
-|**validationOption.min**          |**Opt**|**Numb**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
-|**validationOption.max**          |**Opt**|**Numb**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
-|**validationOption.length**       |**Opt**|**Numb**|**Validation of exact length of the value.**|**0**       |
+|**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
+|**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
+|**validationOption.length**       |**Opt**|**Num**|**Validation of exact length of the value.**|**0**       |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.**|**"en-US"** |
@@ -417,8 +417,8 @@ import { Textarea } from 'react-inputs-validation';
   value={description} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
   placeholder="Place your description here ^-^" //Optional.[String].Default: "".
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-  validationgCallback={res =>
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validationCallback={res =>
     this.setState({
       hasDescriptionError: res,
       validate: false

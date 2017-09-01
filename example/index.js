@@ -679,8 +679,8 @@ class Index extends Component {
                       value={name} //Optional.[String].Default: "".
                       disabled={false} //Optional.[Bool].Default: false.
                       placeholder="Place your name here ^-^" //Optional.[String].Default: "".
-                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-                      validationgCallback={res =>
+                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                      validationCallback={res =>
                         this.setState({ hasNameError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
                       classNameInput="" //Optional.[String].Default: "".
                       classNameWrapper="" //Optional.[String].Default: "".
@@ -734,8 +734,8 @@ class Index extends Component {
                       name="job" //Optional.[String].Default: "". Input name.
                       disabled={false} //Optional.[Bool].Default: false.
                       value={job} //Optional.[String].Default: "".
-                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-                      validationgCallback={res =>
+                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                      validationCallback={res =>
                         this.setState({ hasJobError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
                       optionList={JOB_OPTIONS_LIST}
                       classNameInput="" //Optional.[String].Default: "".
@@ -788,8 +788,8 @@ class Index extends Component {
                       value={agreement} //Required.[String].Default: "".
                       checked={false} //Required.[Bool].Default: false.
                       disabled={false} //Optional.[Bool].Default: false.
-                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-                      validationgCallback={res =>
+                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                      validationCallback={res =>
                         this.setState({
                           hasAgreementError: res,
                           validate: false
@@ -842,8 +842,8 @@ class Index extends Component {
                       name={'movie'} //Optional.[String].Default: "". Input name.
                       value={movie} //Optional.[String].Default: "".
                       disabled={false} //Optional.[Bool].Default: false.
-                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-                      validationgCallback={res =>
+                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                      validationCallback={res =>
                         this.setState({ hasMovieError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
                       optionList={MOVIE_OPTIONS_LIST} //Required.[Array of Object(s)].Default: [].
                       classNameSelect="" //Optional.[String].Default: "".
@@ -909,8 +909,8 @@ class Index extends Component {
                       value={description} //Optional.[String].Default: "".
                       disabled={false} //Optional.[Bool].Default: false.
                       placeholder="Place your description here ^-^" //Optional.[String].Default: "".
-                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationgCallback" you provide.
-                      validationgCallback={res =>
+                      validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+                      validationCallback={res =>
                         this.setState({
                           hasDescriptionError: res,
                           validate: false

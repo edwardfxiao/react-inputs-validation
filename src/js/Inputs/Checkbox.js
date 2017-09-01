@@ -160,8 +160,8 @@ class Index extends React.Component {
       msg = getDefaultValidationOption(this.props.validationOption).msgOnError;
     }
     this.setState({ err, msg });
-    const { validationgCallback } = this.props;
-    validationgCallback && validationgCallback(err);
+    const { validationCallback } = this.props;
+    validationCallback && validationCallback(err);
   }
 
   render() {
@@ -308,7 +308,7 @@ Index.propTypes = {
   customStyleWrapper: PropTypes.object,
   customStyleContainer: PropTypes.object,
   customStyleInputBox: PropTypes.object,
-  validationgCallback: PropTypes.func
+  validationCallback: PropTypes.func
 };
 
 export default Index;

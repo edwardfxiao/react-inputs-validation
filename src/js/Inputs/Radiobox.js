@@ -25,12 +25,12 @@ const getDefaultValidationOption = obj => {
       locale = LOCALE_OPTION_LIST[0];
     }
   }
-  name = name ? name : '';
-  check = check ? check : true;
-  showMsg = showMsg ? showMsg : true;
-  required = required ? required : true;
-  msgOnError = msgOnError ? msgOnError : '';
-  msgOnSuccess = msgOnSuccess ? msgOnSuccess : '';
+  name = typeof name !== 'undefined' ? name : '';
+  check = typeof check !== 'undefined' ? check : true;
+  showMsg = typeof showMsg !== 'undefined' ? showMsg : true;
+  required = typeof required !== 'undefined' ? required : true;
+  msgOnError = typeof msgOnError !== 'undefined' ? msgOnError : '';
+  msgOnSuccess = typeof msgOnSuccess !== 'undefined' ? msgOnSuccess : '';
   return {
     name,
     check,

@@ -5,7 +5,7 @@ import Message from './message';
 import { LOCALE_OPTION_LIST } from './const';
 let STYLES = {};
 try {
-  STYLES = require('./styles.css');
+  STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
 const TYPE = 'select';
 const getDefaultValidationOption = obj => {
@@ -85,16 +85,20 @@ class Index extends React.Component {
   componentDidMount() {
     if (document.addEventListener) {
       window.addEventListener('mousedown', this.pageClick, false);
+      window.addEventListener('touchstart', this.pageClick, false);
     } else {
       document.attachEvent('onmousedown', this.pageClick);
+      document.attachEvent('touchstart', this.pageClick);
     }
   }
 
   componentWillUnmount() {
     if (document.removeEventListener) {
       window.removeEventListener('mousedown', this.pageClick, false);
+      window.removeEventListener('touchstart', this.pageClick, false);
     } else {
       document.detachEvent('onmousedown', this.pageClick);
+      document.detachEvent('touchstart', this.pageClick);
     }
   }
 

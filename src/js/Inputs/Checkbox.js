@@ -5,7 +5,7 @@ import Message from './message';
 import { LOCALE_OPTION_LIST } from './const';
 let STYLES = {};
 try {
-  STYLES = require('./styles.css');
+  STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
 const TYPE = 'checkbox';
 const getDefaultValidationOption = obj => {

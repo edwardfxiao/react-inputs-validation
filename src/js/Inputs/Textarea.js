@@ -108,11 +108,11 @@ class Index extends React.Component {
     }
   }
 
-  onKeyUp() {
+  onKeyUp(e) {
     const { onKeyUp } = this.props;
     if (onKeyUp) {
       this.check();
-      onKeyUp();
+      onKeyUp(e);
     }
   }
 

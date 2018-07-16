@@ -115,9 +115,9 @@ class Index extends React.Component {
     }
   }
 
-  onChange(value) {
+  onChange(value, e) {
     const { onChange } = this.props;
-    onChange && onChange(value);
+    onChange && onChange(value, e);
     this.setState({ value });
     if (this.state.err) {
       this.setState({ err: false });
@@ -126,24 +126,24 @@ class Index extends React.Component {
     }
   }
 
-  onClick() {
+  onClick(e) {
     const { onClick } = this.props;
-    onClick && onClick();
+    onClick && onClick(e);
   }
 
-  onBlur() {
+  onBlur(e) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
-      onBlur();
+      onBlur(e);
     }
   }
 
-  onFocus() {
+  onFocus(e) {
     this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
-      onFocus();
+      onFocus(e);
     }
   }
 
@@ -315,8 +315,8 @@ class Index extends React.Component {
               }
               key={k}
               style={customStyleOptionListItem}
-              onClick={() => {
-                this.onChange(i.id);
+              onClick={(e) => {
+                this.onChange(i.id, e);
               }}
             >
               {i.name}
@@ -342,8 +342,8 @@ class Index extends React.Component {
         id={STYLES['select__wrapper']}
         className={wrapperClass}
         style={customStyleWrapper}
-        onClick={() => {
-          this.onClick();
+        onClick={(e) => {
+          this.onClick(e);
           !disabled ? this.toggleShow(!show) : ``;
         }}
         onFocus={this.onFocus}

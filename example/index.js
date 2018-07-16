@@ -18,8 +18,11 @@ import { Textbox } from 'react-inputs-validation';
   type="text" //Optional.[String].Default: "text". Input type [text, password, phone, number].
   value={name} //Optional.[String].Default: "".
   placeholder="Place your name here ^-^" //Optional.[String].Default: "".
-  onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onChange={(name, e) => {
+    this.setState({ name });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   validationOption={{
     name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your {name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
@@ -40,8 +43,11 @@ import { Textbox } from 'react-inputs-validation';
   type="text" //Optional.[String].Default: "text". Input type [text, password, number].
   value={nameRg} //Optional.[String].Default: "".
   placeholder="Place your name here ^-^" //Optional.[String].Default: "".
-  onChange={name => this.setState({ nameRg })} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onChange={(name, e) => {
+    this.setState({ nameRg });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   validationOption={{
     reg: /^\d{5}$/, //Optional.[Bool].Default: "" Custom regex.
     regMsg: 'failed in reg.test(value)' //Optional.[String].Default: "" Custom regex error message.
@@ -61,8 +67,11 @@ import { Textbox } from 'react-inputs-validation';
   type="number" //Optional.[String].Default: "text". Input type [text, password, number].
   value={name} //Optional.[String].Default: "".
   placeholder="Place your phone number here ^-^" //Optional.[String].Default: "".
-  onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onChange={(name, e) => {
+    this.setState({ name });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   validationOption={{
     type: 'phone', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
     phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
@@ -82,7 +91,10 @@ import { Textbox } from 'react-inputs-validation';
   type="number" //Optional.[String].Default: "text". Input type [text, password, number].
   value={number} //Optional.[String].Default: "".
   placeholder="Place your number here ^-^" //Optional.[String].Default: "".
-  onChange={number => this.setState({ number })} //Required.[Func].Default: () => {}. Will return the value.
+  onChange={(number, e) => {
+    this.setState({ number });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
   onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   validationOption={{
     type: 'number', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
@@ -112,8 +124,11 @@ import { Radiobox } from 'react-inputs-validation';
     justifyContent: 'flex-start'
   }} //Optional.[Object].Default: {}.
   customStyleOptionListItem={{ marginRight: '20px' }} //Optional.[Object].Default: {}.
-  onChange={job => this.setState({ job })} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none.
+  onChange={(job, e) =>{
+    this.setState({ job });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   validationOption={{
     name: 'job', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
@@ -132,8 +147,11 @@ import { Checkbox } from 'react-inputs-validation';
   id={'agreement'} //Optional.[String].Default: "".  Input ID.
   name={'agreement'} //Optional.[String].Default: "". Input name
   value={agreement} //Required.[String].Default: "".
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-  onChange={agreement => this.setState({ agreement })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onChange={(agreement, e) => {
+    this.setState({ agreement });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
   labelHtml={
     <div style={{ color: '#4a4a4a', marginTop: '2px' }}>
       agree?
@@ -163,8 +181,11 @@ import { Select } from 'react-inputs-validation';
     { id: 1, name: 'Lion King' },
     { id: 2, name: 'American Beauty' }
   ]} //Required.[Array of Object(s)].Default: [].
-  onChange={movie => this.setState({ movie })} //Optional.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onChange={(movie, e) => {
+    this.setState({ movie });
+    console.log(e);
+  }} //Optional.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
   // selectOptionListItemHtml={MOVIE_OPTIONS_LIST.map(
   //   (i, k) => {
@@ -199,8 +220,11 @@ import { Textarea } from 'react-inputs-validation';
   name="description" //Optional.[String].Default: "". Input name.
   value={description} //Optional.[String].Default: "".
   placeholder="Place your description here ^-^" //Optional.[String].Default: "".
-  onChange={description => this.setState({ description })} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onChange={(description, e) => {
+    this.setState({ description });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   validationOption={{
     name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your {name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.

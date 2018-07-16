@@ -48,10 +48,11 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |customStyleInput                  |  Opt  |  Obj   |                                             |  {}        |
 |customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
-|**onChange**                      |**Req**|**Func**|**() => {}. Will return the value.**|**() => {}**|
+|**onChange**                      |**Req**|**Func**|**(val, e) => {}. Will return the value.**|**(val, e) => {}**|
 |**onBlur**                        |**Opt**|**Func**|**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**|**none**    |
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
+|onKeyUp                           |  Opt  |  Func  |                                             |  none      |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -90,10 +91,14 @@ import { Textbox } from 'react-inputs-validation';
   customStyleInput={{}} //Optional.[Object].Default: {}.
   customStyleWrapper={{}} //Optional.[Object].Default: {}.
   customStyleContainer={{}} //Optional.[Object].Default: {}.
-  onChange={name => this.setState({ name })} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-  // onFocus={() => {}} //Optional.[Func].Default: none.
-  // onClick={() => {}} //Optional.[Func].Default: none.
+  onChange={(name, e) => {
+    this.setState({ name });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  // onKeyUp={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   validationOption={{
     name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
@@ -137,7 +142,7 @@ import { Textbox } from 'react-inputs-validation';
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
 |**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req.**|**Func**                  |**() => {}. Will return the value.**|**()=>{}**   |
+|**onChange**                      |**Req.**|**Func**                  |**(val, e) => {}. Will return the value.**|**(val, e)=>{}**   |
 |onFocus                           |*Opt.*  |Func                      |                                                                                                            |none     |
 |onClick                           |*Opt.*  |Func                      |                                                                                                            |none     |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
@@ -173,10 +178,13 @@ import { Radiobox } from 'react-inputs-validation';
     justifyContent: 'flex-start'
   }} //Optional.[Object].Default: {}.
   customStyleOptionListItem={{ marginRight: '20px' }} //Optional.[Object].Default: {}.
-  onChange={job => this.setState({ job })} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none.
-  // onFocus={() => {}} //Optional.[Func].Default: none.
-  // onClick={() => {}} //Optional.[Func].Default: none.
+  onChange={(job, e) =>{
+    this.setState({ job });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   validationOption={{
     name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
@@ -214,7 +222,7 @@ import { Radiobox } from 'react-inputs-validation';
 |customStyleInputBox               |  Opt  |  Obj   |                                             |  {}        |
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req.**|**Func**                  |**() => {}. Will return the value.**|**()=>{}**   |
+|**onChange**                      |**Req.**|**Func**                  |**(val, e) => {}. Will return the value.**|**(val, e)=>{}**   |
 |onFocus                           |*Opt.*  |Func                      |                                                                                                            |none     |
 |onClick                           |*Opt.*  |Func                      |                                                                                                            |none     |
 |**labelHtml**                     |*Req.*  |Html                      |                                                                                                            |none     |
@@ -248,10 +256,13 @@ import { Checkbox } from 'react-inputs-validation';
   customStyleWrapper={{}} //Optional.[Object].Default: {}.
   customStyleInputBox={{}} //Optional.[Object].Default: {}.
   customStyleContainer={{}} //Optional.[Object].Default: {}.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-  // onFocus={() => {}} //Optional.[Func].Default: none.
-  // onClick={() => {}} //Optional.[Func].Default: none.
-  onChange={agreement => this.setState({ agreement })} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  onChange={(agreement, e) => {
+    this.setState({ agreement });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
   labelHtml={
     <div style={{ color: '#4a4a4a', marginTop: '2px' }}>
       agree?
@@ -295,7 +306,7 @@ import { Checkbox } from 'react-inputs-validation';
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListContainer    |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
-|**onChange**                      |**Req**|**Func**|                                             |**() => {}**|
+|**onChange**                      |**Req**|**Func**|                                             |**(val, e) => {}**|
 |**onBlur**                        |**Opt**|**Func**|                                             |**none**    |
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
@@ -334,10 +345,13 @@ import { Select } from 'react-inputs-validation';
   customStyleContainer={{}} //Optional.[Object].Default: {}.
   customStyleOptionListContainer={{}} //Optional.[Object].Default: {}.
   customStyleOptionListItem={{}} //Optional.[Object].Default: {}.
-  onChange={movie => this.setState({ movie })} //Optional.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-  // onFocus={() => {}} //Optional.[Func].Default: none.
-  // onClick={() => {}} //Optional.[Func].Default: none.
+  onChange={(movie, e) => {
+    this.setState({ movie });
+    console.log(e);
+  }} //Optional.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
   // selectOptionListItemHtml={MOVIE_OPTIONS_LIST.map(
   //   (i, k) => {
@@ -388,10 +402,11 @@ import { Select } from 'react-inputs-validation';
 |customStyleInput                  |  Opt  |  Obj   |                                             |  {}        |
 |customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
-|**onChange**                      |**Req**|**Func**|**() => {}. Will return the value.**|**() => {}**|
+|**onChange**                      |**Req**|**Func**|**(val, e) => {}. Will return the value.**|**(val, e) => {}**|
 |**onBlur**                        |**Opt**|**Func**|**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**|**none**    |
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
+|onKeyUp                           |  Opt  |  Func  |                                             |  none      |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -429,10 +444,14 @@ import { Textarea } from 'react-inputs-validation';
   customStyleInput={{}} //Optional.[Object].Default: {}.
   customStyleWrapper={{}} //Optional.[Object].Default: {}.
   customStyleContainer={{}} //Optional.[Object].Default: {}.
-  onChange={description => this.setState({ description })} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-  // onFocus={() => {}} //Optional.[Func].Default: none.
-  // onClick={() => {}} //Optional.[Func].Default: none.
+  onChange={(description, e) => {
+    this.setState({ description });
+    console.log(e);
+  }} //Required.[Func].Default: () => {}. Will return the value.
+  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
+  // onKeyUp={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   validationOption={{
     name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.

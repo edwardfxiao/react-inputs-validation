@@ -94,9 +94,9 @@ class Index extends React.Component {
     }
   }
 
-  onChange() {
+  onChange(e) {
     const { onChange } = this.props;
-    onChange && onChange(this.input.value);
+    onChange && onChange(this.input.value, e);
     if (this.state.err) {
       this.setState({ err: false });
     } else {
@@ -104,19 +104,19 @@ class Index extends React.Component {
     }
   }
 
-  onBlur() {
+  onBlur(e) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
-      onBlur();
+      onBlur(e);
     }
   }
 
-  onFocus() {
+  onFocus(e) {
     const { onFocus } = this.props;
     if (onFocus) {
       this.check();
-      onFocus();
+      onFocus(e);
     }
   }
 

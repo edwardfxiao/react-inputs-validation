@@ -91,29 +91,29 @@ class Index extends React.Component {
     }
   }
 
-  onChange(val) {
+  onChange(val, e) {
     const { onChange } = this.props;
-    onChange && onChange(val);
+    onChange && onChange(val, e);
   }
 
-  onClick() {
+  onClick(e) {
     const { onClick } = this.props;
-    onClick && onClick();
+    onClick && onClick(e);
   }
 
-  onBlur() {
+  onBlur(e) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
-      onBlur();
+      onBlur(e);
     }
   }
 
-  onFocus() {
+  onFocus(e) {
     this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
-      onFocus();
+      onFocus(e);
     }
   }
 
@@ -250,7 +250,7 @@ class Index extends React.Component {
               className={
                 checked ? `${STYLES['checked']} ${inputClass}` : `${inputClass}`
               }
-              onChange={() => this.onChange(i.id)}
+              onChange={(e) => this.onChange(i.id, e)}
               style={customStyleInput}
             />
             <label

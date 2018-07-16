@@ -82,11 +82,11 @@ class Index extends React.Component {
     }
   }
 
-  onChange() {
+  onChange(e) {
     const val = !this.state.checked;
     this.setState({ checked: val });
     const { onChange } = this.props;
-    onChange && onChange(val);
+    onChange && onChange(val, e);
     if (this.state.err) {
       this.setState({ err: false });
     } else {
@@ -98,17 +98,17 @@ class Index extends React.Component {
     this.setState({ checked });
   }
 
-  onClick() {
-    this.onChange();
+  onClick(e) {
+    this.onChange(e);
     const { onClick } = this.props;
-    onClick && onClick();
+    onClick && onClick(e);
   }
 
-  onBlur() {
+  onBlur(e) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
-      onBlur();
+      onBlur(e);
     }
   }
 
@@ -122,12 +122,12 @@ class Index extends React.Component {
     }
   }
 
-  onFocus() {
+  onFocus(e) {
     this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
       this.check();
-      onFocus();
+      onFocus(e);
     }
   }
 

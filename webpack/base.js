@@ -139,7 +139,7 @@ var config = (module.exports = {
     compress: true,
     disableHostCheck: true,
     // public: 'your-host:8080',
-    host: '192.168.1.121',
+    host: '0.0.0.0',
     port: 9000
   },
   plugins: [

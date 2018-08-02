@@ -6,6 +6,8 @@ A react inputs validation component.
 # Online Demo
 Please check the <a href="https://edwardfhsiao.github.io/react-inputs-validation/">online demo example</a>
 
+Attention: <a href="https://github.com/edwardfhsiao/react-inputs-validation/blob/gh-pages/example/index.js">you can find demo source here :)</a>
+
 # Docs Link
 [Textbox](#Textbox)
 

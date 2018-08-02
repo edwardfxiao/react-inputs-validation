@@ -39,6 +39,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
+|maxLength                         |  Opt  |  Str   |                                             |  ""        |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
@@ -81,6 +82,7 @@ import { Textbox } from 'react-inputs-validation';
   type="text" //Optional.[String].Default: "text". Input type [text, password, number].
   value={name} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
+  maxLength={maxLength} //Optional.[String].Default: "".
   placeholder="Place your name here ^-^" //Optional.[String].Default: "".
   validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
@@ -393,6 +395,7 @@ import { Select } from 'react-inputs-validation';
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
+|maxLength                         |  Opt  |  Str   |                                             |  ""        |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
@@ -431,6 +434,7 @@ import { Textarea } from 'react-inputs-validation';
   name="description" //Optional.[String].Default: "". Textarea name.
   value={description} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
+  maxLength={maxLength} //Optional.[String].Default: "".
   placeholder="Place your description here ^-^" //Optional.[String].Default: "".
   validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>

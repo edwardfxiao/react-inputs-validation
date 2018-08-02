@@ -12,21 +12,7 @@ try {
 const TYPE = 'textarea';
 const VALIDATE_OPTION_TYPE_LIST = ['string'];
 const getDefaultValidationOption = obj => {
-  let {
-    reg,
-    min,
-    max,
-    type,
-    name,
-    check,
-    length,
-    regMsg,
-    required,
-    showMsg,
-    locale,
-    msgOnError,
-    msgOnSuccess
-  } = obj;
+  let { reg, min, max, type, name, check, length, regMsg, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
   if (!locale) {
     locale = LOCALE_OPTION_LIST[0];
   } else {
@@ -83,6 +69,11 @@ class Index extends React.Component {
   }
 
   onChange(e) {
+    if (this.props.maxLength != '') {
+      if (this.input.value.length > Number(this.props.maxLength)) {
+        return;
+      }
+    }
     const { onChange } = this.props;
     onChange && onChange(this.input.value, e);
     if (this.state.err) {
@@ -117,19 +108,7 @@ class Index extends React.Component {
   }
 
   check(inputValue) {
-    const {
-      reg,
-      min,
-      max,
-      type,
-      name,
-      check,
-      length,
-      regMsg,
-      locale,
-      required,
-      msgOnSuccess
-    } = getDefaultValidationOption(this.props.validationOption);
+    const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
     if (!check) {
       return;
     }
@@ -191,9 +170,7 @@ class Index extends React.Component {
         }
         this.handleCheckEnd(false, msgOnSuccess);
       } else {
-        console.error(
-          `The valid ${toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`
-        );
+        console.error(`The valid ${toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
       }
     } else {
       console.error('Please provide "type" in validationOption');
@@ -201,10 +178,7 @@ class Index extends React.Component {
   }
 
   handleCheckEnd(err, msg) {
-    if (
-      err &&
-      getDefaultValidationOption(this.props.validationOption).msgOnError
-    ) {
+    if (err && getDefaultValidationOption(this.props.validationOption).msgOnError) {
       msg = getDefaultValidationOption(this.props.validationOption).msgOnError;
     }
     this.setState({ err, msg });
@@ -219,6 +193,7 @@ class Index extends React.Component {
       name,
       value,
       disabled,
+      maxLength,
       placeholder,
       classNameWrapper,
       classNameContainer,
@@ -231,29 +206,11 @@ class Index extends React.Component {
 
     const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = cx(
-      classNameWrapper,
-      STYLES['textarea__wrapper'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const wrapperClass = cx(classNameWrapper, STYLES['textarea__wrapper'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const containerClass = cx(
-      classNameContainer,
-      STYLES['textarea__container'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const containerClass = cx(classNameContainer, STYLES['textarea__container'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const inputClass = cx(
-      classNameInput,
-      STYLES['textarea__input'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const inputClass = cx(classNameInput, STYLES['textarea__input'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
     const errMsgClass = cx(STYLES['msg'], err && STYLES['error']);
     const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
@@ -262,11 +219,7 @@ class Index extends React.Component {
     if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (
-      getDefaultValidationOption(validationOption).showMsg &&
-      !err &&
-      successMsg
-    ) {
+    if (getDefaultValidationOption(validationOption).showMsg && !err && successMsg) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (
@@ -279,6 +232,7 @@ class Index extends React.Component {
             value={value}
             disabled={disabled}
             onBlur={this.onBlur}
+            maxLength={maxLength}
             onKeyUp={this.onKeyUp}
             onFocus={this.onFocus}
             className={inputClass}
@@ -301,6 +255,7 @@ Index.defaultProps = {
   value: '',
   disabled: false,
   validate: false,
+  maxLength: '',
   placeholder: '',
   classNameInput: '',
   classNameWrapper: '',
@@ -319,6 +274,7 @@ Index.propTypes = {
   value: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   validate: PropTypes.bool,
+  maxLength: PropTypes.string,
   placeholder: PropTypes.string,
   classNameInput: PropTypes.string,
   classNameWrapper: PropTypes.string,

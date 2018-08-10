@@ -8,6 +8,8 @@ Please check the <a href="https://edwardfhsiao.github.io/react-inputs-validation
 
 Attention: <a href="https://github.com/edwardfhsiao/react-inputs-validation/blob/gh-pages/example/index.js">you can find demo source here :)</a>
 
+Fully custom validate playground: <a href="https://codesandbox.io/s/pjom8r78x7">check out here when you wish to validate yourself</a>
+
 # Docs Link
 [Textbox](#Textbox)
 

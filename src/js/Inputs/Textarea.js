@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { toCamelCase } from './utils';
 import Message from './message';
 import Validator from './validator';
-import { LOCALE_OPTION_LIST } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
 let STYLES = {};
 try {
   STYLES = require('./react-inputs-validation.css');
@@ -13,13 +13,7 @@ const TYPE = 'textarea';
 const VALIDATE_OPTION_TYPE_LIST = ['string'];
 const getDefaultValidationOption = obj => {
   let { reg, min, max, type, name, check, length, regMsg, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
-  if (!locale) {
-    locale = LOCALE_OPTION_LIST[0];
-  } else {
-    if (LOCALE_OPTION_LIST.indexOf(locale) == -1) {
-      locale = LOCALE_OPTION_LIST[0];
-    }
-  }
+  locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
   max = typeof max !== 'undefined' ? max : 0;
@@ -115,13 +109,17 @@ class Index extends React.Component {
     if (type) {
       if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) != -1) {
         const Msg = Message[locale][TYPE];
+        if (!Msg) {
+          console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+          return;
+        }
         const value = inputValue || this.input.value;
         let nameText = name ? name : '';
         let msg = '';
         // CHECK EMPTY
         if (required) {
           if (Validator.empty(value)) {
-            this.handleCheckEnd(true, Msg.empty(nameText));
+            this.handleCheckEnd(true, Msg.empty ? Msg.empty(nameText) : '');
             return;
           }
         }
@@ -129,7 +127,7 @@ class Index extends React.Component {
           // CHECK REGEX
           if (reg) {
             if (Validator['reg'](reg, value)) {
-              msg = regMsg != '' ? regMsg : Msg.invalid(nameText);
+              msg = regMsg != '' ? regMsg : Msg.invalid ? Msg.invalid(nameText) : '';
               this.handleCheckEnd(true, msg);
               return;
             }
@@ -139,19 +137,19 @@ class Index extends React.Component {
             if (min || max) {
               if (min && max) {
                 if (String(value).length < min || String(value).length > max) {
-                  this.handleCheckEnd(true, Msg.inBetween(nameText)(min)(max));
+                  this.handleCheckEnd(true, Msg.inBetween ? Msg.inBetween(nameText)(min)(max) : '');
                   return;
                 }
               } else {
                 if (min) {
                   if (String(value).length < min) {
-                    this.handleCheckEnd(true, Msg.lessThan(nameText)(min));
+                    this.handleCheckEnd(true, Msg.lessThan ? Msg.lessThan(nameText)(min) : '');
                     return;
                   }
                 }
                 if (max) {
                   if (String(value).length > max) {
-                    this.handleCheckEnd(true, Msg.greaterThan(nameText)(max));
+                    this.handleCheckEnd(true, Msg.greaterThan ? Msg.greaterThan(nameText)(max) : '');
                     return;
                   }
                 }
@@ -159,7 +157,7 @@ class Index extends React.Component {
             }
             if (length) {
               if (String(value).length != length) {
-                this.handleCheckEnd(true, Msg.lengthEqual(nameText)(length));
+                this.handleCheckEnd(true, Msg.lengthEqual ? Msg.lengthEqual(nameText)(length) : '');
                 return;
               }
             }

@@ -489,32 +489,32 @@ window.REACT_INPUTS_VALIDATION = {
     customErrorMessage: {
         'en-US': {
             textbox: {
-                empty: name => `${name}cannot be empty`,
-                invalid: name => `${name}invalid format`,
-                invalidFormat: name => `${name}is not a number`,
-                inBetween: name => min => max => `${name}must be ${min}-${max}`,
-                lessThan: name => min => `${name}cannot less than ${min}`,
-                greaterThan: name => max => `${name}cannot greater than ${max}`,
-                lengthEqual: name => length => `${name}length must be ${length}`,
+                empty: name => `${name} cannot be empty`,
+                invalid: name => `${name} invalid format`,
+                invalidFormat: name => `${name} is not a number`,
+                inBetween: name => min => max => `${name} must be ${min}-${max}`,
+                lessThan: name => min => `${name} cannot less than ${min}`,
+                greaterThan: name => max => `${name} cannot greater than ${max}`,
+                lengthEqual: name => length => `${name} length must be ${length}`,
                 twoInputsNotEqual: () => `two inputs are not equal`
             },
             radiobox: {
                 empty: name => `Please choose one ${name}`
             },
             checkbox: {
-                unchecked: name => `${name}must be checked`
+                unchecked: name => `${name} must be checked`
             },
             select: {
                 empty: name => `Please select a ${name}`
             },
             textarea: {
-                empty: name => `${name}cannot be empty`,
-                invalid: name => `${name}invalid format`,
-                invalidFormat: name => `${name}is not a number`,
-                inBetween: name => min => max => `${name}must be ${min}-${max}`,
-                lessThan: name => min => `${name}cannot less than ${min}`,
-                greaterThan: name => max => `${name}cannot greater than ${max}`,
-                lengthEqual: name => length => `${name}length must be ${length}`,
+                empty: name => `${name} cannot be empty`,
+                invalid: name => `${name} invalid format`,
+                invalidFormat: name => `${name} is not a number`,
+                inBetween: name => min => max => `${name} must be ${min}-${max}`,
+                lessThan: name => min => `${name} cannot less than ${min}`,
+                greaterThan: name => max => `${name} cannot greater than ${max}`,
+                lengthEqual: name => length => `${name} length must be ${length}`,
                 twoInputsNotEqual: () => `two inputs are not equal`
             }
         }
@@ -529,34 +529,34 @@ window.REACT_INPUTS_VALIDATION = {
         'en-US': {
             textbox: {
                 empty: function empty(name) {
-                    return name + 'cannot be empty';
+                    return name + ' cannot be empty';
                 },
                 invalid: function invalid(name) {
-                    return name + 'invalid format';
+                    return name + ' invalid format';
                 },
                 invalidFormat: function invalidFormat(name) {
-                    return name + 'is not a number';
+                    return name + ' is not a number';
                 },
                 inBetween: function inBetween(name) {
                     return function(min) {
                         return function(max) {
-                            return name + 'must be ' + min + '-' + max;
+                            return name + ' must be ' + min + '-' + max;
                         };
                     };
                 },
                 lessThan: function lessThan(name) {
                     return function(min) {
-                        return name + 'cannot less than ' + min;
+                        return name + ' cannot less than ' + min;
                     };
                 },
                 greaterThan: function greaterThan(name) {
                     return function(max) {
-                        return name + 'cannot greater than ' + max;
+                        return name + ' cannot greater than ' + max;
                     };
                 },
                 lengthEqual: function lengthEqual(name) {
                     return function(length) {
-                        return name + 'length must be ' + length;
+                        return name + ' length must be ' + length;
                     };
                 },
                 twoInputsNotEqual: function twoInputsNotEqual() {
@@ -570,7 +570,7 @@ window.REACT_INPUTS_VALIDATION = {
             },
             checkbox: {
                 unchecked: function unchecked(name) {
-                    return name + 'must be checked';
+                    return name + ' must be checked';
                 }
             },
             select: {
@@ -580,34 +580,34 @@ window.REACT_INPUTS_VALIDATION = {
             },
             textarea: {
                 empty: function empty(name) {
-                    return name + 'cannot be empty';
+                    return name + ' cannot be empty';
                 },
                 invalid: function invalid(name) {
-                    return name + 'invalid format';
+                    return name + ' invalid format';
                 },
                 invalidFormat: function invalidFormat(name) {
-                    return name + 'is not a number';
+                    return name + ' is not a number';
                 },
                 inBetween: function inBetween(name) {
                     return function(min) {
                         return function(max) {
-                            return name + 'must be ' + min + '-' + max;
+                            return name + ' must be ' + min + '-' + max;
                         };
                     };
                 },
                 lessThan: function lessThan(name) {
                     return function(min) {
-                        return name + 'cannot less than ' + min;
+                        return name + ' cannot less than ' + min;
                     };
                 },
                 greaterThan: function greaterThan(name) {
                     return function(max) {
-                        return name + 'cannot greater than ' + max;
+                        return name + ' cannot greater than ' + max;
                     };
                 },
                 lengthEqual: function lengthEqual(name) {
                     return function(length) {
-                        return name + 'length must be ' + length;
+                        return name + ' length must be ' + length;
                     };
                 },
                 twoInputsNotEqual: function twoInputsNotEqual() {

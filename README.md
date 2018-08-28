@@ -522,6 +522,7 @@ window.REACT_INPUTS_VALIDATION = {
         }
     }
 };
+import { Textbox } from 'react-inputs-validation';
 ```
 
 ```js
@@ -619,5 +620,6 @@ window.REACT_INPUTS_VALIDATION = {
         }
     }
 };
+import { Textbox } from 'react-inputs-validation';
 ```
 

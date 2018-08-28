@@ -19,6 +19,8 @@ Fully custom validate **playground**: <a href="https://codesandbox.io/s/pjom8r78
 
 [Textarea](#Textarea)
 
+[Custom Error Message Guid](#CustomErrorMessage)
+
 # Installation
 ```sh
 npm install react-inputs-validation --save
@@ -260,7 +262,7 @@ import { Checkbox } from 'react-inputs-validation';
   customStyleWrapper={{}} //Optional.[Object].Default: {}.
   customStyleInputBox={{}} //Optional.[Object].Default: {}.
   customStyleContainer={{}} //Optional.[Object].Default: {}.
-  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   onChange={(agreement, e) => {
@@ -353,7 +355,7 @@ import { Select } from 'react-inputs-validation';
     this.setState({ movie });
     console.log(e);
   }} //Optional.[Func].Default: () => {}. Will return the value.
-  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
@@ -475,3 +477,145 @@ import { Textarea } from 'react-inputs-validation';
   }}
 />
 ```
+
+### <a name="CustomErrorMessage"></a>Custom Error Message (with multiple locale)
+By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can add or overwrite the error message.
+
+example(fully customized):
+
+```js
+//es6
+window.REACT_INPUTS_VALIDATION = {
+    customErrorMessage: {
+        'en-US': {
+            textbox: {
+                empty: name => `${name}cannot be empty`,
+                invalid: name => `${name}invalid format`,
+                invalidFormat: name => `${name}is not a number`,
+                inBetween: name => min => max => `${name}must be ${min}-${max}`,
+                lessThan: name => min => `${name}cannot less than ${min}`,
+                greaterThan: name => max => `${name}cannot greater than ${max}`,
+                lengthEqual: name => length => `${name}length must be ${length}`,
+                twoInputsNotEqual: () => `two inputs are not equal`
+            },
+            radiobox: {
+                empty: name => `Please choose one ${name}`
+            },
+            checkbox: {
+                unchecked: name => `${name}must be checked`
+            },
+            select: {
+                empty: name => `Please select a ${name}`
+            },
+            textarea: {
+                empty: name => `${name}cannot be empty`,
+                invalid: name => `${name}invalid format`,
+                invalidFormat: name => `${name}is not a number`,
+                inBetween: name => min => max => `${name}must be ${min}-${max}`,
+                lessThan: name => min => `${name}cannot less than ${min}`,
+                greaterThan: name => max => `${name}cannot greater than ${max}`,
+                lengthEqual: name => length => `${name}length must be ${length}`,
+                twoInputsNotEqual: () => `two inputs are not equal`
+            }
+        }
+    }
+};
+```
+
+```js
+//es5
+window.REACT_INPUTS_VALIDATION = {
+    customErrorMessage: {
+        'en-US': {
+            textbox: {
+                empty: function empty(name) {
+                    return name + 'cannot be empty';
+                },
+                invalid: function invalid(name) {
+                    return name + 'invalid format';
+                },
+                invalidFormat: function invalidFormat(name) {
+                    return name + 'is not a number';
+                },
+                inBetween: function inBetween(name) {
+                    return function(min) {
+                        return function(max) {
+                            return name + 'must be ' + min + '-' + max;
+                        };
+                    };
+                },
+                lessThan: function lessThan(name) {
+                    return function(min) {
+                        return name + 'cannot less than ' + min;
+                    };
+                },
+                greaterThan: function greaterThan(name) {
+                    return function(max) {
+                        return name + 'cannot greater than ' + max;
+                    };
+                },
+                lengthEqual: function lengthEqual(name) {
+                    return function(length) {
+                        return name + 'length must be ' + length;
+                    };
+                },
+                twoInputsNotEqual: function twoInputsNotEqual() {
+                    return 'two inputs are not equal';
+                }
+            },
+            radiobox: {
+                empty: function empty(name) {
+                    return 'Please choose one ' + name;
+                }
+            },
+            checkbox: {
+                unchecked: function unchecked(name) {
+                    return name + 'must be checked';
+                }
+            },
+            select: {
+                empty: function empty(name) {
+                    return 'Please select a ' + name;
+                }
+            },
+            textarea: {
+                empty: function empty(name) {
+                    return name + 'cannot be empty';
+                },
+                invalid: function invalid(name) {
+                    return name + 'invalid format';
+                },
+                invalidFormat: function invalidFormat(name) {
+                    return name + 'is not a number';
+                },
+                inBetween: function inBetween(name) {
+                    return function(min) {
+                        return function(max) {
+                            return name + 'must be ' + min + '-' + max;
+                        };
+                    };
+                },
+                lessThan: function lessThan(name) {
+                    return function(min) {
+                        return name + 'cannot less than ' + min;
+                    };
+                },
+                greaterThan: function greaterThan(name) {
+                    return function(max) {
+                        return name + 'cannot greater than ' + max;
+                    };
+                },
+                lengthEqual: function lengthEqual(name) {
+                    return function(length) {
+                        return name + 'length must be ' + length;
+                    };
+                },
+                twoInputsNotEqual: function twoInputsNotEqual() {
+                    return 'two inputs are not equal';
+                }
+            }
+        }
+    }
+};
+```
+

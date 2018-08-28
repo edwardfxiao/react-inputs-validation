@@ -488,140 +488,144 @@ By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can
 example(fully customized):
 
 ```html
-//es6
-window.REACT_INPUTS_VALIDATION = {
-  customErrorMessage: {
-    "en-US": {
-      textbox: {
-        empty: name => `${name} cannot be empty(custom message)`,
-        invalid: name => `${name} invalid format(custom message)`,
-        invalidFormat: name => `${name} is not a number(custom message)`,
-        inBetween: name => min => max => `${name} must be ${min}-${max}(custom message)`,
-        lessThan: name => min => `${name} cannot less than ${min}(custom message)`,
-        greaterThan: name => max => `${name} cannot greater than ${max}(custom message)`,
-        lengthEqual: name => length => `${name} length must be ${length}(custom message)`,
-        twoInputsNotEqual: () => `two inputs are not equal(custom message)`
-      },
-      radiobox: {
-        empty: name => `Please choose one ${name}(custom message)`
-      },
-      checkbox: {
-        unchecked: name => `${name} must be checked(custom message)`
-      },
-      select: {
-        empty: name => `Please select a ${name}(custom message)`
-      },
-      textarea: {
-        empty: name => `${name} cannot be empty(custom message)`,
-        invalid: name => `${name} invalid format(custom message)`,
-        invalidFormat: name => `${name} is not a number(custom message)`,
-        inBetween: name => min => max => `${name} must be ${min}-${max}(custom message)`,
-        lessThan: name => min => `${name} cannot less than ${min}(custom message)`,
-        greaterThan: name => max => `${name} cannot greater than ${max}(custom message)`,
-        lengthEqual: name => length => `${name} length must be ${length}(custom message)`,
-        twoInputsNotEqual: () => `two inputs are not equal(custom message)`
+<script type="text/javascript">
+  //es6
+  window.REACT_INPUTS_VALIDATION = {
+    customErrorMessage: {
+      "en-US": {
+        textbox: {
+          empty: name => `${name} cannot be empty(custom message)`,
+          invalid: name => `${name} invalid format(custom message)`,
+          invalidFormat: name => `${name} is not a number(custom message)`,
+          inBetween: name => min => max => `${name} must be ${min}-${max}(custom message)`,
+          lessThan: name => min => `${name} cannot less than ${min}(custom message)`,
+          greaterThan: name => max => `${name} cannot greater than ${max}(custom message)`,
+          lengthEqual: name => length => `${name} length must be ${length}(custom message)`,
+          twoInputsNotEqual: () => `two inputs are not equal(custom message)`
+        },
+        radiobox: {
+          empty: name => `Please choose one ${name}(custom message)`
+        },
+        checkbox: {
+          unchecked: name => `${name} must be checked(custom message)`
+        },
+        select: {
+          empty: name => `Please select a ${name}(custom message)`
+        },
+        textarea: {
+          empty: name => `${name} cannot be empty(custom message)`,
+          invalid: name => `${name} invalid format(custom message)`,
+          invalidFormat: name => `${name} is not a number(custom message)`,
+          inBetween: name => min => max => `${name} must be ${min}-${max}(custom message)`,
+          lessThan: name => min => `${name} cannot less than ${min}(custom message)`,
+          greaterThan: name => max => `${name} cannot greater than ${max}(custom message)`,
+          lengthEqual: name => length => `${name} length must be ${length}(custom message)`,
+          twoInputsNotEqual: () => `two inputs are not equal(custom message)`
+        }
       }
     }
-  }
-};
+  };
+</script>
 <script type="text/javascript" src="/js/index.js"></script></body>
 ```
 
 ```html
-//es5
-window.REACT_INPUTS_VALIDATION = {
-  customErrorMessage: {
-    "en-US": {
-      textbox: {
-        empty: function empty(name) {
-          return name + " cannot be empty(custom message)";
-        },
-        invalid: function invalid(name) {
-          return name + " invalid format(custom message)";
-        },
-        invalidFormat: function invalidFormat(name) {
-          return name + " is not a number(custom message)";
-        },
-        inBetween: function inBetween(name) {
-          return function (min) {
-            return function (max) {
-              return name + " must be " + min + "-" + max + "(custom message)";
+<script type="text/javascript">
+  //es5
+  window.REACT_INPUTS_VALIDATION = {
+    customErrorMessage: {
+      "en-US": {
+        textbox: {
+          empty: function empty(name) {
+            return name + " cannot be empty(custom message)";
+          },
+          invalid: function invalid(name) {
+            return name + " invalid format(custom message)";
+          },
+          invalidFormat: function invalidFormat(name) {
+            return name + " is not a number(custom message)";
+          },
+          inBetween: function inBetween(name) {
+            return function (min) {
+              return function (max) {
+                return name + " must be " + min + "-" + max + "(custom message)";
+              };
             };
-          };
-        },
-        lessThan: function lessThan(name) {
-          return function (min) {
-            return name + " cannot less than " + min + "(custom message)";
-          };
-        },
-        greaterThan: function greaterThan(name) {
-          return function (max) {
-            return name + " cannot greater than " + max + "(custom message)";
-          };
-        },
-        lengthEqual: function lengthEqual(name) {
-          return function (length) {
-            return name + " length must be " + length + "(custom message)";
-          };
-        },
-        twoInputsNotEqual: function twoInputsNotEqual() {
-          return "two inputs are not equal(custom message)";
-        }
-      },
-      radiobox: {
-        empty: function empty(name) {
-          return "Please choose one " + name + "(custom message)";
-        }
-      },
-      checkbox: {
-        unchecked: function unchecked(name) {
-          return name + " must be checked(custom message)";
-        }
-      },
-      select: {
-        empty: function empty(name) {
-          return "Please select a " + name + "(custom message)";
-        }
-      },
-      textarea: {
-        empty: function empty(name) {
-          return name + " cannot be empty(custom message)";
-        },
-        invalid: function invalid(name) {
-          return name + " invalid format(custom message)";
-        },
-        invalidFormat: function invalidFormat(name) {
-          return name + " is not a number(custom message)";
-        },
-        inBetween: function inBetween(name) {
-          return function (min) {
-            return function (max) {
-              return name + " must be " + min + "-" + max + "(custom message)";
+          },
+          lessThan: function lessThan(name) {
+            return function (min) {
+              return name + " cannot less than " + min + "(custom message)";
             };
-          };
+          },
+          greaterThan: function greaterThan(name) {
+            return function (max) {
+              return name + " cannot greater than " + max + "(custom message)";
+            };
+          },
+          lengthEqual: function lengthEqual(name) {
+            return function (length) {
+              return name + " length must be " + length + "(custom message)";
+            };
+          },
+          twoInputsNotEqual: function twoInputsNotEqual() {
+            return "two inputs are not equal(custom message)";
+          }
         },
-        lessThan: function lessThan(name) {
-          return function (min) {
-            return name + " cannot less than " + min + "(custom message)";
-          };
+        radiobox: {
+          empty: function empty(name) {
+            return "Please choose one " + name + "(custom message)";
+          }
         },
-        greaterThan: function greaterThan(name) {
-          return function (max) {
-            return name + " cannot greater than " + max + "(custom message)";
-          };
+        checkbox: {
+          unchecked: function unchecked(name) {
+            return name + " must be checked(custom message)";
+          }
         },
-        lengthEqual: function lengthEqual(name) {
-          return function (length) {
-            return name + " length must be " + length + "(custom message)";
-          };
+        select: {
+          empty: function empty(name) {
+            return "Please select a " + name + "(custom message)";
+          }
         },
-        twoInputsNotEqual: function twoInputsNotEqual() {
-          return "two inputs are not equal(custom message)";
+        textarea: {
+          empty: function empty(name) {
+            return name + " cannot be empty(custom message)";
+          },
+          invalid: function invalid(name) {
+            return name + " invalid format(custom message)";
+          },
+          invalidFormat: function invalidFormat(name) {
+            return name + " is not a number(custom message)";
+          },
+          inBetween: function inBetween(name) {
+            return function (min) {
+              return function (max) {
+                return name + " must be " + min + "-" + max + "(custom message)";
+              };
+            };
+          },
+          lessThan: function lessThan(name) {
+            return function (min) {
+              return name + " cannot less than " + min + "(custom message)";
+            };
+          },
+          greaterThan: function greaterThan(name) {
+            return function (max) {
+              return name + " cannot greater than " + max + "(custom message)";
+            };
+          },
+          lengthEqual: function lengthEqual(name) {
+            return function (length) {
+              return name + " length must be " + length + "(custom message)";
+            };
+          },
+          twoInputsNotEqual: function twoInputsNotEqual() {
+            return "two inputs are not equal(custom message)";
+          }
         }
       }
     }
-  }
-};
+  };
+<script/>
 <script type="text/javascript" src="/js/index.js"></script></body>
 ```
 

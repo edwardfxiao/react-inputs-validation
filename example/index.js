@@ -147,7 +147,7 @@ import { Checkbox } from 'react-inputs-validation';
   id={'agreement'} //Optional.[String].Default: "".  Input ID.
   name={'agreement'} //Optional.[String].Default: "". Input name
   value={agreement} //Required.[String].Default: "".
-  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   onChange={(agreement, e) => {
     this.setState({ agreement });
     console.log(e);
@@ -185,7 +185,7 @@ import { Select } from 'react-inputs-validation';
     this.setState({ movie });
     console.log(e);
   }} //Optional.[Func].Default: () => {}. Will return the value.
-  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
   // selectOptionListItemHtml={MOVIE_OPTIONS_LIST.map(
   //   (i, k) => {
@@ -528,9 +528,7 @@ class Index extends Component {
                     id={'agreement'} //Optional.[String].Default: "".  Input ID.
                     name={'agreement'} //Optional.[String].Default: "". Input name
                     value={agreement} //Required.[String].Default: "".
-                    onBlur={e => {
-                      console.log(e);
-                    }} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     onChange={(agreement, e) => {
                       this.setState({ agreement });
                       console.log(e);
@@ -570,9 +568,7 @@ class Index extends Component {
                       this.setState({ movie });
                       console.log(e);
                     }} //Optional.[Func].Default: () => {}. Will return the value.
-                    onBlur={e => {
-                      console.log(e);
-                    }} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
                     // selectOptionListItemHtml={MOVIE_OPTIONS_LIST.map(
                     //   (i, k) => {
@@ -780,9 +776,7 @@ class Index extends Component {
                       customStyleWrapper={{}} //Optional.[Object].Default: {}.
                       customStyleInputBox={{}} //Optional.[Object].Default: {}.
                       customStyleContainer={{}} //Optional.[Object].Default: {}.
-                      onBlur={e => {
-                        console.log(e);
-                      }} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                      onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                       // onFocus={(e) => {console.log(e);}} //Optional.[Func].Default: none.
                       // onClick={(e) => {console.log(e);}} //Optional.[Func].Default: none.
                       onChange={(agreement, e) => {
@@ -835,9 +829,7 @@ class Index extends Component {
                         this.setState({ movie });
                         console.log(e);
                       }} //Optional.[Func].Default: () => {}. Will return the value.
-                      onBlur={e => {
-                        console.log(e);
-                      }} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                      onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                       // onFocus={(e) => {console.log(e);}} //Optional.[Func].Default: none.
                       // onClick={(e) => {console.log(e);}} //Optional.[Func].Default: none.
                       // selectHtml={<div>{movieItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.

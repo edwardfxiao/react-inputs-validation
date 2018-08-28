@@ -2,29 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Message from './message';
-import { LOCALE_OPTION_LIST } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
 let STYLES = {};
 try {
   STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
 const TYPE = 'radiobox';
 const getDefaultValidationOption = obj => {
-  let {
-    name,
-    check,
-    required,
-    showMsg,
-    locale,
-    msgOnError,
-    msgOnSuccess
-  } = obj;
-  if (!locale) {
-    locale = LOCALE_OPTION_LIST[0];
-  } else {
-    if (LOCALE_OPTION_LIST.indexOf(locale) == -1) {
-      locale = LOCALE_OPTION_LIST[0];
-    }
-  }
+  let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
+  locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
   showMsg = typeof showMsg !== 'undefined' ? showMsg : true;
@@ -58,16 +44,12 @@ class Index extends React.Component {
       successMsg: undefined
     };
     if (!props.optionList.length) {
-      console.error(
-        'Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
-      );
+      console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
       return;
     } else {
       props.optionList.map(i => {
         if (typeof i.name == 'undefined' || typeof i.id == 'undefined') {
-          console.error(
-            'Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
-          );
+          console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
         }
         return;
       });
@@ -122,21 +104,19 @@ class Index extends React.Component {
     if (val != null) {
       value = val;
     }
-    const {
-      name,
-      check,
-      required,
-      locale,
-      msgOnSuccess
-    } = getDefaultValidationOption(this.props.validationOption);
+    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
     if (!check) {
       return;
     }
     const Msg = Message[locale][TYPE];
+    if (!Msg) {
+      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+      return;
+    }
     let nameText = name ? name : '';
     if (required) {
       if (isValidateValue(value)) {
-        this.handleCheckEnd(true, Msg.empty(nameText));
+        this.handleCheckEnd(true, Msg.empty ? Msg.empty(nameText) : '');
         return;
       }
     }
@@ -176,44 +156,15 @@ class Index extends React.Component {
 
     const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = cx(
-      classNameWrapper,
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      STYLES['radiobox__wrapper'],
-      disabled && STYLES['disabled']
-    );
+    const wrapperClass = cx(classNameWrapper, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__wrapper'], disabled && STYLES['disabled']);
 
-    const containerClass = cx(
-      classNameContainer,
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      STYLES['radiobox__container'],
-      disabled && STYLES['disabled']
-    );
+    const containerClass = cx(classNameContainer, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__container'], disabled && STYLES['disabled']);
 
-    const inputClass = cx(
-      classNameInput,
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      STYLES['radiobox__input'],
-      disabled && STYLES['disabled']
-    );
+    const inputClass = cx(classNameInput, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__input'], disabled && STYLES['disabled']);
 
-    const labelClass = cx(
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      STYLES['radiobox__label'],
-      disabled && STYLES['disabled']
-    );
+    const labelClass = cx(err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__label'], disabled && STYLES['disabled']);
 
-    const optionListItemClass = cx(
-      classNameOptionListItem,
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      STYLES['radiobox__item'],
-      disabled && STYLES['disabled']
-    );
+    const optionListItemClass = cx(classNameOptionListItem, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__item'], disabled && STYLES['disabled']);
 
     const errMsgClass = cx(STYLES['msg'], err && STYLES['error']);
     const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
@@ -222,11 +173,7 @@ class Index extends React.Component {
     if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (
-      getDefaultValidationOption(validationOption).showMsg &&
-      !err &&
-      successMsg
-    ) {
+    if (getDefaultValidationOption(validationOption).showMsg && !err && successMsg) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
 
@@ -235,11 +182,7 @@ class Index extends React.Component {
       optionHtml = optionList.map((i, k) => {
         let checked = String(i.id) == String(value) ? true : false;
         return (
-          <div
-            className={optionListItemClass}
-            style={customStyleOptionListItem}
-            key={k}
-          >
+          <div className={optionListItemClass} style={customStyleOptionListItem} key={k}>
             <input
               id={`${id}-${k}`}
               name={name}
@@ -247,18 +190,11 @@ class Index extends React.Component {
               value={value}
               checked={checked}
               disabled={disabled}
-              className={
-                checked ? `${STYLES['checked']} ${inputClass}` : `${inputClass}`
-              }
-              onChange={(e) => this.onChange(i.id, e)}
+              className={checked ? `${STYLES['checked']} ${inputClass}` : `${inputClass}`}
+              onChange={e => this.onChange(i.id, e)}
               style={customStyleInput}
             />
-            <label
-              htmlFor={`${id}-${k}`}
-              className={
-                checked ? `${STYLES['checked']} ${labelClass}` : `${labelClass}`
-              }
-            >
+            <label htmlFor={`${id}-${k}`} className={checked ? `${STYLES['checked']} ${labelClass}` : `${labelClass}`}>
               {i.name}
             </label>
           </div>
@@ -267,15 +203,7 @@ class Index extends React.Component {
     }
 
     return (
-      <div
-        id={id}
-        tabIndex={tabIndex}
-        className={wrapperClass}
-        style={customStyleWrapper}
-        onClick={this.onClick}
-        onBlur={this.onBlur}
-        onFocus={this.onFocus}
-      >
+      <div id={id} tabIndex={tabIndex} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
         <div className={containerClass} style={customStyleContainer}>
           {optionHtml}
         </div>

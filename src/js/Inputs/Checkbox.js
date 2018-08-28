@@ -2,29 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Message from './message';
-import { LOCALE_OPTION_LIST } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
 let STYLES = {};
 try {
   STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
 const TYPE = 'checkbox';
 const getDefaultValidationOption = obj => {
-  let {
-    name,
-    check,
-    required,
-    showMsg,
-    locale,
-    msgOnError,
-    msgOnSuccess
-  } = obj;
-  if (!locale) {
-    locale = LOCALE_OPTION_LIST[0];
-  } else {
-    if (LOCALE_OPTION_LIST.indexOf(locale) == -1) {
-      locale = LOCALE_OPTION_LIST[0];
-    }
-  }
+  let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
+  locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
   showMsg = typeof showMsg !== 'undefined' ? showMsg : true;
@@ -132,20 +118,18 @@ class Index extends React.Component {
   }
 
   check() {
-    const {
-      name,
-      check,
-      locale,
-      required,
-      msgOnSuccess
-    } = getDefaultValidationOption(this.props.validationOption);
+    const { name, check, locale, required, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
     if (!check) {
       return;
     }
     if (required) {
       const Msg = Message[locale][TYPE];
+      if (!Msg) {
+        console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+        return;
+      }
       if (!this.state.checked) {
-        this.handleCheckEnd(true, Msg.unchecked(name ? name : ''));
+        this.handleCheckEnd(true, Msg.unchecked ? Msg.unchecked(name ? name : '') : '');
         return;
       }
     }
@@ -201,22 +185,9 @@ class Index extends React.Component {
       disabled && STYLES['disabled']
     );
 
-    const boxClass = cx(
-      classNameInputBox,
-      STYLES['checkbox__box'],
-      err && STYLES['error'],
-      checked && STYLES['checked'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const boxClass = cx(classNameInputBox, STYLES['checkbox__box'], err && STYLES['error'], checked && STYLES['checked'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const labelClass = cx(
-      STYLES['checkbox__label'],
-      checked && STYLES['checked'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const labelClass = cx(STYLES['checkbox__label'], checked && STYLES['checked'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
     const errMsgClass = cx(STYLES['msg'], err && STYLES['error']);
     const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
@@ -225,23 +196,11 @@ class Index extends React.Component {
     if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (
-      getDefaultValidationOption(validationOption).showMsg &&
-      !err &&
-      successMsg
-    ) {
+    if (getDefaultValidationOption(validationOption).showMsg && !err && successMsg) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (
-      <div
-        tabIndex={tabIndex}
-        className={wrapperClass}
-        style={customStyleWrapper}
-        onClick={this.onClick}
-        onBlur={this.onBlur}
-        onFocus={this.onFocus}
-        ref={ref => (this.wrapper = ref)}
-      >
+      <div tabIndex={tabIndex} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus} ref={ref => (this.wrapper = ref)}>
         <div className={containerClass} style={customStyleContainer}>
           <div className={boxClass} style={customStyleInputBox}>
             <div className={STYLES['box']} />
@@ -257,9 +216,7 @@ class Index extends React.Component {
               ref={ref => (this.input = ref)}
             />
           </div>
-          <label className={labelClass}>
-            {labelHtml}
-          </label>
+          <label className={labelClass}>{labelHtml}</label>
         </div>
         {msgHtml}
       </div>

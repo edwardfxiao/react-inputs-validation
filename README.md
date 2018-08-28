@@ -19,7 +19,7 @@ Fully custom validate **playground**: <a href="https://codesandbox.io/s/pjom8r78
 
 [Textarea](#Textarea)
 
-[Custom Error Message Guid](#CustomErrorMessage)
+[Custom Error Message Guid(can be multiple locales)](#CustomErrorMessage)
 
 # Installation
 ```sh
@@ -478,7 +478,7 @@ import { Textarea } from 'react-inputs-validation';
 />
 ```
 
-### <a name="CustomErrorMessage"></a>Custom Error Message (with multiple locale)
+### <a name="CustomErrorMessage"></a>Custom Error Message (can be multiple locales)
 By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can add or overwrite the error message.
 
 example(fully customized):

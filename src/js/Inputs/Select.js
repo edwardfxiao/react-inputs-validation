@@ -2,29 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Message from './message';
-import { LOCALE_OPTION_LIST } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
 let STYLES = {};
 try {
   STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
 const TYPE = 'select';
 const getDefaultValidationOption = obj => {
-  let {
-    name,
-    check,
-    required,
-    showMsg,
-    locale,
-    msgOnError,
-    msgOnSuccess
-  } = obj;
-  if (!locale) {
-    locale = LOCALE_OPTION_LIST[0];
-  } else {
-    if (LOCALE_OPTION_LIST.indexOf(locale) == -1) {
-      locale = LOCALE_OPTION_LIST[0];
-    }
-  }
+  let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
+  locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
   showMsg = typeof showMsg !== 'undefined' ? showMsg : true;
@@ -61,16 +47,12 @@ class Index extends React.Component {
       successMsg: undefined
     };
     if (!props.optionList.length) {
-      console.error(
-        'Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
-      );
+      console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
       return;
     } else {
       props.optionList.map(i => {
         if (typeof i.name == 'undefined' || typeof i.id == 'undefined') {
-          console.error(
-            'Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]'
-          );
+          console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
         }
         return;
       });
@@ -167,21 +149,19 @@ class Index extends React.Component {
     if (val != null) {
       value = val;
     }
-    const {
-      name,
-      check,
-      required,
-      locale,
-      msgOnSuccess
-    } = getDefaultValidationOption(this.props.validationOption);
+    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
     if (!check) {
       return;
     }
     const Msg = Message[locale][TYPE];
+    if (!Msg) {
+      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+      return;
+    }
     let nameText = name ? name : '';
     if (required) {
       if (isValidateValue(value)) {
-        this.handleCheckEnd(true, Msg.empty(nameText));
+        this.handleCheckEnd(true, Msg.empty ? Msg.empty(nameText) : '');
         return;
       }
     }
@@ -225,38 +205,13 @@ class Index extends React.Component {
 
     const { value, err, msg, show, successMsg } = this.state;
 
-    const wrapperClass = cx(
-      classNameWrapper,
-      STYLES['select__wrapper'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const wrapperClass = cx(classNameWrapper, STYLES['select__wrapper'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const containerClass = cx(
-      classNameContainer,
-      STYLES['select__container'],
-      err && STYLES['error'],
-      show && STYLES['show'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const containerClass = cx(classNameContainer, STYLES['select__container'], err && STYLES['error'], show && STYLES['show'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const inputClass = cx(
-      STYLES['select__input'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const inputClass = cx(STYLES['select__input'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const selectClass = cx(
-      classNameSelect,
-      STYLES['ellipsis'],
-      STYLES['select__dropdown-menu'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const selectClass = cx(classNameSelect, STYLES['ellipsis'], STYLES['select__dropdown-menu'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
     const selectOptionListContainerClass = cx(
       classNameOptionListContainer,
@@ -267,18 +222,9 @@ class Index extends React.Component {
       disabled && STYLES['disabled']
     );
 
-    const selectOptionListItemClass = cx(
-      classNameOptionListItem,
-      STYLES['select__options-item'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
-    );
+    const selectOptionListItemClass = cx(classNameOptionListItem, STYLES['select__options-item'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const dropdownIconClass = cx(
-      classNameDropdownIconOptionListItem,
-      STYLES['select__dropdown-icon']
-    );
+    const dropdownIconClass = cx(classNameDropdownIconOptionListItem, STYLES['select__dropdown-icon']);
 
     const errMsgClass = cx(STYLES['msg'], err && STYLES['error']);
     const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
@@ -287,11 +233,7 @@ class Index extends React.Component {
     if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (
-      getDefaultValidationOption(validationOption).showMsg &&
-      !err &&
-      successMsg
-    ) {
+    if (getDefaultValidationOption(validationOption).showMsg && !err && successMsg) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     let optionListHtml;
@@ -308,14 +250,10 @@ class Index extends React.Component {
         optionListHtml = optionList.map((i, k) => {
           return (
             <div
-              className={
-                String(i.id) == String(value)
-                  ? `${selectOptionListItemClass} ${STYLES['active']}`
-                  : `${selectOptionListItemClass}`
-              }
+              className={String(i.id) == String(value) ? `${selectOptionListItemClass} ${STYLES['active']}` : `${selectOptionListItemClass}`}
               key={k}
               style={customStyleOptionListItem}
-              onClick={(e) => {
+              onClick={e => {
                 this.onChange(i.id, e);
               }}
             >
@@ -342,7 +280,7 @@ class Index extends React.Component {
         id={STYLES['select__wrapper']}
         className={wrapperClass}
         style={customStyleWrapper}
-        onClick={(e) => {
+        onClick={e => {
           this.onClick(e);
           !disabled ? this.toggleShow(!show) : ``;
         }}
@@ -351,23 +289,12 @@ class Index extends React.Component {
         ref={ref => (this.wrapper = ref)}
       >
         <div className={containerClass} style={customStyleContainer}>
-          <input
-            id={id}
-            name={name}
-            type="hidden"
-            value={value}
-            className={inputClass}
-            onChange={() => {}}
-            ref={ref => (this.input = ref)}
-          />
+          <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} ref={ref => (this.input = ref)} />
 
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
-          <div
-            className={selectOptionListContainerClass}
-            style={customStyleOptionListContainer}
-          >
+          <div className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
             {optionListHtml}
           </div>
         </div>

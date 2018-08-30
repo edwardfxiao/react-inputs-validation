@@ -481,7 +481,7 @@ import { Textarea } from 'react-inputs-validation';
 ```
 
 ### <a name="CustomErrorMessage"></a>Custom Error Message (can be multiple locales)
-By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can add or overwrite the error message.
+By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can overwrite the error message.
 
 **IMPORTANT NOTE: YOU WILL NEED TO PLACE window.REACT_INPUTS_VALIDATION BEFORE YOUR JS SCRIPT**
 

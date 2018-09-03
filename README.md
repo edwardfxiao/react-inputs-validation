@@ -4,9 +4,9 @@ A react inputs validation component.
 # <img src="http://oc54ddm6x.bkt.clouddn.com/react-inputs.gif" />
 
 # Online Demo
-<a href="https://edwardfhsiao.github.io/react-inputs-validation/">online demo example</a>
+<a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>
 
-<a href="https://github.com/edwardfhsiao/react-inputs-validation/blob/gh-pages/example/index.js">demo source code</a>
+<a href="https://github.com/edwardfhsiao/react-inputs-validation/blob/gh-pages/example/index.js">Demo source code</a>
 
 <a href="https://codesandbox.io/s/pjom8r78x7">Fully custom validate playground</a>
 

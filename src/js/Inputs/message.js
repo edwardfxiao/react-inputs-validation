@@ -87,30 +87,32 @@ const message = {
   }
 };
 
-if (window.REACT_INPUTS_VALIDATION && window.REACT_INPUTS_VALIDATION['customErrorMessage']) {
-  if (
-    window.REACT_INPUTS_VALIDATION['customErrorMessage'] &&
-    typeof window.REACT_INPUTS_VALIDATION['customErrorMessage'] === 'object' &&
-    window.REACT_INPUTS_VALIDATION['customErrorMessage'].constructor === Object &&
-    Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage']).length > 0
-  ) {
-    Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage']).map(i => {
-      if (!message[i]) {
-        message[i] = window.REACT_INPUTS_VALIDATION['customErrorMessage'][i];
-      } else {
-        if (Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i]).length) {
-          Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i]).map(j => {
-            if (Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j]).length) {
-              Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j]).map(k => {
-                message[i][j][k] = window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j][k];
-              });
-            }
-          });
+if (typeof window !== 'undefined') {
+  if (window.REACT_INPUTS_VALIDATION && window.REACT_INPUTS_VALIDATION['customErrorMessage']) {
+    if (
+      window.REACT_INPUTS_VALIDATION['customErrorMessage'] &&
+      typeof window.REACT_INPUTS_VALIDATION['customErrorMessage'] === 'object' &&
+      window.REACT_INPUTS_VALIDATION['customErrorMessage'].constructor === Object &&
+      Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage']).length > 0
+    ) {
+      Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage']).map(i => {
+        if (!message[i]) {
+          message[i] = window.REACT_INPUTS_VALIDATION['customErrorMessage'][i];
+        } else {
+          if (Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i]).length) {
+            Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i]).map(j => {
+              if (Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j]).length) {
+                Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j]).map(k => {
+                  message[i][j][k] = window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j][k];
+                });
+              }
+            });
+          }
         }
-      }
-    });
-  } else {
-    console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+      });
+    } else {
+      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+    }
   }
 }
 

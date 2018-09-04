@@ -10,6 +10,12 @@ A react inputs validation component.
 
 <a href="https://codesandbox.io/s/pjom8r78x7">Fully custom validate playground</a>
 
+## For version >= 1.1.4, please import css manually
+```js
+import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
+```
+
 # Docs Link
 [Textbox](#Textbox)
 
@@ -80,6 +86,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 
 ```js
 import { Textbox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textbox
   tabIndex="1" //Optional.[String or Number].Default: -1.
@@ -164,6 +171,7 @@ import { Textbox } from 'react-inputs-validation';
 
 ```js
 import { Radiobox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Radiobox
   tabIndex={2} //Optional.[String or Number].Default: -1.
@@ -244,6 +252,7 @@ import { Radiobox } from 'react-inputs-validation';
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 ```js
 import { Checkbox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Checkbox
   tabIndex="5" //Optional.[String or Number].Default: -1.
@@ -332,6 +341,7 @@ import { Checkbox } from 'react-inputs-validation';
 
 ```js
 import { Select } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Select
   tabIndex="6" //Optional.[String or Number].Default: -1.
@@ -433,6 +443,7 @@ import { Select } from 'react-inputs-validation';
 
 ```js
 import { Textarea } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textarea
   tabIndex="7" //Optional.[String or Number].Default: -1.

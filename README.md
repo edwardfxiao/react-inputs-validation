@@ -10,7 +10,7 @@ A react inputs validation component.
 
 <a href="https://codesandbox.io/s/pjom8r78x7">Fully custom validate playground</a>
 
-## For version >= 1.1.4, please import css manually
+### For version >= 1.1.4, please import css manually.
 ```js
 import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';

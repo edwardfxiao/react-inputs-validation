@@ -10,6 +10,7 @@ import { Textbox, Textarea, Radiobox, Checkbox, Select } from '../src/js/Inputs'
 const markdownTextboxEmptyExample = `
 \`\`\`javascript
 import { Textbox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textbox
   tabIndex="1" //Optional.[String or Number].Default: -1.
@@ -35,6 +36,7 @@ import { Textbox } from 'react-inputs-validation';
 const markdownTextboxRegexExample = `
 \`\`\`javascript
 import { Textbox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textbox
   tabIndex="1" //Optional.[String or Number].Default: -1.
@@ -59,6 +61,7 @@ import { Textbox } from 'react-inputs-validation';
 const markdownTextboxPhoneExample = `
 \`\`\`javascript
 import { Textbox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textbox
   tabIndex="1" //Optional.[String or Number].Default: -1.
@@ -83,6 +86,7 @@ import { Textbox } from 'react-inputs-validation';
 const markdownTextboxNumberExample = `
 \`\`\`javascript
 import { Textbox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textbox
   tabIndex="1" //Optional.[String or Number].Default: -1.
@@ -108,6 +112,7 @@ import { Textbox } from 'react-inputs-validation';
 const markdownRadioboxEmptyExample = `
 \`\`\`javascript
 import { Radiobox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Radiobox
   tabIndex={2} //Optional.[String or Number].Default: -1.
@@ -141,6 +146,7 @@ import { Radiobox } from 'react-inputs-validation';
 const markdownCheckboxEmptyExample = `
 \`\`\`javascript
 import { Checkbox } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Checkbox
   tabIndex="5" //Optional.[String or Number].Default: -1.
@@ -169,6 +175,7 @@ import { Checkbox } from 'react-inputs-validation';
 const markdownSelectEmptyExample = `
 \`\`\`javascript
 import { Select } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Select
   tabIndex="6" //Optional.[String or Number].Default: -1.
@@ -213,6 +220,7 @@ import { Select } from 'react-inputs-validation';
 const markdownTextareaEmptyExample = `
 \`\`\`javascript
 import { Textarea } from 'react-inputs-validation';
+import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textarea
   tabIndex="1" //Optional.[String or Number].Default: -1.

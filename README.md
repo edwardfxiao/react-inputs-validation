@@ -53,7 +53,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |maxLength                         |  Opt  |  Str   |                                             |  ""        |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
-|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |classNameInput                    |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
@@ -97,7 +97,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   disabled={false} //Optional.[Bool].Default: false.
   maxLength={maxLength} //Optional.[String].Default: "".
   placeholder="Place your name here ^-^" //Optional.[String].Default: "".
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
     this.setState({ hasNameError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
   classNameInput="" //Optional.[String].Default: "".
@@ -145,7 +145,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
-|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |**optionList**                    |**Req**|**Array**|**[{id: 'teacher', name: 'teacher']**           |**[]**
 |classNameInput                    |  Opt  |  Str   |                                             |  ""        |
@@ -179,7 +179,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   name="job" //Optional.[String].Default: "". Input name.
   disabled={false} //Optional.[Bool].Default: false.
   value={job} //Optional.[String].Default: "".
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
     this.setState({ hasJobError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
   optionList={JOB_OPTIONS_LIST}
@@ -229,7 +229,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |checked                           |  Opt  |  Bool  |                                             |  false      |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
-|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameInputBox                 |  Opt  |  Str   |                                             |  ""        |
@@ -261,7 +261,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   value={agreement} //Required.[String].Default: "".
   checked={false} //Optional.[Bool].Default: false.
   disabled={false} //Optional.[Bool].Default: false.
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
     this.setState({
       hasAgreementError: res,
@@ -349,7 +349,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   name={'movie'} //Optional.[String].Default: "". Input name.
   value={movie} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
     this.setState({ hasMovieError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
   optionList={MOVIE_OPTIONS_LIST} //Required.[Array of Object(s)].Default: [].
@@ -413,7 +413,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |maxLength                         |  Opt  |  Str   |                                             |  ""        |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
-|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
+|**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |classNameInput                    |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
@@ -453,7 +453,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   disabled={false} //Optional.[Bool].Default: false.
   maxLength={maxLength} //Optional.[String].Default: "".
   placeholder="Place your description here ^-^" //Optional.[String].Default: "".
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
     this.setState({
       hasDescriptionError: res,

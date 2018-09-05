@@ -496,6 +496,8 @@ By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can
 
 **IMPORTANT NOTE: YOU WILL NEED TO PLACE window.REACT_INPUTS_VALIDATION BEFORE YOUR JS SCRIPT**
 
+<a href="https://codesandbox.io/s/q9vqmk4j84">codesandbox example</a>(located in index.html)
+
 example(fully customized):
 
 ```html

@@ -76,6 +76,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
 |**validationOption.length**       |**Opt**|**Num**|**Validation of exact length of the value.**|**0**       |
 |**validationOption.compare**      |**Opt**|**Str** |**Compare this value to 3 to see if they are equal.**|**""**      |
+|**validationOption.custom**       |**Opt**|**Func**|**Custom function. Returns true or err**|  none      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.**|**"en-US"** |

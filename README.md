@@ -15,6 +15,10 @@ A react inputs validation component.
 import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
+# Codesandbox Examples
+* <a href="https://codesandbox.io/s/pjom8r78x7">Fully custom validate</a>
+* <a href="https://codesandbox.io/s/q9vqmk4j84">Custom locales</a>
+* <a href="https://codesandbox.io/s/o565o4qxvq">Custom function</a>
 
 # Docs Link
 [Textbox](#Textbox)

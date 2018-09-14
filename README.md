@@ -8,13 +8,15 @@ A react inputs validation component.
 
 <a href="https://github.com/edwardfhsiao/react-inputs-validation/blob/gh-pages/example/index.js">Demo source code</a>
 
-<a href="https://codesandbox.io/s/pjom8r78x7">Fully custom validate playground</a>
-
 ### For version >= 1.1.4, please import css manually.
 ```js
 import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
+# Codesandbox Examples
+* <a href="https://codesandbox.io/s/pjom8r78x7">Custom control</a>(when ```check: false```)
+* <a href="https://codesandbox.io/s/o565o4qxvq">Custom function</a>(when providing ```customFunc```)
+* <a href="https://codesandbox.io/s/q9vqmk4j84">Custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
 
 # Docs Link
 [Textbox](#Textbox)

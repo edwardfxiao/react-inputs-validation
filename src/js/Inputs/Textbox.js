@@ -12,7 +12,7 @@ try {
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'phone'];
 const getDefaultValidationOption = obj => {
-  let { reg, min, max, type, name, check, length, regMsg, compare, required, showMsg, locale, phoneCountry, msgOnError, msgOnSuccess } = obj;
+  let { reg, min, max, type, name, check, length, regMsg, compare, required, showMsg, locale, phoneCountry, msgOnError, msgOnSuccess, customFunc } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
@@ -42,7 +42,8 @@ const getDefaultValidationOption = obj => {
     showMsg,
     phoneCountry,
     msgOnError,
-    msgOnSuccess
+    msgOnSuccess,
+    customFunc
   };
 };
 class Index extends React.Component {
@@ -106,7 +107,7 @@ class Index extends React.Component {
 
   check(inputValue) {
     const { validationOption } = this.props;
-    const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, phoneCountry, msgOnSuccess } = getDefaultValidationOption(validationOption);
+    const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, phoneCountry, msgOnSuccess, customFunc } = getDefaultValidationOption(validationOption);
     if (!check) {
       return;
     }
@@ -213,6 +214,14 @@ class Index extends React.Component {
               this.handleCheckEnd(true, Msg.twoInputsNotEqual ? Msg.twoInputsNotEqual() : '');
               return;
             }
+          }
+        }
+        // CHECK CUSTOM FUNCTION
+        if (customFunc && typeof customFunc === 'function') {
+          const customFuncResult = customFunc(value);
+          if (customFuncResult !== true) {
+            this.handleCheckEnd(true, customFuncResult);
+            return;
           }
         }
         if (msgOnSuccess) {

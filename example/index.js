@@ -364,7 +364,7 @@ class Index extends Component {
                     }} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     validationOption={{
                       name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
-                      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+                      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.,
                       required: true //Optional.[Bool].Default: true. To determin if it is a required field.
                     }}
                   />
@@ -689,6 +689,12 @@ class Index extends Component {
                         // phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+                        // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
+                        //   if (res != 'milk') {
+                        //     return 'Name cannot be other things but milk';
+                        //   }
+                        //   return true;
+                        // }
                       }}
                     />
                   </div>
@@ -912,6 +918,12 @@ class Index extends Component {
                         // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "". Custom regex error message.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+                        // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
+                        //   if (res != 'banana') {
+                        //     return 'Description cannot be other things but banana';
+                        //   }
+                        //   return true;
+                        // }
                       }}
                     />
                   </div>

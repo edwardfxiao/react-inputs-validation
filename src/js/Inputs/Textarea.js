@@ -12,7 +12,7 @@ try {
 const TYPE = 'textarea';
 const VALIDATE_OPTION_TYPE_LIST = ['string'];
 const getDefaultValidationOption = obj => {
-  let { reg, min, max, type, name, check, length, regMsg, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
+  let { reg, min, max, type, name, check, length, regMsg, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
@@ -39,7 +39,8 @@ const getDefaultValidationOption = obj => {
     required,
     showMsg,
     msgOnError,
-    msgOnSuccess
+    msgOnSuccess,
+    customFunc
   };
 };
 class Index extends React.Component {
@@ -102,7 +103,7 @@ class Index extends React.Component {
   }
 
   check(inputValue) {
-    const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
+    const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess, customFunc } = getDefaultValidationOption(this.props.validationOption);
     if (!check) {
       return;
     }
@@ -161,6 +162,14 @@ class Index extends React.Component {
                 return;
               }
             }
+          }
+        }
+        // CHECK CUSTOM FUNCTION
+        if (customFunc && typeof customFunc === 'function') {
+          const customFuncResult = customFunc(value);
+          if (customFuncResult !== true) {
+            this.handleCheckEnd(true, customFuncResult);
+            return;
           }
         }
         if (msgOnSuccess) {

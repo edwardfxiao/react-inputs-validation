@@ -439,10 +439,10 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
-|**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number', 'phone'].**|**"string"**|
+|**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string'].**|**"string"**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
-|**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
-|**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
+|**validationOption.min**          |**Opt**|**Num**|**Validation of min length.**|**0**       |
+|**validationOption.max**          |**Opt**|**Num**|**Validation of max length.**|**0**       |
 |**validationOption.length**       |**Opt**|**Num**|**Validation of exact length of the value.**|**0**       |
 |**validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message.**|  **none**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
@@ -487,11 +487,11 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
-    type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+    type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string'].
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
-    // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
-    // max: 10, //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
+    // min: 2, //Optional.[Number].Default: 0. Validation of min length.
+    // max: 10, //Optional.[Number].Default: 0. Validation of max length.
     // length: 2, //Optional.[Number].Default: 0. Validation of exact length of the value.
     // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "". Custom regex.
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "". Custom regex error message.

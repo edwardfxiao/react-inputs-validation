@@ -177,9 +177,9 @@ import { Select } from 'react-inputs-validation';
   value={country} //Optional.[String].Default: "".
   optionList={[
     { id: '', name: 'Please Select a country' },
-    { id: 0, name: 'Twin Peaks' },
-    { id: 1, name: 'Lion King' },
-    { id: 2, name: 'American Beauty' }
+    { id: 'US', name: 'United States' },
+    { id: 'CN', name: 'China' },
+    { id: 'JP', name: 'Japan' }
   ]} //Required.[Array of Object(s)].Default: [].
   onChange={(country, e) => {
     this.setState({ country });

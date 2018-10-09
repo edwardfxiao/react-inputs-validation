@@ -185,16 +185,16 @@ class Index extends React.Component {
       if (keyCode == keyCodeDown) {
         direction = 'down';
         this.currentFocus++;
-        // if (this.currentFocus > optionList.length - 1) {
-        //   this.currentFocus = optionList.length - 1;
-        // }
+        if (this.currentFocus > optionList.length - 1) {
+          this.currentFocus = optionList.length - 1;
+        }
         this.addActive();
       } else if (keyCode == keyCodeUp) {
         direction = 'up';
         this.currentFocus--;
-        // if (this.currentFocus < 0) {
-        //   this.currentFocus = 0;
-        // }
+        if (this.currentFocus < 0) {
+          this.currentFocus = 0;
+        }
         this.addActive();
       } else if (keyCode == keyCodeEnter) {
         e.preventDefault();
@@ -210,12 +210,10 @@ class Index extends React.Component {
       this.setTimeoutTyping();
       const newkeyCodeList = [...keycodeList, keyCode];
       const str = String.fromCharCode(...newkeyCodeList).toLowerCase();
-      console.log(str);
       let index = -1;
       optionList.filter((i, k) => {
         const { name } = i;
         if (name.toLowerCase().startsWith(str)) {
-          console.log(name.toLowerCase());
           if (index == -1) {
             index = k;
           }
@@ -240,36 +238,24 @@ class Index extends React.Component {
   }
 
   scroll(direction) {
-    console.log(this.currentFocus);
-    console.log(this.itemsWrapper);
-    const item = this.itemsWrapper.getElementsByTagName('div')[this.currentFocus];
     const containerHeight = this.itemsWrapper.offsetHeight;
     const containerScrollTop = this.itemsWrapper.scrollTop;
-    const itemHeight = item.offsetHeight;
-    // console.log(`containerHeight: ${containerHeight}`);
-    // console.log(`containerScrollTop: ${containerScrollTop}`);
-    // console.log(item);
-    // debugger;
-    // console.log(`itemTop: ${itemTop}`);
-    // console.log(`this.currentFocus: ${this.currentFocus}`);
-    // console.log(`itemHeight: ${itemHeight}`);
-    // this.itemsWrapper.scrollTop = 0;
-    const itemTop = this.currentFocus * itemHeight;
+    const itemHeight = this.itemsWrapper.getElementsByTagName('div')[this.currentFocus].offsetHeight;
     if (direction) {
-      if (itemTop > containerHeight) {
-        this.itemsWrapper.scroll(0, itemTop);
+      if (direction == 'down') {
+        const bound = containerScrollTop + containerHeight;
+        if (this.currentFocus * itemHeight >= bound - itemHeight) {
+          this.itemsWrapper.scroll(0, containerScrollTop + itemHeight);
+        }
+      }
+      if (direction == 'up') {
+        if (this.currentFocus * itemHeight <= containerScrollTop) {
+          this.itemsWrapper.scroll(0, this.currentFocus * itemHeight);
+        }
       }
     } else {
-      this.itemsWrapper.scroll(0, itemTop);
+      this.itemsWrapper.scroll(0, this.currentFocus * itemHeight);
     }
-
-    // console.log(Math.abs(containerHeight - (this.currentFocus + 1) * itemHeight))
-    // if (itemTop > containerHeight) {
-    //   this.itemsWrapper.scrollTop = Math.abs(containerHeight - (this.currentFocus + 1) * itemHeight);
-    //   // console.log(`containerScrollTop: ${containerScrollTop}`);
-    // } else {
-    //   this.itemsWrapper.scrollTop = 0;
-    // }
   }
 
   addActive() {
@@ -467,7 +453,6 @@ class Index extends React.Component {
       >
         <div className={containerClass} style={customStyleContainer}>
           <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} ref={ref => (this.input = ref)} />
-
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>

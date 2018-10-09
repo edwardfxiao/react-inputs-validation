@@ -78,9 +78,9 @@ class Index extends React.Component {
     this.wrapper.addEventListener('keydown', this.onKeyPress);
   }
 
-  componentWillUpdate({}, nextState) {
-    if (nextState.show != this.state.show) {
-      if (nextState.show) {
+  componentDidUpdate({}, prevState) {
+    if (prevState.show != this.state.show) {
+      if (this.state.show) {
         this.resetCurrentFocus();
       }
     }
@@ -153,10 +153,10 @@ class Index extends React.Component {
   }
 
   resetCurrentFocus() {
-    // const { value } = this.state;
-    // const { optionList } = this.props;
-    // this.currentFocus = this.getIndex(optionList, value);
-    // this.scroll();
+    const { value } = this.state;
+    const { optionList } = this.props;
+    this.currentFocus = this.getIndex(optionList, value);
+    this.scroll();
   }
 
   onKeyPress(e) {
@@ -169,6 +169,7 @@ class Index extends React.Component {
     const x = this.itemsWrapper.getElementsByTagName('div');
     const { optionList } = this.props;
     this.currentFocus = this.currentFocus ? this.currentFocus : this.getIndex(optionList, value);
+    let direction = null;
     const { keyCode } = e;
     const keyCodeEsc = 27;
     const keyCodeDown = 40;
@@ -182,12 +183,14 @@ class Index extends React.Component {
         return;
       }
       if (keyCode == keyCodeDown) {
+        direction = 'down';
         this.currentFocus++;
         // if (this.currentFocus > optionList.length - 1) {
         //   this.currentFocus = optionList.length - 1;
         // }
         this.addActive();
       } else if (keyCode == keyCodeUp) {
+        direction = 'up';
         this.currentFocus--;
         // if (this.currentFocus < 0) {
         //   this.currentFocus = 0;
@@ -224,7 +227,7 @@ class Index extends React.Component {
       }
       this.setState({ keycodeList: newkeyCodeList });
     }
-    this.scroll();
+    this.scroll(direction);
   }
 
   setTimeoutTyping() {
@@ -236,20 +239,31 @@ class Index extends React.Component {
     }, 250);
   }
 
-  scroll() {
-    // console.log(this.currentFocus)
-    // const item = this.itemsWrapper.getElementsByTagName('div')[this.currentFocus];
-    // const containerHeight = this.itemsWrapper.offsetHeight;
-    // const containerScrollTop = this.itemsWrapper.scrollTop;
-    // const itemHeight = item.offsetHeight;
-    // const itemTop = item.offsetTop;
-    // // console.log(`containerHeight: ${containerHeight}`);
-    // // console.log(`containerScrollTop: ${containerScrollTop}`);
-    // // console.log(item);
-    // // debugger;
-    // // console.log(`itemTop: ${itemTop}`);
-    // // console.log(`this.currentFocus: ${this.currentFocus}`);
-    // // console.log(`itemHeight: ${itemHeight}`);
+  scroll(direction) {
+    console.log(this.currentFocus);
+    console.log(this.itemsWrapper);
+    const item = this.itemsWrapper.getElementsByTagName('div')[this.currentFocus];
+    const containerHeight = this.itemsWrapper.offsetHeight;
+    const containerScrollTop = this.itemsWrapper.scrollTop;
+    const itemHeight = item.offsetHeight;
+    // console.log(`containerHeight: ${containerHeight}`);
+    // console.log(`containerScrollTop: ${containerScrollTop}`);
+    // console.log(item);
+    // debugger;
+    // console.log(`itemTop: ${itemTop}`);
+    // console.log(`this.currentFocus: ${this.currentFocus}`);
+    // console.log(`itemHeight: ${itemHeight}`);
+    // this.itemsWrapper.scrollTop = 0;
+    const itemTop = this.currentFocus * itemHeight;
+    if (direction) {
+      if (itemTop > containerHeight) {
+        this.itemsWrapper.scroll(0, itemTop);
+      }
+    } else {
+      this.itemsWrapper.scroll(0, itemTop);
+    }
+
+    // console.log(Math.abs(containerHeight - (this.currentFocus + 1) * itemHeight))
     // if (itemTop > containerHeight) {
     //   this.itemsWrapper.scrollTop = Math.abs(containerHeight - (this.currentFocus + 1) * itemHeight);
     //   // console.log(`containerScrollTop: ${containerScrollTop}`);

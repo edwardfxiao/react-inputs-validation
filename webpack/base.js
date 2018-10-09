@@ -18,7 +18,14 @@ var config = (module.exports = {
         enforce: 'pre',
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: [{ loader: 'eslint-loader', options: {} }]
+        use: [
+          {
+            loader: 'eslint-loader',
+            options: {
+              emitWarning: true
+            }
+          }
+        ]
       },
       {
         test: /\.jsx?$/,
@@ -147,12 +154,7 @@ var config = (module.exports = {
     //   names: 'commons',
     //   chunks: ['lib', 'index']
     // }),
-    new webpack.ContextReplacementPlugin(
-      /\.\/locale$/,
-      'empty-module',
-      false,
-      /js$/
-    ),
+    new webpack.ContextReplacementPlugin(/\.\/locale$/, 'empty-module', false, /js$/),
     new webpack.ProvidePlugin({
       React: 'React',
       react: 'React',

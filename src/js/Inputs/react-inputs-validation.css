@@ -1,57 +1,39 @@
 /*GENERAL*/
 
-input[type=password],
-input[type=phone],
-input[type=number],
-input[type=text],
+input[type='password'],
+input[type='phone'],
+input[type='number'],
+input[type='text'],
 select {
-  border-top-left-radius: 0!important;
-  border-bottom-left-radius: 0!important;
-  border-top-right-radius: 0!important;
-  border-bottom-right-radius: 0!important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
   -webkit-appearance: none;
-  -webkit-border-radius: 0!important;
+  -webkit-border-radius: 0 !important;
   background-color: white;
   background-position: right center;
   background-repeat: no-repeat;
   outline: 0;
 }
 
-input[type=password]:focus,
-input[type=phone]:focus,
-input[type=number]:focus,
-input[type=text]:focus,
+input[type='password']:focus,
+input[type='phone']:focus,
+input[type='number']:focus,
+input[type='text']:focus,
 select:focus {
   outline: 0;
 }
 
 select {
-  background: transparent!important;
+  background: transparent !important;
 }
-
 
 .ellipsis {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*TEXTBOX*/
 
@@ -68,10 +50,10 @@ select {
   position: relative;
 }
 
-input[type=password].textbox__input,
-input[type=phone].textbox__input,
-input[type=number].textbox__input,
-input[type=text].textbox__input {
+input[type='password'].textbox__input,
+input[type='phone'].textbox__input,
+input[type='number'].textbox__input,
+input[type='text'].textbox__input {
   display: block;
   margin: 0;
   width: 100%;
@@ -86,26 +68,26 @@ input[type=text].textbox__input {
   -moz-box-sizing: border-box;
 }
 
-input[type=password].textbox__input.error,
-input[type=phone].textbox__input.error,
-input[type=number].textbox__input.error,
-input[type=text].textbox__input.error {
+input[type='password'].textbox__input.error,
+input[type='phone'].textbox__input.error,
+input[type='number'].textbox__input.error,
+input[type='text'].textbox__input.error {
   border: 1px solid #ff5a57;
   color: #ff5a57;
 }
 
-input[type=password].textbox__input.success,
-input[type=phone].textbox__input.success,
-input[type=number].textbox__input.success,
-input[type=text].textbox__input.success {
+input[type='password'].textbox__input.success,
+input[type='phone'].textbox__input.success,
+input[type='number'].textbox__input.success,
+input[type='text'].textbox__input.success {
   border: 1px solid #2fca6f;
   color: #2fca6f;
 }
 
-input[type=password].textbox__input.disabled,
-input[type=phone].textbox__input.disabled,
-input[type=number].textbox__input.disabled,
-input[type=text].textbox__input.disabled {
+input[type='password'].textbox__input.disabled,
+input[type='phone'].textbox__input.disabled,
+input[type='number'].textbox__input.disabled,
+input[type='text'].textbox__input.disabled {
   border: 1px solid #ccc;
   color: #ccc;
   background: #f8f8f8;
@@ -143,26 +125,6 @@ input[type=text].textbox__input.disabled {
   color: #a5a5a5;
   opacity: 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*TEXTAREA*/
 
@@ -213,29 +175,6 @@ textarea.textarea__input.disabled {
   cursor: not-allowed;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*RADIOBOX*/
 
 .radiobox__wrapper,
@@ -243,7 +182,7 @@ textarea.textarea__input.disabled {
   outline: 0;
 }
 
-input[type="radio"] {
+input[type='radio'] {
   position: absolute;
   opacity: 0;
   display: none;
@@ -287,35 +226,15 @@ input[type="radio"] {
 }
 
 .radiobox__item {
-  width: auto
+  width: auto;
 }
 
-.radiobox__item.success .radiobox__label.checked:before{
+.radiobox__item.success .radiobox__label.checked:before {
   border-color: #2fca6f;
 }
-.radiobox__item.error .radiobox__label:before{
+.radiobox__item.error .radiobox__label:before {
   border-color: #ff5a57;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*CHECKBOX*/
 
@@ -324,7 +243,7 @@ input[type="radio"] {
   outline: 0;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   position: absolute;
   opacity: 0;
 }
@@ -342,9 +261,11 @@ input[type="checkbox"] {
   align-items: center;
 }
 
-.checkbox__wrapper.disabled {}
+.checkbox__wrapper.disabled {
+}
 
-.checkbox__container.disabled {}
+.checkbox__container.disabled {
+}
 
 .checkbox__box {
   width: 15px;
@@ -385,24 +306,12 @@ input[type="checkbox"] {
   transform: rotate(-45deg);
 }
 
-
-
-
-
-
-
-
-
-
 /*SELECT*/
 
 .select__wrapper,
 .select__wrapper *:focus {
   outline: 0;
 }
-
-
-
 
 /*.select__wrapper:focus .select__container{
   outline-color: #cecece;
@@ -430,7 +339,7 @@ input[type="checkbox"] {
 .select__container {
   padding: 2%;
   position: relative;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #d3d3d3;
 }
 
 .select__container.error {
@@ -447,23 +356,27 @@ input[type="checkbox"] {
 
 .select__options-item {
   background: #fff;
-  color: #4a4a4a;
-  transition: background .4s, color .2s;
+  transition: background 0.4s, color 0.2s;
   padding: 10px;
+  cursor: none;
+}
+
+.select__options-item-show-cursor {
   cursor: pointer;
 }
 
-.select__options-item:hover {
+.select__no-mouse {
+  cursor: none;
+}
+
+.select__hover-active {
   background: #ff5a57;
   color: #fff;
 }
 
-.select__options-item.active:hover {
-  color: #4a4a4a;
-}
-
 .select__options-item.active {
-  background: #e5e5e5;
+  background: #d3d3d3;
+  color: #fff;
 }
 
 .select__options-container-animate {
@@ -475,7 +388,7 @@ input[type="checkbox"] {
   opacity: 0;
   left: 50%;
   transform-origin: 0 0;
-  transition: transform .4s, opacity .2s;
+  transition: transform 0.4s, opacity 0.2s;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08), 0 0 1px 0 rgba(0, 0, 0, 0.12);
   z-index: -1;
   transform: translate(-50%, 0) scale(1, 0);
@@ -512,7 +425,7 @@ input[type="checkbox"] {
 
 .select__dropdown-icon {
   width: 20px;
-  height: 20px
+  height: 20px;
 }
 
 .select__dropdown-icon:before {

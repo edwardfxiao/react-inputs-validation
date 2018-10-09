@@ -78,7 +78,7 @@ class Index extends React.Component {
     this.wrapper.addEventListener('keydown', this.onKeyPress);
   }
 
-  componentDidUpdate({}, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.show != this.state.show) {
       if (this.state.show) {
         this.resetCurrentFocus();

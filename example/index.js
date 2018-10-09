@@ -201,6 +201,7 @@ import { Select } from 'react-inputs-validation';
   //     );
   //   }
   // )} //Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
+  customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto', fontSize: '14px' }} //Optional.[Object].Default: {}.
   validationOption={{
     name: 'country', //Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
@@ -826,7 +827,7 @@ class Index extends Component {
                     //     );
                     //   }
                     // )} //Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
-                    customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto' }} //Optional.[Object].Default: {}.
+                    customStyleOptionListContainer={{ maxHeight: '380px', overflow: 'auto', fontSize: '14px' }} //Optional.[Object].Default: {}.
                     validationOption={{
                       name: 'country', //Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
                       check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
@@ -1072,7 +1073,7 @@ class Index extends Component {
                       customStyleSelect={{}} //Optional.[Object].Default: {}.
                       customStyleWrapper={{}} //Optional.[Object].Default: {}.
                       customStyleContainer={{}} //Optional.[Object].Default: {}.
-                      customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto' }} //Optional.[Object].Default: {}.
+                      customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto', fontSize: '14px' }} //Optional.[Object].Default: {}.
                       customStyleOptionListItem={{}} //Optional.[Object].Default: {}.
                       onChange={(country, e) => {
                         this.setState({ country });

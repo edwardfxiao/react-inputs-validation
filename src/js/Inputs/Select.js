@@ -244,17 +244,27 @@ class Index extends React.Component {
     if (direction) {
       if (direction == 'down') {
         const bound = containerScrollTop + containerHeight;
-        if (this.currentFocus * itemHeight >= bound - itemHeight) {
-          this.itemsWrapper.scroll(0, containerScrollTop + itemHeight);
+        const heightItems = this.currentFocus * itemHeight;
+        const heightContainer = bound - itemHeight;
+        if (heightItems >= heightContainer) {
+          const offset = Math.abs(heightItems - heightContainer - itemHeight);
+          if (offset >= 0 && !this.corrected) {
+            this.itemsWrapper.scrollTop = containerScrollTop + itemHeight - offset;
+            this.corrected = true;
+          } else {
+            this.itemsWrapper.scrollTop = containerScrollTop + itemHeight;
+          }
         }
       }
       if (direction == 'up') {
+        this.corrected = false;
         if (this.currentFocus * itemHeight <= containerScrollTop) {
-          this.itemsWrapper.scroll(0, this.currentFocus * itemHeight);
+          this.itemsWrapper.scrollTop = this.currentFocus * itemHeight;
         }
       }
     } else {
-      this.itemsWrapper.scroll(0, this.currentFocus * itemHeight);
+      this.corrected = false;
+      this.itemsWrapper.scrollTop = this.currentFocus * itemHeight;
     }
   }
 

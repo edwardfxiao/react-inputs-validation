@@ -10,7 +10,7 @@ const stylelintRules = require('../stylelint.config.js');
 var config = (module.exports = {
   context: PATH.ROOT_PATH,
   entry: {
-    index: PATH.ROOT_PATH + 'example/index.js',
+    index: PATH.ROOT_PATH + 'example/index.js'
   },
   module: {
     rules: [
@@ -18,7 +18,14 @@ var config = (module.exports = {
         enforce: 'pre',
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: [{ loader: 'eslint-loader', options: {} }]
+        use: [
+          {
+            loader: 'eslint-loader',
+            options: {
+              emitWarning: true
+            }
+          }
+        ]
       },
       {
         test: /\.jsx?$/,
@@ -32,7 +39,16 @@ var config = (module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)\??.*$/,
-        use: [{ loader: 'url-loader?limit=8192&name=font/[name].[ext]' }]
+        use: [
+          {
+            loader: 'url-loader?limit=8192&name=font/[name].[ext]',
+            query: {
+              // outputPath: 'assets/',
+              // publicPath: 'http://localhost:8080/',
+              // emitFile: true
+            }
+          }
+        ]
       },
       {
         test: /\.(jpe?g|png|gif|svg)\??.*$/,
@@ -130,7 +146,7 @@ var config = (module.exports = {
     compress: true,
     disableHostCheck: true,
     // public: 'your-host:8080',
-    host: '192.168.1.121',
+    host: '0.0.0.0',
     port: 9000
   },
   plugins: [
@@ -138,12 +154,7 @@ var config = (module.exports = {
     //   names: 'commons',
     //   chunks: ['lib', 'index']
     // }),
-    new webpack.ContextReplacementPlugin(
-      /\.\/locale$/,
-      'empty-module',
-      false,
-      /js$/
-    ),
+    new webpack.ContextReplacementPlugin(/\.\/locale$/, 'empty-module', false, /js$/),
     new webpack.ProvidePlugin({
       React: 'React',
       react: 'React',

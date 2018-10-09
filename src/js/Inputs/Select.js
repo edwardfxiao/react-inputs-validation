@@ -42,9 +42,11 @@ class Index extends React.Component {
     this.state = {
       value: props.value,
       show: false,
+      isTyping: false,
       err: false,
       msg: '',
-      successMsg: undefined
+      successMsg: undefined,
+      keycodeList: []
     };
     if (!props.optionList.length) {
       console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
@@ -62,6 +64,7 @@ class Index extends React.Component {
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.pageClick = this.pageClick.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
   }
 
   componentDidMount() {
@@ -71,6 +74,15 @@ class Index extends React.Component {
     } else {
       document.attachEvent('onmousedown', this.pageClick);
       document.attachEvent('touchstart', this.pageClick);
+    }
+    this.wrapper.addEventListener('keydown', this.onKeyPress);
+  }
+
+  componentDidUpdate({}, prevState) {
+    if (prevState.show != this.state.show) {
+      if (this.state.show) {
+        this.resetCurrentFocus();
+      }
     }
   }
 
@@ -126,6 +138,140 @@ class Index extends React.Component {
     const { onFocus } = this.props;
     if (onFocus) {
       onFocus(e);
+    }
+  }
+
+  getIndex(list, val) {
+    let key = -1;
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].id == val) {
+        key = i;
+        break;
+      }
+    }
+    return key;
+  }
+
+  resetCurrentFocus() {
+    const { value } = this.state;
+    const { optionList } = this.props;
+    this.currentFocus = this.getIndex(optionList, value);
+    this.scroll();
+  }
+
+  onKeyPress(e) {
+    this.setState({ isTyping: true });
+    e.preventDefault();
+    const { show, value } = this.state;
+    if (!show) {
+      return;
+    }
+    const x = this.itemsWrapper.getElementsByTagName('div');
+    const { optionList } = this.props;
+    this.currentFocus = this.currentFocus ? this.currentFocus : this.getIndex(optionList, value);
+    let direction = null;
+    const { keyCode } = e;
+    const keyCodeEsc = 27;
+    const keyCodeDown = 40;
+    const keyCodeUp = 38;
+    const keyCodeEnter = 13;
+    const selectKeyList = [keyCodeEsc, keyCodeDown, keyCodeUp, keyCodeEnter];
+    if (selectKeyList.indexOf(keyCode) != -1) {
+      if (keyCode == keyCodeEsc) {
+        this.setState({ show: false });
+        this.resetCurrentFocus();
+        return;
+      }
+      if (keyCode == keyCodeDown) {
+        direction = 'down';
+        this.currentFocus++;
+        if (this.currentFocus > optionList.length - 1) {
+          this.currentFocus = optionList.length - 1;
+        }
+        this.addActive();
+      } else if (keyCode == keyCodeUp) {
+        direction = 'up';
+        this.currentFocus--;
+        if (this.currentFocus < 0) {
+          this.currentFocus = 0;
+        }
+        this.addActive();
+      } else if (keyCode == keyCodeEnter) {
+        e.preventDefault();
+        if (this.currentFocus > -1) {
+          if (x) x[this.currentFocus].click();
+        }
+      }
+    } else {
+      const { keycodeList } = this.state;
+      if (!(keyCode >= 48 || keyCode <= 57 || keyCode >= 65 || keyCode <= 90 || keyCode >= 96 || keyCode <= 105)) {
+        return;
+      }
+      this.setTimeoutTyping();
+      const newkeyCodeList = [...keycodeList, keyCode];
+      const str = String.fromCharCode(...newkeyCodeList).toLowerCase();
+      let index = -1;
+      optionList.filter((i, k) => {
+        const { name } = i;
+        if (name.toLowerCase().startsWith(str)) {
+          if (index == -1) {
+            index = k;
+          }
+        }
+      });
+      if (index != -1) {
+        this.currentFocus = index;
+        this.addActive();
+      }
+      this.setState({ keycodeList: newkeyCodeList });
+    }
+    this.scroll(direction);
+  }
+
+  setTimeoutTyping() {
+    if (this.typingTimeout) {
+      clearTimeout(this.typingTimeout);
+    }
+    this.typingTimeout = setTimeout(() => {
+      this.setState({ keycodeList: [] });
+    }, 250);
+  }
+
+  scroll(direction) {
+    const containerHeight = this.itemsWrapper.offsetHeight;
+    const containerScrollTop = this.itemsWrapper.scrollTop;
+    const itemHeight = this.itemsWrapper.getElementsByTagName('div')[this.currentFocus].offsetHeight;
+    if (direction) {
+      if (direction == 'down') {
+        const bound = containerScrollTop + containerHeight;
+        if (this.currentFocus * itemHeight >= bound - itemHeight) {
+          this.itemsWrapper.scroll(0, containerScrollTop + itemHeight);
+        }
+      }
+      if (direction == 'up') {
+        if (this.currentFocus * itemHeight <= containerScrollTop) {
+          this.itemsWrapper.scroll(0, this.currentFocus * itemHeight);
+        }
+      }
+    } else {
+      this.itemsWrapper.scroll(0, this.currentFocus * itemHeight);
+    }
+  }
+
+  addActive() {
+    const x = this.itemsWrapper.getElementsByTagName('div');
+    if (!x) return false;
+    this.removeActive();
+    if (this.currentFocus >= x.length) this.currentFocus = 0;
+    if (this.currentFocus < 0) this.currentFocus = x.length - 1;
+    const item = x[this.currentFocus];
+    item.classList.add(STYLES['select__hover-active']);
+  }
+
+  removeActive() {
+    const x = this.itemsWrapper.getElementsByTagName('div');
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove(STYLES['select__hover-active']);
     }
   }
 
@@ -203,7 +349,7 @@ class Index extends React.Component {
       validationOption
     } = this.props;
 
-    const { value, err, msg, show, successMsg } = this.state;
+    const { value, err, msg, show, successMsg, isTyping } = this.state;
 
     const wrapperClass = cx(classNameWrapper, STYLES['select__wrapper'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
@@ -222,7 +368,14 @@ class Index extends React.Component {
       disabled && STYLES['disabled']
     );
 
-    const selectOptionListItemClass = cx(classNameOptionListItem, STYLES['select__options-item'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const selectOptionListItemClass = cx(
+      !isTyping && STYLES['select__options-item-show-cursor'],
+      classNameOptionListItem,
+      STYLES['select__options-item'],
+      err && STYLES['error'],
+      successMsg && !err && STYLES['success'],
+      disabled && STYLES['disabled']
+    );
 
     const dropdownIconClass = cx(classNameDropdownIconOptionListItem, STYLES['select__dropdown-icon']);
 
@@ -250,6 +403,16 @@ class Index extends React.Component {
         optionListHtml = optionList.map((i, k) => {
           return (
             <div
+              onMouseOver={() => {
+                this.currentFocus = k;
+                this.addActive();
+              }}
+              onMouseMove={() => {
+                this.setState({ isTyping: false });
+              }}
+              onMouseOut={() => {
+                this.removeActive();
+              }}
               className={String(i.id) == String(value) ? `${selectOptionListItemClass} ${STYLES['active']}` : `${selectOptionListItemClass}`}
               key={k}
               style={customStyleOptionListItem}
@@ -290,11 +453,10 @@ class Index extends React.Component {
       >
         <div className={containerClass} style={customStyleContainer}>
           <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} ref={ref => (this.input = ref)} />
-
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
-          <div className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
+          <div ref={ref => (this.itemsWrapper = ref)} className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
             {optionListHtml}
           </div>
         </div>

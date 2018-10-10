@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "10"
+before_script:
+  - npm i
+script: npm test
+env:
+  - REACT=16
+bundler_args: --retry 2
+matrix:
+  fast_finish: true
+cache:
+  directories:
+    - node_modules

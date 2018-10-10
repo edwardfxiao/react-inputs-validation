@@ -36,6 +36,13 @@ const isValidateValue = value => {
   }
 };
 
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) {
+    position = position || 0;
+    return this.indexOf(searchString, position) === position;
+  };
+}
+
 class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -69,13 +76,8 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    if (document.addEventListener) {
-      window.addEventListener('mousedown', this.pageClick, false);
-      window.addEventListener('touchstart', this.pageClick, false);
-    } else {
-      document.attachEvent('onmousedown', this.pageClick);
-      document.attachEvent('touchstart', this.pageClick);
-    }
+    window.addEventListener('mousedown', this.pageClick);
+    window.addEventListener('touchstart', this.pageClick);
     this.wrapper.addEventListener('keydown', this.onKeyPress);
   }
 
@@ -88,13 +90,9 @@ class Index extends React.Component {
   }
 
   componentWillUnmount() {
-    if (document.removeEventListener) {
-      window.removeEventListener('mousedown', this.pageClick, false);
-      window.removeEventListener('touchstart', this.pageClick, false);
-    } else {
-      document.detachEvent('onmousedown', this.pageClick);
-      document.detachEvent('touchstart', this.pageClick);
-    }
+    window.removeEventListener('mousedown', this.pageClick);
+    window.removeEventListener('touchstart', this.pageClick);
+    this.wrapper.removeEventListener('keydown', this.onKeyPress);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -275,14 +273,13 @@ class Index extends React.Component {
     this.removeActive();
     if (this.currentFocus >= x.length) this.currentFocus = 0;
     if (this.currentFocus < 0) this.currentFocus = x.length - 1;
-    const item = x[this.currentFocus];
-    item.classList.add(STYLES['select__hover-active']);
+    x[this.currentFocus].className += ' ' + STYLES['select__hover-active'];
   }
 
   removeActive() {
     const x = this.optionItems;
     for (var i = 0; i < x.length; i++) {
-      x[i].classList.remove(STYLES['select__hover-active']);
+      x[i].className = x[i].className.replace(STYLES['select__hover-active'], '');
     }
   }
 
@@ -442,9 +439,7 @@ class Index extends React.Component {
     if (!selectorHtml) {
       selectorHtml = (
         <div className={STYLES['select__dropdown']}>
-          <div className={STYLES['ellipsis']} style={{ width: '100%' }}>
-            {item.name}
-          </div>
+          <div className={`${STYLES['select__dropdown-name']} ${STYLES['ellipsis']}`}>{item.name}</div>
           <div className={dropdownIconClass} />
         </div>
       );

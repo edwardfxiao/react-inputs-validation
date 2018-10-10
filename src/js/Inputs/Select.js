@@ -59,6 +59,7 @@ class Index extends React.Component {
         return;
       });
     }
+    this.optionItems = [];
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onBlur = this.onBlur.bind(this);
@@ -166,9 +167,9 @@ class Index extends React.Component {
     if (!show) {
       return;
     }
-    const x = this.itemsWrapper.getElementsByTagName('div');
+    const x = this.optionItems;
     const { optionList } = this.props;
-    this.currentFocus = this.currentFocus ? this.currentFocus : this.getIndex(optionList, value);
+    this.currentFocus = typeof this.currentFocus != 'undefined' ? this.currentFocus : this.getIndex(optionList, value);
     let direction = null;
     const { keyCode } = e;
     const keyCodeEsc = 27;
@@ -240,7 +241,7 @@ class Index extends React.Component {
   scroll(direction) {
     const containerHeight = this.itemsWrapper.offsetHeight;
     const containerScrollTop = this.itemsWrapper.scrollTop;
-    const itemHeight = this.itemsWrapper.getElementsByTagName('div')[this.currentFocus].offsetHeight;
+    const itemHeight = this.optionItems[this.currentFocus].offsetHeight;
     if (direction) {
       if (direction == 'down') {
         const bound = containerScrollTop + containerHeight;
@@ -269,7 +270,7 @@ class Index extends React.Component {
   }
 
   addActive() {
-    const x = this.itemsWrapper.getElementsByTagName('div');
+    const x = this.optionItems;
     if (!x) return false;
     this.removeActive();
     if (this.currentFocus >= x.length) this.currentFocus = 0;
@@ -279,7 +280,7 @@ class Index extends React.Component {
   }
 
   removeActive() {
-    const x = this.itemsWrapper.getElementsByTagName('div');
+    const x = this.optionItems;
     for (var i = 0; i < x.length; i++) {
       x[i].classList.remove(STYLES['select__hover-active']);
     }
@@ -413,6 +414,7 @@ class Index extends React.Component {
         optionListHtml = optionList.map((i, k) => {
           return (
             <div
+              ref={ref => (this.optionItems[k] = ref)}
               onMouseOver={() => {
                 this.currentFocus = k;
                 this.addActive();

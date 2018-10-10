@@ -169,7 +169,7 @@ class Index extends React.Component {
     }
     const x = this.optionItems;
     const { optionList } = this.props;
-    this.currentFocus = this.currentFocus ? this.currentFocus : this.getIndex(optionList, value);
+    this.currentFocus = typeof this.currentFocus != 'undefined' ? this.currentFocus : this.getIndex(optionList, value);
     let direction = null;
     const { keyCode } = e;
     const keyCodeEsc = 27;

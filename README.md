@@ -81,7 +81,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message.**|  **none**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
-|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.**|**"en-US"** |
+|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.**|**"en-US"** |
 |**validationOption.phoneCountry** |**Opt**|**Str** |**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**|**"en-US"** |
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
@@ -129,7 +129,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // compare: '3', //Optional.[String].Default: "" Compare this value to 3 to see if they are equal.
     // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "" Custom regex.
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "" Custom regex error message.
-    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
@@ -174,7 +174,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
-|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.**|**"en-US"** |
+|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.**|**"en-US"** |
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
@@ -215,7 +215,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
-    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
   }}
@@ -256,7 +256,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
-|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.**|**"en-US"** |
+|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.**|**"en-US"** |
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 ```js
@@ -299,7 +299,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
-    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look of 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
   }}
@@ -343,7 +343,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
-|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.**|**"en-US"** |
+|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.**|**"en-US"** |
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
@@ -399,7 +399,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
-    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
   }}
@@ -447,7 +447,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message.**|  **none**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
-|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.**|**"en-US"** |
+|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.**|**"en-US"** |
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
@@ -489,7 +489,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string'].
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
-    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+    // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // min: 2, //Optional.[Number].Default: 0. Validation of min length.
     // max: 10, //Optional.[Number].Default: 0. Validation of max length.
     // length: 2, //Optional.[Number].Default: 0. Validation of exact length of the value.
@@ -521,6 +521,7 @@ example(fully customized):
   //es6
   window.REACT_INPUTS_VALIDATION = {
     customErrorMessage: {
+      "my-own-locale": {...},//structure must follow below
       "en-US": {
         textbox: {
           empty: name => `${name} cannot be empty(custom message)`,
@@ -563,6 +564,7 @@ example(fully customized):
   //es5
   window.REACT_INPUTS_VALIDATION = {
     customErrorMessage: {
+      "my-own-locale": {...},//structure must follow below
       "en-US": {
         textbox: {
           empty: function empty(name) {
@@ -657,4 +659,19 @@ example(fully customized):
 </script>
 <script type="text/javascript" src="/js/index.js"></script></body>
 ```
+Then in the component...
+
+```js
+<Textbox
+  tabIndex="1" //Optional.[String or Number].Default: -1.
+  ...
+  validationOption={{
+    ...
+    locale: 'my-own-locale'
+    ...
+  }}
+ />
+```
+
+# For more extensibility please reffer to 'customFunc' section
 

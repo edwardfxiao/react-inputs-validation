@@ -673,5 +673,5 @@ Then in the component...
  />
 ```
 
-**For more extensibility or customization please reffer to '[customFunc](#customFunc)'**
+**For more extensibility or customization please reffer to '[validationOption.customFunc](#customFunc)'**
 

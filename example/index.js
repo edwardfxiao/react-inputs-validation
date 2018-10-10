@@ -1,7 +1,11 @@
+import 'core-js/es6/map';
+import 'core-js/es6/set';
+import 'raf/polyfill';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import Markdown from 'react-markdown';
+import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 import STYLES from '../src/css/example.css';
@@ -887,11 +891,11 @@ class Index extends Component {
             <div style={rowWrapperStyle}>
               <div style={rowContainerStyle}>
                 <div style={rowStyle}>
-                  <div style={{ ...labelStyle, flex: '3 3 0', marginTop: '3px' }}>
+                  <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
                     <span className="icon icon-person" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
                     <span style={labelContentStyle}>Name</span>
                   </div>
-                  <div style={{ flex: '6 6 0' }}>
+                  <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Textbox
                       tabIndex="1" //Optional.[String or Number].Default: -1.
                       id={'Name'} //Optional.[String].Default: "".  Input ID.
@@ -948,12 +952,12 @@ class Index extends Component {
             <div style={rowWrapperStyle}>
               <div style={rowContainerStyle}>
                 <div style={rowStyle}>
-                  <div style={{ ...labelStyle, flex: '3 3 0', marginTop: '3px' }}>
-                    {/*<div style={(labelStyle, { flex: '3 3 0' })}>*/}
+                  <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
+                    {/*<div style={(labelStyle, { flex: '3 3 0px' })}>*/}
                     <span className="icon icon-info" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
                     <span style={labelContentStyle}>job</span>
                   </div>
-                  <div style={{ flex: '6 6 0', display: 'flex' }}>
+                  <div style={prefixAll({ flex: '6 6 0px', display: 'flex' })}>
                     <Radiobox
                       tabIndex={2} //Optional.[String or Number].Default: -1.
                       id="job" //Optional.[String].Default: "".  Input ID.
@@ -1000,12 +1004,12 @@ class Index extends Component {
             <div style={rowWrapperStyle}>
               <div style={rowContainerStyle}>
                 <div style={rowStyle}>
-                  <div style={{ ...labelStyle, flex: '3 3 0', marginTop: '3px' }}>
-                    {/*<div style={(labelStyle, { flex: '3 3 0' })}>*/}
+                  <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
+                    {/*<div style={(labelStyle, { flex: '3 3 0px' })}>*/}
                     <span className="icon icon-assignment-late" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
                     <span style={labelContentStyle}>agreement</span>
                   </div>
-                  <div style={{ flex: '6 6 0' }}>
+                  <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Checkbox
                       tabIndex="5" //Optional.[String or Number].Default: -1.
                       id={'agreement'} //Optional.[String].Default: "".  Input ID.
@@ -1051,11 +1055,11 @@ class Index extends Component {
             <div style={rowWrapperStyle}>
               <div style={rowContainerStyle}>
                 <div style={rowStyle}>
-                  <div style={{ ...labelStyle, flex: '3 3 0', marginTop: '3px' }}>
+                  <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
                     <span className="icon icon-bookmark" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
                     <span style={labelContentStyle}>country</span>
                   </div>
-                  <div style={{ flex: '6 6 0' }}>
+                  <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Select
                       tabIndex="6" //Optional.[String or Number].Default: -1.
                       id={'country'} //Optional.[String].Default: "". Input ID.
@@ -1114,11 +1118,11 @@ class Index extends Component {
             <div style={rowWrapperStyle}>
               <div style={rowContainerStyle}>
                 <div style={rowStyle}>
-                  <div style={{ ...labelStyle, flex: '3 3 0', marginTop: '3px' }}>
+                  <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
                     <span className="icon icon-insert-drive-file" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
                     <span style={labelContentStyle}>description</span>
                   </div>
-                  <div style={{ flex: '6 6 0' }}>
+                  <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Textarea
                       tabIndex="7" //Optional.[String or Number].Default: -1.
                       id="description" //Optional.[String].Default: "".  Textarea ID.

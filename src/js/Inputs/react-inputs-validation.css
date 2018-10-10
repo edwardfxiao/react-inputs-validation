@@ -197,6 +197,7 @@ input[type='radio'] {
 }
 
 .radiobox__label {
+  display: inline-block\9;
   display: flex;
   align-items: center;
 }
@@ -205,7 +206,8 @@ input[type='radio'] {
   content: '';
   border: 1px solid #e5e5e5;
   border-radius: 100%;
-  display: iblock;
+  display: inline-block;
+  vertical-align: middle;
   width: 14px;
   height: 14px;
   position: relative;
@@ -226,6 +228,7 @@ input[type='radio'] {
 }
 
 .radiobox__item {
+  display: inline-block\9;
   width: auto;
 }
 
@@ -268,11 +271,18 @@ input[type='checkbox'] {
 }
 
 .checkbox__box {
+  vertical-align: middle\9;
+  display: inline-block\9;
   width: 15px;
   height: 15px;
   position: relative;
   border: 1px solid #e5e5e5;
   margin-right: 10px;
+}
+
+.checkbox__container label > div {
+  vertical-align: middle\9;
+  display: inline-block\9;
 }
 
 .checkbox__box.disabled {
@@ -424,8 +434,15 @@ input[type='checkbox'] {
 }
 
 .select__dropdown-icon {
+  width: 2%\9;
+  display: inline-block\9;
   width: 20px;
   height: 20px;
+}
+
+.select__dropdown-name {
+  width: 98%\9;
+  display: inline-block\9;
 }
 
 .select__dropdown-icon:before {

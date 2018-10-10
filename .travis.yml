@@ -12,3 +12,6 @@ matrix:
 cache:
   directories:
     - node_modules
+notifications:
+  email:
+    - email:edwardfhsiao@gmail.com

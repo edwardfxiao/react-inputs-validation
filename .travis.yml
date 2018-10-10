@@ -6,12 +6,6 @@ before_script:
 script: npm test
 env:
   - REACT=16
-bundler_args: --retry 2
-matrix:
-  fast_finish: true
-cache:
-  directories:
-    - node_modules
 notifications:
   email:
     - email:edwardfhsiao@gmail.com

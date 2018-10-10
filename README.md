@@ -1,4 +1,6 @@
 # react-inputs-validation
+[![Package quality](http://packagequality.com/shield/yourpackage.svg)](http://packagequality.com/#?package=react-inputs-validation)
+[![Package quality](http://packagequality.com/badge/yourpackage.png)](http://packagequality.com/#?package=react-inputs-validation)
 
 A react inputs validation component.
 # <img src="http://oc54ddm6x.bkt.clouddn.com/react-inputs.gif" />

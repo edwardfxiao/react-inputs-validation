@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow, configure, mount } from 'enzyme';
+import PropTypes from 'prop-types';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Select from '../js/Inputs/Select.js';
 
@@ -17,7 +18,9 @@ class SelectWrapper extends React.Component {
     const { validationOption } = this.props;
     const { value, hasError } = this.state;
     return (
-      <div id="wrapper">
+      <div
+        id="wrapper"
+      >
         <Select
           tabIndex="1"
           id={'country'}
@@ -31,7 +34,7 @@ class SelectWrapper extends React.Component {
           onChange={res => {
             this.setState({ value: res });
           }}
-          onBlur={e => {}}
+          onBlur={() => {}}
           validationOption={validationOption}
         />
         <label id="value">{value}</label>
@@ -40,6 +43,18 @@ class SelectWrapper extends React.Component {
     );
   }
 }
+
+SelectWrapper.defaultProps = {
+  value: '',
+  hasError: false,
+  validationOption: {}
+};
+
+SelectWrapper.propTypes = {
+  value: PropTypes.string,
+  hasError: PropTypes.bool,
+  validationOption: PropTypes.object
+};
 
 configure({ adapter: new Adapter() });
 const getWrapper = (value, validationOption, hasError) => {
@@ -100,5 +115,28 @@ describe('Select component', () => {
     $input.simulate('blur');
     expect($labelValue.text()).toEqual(OPTION_LIST[SELECTED_INDEX].id);
     expect($labelHasError.text()).toEqual('not has error');
+  });
+
+  it('[ArrowDown]: Should return correct index', () => {
+    const value = '';
+    const validationOption = {
+      check: true,
+      required: false
+    };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} validationOption={validationOption} />);
+    wrapper.instance().toggleShow(true);
+    wrapper.instance().onKeyDown({ keyCode: 40 });
+    expect(wrapper.instance().onKeyDown({ keyCode: 40 })).toEqual(2);
+  });
+
+  it('[ArrowUp]: Should return correct index', () => {
+    const value = '';
+    const validationOption = {
+      check: true,
+      required: false
+    };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} validationOption={validationOption} />);
+    wrapper.instance().toggleShow(true);
+    expect(wrapper.instance().onKeyDown({ keyCode: 38 })).toEqual(0);
   });
 });

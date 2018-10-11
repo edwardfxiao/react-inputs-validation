@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow, configure, mount } from 'enzyme';
+import PropTypes from 'prop-types';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Radiobox from '../js/Inputs/Radiobox.js';
 
@@ -30,7 +31,7 @@ class RadioboxWrapper extends React.Component {
           onChange={res => {
             this.setState({ value: res });
           }}
-          onBlur={e => {}}
+          onBlur={() => {}}
           validationOption={validationOption}
         />
         <label id="value">{value}</label>
@@ -39,6 +40,18 @@ class RadioboxWrapper extends React.Component {
     );
   }
 }
+
+RadioboxWrapper.defaultProps = {
+  checked: '',
+  hasError: false,
+  validationOption: {}
+};
+
+RadioboxWrapper.propTypes = {
+  checked: PropTypes.string,
+  hasError: PropTypes.bool,
+  validationOption: PropTypes.object
+};
 
 configure({ adapter: new Adapter() });
 const getWrapper = (value, validationOption, hasError) => {
@@ -92,7 +105,7 @@ describe('Radiobox component', () => {
     const $labelValue = wrapper.find('#value');
     const $labelHasError = wrapper.find('#hasError');
     $input.simulate('focus');
-    const $option = wrapper
+    wrapper
       .find('.radiobox__input')
       .at(SELECTED_INDEX)
       .simulate('change', { target: { value: OPTIONS_LIST[SELECTED_INDEX].id } });

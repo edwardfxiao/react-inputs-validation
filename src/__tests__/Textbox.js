@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow, configure, mount } from 'enzyme';
+import PropTypes from 'prop-types';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Textbox from '../js/Inputs/Textbox.js';
 
@@ -26,7 +27,7 @@ class TextboxWrapper extends React.Component {
           onChange={res => {
             this.setState({ value: res });
           }}
-          onBlur={e => {}}
+          onBlur={() => {}}
           validationOption={validationOption}
         />
         <label id="value">{value}</label>
@@ -35,6 +36,18 @@ class TextboxWrapper extends React.Component {
     );
   }
 }
+
+TextboxWrapper.defaultProps = {
+  value: '',
+  hasError: false,
+  validationOption: {}
+};
+
+TextboxWrapper.propTypes = {
+  value: PropTypes.string,
+  hasError: PropTypes.bool,
+  validationOption: PropTypes.object
+};
 
 configure({ adapter: new Adapter() });
 const getWrapper = (value, validationOption, hasError) => {
@@ -101,7 +114,6 @@ describe('Textbox component', () => {
     };
     const wrapper = getWrapper(value, validationOption, hasError);
     const $input = wrapper.find('input');
-    const $labelValue = wrapper.find('#value');
     const $labelHasError = wrapper.find('#hasError');
     $input.simulate('focus');
     wrapper.setState({ value: 'banana' });

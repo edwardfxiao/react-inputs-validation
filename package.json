@@ -1,19 +1,13 @@
 {
   "name": "react-inputs-validation",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "a react inputs validation component",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/edwardfhsiao/react-inputs-validation.git"
   },
-  "keywords": [
-    "react",
-    "input",
-    "inputs",
-    "validate",
-    "validation"
-  ],
+  "keywords": ["react", "input", "inputs", "validate", "validation", "form", "textbox", "select", "checkbox", "radio", "textarea"],
   "author": "Edward Xiao",
   "license": "ISC",
   "bugs": {

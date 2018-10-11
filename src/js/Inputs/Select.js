@@ -78,6 +78,7 @@ class Index extends React.Component {
   componentDidMount() {
     window.addEventListener('mousedown', this.pageClick);
     window.addEventListener('touchstart', this.pageClick);
+    this.wrapper.addEventListener('keydown', this.onKeyDown);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -91,6 +92,7 @@ class Index extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('mousedown', this.pageClick);
     window.removeEventListener('touchstart', this.pageClick);
+    this.wrapper.removeEventListener('keydown', this.onKeyDown);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -458,7 +460,6 @@ class Index extends React.Component {
         onFocus={this.onFocus}
         onBlur={this.onBlur}
         ref={ref => (this.wrapper = ref)}
-        onKeyDown={this.onKeyDown}
       >
         <div className={containerClass} style={customStyleContainer}>
           <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} ref={ref => (this.input = ref)} />

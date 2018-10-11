@@ -5,7 +5,7 @@ const getEnglishName = name => (name = name ? name + ' ' : '');
 const TEXT_BOX_VALIDATION_ZH_CN = {
   empty: name => `${name}不能为空`,
   invalid: name => `${name}格式有误`,
-  invalidFormat: name => `${name} 不是数字`,
+  invalidFormat: name => `${name}不是数字`,
   inBetween: name => min => max => `${name}必须在${min}-${max}之间`,
   lessThan: name => min => `${name}不可少于${min}`,
   greaterThan: name => max => `${name}不可大于${max}`,
@@ -27,7 +27,7 @@ const TEXT_BOX_VALIDATION_EN_US = {
 const TEXT_AREA_VALIDATION_ZH_CN = {
   empty: name => `${name}不能为空`,
   invalid: name => `${name}格式有误`,
-  invalidFormat: name => `${name} 不是数字`,
+  invalidFormat: name => `${name}不是数字`,
   inBetween: name => min => max => `${name}必须在${min}-${max}之间`,
   lessThan: name => min => `${name}不可少于${min}`,
   greaterThan: name => max => `${name}不可大于${max}`,

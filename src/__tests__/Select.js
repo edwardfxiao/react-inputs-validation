@@ -18,7 +18,12 @@ class SelectWrapper extends React.Component {
     const { validationOption } = this.props;
     const { value, hasError } = this.state;
     return (
-      <div id="wrapper">
+      <div
+        id="wrapper"
+        onKeyDown={() => {
+          console.log(3);
+        }}
+      >
         <Select
           tabIndex="1"
           id={'country'}
@@ -113,5 +118,28 @@ describe('Select component', () => {
     $input.simulate('blur');
     expect($labelValue.text()).toEqual(OPTION_LIST[SELECTED_INDEX].id);
     expect($labelHasError.text()).toEqual('not has error');
+  });
+
+  it('[ArrowDown]: Should return correct index', () => {
+    const value = '';
+    const validationOption = {
+      check: true,
+      required: false
+    };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} validationOption={validationOption} />);
+    wrapper.instance().toggleShow(true);
+    wrapper.instance().onKeyDown({ keyCode: 40 });
+    expect(wrapper.instance().onKeyDown({ keyCode: 40 })).toEqual(2);
+  });
+
+  it('[ArrowUp]: Should return correct index', () => {
+    const value = '';
+    const validationOption = {
+      check: true,
+      required: false
+    };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} validationOption={validationOption} />);
+    wrapper.instance().toggleShow(true);
+    expect(wrapper.instance().onKeyDown({ keyCode: 38 })).toEqual(0);
   });
 });

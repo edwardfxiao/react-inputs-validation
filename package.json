@@ -7,13 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/edwardfhsiao/react-inputs-validation.git"
   },
-  "keywords": [
-    "react",
-    "input",
-    "inputs",
-    "validate",
-    "validation"
-  ],
+  "keywords": ["react", "input", "inputs", "validate", "validation"],
   "author": "Edward Xiao",
   "license": "ISC",
   "bugs": {
@@ -22,6 +16,9 @@
   "homepage": "https://github.com/edwardfhsiao/react-inputs-validation#readme",
   "scripts": {
     "test": "jest",
+    "test:coverage": "npm run lint && npm test -- --coverage",
+    "prepublish": "npm run test:coverage && npm run test",
+    "lint": "eslint ./src",
     "babel": "BABEL_ENV=lib babel ./src/js/Inputs --out-dir ./lib/components",
     "build": "rm -rf lib && npm run babel && npm run build_prod",
     "webpack_dev": "rm -rf dist && NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack/development.config.js --progress --watch",
@@ -51,6 +48,7 @@
     "babel-preset-stage-0": "^6.16.0",
     "copy-webpack-plugin": "^4.0.1",
     "core-js": "^2.5.7",
+    "coveralls": "^3.0.2",
     "css-loader": "^0.26.2",
     "empty-module": "^0.0.2",
     "enzyme": "^3.6.0",

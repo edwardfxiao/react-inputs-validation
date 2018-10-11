@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow, configure, mount } from 'enzyme';
+import PropTypes from 'prop-types';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Checkbox from '../js/Inputs/Checkbox.js';
 
@@ -26,7 +27,7 @@ class CheckboxWrapper extends React.Component {
           onChange={res => {
             this.setState({ value: res });
           }}
-          onBlur={e => {}}
+          onBlur={() => {}}
           validationOption={validationOption}
         />
         <label id="value">{value ? 'checked' : 'not checked'}</label>
@@ -35,6 +36,18 @@ class CheckboxWrapper extends React.Component {
     );
   }
 }
+
+CheckboxWrapper.defaultProps = {
+  checked: false,
+  hasError: false,
+  validationOption: {}
+};
+
+CheckboxWrapper.propTypes = {
+  checked: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  hasError: PropTypes.bool,
+  validationOption: PropTypes.object
+};
 
 configure({ adapter: new Adapter() });
 const getWrapper = (value, validationOption, hasError) => {

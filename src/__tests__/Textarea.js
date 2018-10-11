@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow, configure, mount } from 'enzyme';
+import PropTypes from 'prop-types';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Textarea from '../js/Inputs/Textarea.js';
 
@@ -26,7 +27,7 @@ class TextareWrapper extends React.Component {
           onChange={res => {
             this.setState({ value: res });
           }}
-          onBlur={e => {}}
+          onBlur={() => {}}
           validationOption={validationOption}
         />
         <label id="value">{value}</label>
@@ -36,6 +37,18 @@ class TextareWrapper extends React.Component {
   }
 }
 
+TextareWrapper.defaultProps = {
+  value: '',
+  hasError: false,
+  validationOption: {}
+};
+
+TextareWrapper.propTypes = {
+  value: PropTypes.string,
+  hasError: PropTypes.bool,
+  validationOption: PropTypes.object
+};
+
 configure({ adapter: new Adapter() });
 const getWrapper = (value, validationOption, hasError) => {
   return mount(<TextareWrapper value={value} validationOption={validationOption} hasError={hasError} />);
@@ -43,8 +56,6 @@ const getWrapper = (value, validationOption, hasError) => {
 
 const MIN = 10;
 const MAX = 20;
-const VALUE_OUT_OF_RAGE_NUMBER = '30';
-const VALUE_IN_THE_RAGE_NUMBER = '15';
 const VALUE_OUT_OF_RAGE_LENGTH = '11';
 const VALUE_IN_THE_RAGE_LENGTH = '111111111111111';
 const LENGTH = '5';
@@ -101,7 +112,6 @@ describe('Textare component', () => {
     };
     const wrapper = getWrapper(value, validationOption, hasError);
     const $input = wrapper.find('textarea');
-    const $labelValue = wrapper.find('#value');
     const $labelHasError = wrapper.find('#hasError');
     $input.simulate('focus');
     wrapper.setState({ value: 'banana' });

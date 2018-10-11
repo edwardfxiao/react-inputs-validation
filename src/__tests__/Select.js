@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow, configure, mount } from 'enzyme';
+import PropTypes from 'prop-types';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Select from '../js/Inputs/Select.js';
 
@@ -31,7 +32,7 @@ class SelectWrapper extends React.Component {
           onChange={res => {
             this.setState({ value: res });
           }}
-          onBlur={e => {}}
+          onBlur={() => {}}
           validationOption={validationOption}
         />
         <label id="value">{value}</label>
@@ -40,6 +41,18 @@ class SelectWrapper extends React.Component {
     );
   }
 }
+
+SelectWrapper.defaultProps = {
+  value: '',
+  hasError: false,
+  validationOption: {}
+};
+
+SelectWrapper.propTypes = {
+  value: PropTypes.string,
+  hasError: PropTypes.bool,
+  validationOption: PropTypes.object
+};
 
 configure({ adapter: new Adapter() });
 const getWrapper = (value, validationOption, hasError) => {

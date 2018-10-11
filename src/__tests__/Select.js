@@ -20,9 +20,6 @@ class SelectWrapper extends React.Component {
     return (
       <div
         id="wrapper"
-        onKeyDown={() => {
-          console.log(3);
-        }}
       >
         <Select
           tabIndex="1"

@@ -17,7 +17,7 @@
   "scripts": {
     "test": "jest",
     "test:coverage": "npm run lint && npm test -- --coverage",
-    "prepublish": "npm run test:coverage && npm run test",
+    "prepublish": "npm run test:coverage",
     "lint": "eslint ./src",
     "babel": "BABEL_ENV=lib babel ./src/js/Inputs --out-dir ./lib/components",
     "build": "rm -rf lib && npm run babel && npm run build_prod",

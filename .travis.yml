@@ -4,6 +4,7 @@ node_js:
 before_script:
   - npm i
 script: npm test
+after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
 env:
   - REACT=16
 notifications:

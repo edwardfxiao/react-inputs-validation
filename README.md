@@ -32,7 +32,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 [Custom Error Message Guid(can be multiple locales)](#CustomErrorMessage)
 
-[Phone and email validation example](#phone-email-validation-example)
+[Phone and email validation example](#phone-email-validation-example)(Since the phone and email validation are no longer  handled internally after v1.4.0.)
 
 # Installation
 ```sh
@@ -85,7 +85,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#CustomErrorMessage)' section, which provides the extensibility for your own locale.**|**"en-US"** |
-|~~**validationOption.phoneCountry**~~|~~**Opt**~~|~~**Str**~~|~~**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**~~ **No longer support after v1.4.0. For phone or email address validationg please reffer to '[Phone and email validation example](#phone-email-validation-example)'**|~~**"en-US"**~~|
+|~~**validationOption.phoneCountry**~~|~~**Opt**~~|~~**Str**~~|~~**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**~~ <br><br>**No longer support after v1.4.0. For phone or email address validation please reffer to '[Phone and email validation example](#phone-email-validation-example)'**|~~**"en-US"**~~|
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
@@ -133,7 +133,6 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "" Custom regex.
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "" Custom regex error message.
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
-    // phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
     // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message

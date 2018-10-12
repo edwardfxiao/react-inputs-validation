@@ -1,5 +1,5 @@
 # react-inputs-validation
-[![npm version](https://badge.fury.io/js/react-inputs-validation.svg)](https://badge.fury.io/js/react-inputs-validation) [![Build Status](https://travis-ci.org/edwardfhsiao/react-inputs-validation.svg?branch=master)](https://travis-ci.org/edwardfhsiao/react-inputs-validation) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com) [![react-inputs-validation](http://img.shields.io/npm/dm/react-inputs-validation.svg)](https://www.npmjs.com/package/react-inputs-validation) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/LICENSE)
+[![npm version](https://badge.fury.io/js/react-inputs-validation.svg)](https://badge.fury.io/js/react-inputs-validation) [![Build Status](https://travis-ci.org/edwardfhsiao/react-inputs-validation.svg?branch=master)](https://travis-ci.org/edwardfhsiao/react-inputs-validation) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com) [![react-inputs-validation](http://img.shields.io/npm/dm/react-inputs-validation.svg)](https://www.npmjs.com/package/react-inputs-validation) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-inputs-validation.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/LICENSE)
 
 A react inputs validation component.
 # <img src="http://oc54ddm6x.bkt.clouddn.com/react-inputs.gif" />
@@ -18,6 +18,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 * <a href="https://codesandbox.io/s/pjom8r78x7">Custom control</a>(when ```check: false```)
 * <a href="https://codesandbox.io/s/1r77ozkrk7">Custom function</a>(when providing ```customFunc```)
 * <a href="https://codesandbox.io/s/q9vqmk4j84">Custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
+* <a href="https://codesandbox.io/s/13qo2rqxjj">Phone and email validation example</a>(handled with ```customFunc```)
 
 # Docs Link
 [Textbox](#Textbox)
@@ -31,6 +32,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 [Textarea](#Textarea)
 
 [Custom Error Message Guid(can be multiple locales)](#CustomErrorMessage)
+
+[Phone and email validation example](#phone-email-validation-example)(Since the phone and email validation are no longer  handled internally after v1.4.0.)
 
 # Installation
 ```sh
@@ -73,7 +76,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
-|**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number', 'phone'].**|**"string"**|
+|**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number'~~, 'phone'~~].**|**"string"**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
 |**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
@@ -83,7 +86,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#CustomErrorMessage)' section, which provides the extensibility for your own locale.**|**"en-US"** |
-|**validationOption.phoneCountry** |**Opt**|**Str** |**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**|**"en-US"** |
+|~~**validationOption.phoneCountry**~~|~~**Opt**~~|~~**Str**~~|~~**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**~~ <br><br>**No longer support after v1.4.0. For phone or email address validation please reffer to '[Phone and email validation example](#phone-email-validation-example)'**|~~**"en-US"**~~|
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
@@ -131,7 +134,6 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "" Custom regex.
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "" Custom regex error message.
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
-    // phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
     // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
@@ -506,6 +508,46 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // }
   }}
 />
+```
+
+### <a name="phone-email-validation-example"></a>Phone and email validation example
+<a href="https://codesandbox.io/s/13qo2rqxjj">codesandbox example</a>
+```js
+ import validator from 'validator';
+ // Phone
+  <Textbox
+   ...
+   validationOption={{
+     name: 'Phone', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.,
+     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+     customFunc: phone => {
+       if (validator.isMobilePhone(phone, 'en-US')) {
+         return true;
+       } else {
+         return 'is not a valid phone number';
+       }
+     }
+   }}
+ />
+ 
+ // Email
+ <Textbox
+   ...
+   validationOption={{
+     name: 'Email', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.,
+     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+     customFunc: email => {
+       const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+       if (reg.test(String(email).toLowerCase())) {
+         return true;
+       } else {
+         return 'is not a valid email address';
+       }
+     }
+   }}
+ />
 ```
 
 ### <a name="CustomErrorMessage"></a>Custom Error Message (can be multiple locales)

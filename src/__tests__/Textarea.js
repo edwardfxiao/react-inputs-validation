@@ -196,4 +196,67 @@ describe('Textare component', () => {
     expect($labelValue.text()).toEqual(VALUE_IN_THE_RAGE_LENGTH_EXACT);
     expect($labelHasError.text()).toEqual('not has error');
   });
+
+  it('[check]: Should call handleCheckEnd', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check(value);
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it("[onBlur]: Should call parent's onBlur", () => {
+    let value = '';
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onBlur={() => {
+          value = 'blured';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onBlur();
+    expect(value).toEqual('blured');
+  });
+
+  it("[onFocus]: Should call parent's onFocus", () => {
+    let value = '';
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onFocus={() => {
+          value = 'focused';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    expect(value).toEqual('focused');
+  });
+
+  it("[onKeyUp]: Should call parent's onKeyUp", () => {
+    let value = '';
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onKeyUp={() => {
+          value = 'keyuped';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onKeyUp();
+    expect(value).toEqual('keyuped');
+  });
 });

@@ -90,4 +90,40 @@ describe('Checkbox component', () => {
     expect($labelValue.text()).toEqual(result);
     expect($labelHasError.text()).toEqual('not has error');
   });
+
+  it('[check]: Should call handleCheckEnd when empty', () => {
+    let value = '';
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check(value);
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it('[pageClick]: Should not call onBlur', () => {
+    let value = '';
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onBlur = jest.fn();
+    instance.pageClick({target: null});
+    expect(instance.onBlur).not.toHaveBeenCalled();
+  });
 });

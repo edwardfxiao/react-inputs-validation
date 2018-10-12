@@ -73,7 +73,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
-|**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number', 'phone'].**|**"string"**|
+|**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number'~~, 'phone'~~].**|**"string"**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
 |**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
@@ -83,7 +83,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#CustomErrorMessage)' section, which provides the extensibility for your own locale.**|**"en-US"** |
-|**validationOption.phoneCountry** |**Opt**|**Str** |**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**|**"en-US"** |
+~~|**validationOption.phoneCountry** |**Opt**|**Str** |**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**|**"en-US"** |~~
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 

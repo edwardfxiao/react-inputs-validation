@@ -10,9 +10,9 @@ try {
   STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
 const TYPE = 'textbox';
-const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'phone'];
+const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
 const getDefaultValidationOption = obj => {
-  let { reg, min, max, type, name, check, length, regMsg, compare, required, showMsg, locale, phoneCountry, msgOnError, msgOnSuccess, customFunc } = obj;
+  let { reg, min, max, type, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
@@ -40,7 +40,6 @@ const getDefaultValidationOption = obj => {
     compare,
     required,
     showMsg,
-    phoneCountry,
     msgOnError,
     msgOnSuccess,
     customFunc
@@ -67,13 +66,19 @@ class Index extends React.Component {
   }
 
   onChange(e) {
+    let v = this.input.value;
     if (this.props.maxLength != '') {
-      if (this.input.value.length > Number(this.props.maxLength)) {
+      if (v.length > Number(this.props.maxLength)) {
         return;
       }
     }
+    const { type } = getDefaultValidationOption(this.props.validationOption);
+    // FORMAT NUMBER
+    if (type == VALIDATE_OPTION_TYPE_LIST[1]) {
+      v = this.autoFormatNumber(v);
+    }
     const { onChange } = this.props;
-    onChange && onChange(this.input.value, e);
+    onChange && onChange(v, e);
     if (this.state.err) {
       this.setState({ err: false });
     } else {
@@ -107,7 +112,7 @@ class Index extends React.Component {
 
   check(inputValue) {
     const { validationOption } = this.props;
-    const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, phoneCountry, msgOnSuccess, customFunc } = getDefaultValidationOption(validationOption);
+    const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = getDefaultValidationOption(validationOption);
     if (!check) {
       return;
     }
@@ -201,13 +206,6 @@ class Index extends React.Component {
               }
             }
           }
-          // CHECK PHONE
-          if (type == VALIDATE_OPTION_TYPE_LIST[2]) {
-            if (!Validator[type](value, phoneCountry)) {
-              this.handleCheckEnd(true, Msg.invalid ? Msg.invalid(nameText) : '');
-              return;
-            }
-          }
           // CHECK EQUAL
           if (compare && compare != '') {
             if (value != compare) {
@@ -234,6 +232,26 @@ class Index extends React.Component {
     } else {
       console.error('Please provide "type" in validationOption');
     }
+  }
+
+  autoFormatNumber(v) {
+    const DOT = '.';
+    v = String(v);
+    let res = '';
+    let hasDot = false;
+    v.split('').filter(i => {
+      const charCode = i.toLowerCase().charCodeAt(0);
+      if ((charCode >= 48 && charCode <= 57) || (charCode == 46 && !hasDot)) {
+        if (charCode == 46) {
+          hasDot = true;
+        }
+        res += i;
+      }
+    });
+    if (res.length && res[0] == DOT) {
+      res = '0' + res;
+    }
+    return res;
   }
 
   handleCheckEnd(err, msg) {

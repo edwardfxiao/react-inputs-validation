@@ -32,6 +32,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 [Custom Error Message Guid(can be multiple locales)](#CustomErrorMessage)
 
+[Phone and email validation example](#phone-email-validation-example)
+
 # Installation
 ```sh
 npm install react-inputs-validation --save
@@ -83,7 +85,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#CustomErrorMessage)' section, which provides the extensibility for your own locale.**|**"en-US"** |
-|~~**validationOption.phoneCountry**~~|~~**Opt**~~|~~**Str**~~|~~**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**~~|~~**"en-US"**~~|
+|~~**validationOption.phoneCountry**~~|~~**Opt**~~|~~**Str**~~|~~**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**~~ **No longer support after v1.4.0. For phone or email address validationg please reffer to '[Phone and email validation example](#phone-email-validation-example)'**|~~**"en-US"**~~|
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
@@ -506,6 +508,45 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // }
   }}
 />
+```
+
+### <a name="phone-email-validation-example"></a>Phone and email validation example
+```js
+ import validator from 'validator';
+ // Phone
+  <Textbox
+   ...
+   validationOption={{
+     name: 'Phone', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.,
+     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+     customFunc: phone => {
+       if (validator.isMobilePhone(phone, 'en-US')) {
+         return true;
+       } else {
+         return 'is not a valid phone number';
+       }
+     }
+   }}
+ />
+ 
+ // Email
+ <Textbox
+   ...
+   validationOption={{
+     name: 'Email', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.,
+     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+     customFunc: email => {
+       const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+       if (reg.test(String(email).toLowerCase())) {
+         return true;
+       } else {
+         return 'is not a valid email address';
+       }
+     }
+   }}
+ />
 ```
 
 ### <a name="CustomErrorMessage"></a>Custom Error Message (can be multiple locales)

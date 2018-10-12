@@ -1,52 +1,22 @@
-import validator from 'validator';
-
-const email = value => validator.isEmail(value);
-
-const phone = (value, locale = 'zh-CN') =>
-  validator.isMobilePhone(value, locale);
-
-const empty = value => validator.isEmpty(value);
-
-const number = (value, min = 0, max = 999999999999) => {
-  let res = validator.isInt(value, {
-    min: parseInt(min),
-    max: parseInt(max)
-  });
-  return res;
+const empty = v => (v.replace(/\s/g, '').length ? false : true);
+const number = (v, min = 0, max = 999999999999) => {
+  if (!isNumeric(v)) {
+    return false;
+  }
+  return v < parseInt(min) || v > parseInt(max) ? false : true;
 };
-
-const url = value => validator.isURL(value);
-
-const string = (value, min = 0, max = 999999999999) =>
-  validator.isByteLength(value, {
-    min: parseInt(min),
-    max: parseInt(max)
-  });
-
-const password = string;
-
-const textarea = (value, min = 0, max = 999999999999) =>
-  validator.isByteLength(value, {
-    min: parseInt(min),
-    max: parseInt(max)
-  });
-
-const reg = (reg, val) => {
+const reg = (reg, v) => {
   let err = true;
-  if (reg.test(val)) {
+  if (reg.test(v)) {
     err = false;
   }
   return err;
 };
-
+const isNumeric = v => {
+  return !isNaN(parseFloat(v)) && isFinite(v);
+};
 export default {
   reg,
-  email,
-  phone,
-  password,
   empty,
-  url,
-  string,
-  number,
-  textarea
+  number
 };

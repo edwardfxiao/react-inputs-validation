@@ -19,7 +19,7 @@ import { Textbox } from 'react-inputs-validation';
   tabIndex="1" //Optional.[String or Number].Default: -1.
   id={'Name'} //Optional.[String].Default: "".  Input ID.
   name="Name" //Optional.[String].Default: "". Input name.
-  type="text" //Optional.[String].Default: "text". Input type [text, password, phone, number].
+  type="text" //Optional.[String].Default: "text". Input type [text, password, number].
   value={name} //Optional.[String].Default: "".
   placeholder="Place your name here ^-^" //Optional.[String].Default: "".
   onChange={(name, e) => {
@@ -60,30 +60,6 @@ import { Textbox } from 'react-inputs-validation';
 \`\`\`
 `;
 
-const markdownTextboxPhoneExample = `
-\`\`\`javascript
-import { Textbox } from 'react-inputs-validation';
-
-<Textbox
-  tabIndex="1" //Optional.[String or Number].Default: -1.
-  id={'Phone'} //Optional.[String].Default: "".  Input ID.
-  name="Phone" //Optional.[String].Default: "". Input name.
-  type="number" //Optional.[String].Default: "text". Input type [text, password, number].
-  value={name} //Optional.[String].Default: "".
-  placeholder="Place your phone number here ^-^" //Optional.[String].Default: "".
-  onChange={(name, e) => {
-    this.setState({ name });
-    console.log(e);
-  }} //Required.[Func].Default: () => {}. Will return the value.
-  onBlur={(e) => {console.log(e)}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-  validationOption={{
-    type: 'phone', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
-    phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
-  }}
-/>
-\`\`\`
-`;
-
 const markdownTextboxNumberExample = `
 \`\`\`javascript
 import { Textbox } from 'react-inputs-validation';
@@ -101,7 +77,7 @@ import { Textbox } from 'react-inputs-validation';
   }} //Required.[Func].Default: () => {}. Will return the value.
   onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   validationOption={{
-    type: 'number', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+    type: 'number', //Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
     min: 10, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
     max: 100 //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
   }}
@@ -506,7 +482,6 @@ class Index extends Component {
     this.state = {
       name: '',
       nameRg: '',
-      phone: '',
       number: '',
       description: '',
       job: '',
@@ -547,7 +522,7 @@ class Index extends Component {
   }
 
   render() {
-    const { name, nameRg, phone, number, description, job, agreement, country, validate } = this.state;
+    const { name, nameRg, number, description, job, agreement, country, validate } = this.state;
     const rowStyle = {
       display: 'flex',
       alignItems: 'flex-start',
@@ -658,37 +633,6 @@ class Index extends Component {
             <div style={{ overflow: 'auto', padding: '2%' }}>
               <div className={STYLES['block']}>
                 <div>
-                  <h1>Validate Textbox Phone format by onBlur Example:</h1>
-                  <Textbox
-                    tabIndex="1" //Optional.[String or Number].Default: -1.
-                    id={'Phone'} //Optional.[String].Default: "".  Input ID.
-                    name="Phone" //Optional.[String].Default: "". Input name.
-                    type="number" //Optional.[String].Default: "text". Input type [text, password, number].
-                    value={phone} //Optional.[String].Default: "".
-                    placeholder="Place your phone number here ^-^" //Optional.[String].Default: "".
-                    onChange={(phone, e) => {
-                      this.setState({ phone });
-                      console.log(e);
-                    }} //Required.[Func].Default: () => {}. Will return the value.
-                    onBlur={e => {
-                      console.log(e);
-                    }} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-                    validationOption={{
-                      type: 'phone', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
-                      phoneCountry: 'en-US' //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
-                    }}
-                  />
-                  <br />
-                </div>
-                <div>
-                  <Markdown source={markdownTextboxPhoneExample} renderers={{ CodeBlock }} />
-                </div>
-              </div>
-            </div>
-
-            <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
-                <div>
                   <h1>Validate Textbox Number by onBlur Example:</h1>
                   <Textbox
                     tabIndex="1" //Optional.[String or Number].Default: -1.
@@ -705,7 +649,7 @@ class Index extends Component {
                       console.log(e);
                     }} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     validationOption={{
-                      type: 'number', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+                      type: 'number', //Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
                       min: 10, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
                       max: 100 //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
                     }}
@@ -925,7 +869,7 @@ class Index extends Component {
                         name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
                         check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
                         required: true //Optional.[Bool].Default: true. To determin if it is a required field.
-                        // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+                        // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
                         // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
                         // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
                         // max: 10, //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
@@ -934,7 +878,6 @@ class Index extends Component {
                         // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "" Custom regex.
                         // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "" Custom regex error message.
                         // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
-                        // phoneCountry: 'en-US', //Optional.[String].Default: "en-US". Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                         // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
@@ -1156,7 +1099,7 @@ class Index extends Component {
                         name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
                         check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
                         required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
-                        type: 'string' //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+                        type: 'string' //Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
                         // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
                         // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
                         // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.

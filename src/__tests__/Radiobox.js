@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import Radiobox from '../js/Inputs/Radiobox.js';
 
 const SELECTED_INDEX = 2;
-const OPTIONS_LIST = [{ id: 'engineer', name: 'engineer' }, { id: 'teacher', name: 'teacher' }, { id: 'student', name: 'student' }];
+const OPTION_LIST = [{ id: 'engineer', name: 'engineer' }, { id: 'teacher', name: 'teacher' }, { id: 'student', name: 'student' }];
 
 class RadioboxWrapper extends React.Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class RadioboxWrapper extends React.Component {
           name="Radiobox"
           type="text"
           value={value}
-          optionList={OPTIONS_LIST}
+          optionList={OPTION_LIST}
           validationCallback={res => {
             this.setState({ hasError: res });
           }}
@@ -108,9 +108,92 @@ describe('Radiobox component', () => {
     wrapper
       .find('.radiobox__input')
       .at(SELECTED_INDEX)
-      .simulate('change', { target: { value: OPTIONS_LIST[SELECTED_INDEX].id } });
+      .simulate('change', { target: { value: OPTION_LIST[SELECTED_INDEX].id } });
     $input.simulate('blur');
-    expect($labelValue.text()).toEqual(OPTIONS_LIST[SELECTED_INDEX].id);
+    expect($labelValue.text()).toEqual(OPTION_LIST[SELECTED_INDEX].id);
     expect($labelHasError.text()).toEqual('not has error');
+  });
+
+  it("[onChange]: Should call parent's onChange", () => {
+    let value = '';
+    const wrapper = mount(
+      <Radiobox
+        value={value}
+        optionList={OPTION_LIST}
+        onChange={res => {
+          value = res;
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onChange('us');
+    expect(value).toEqual('us');
+  });
+
+  it("[onClick]: Should call parent's onClick", () => {
+    let value = '';
+    const wrapper = mount(
+      <Radiobox
+        value={value}
+        optionList={OPTION_LIST}
+        onClick={() => {
+          value = 'clicked';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onClick();
+    expect(value).toEqual('clicked');
+  });
+
+  it("[onBlur]: Should call parent's onBlur", () => {
+    let value = '';
+    const wrapper = mount(
+      <Radiobox
+        value={value}
+        optionList={OPTION_LIST}
+        onBlur={() => {
+          value = 'blured';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onBlur();
+    expect(value).toEqual('blured');
+  });
+
+  it("[onFocus]: Should call parent's onFocus", () => {
+    let value = '';
+    const wrapper = mount(
+      <Radiobox
+        value={value}
+        optionList={OPTION_LIST}
+        onFocus={() => {
+          value = 'focused';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    expect(value).toEqual('focused');
+  });
+
+  it('[check]: Should call handleCheckEnd when empty', () => {
+    let value = '';
+    const wrapper = mount(
+      <Radiobox
+        value={value}
+        optionList={OPTION_LIST}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check(value);
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
   });
 });

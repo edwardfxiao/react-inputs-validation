@@ -53,19 +53,11 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    if (document.addEventListener) {
-      window.addEventListener('mousedown', this.pageClick, false);
-    } else {
-      document.attachEvent('onmousedown', this.pageClick);
-    }
+    window.addEventListener('mousedown', this.pageClick, false);
   }
 
   componentWillUnmount() {
-    if (document.removeEventListener) {
-      window.removeEventListener('mousedown', this.pageClick, false);
-    } else {
-      document.detachEvent('onmousedown', this.pageClick);
-    }
+    window.removeEventListener('mousedown', this.pageClick, false);
   }
 
   onChange(e) {

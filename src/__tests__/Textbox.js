@@ -240,4 +240,143 @@ describe('Textbox component', () => {
     expect($labelValue.text()).toEqual(VALUE_IN_THE_RAGE_LENGTH_EXACT);
     expect($labelHasError.text()).toEqual('not has error');
   });
+
+  it('[check equal]: Should return has error when not equal', () => {
+    const value = '';
+    const hasError = false;
+    const validationOption = {
+      check: true,
+      required: true,
+      compare: 3
+    };
+    const wrapper = getWrapper(value, validationOption, hasError);
+    const $input = wrapper.find('input');
+    const $labelValue = wrapper.find('#value');
+    const $labelHasError = wrapper.find('#hasError');
+    $input.simulate('focus');
+    wrapper.setState({ value: '2' });
+    $input.simulate('blur');
+    expect($labelValue.text()).toEqual('2');
+    expect($labelHasError.text()).toEqual('has error');
+  });
+
+  it('[check equal]: Should return not has error when equal', () => {
+    const value = '';
+    const hasError = false;
+    const validationOption = {
+      check: true,
+      required: true,
+      compare: 2
+    };
+    const wrapper = getWrapper(value, validationOption, hasError);
+    const $input = wrapper.find('input');
+    const $labelValue = wrapper.find('#value');
+    const $labelHasError = wrapper.find('#hasError');
+    $input.simulate('focus');
+    wrapper.setState({ value: '2' });
+    $input.simulate('blur');
+    expect($labelValue.text()).toEqual('2');
+    expect($labelHasError.text()).toEqual('not has error');
+  });
+
+  it('[onChange]: Should call autoFormatNumber when type is numer', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true,
+          type: 'number'
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.autoFormatNumber = jest.fn();
+    instance.onChange();
+    expect(instance.autoFormatNumber).toHaveBeenCalled();
+  });
+
+  it('[check]: Should call handleCheckEnd', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true,
+          type: 'number'
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check(value);
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it('[check]: Should call handleCheckEnd when empty', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check(value);
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it("[onBlur]: Should call parent's onBlur", () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {
+          value = 'blured';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onBlur();
+    expect(value).toEqual('blured');
+  });
+
+  it("[onFocus]: Should call parent's onFocus", () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onFocus={() => {
+          value = 'focused';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    expect(value).toEqual('focused');
+  });
+
+  it("[onKeyUp]: Should call parent's onKeyUp", () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onKeyUp={() => {
+          value = 'keyuped';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onKeyUp();
+    expect(value).toEqual('keyuped');
+  });
 });

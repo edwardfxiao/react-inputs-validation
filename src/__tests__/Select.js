@@ -18,9 +18,7 @@ class SelectWrapper extends React.Component {
     const { validationOption } = this.props;
     const { value, hasError } = this.state;
     return (
-      <div
-        id="wrapper"
-      >
+      <div id="wrapper">
         <Select
           tabIndex="1"
           id={'country'}
@@ -119,24 +117,138 @@ describe('Select component', () => {
 
   it('[ArrowDown]: Should return correct index', () => {
     const value = '';
-    const validationOption = {
-      check: true,
-      required: false
-    };
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} validationOption={validationOption} />);
-    wrapper.instance().toggleShow(true);
-    wrapper.instance().onKeyDown({ keyCode: 40 });
-    expect(wrapper.instance().onKeyDown({ keyCode: 40 })).toEqual(2);
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.toggleShow(true);
+    instance.onKeyDown({ keyCode: 40 });
+    expect(instance.onKeyDown({ keyCode: 40 })).toEqual(2);
+  });
+
+  it('[ArrowDown]: Should called scroll', () => {
+    const value = '';
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.scroll = jest.fn();
+    instance.toggleShow(true);
+    instance.onKeyDown({ keyCode: 40 });
+    expect(instance.scroll).toHaveBeenCalled();
+  });
+
+  it('[Type "C" and hit "Enter"]: Should call addActive', () => {
+    const value = '';
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.addActive = jest.fn();
+    instance.toggleShow(true);
+    instance.onKeyDown({ keyCode: 67 });
+    instance.onKeyDown({ keyCode: 13 });
+    expect(instance.addActive).toHaveBeenCalled();
+  });
+
+  it('[Type "C"]: Should call setTimeoutTyping', () => {
+    const value = '';
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.setTimeoutTyping = jest.fn();
+    instance.toggleShow(true);
+    instance.onKeyDown({ keyCode: 67 });
+    expect(instance.setTimeoutTyping).toHaveBeenCalled();
   });
 
   it('[ArrowUp]: Should return correct index', () => {
     const value = '';
-    const validationOption = {
-      check: true,
-      required: false
-    };
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} validationOption={validationOption} />);
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
     wrapper.instance().toggleShow(true);
     expect(wrapper.instance().onKeyDown({ keyCode: 38 })).toEqual(0);
+  });
+
+  it('[getIndex]: Should return correct index', () => {
+    const value = '';
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    expect(instance.getIndex(OPTION_LIST, 'ca')).toEqual(2);
+  });
+
+  it("[onChange]: Should call parent's onChange", () => {
+    let value = '';
+    const wrapper = mount(
+      <Select
+        value={value}
+        optionList={OPTION_LIST}
+        onChange={res => {
+          value = res;
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onChange('us');
+    expect(value).toEqual('us');
+  });
+
+  it("[onClick]: Should call parent's onClick", () => {
+    let value = '';
+    const wrapper = mount(
+      <Select
+        value={value}
+        optionList={OPTION_LIST}
+        onClick={() => {
+          value = 'clicked';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onClick();
+    expect(value).toEqual('clicked');
+  });
+
+  it("[onBlur]: Should call parent's onBlur", () => {
+    let value = '';
+    const wrapper = mount(
+      <Select
+        value={value}
+        optionList={OPTION_LIST}
+        onBlur={() => {
+          value = 'blured';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onBlur();
+    expect(value).toEqual('blured');
+  });
+
+  it("[onFocus]: Should call parent's onFocus", () => {
+    let value = '';
+    const wrapper = mount(
+      <Select
+        value={value}
+        optionList={OPTION_LIST}
+        onFocus={() => {
+          value = 'focused';
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    expect(value).toEqual('focused');
+  });
+
+  it('[check]: Should call handleCheckEnd when empty', () => {
+    let value = '';
+    const wrapper = mount(
+      <Select
+        value={value}
+        optionList={OPTION_LIST}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check(value);
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { configure, mount } from 'enzyme';
+import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Checkbox from '../js/Inputs/Checkbox.js';
 
@@ -111,6 +111,43 @@ describe('Checkbox component', () => {
     expect(instance.handleCheckEnd).toHaveBeenCalled();
   });
 
+  it('[check]: Should call handleCheckEnd when empty', () => {
+    let value = '';
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        validationOption={{
+          check: false,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check(value);
+    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
+  });
+
+  it('[pageClick]: Should call onBlur', () => {
+    let value = '';
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    instance.onBlur = jest.fn();
+    instance.pageClick({ target: null });
+    expect(instance.onBlur).toHaveBeenCalled();
+  });
+
   it('[pageClick]: Should not call onBlur', () => {
     let value = '';
     const wrapper = mount(
@@ -127,6 +164,69 @@ describe('Checkbox component', () => {
     instance.onBlur = jest.fn();
     instance.pageClick({ target: null });
     expect(instance.onBlur).not.toHaveBeenCalled();
+  });
+
+  it("[onFocus]: Should not call parent's onFocus", () => {
+    let value = '';
+    let focused = false;
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        onFocus={() => {
+          focused = true;
+        }}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    expect(focused).toEqual(true);
+  });
+
+  it("[onBlur]: Should not call parent's onBlur", () => {
+    let value = '';
+    let blured = false;
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        onBlur={() => {
+          blured = true;
+        }}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onBlur();
+    expect(blured).toEqual(true);
+  });
+
+  it("[onClick]: Should not call parent's onClick", () => {
+    let value = '';
+    let clicked = false;
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        onClick={() => {
+          clicked = true;
+        }}
+        validationOption={{
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onClick();
+    expect(clicked).toEqual(true);
   });
 
   it('[handleCheckEnd]: Should call validationCallback', () => {
@@ -177,5 +277,22 @@ describe('Checkbox component', () => {
     const instance = wrapper.instance();
     instance.handleCheckEnd(true, 'msgOnError');
     expect(valid).toEqual(true);
+  });
+});
+
+describe('Checkbox component componentWillReceiveProps', () => {
+  it('[validate]: Should call check when nextProps.validate = true', () => {
+    const wrapper = shallow(<Checkbox validate={false} />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    wrapper.setProps({ validate: true });
+    expect(instance.check).toHaveBeenCalled();
+  });
+
+  it('[checked]: err should be false if this.props.checked != nextProps.checked', () => {
+    const checked = true;
+    const wrapper = shallow(<Checkbox checked={false} />);
+    wrapper.setProps({ checked });
+    expect(wrapper.state().checked).toEqual(checked);
   });
 });

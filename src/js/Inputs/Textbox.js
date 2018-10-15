@@ -118,11 +118,11 @@ class Index extends React.Component {
     }
     if (type) {
       if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) != -1) {
-        const Msg = Message[locale][TYPE];
-        if (!Msg) {
+        if (!Message[locale] || !Message[locale][TYPE]) {
           console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
           return;
         }
+        const Msg = Message[locale][TYPE];
         const value = inputValue || this.input.value;
         let nameText = name ? name : '';
         let msg = '';

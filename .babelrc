@@ -1,22 +1,28 @@
 {
-  "presets": [
-    "es2015",
-    "stage-0",
-    "react"
-  ],
-  "env":
-  {
-    "development":
+    "presets": [
+        "es2015",
+        "stage-0",
+        "react"
+    ],
+    "env":
     {
+        "development":
+        {
 
-    },
-    "production":
-    {
+        },
+        "production":
+        {
 
-    },
-    "lib":
-    {
-      "plugins": ["css-modules-transform"]
-    },
-  }
+        },
+        "lib":
+        {
+            "plugins": ["css-modules-transform"],
+        },
+        "test":
+        {
+            "plugins": [
+                "babel-plugin-rewire"
+            ]
+        }
+    }
 }

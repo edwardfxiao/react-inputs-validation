@@ -180,6 +180,7 @@ describe('Radiobox component', () => {
 
   it('[check]: Should call handleCheckEnd when empty', () => {
     let value = '';
+    const msgOnSuccess = 'foobar';
     const wrapper = mount(
       <Radiobox
         value={value}
@@ -187,7 +188,8 @@ describe('Radiobox component', () => {
         onChange={() => {}}
         validationOption={{
           check: true,
-          required: true
+          required: true,
+          msgOnSuccess
         }}
       />
     );
@@ -195,5 +197,60 @@ describe('Radiobox component', () => {
     instance.handleCheckEnd = jest.fn();
     instance.check(value);
     expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it('[handleCheckEnd]: Should call validationCallback', () => {
+    let value = '';
+    const msgOnError = 'foobar';
+    const msgOnSuccess = 'foobar';
+    let valid = false;
+    const wrapper = mount(
+      <Radiobox
+        value={value}
+        optionList={OPTION_LIST}
+        onChange={() => {}}
+        validationCallback={() => {
+          valid = true;
+        }}
+        validationOption={{
+          name: 'foobar',
+          locale: 'en-US',
+          check: true,
+          required: true,
+          msgOnError,
+          msgOnSuccess
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd(true, msgOnError);
+    expect(valid).toEqual(true);
+  });
+
+  it('[handleCheckEnd]: all validationOption', () => {
+    let value = '';
+    let valid = false;
+    const wrapper = mount(
+      <Radiobox
+        value={value}
+        optionList={OPTION_LIST}
+        onChange={() => {}}
+        validationCallback={() => {
+          valid = true;
+        }}
+        validationOption={{
+          locale: 'en-US',
+          name: 'foobar',
+          check: true,
+          showMsg: 'showMsg',
+          required: true,
+          msgOnError: 'msgOnError',
+          msgOnSuccess: 'msgOnSuccess'
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd(true, 'msgOnError');
+    expect(valid).toEqual(true);
   });
 });

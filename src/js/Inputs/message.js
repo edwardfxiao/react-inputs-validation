@@ -1,4 +1,4 @@
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_message_EXAMPLE } from './const';
 
 const getEnglishName = name => (name = name ? name + ' ' : '');
 
@@ -70,7 +70,7 @@ const RADIO_BOX_VALIDATION_EN_US = {
   empty: name => `Please choose one ${getEnglishName(name)}`
 };
 
-const message = {
+let message = {
   'zh-CN': {
     textbox: TEXT_BOX_VALIDATION_ZH_CN,
     radiobox: RADIO_BOX_VALIDATION_ZH_CN,
@@ -87,33 +87,43 @@ const message = {
   }
 };
 
-if (typeof window !== 'undefined') {
-  if (window.REACT_INPUTS_VALIDATION && window.REACT_INPUTS_VALIDATION['customErrorMessage']) {
-    if (
-      window.REACT_INPUTS_VALIDATION['customErrorMessage'] &&
-      typeof window.REACT_INPUTS_VALIDATION['customErrorMessage'] === 'object' &&
-      window.REACT_INPUTS_VALIDATION['customErrorMessage'].constructor === Object &&
-      Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage']).length > 0
-    ) {
-      Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage']).map(i => {
-        if (!message[i]) {
-          message[i] = window.REACT_INPUTS_VALIDATION['customErrorMessage'][i];
-        } else {
-          if (Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i]).length) {
-            Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i]).map(j => {
-              if (Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j]).length) {
-                Object.keys(window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j]).map(k => {
-                  message[i][j][k] = window.REACT_INPUTS_VALIDATION['customErrorMessage'][i][j][k];
-                });
-              }
+const getCustomErrorMessage = (o, m) => {
+  console.log(o);
+  if (!o || typeof o !== 'object' || o.constructor !== Object || !Object.keys(o).length) {
+    console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_message_EXAMPLE);
+    return false;
+  }
+  Object.keys(o).map(i => {
+    if (!m[i]) {
+      m[i] = o[i];
+    } else {
+      if (Object.keys(o[i]).length) {
+        Object.keys(o[i]).map(j => {
+          if (Object.keys(o[i][j]).length) {
+            Object.keys(o[i][j]).map(k => {
+              m[i][j][k] = o[i][j][k];
             });
           }
-        }
-      });
-    } else {
-      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+        });
+      }
+    }
+  });
+  return m;
+};
+
+const handleCustomErrorMessage = (message, w) => {
+  let res;
+  if (typeof w !== 'undefined') {
+    if (w.REACT_INPUTS_VALIDATION && w.REACT_INPUTS_VALIDATION['customErrorMessage']) {
+      res = getCustomErrorMessage(w.REACT_INPUTS_VALIDATION['customErrorMessage'], message);
     }
   }
-}
+  if (typeof res === 'undefined' || res === false) {
+    return message;
+  }
+  return res;
+};
+
+message = handleCustomErrorMessage(message, window);
 
 export default message;

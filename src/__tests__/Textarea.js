@@ -259,4 +259,58 @@ describe('Textare component', () => {
     instance.onKeyUp();
     expect(value).toEqual('keyuped');
   });
+
+  it('[handleCheckEnd]: Should call validationCallback', () => {
+    let value = '';
+    const msgOnError = 'foobar';
+    let valid = false;
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onChange={() => {}}
+        validationCallback={() => {
+          valid = true;
+        }}
+        validationOption={{
+          name: 'foobar',
+          check: true,
+          required: true,
+          msgOnError
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd(true, msgOnError);
+    expect(valid).toEqual(true);
+  });
+
+  it('[handleCheckEnd]: all validationOption', () => {
+    let value = '';
+    let valid = false;
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onChange={() => {}}
+        validationCallback={() => {
+          valid = true;
+        }}
+        validationOption={{
+          locale: 'en-US',
+          name: 'foobar',
+          check: true,
+          showMsg: 'showMsg',
+          required: true,
+          msgOnError: 'msgOnError',
+          msgOnSuccess: 'msgOnSuccess',
+          type: 'string',
+          min: '10',
+          max: '20',
+          length: '10'
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd(true, 'msgOnError');
+    expect(valid).toEqual(true);
+  });
 });

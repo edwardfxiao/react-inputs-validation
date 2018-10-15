@@ -88,7 +88,6 @@ let message = {
 };
 
 const getCustomErrorMessage = (o, m) => {
-  console.log(o);
   if (!o || typeof o !== 'object' || o.constructor !== Object || !Object.keys(o).length) {
     console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_message_EXAMPLE);
     return false;

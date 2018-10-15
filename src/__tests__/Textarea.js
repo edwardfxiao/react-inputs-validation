@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { configure, mount } from 'enzyme';
+import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Textarea from '../js/Inputs/Textarea.js';
 
@@ -312,5 +312,15 @@ describe('Textare component', () => {
     const instance = wrapper.instance();
     instance.handleCheckEnd(true, 'msgOnError');
     expect(valid).toEqual(true);
+  });
+});
+
+describe('Textarea component componentWillReceiveProps', () => {
+  it('[validate]: Should call check when nextProps.validate = true', () => {
+    const wrapper = shallow(<Textarea validate={false} />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    wrapper.setProps({ validate: true });
+    expect(instance.check).toHaveBeenCalled();
   });
 });

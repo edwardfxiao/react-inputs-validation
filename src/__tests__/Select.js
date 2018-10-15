@@ -303,4 +303,124 @@ describe('Select component', () => {
     instance.handleCheckEnd(true, 'msgOnError');
     expect(valid).toEqual(true);
   });
+
+  it('[onMouseOver]: Should call addActive', () => {
+    const value = '';
+    const validationOption = {};
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    wrapper.setState({ isTyping: true });
+    const instance = wrapper.instance();
+    instance.addActive = jest.fn();
+    const $input = wrapper.find('#select__wrapper');
+    $input.simulate('click');
+    wrapper
+      .find('.select__options-item')
+      .at(SELECTED_INDEX)
+      .simulate('mouseOver');
+    expect(instance.addActive).toHaveBeenCalled();
+  });
+
+  it('[onMouseOut]: Should call removeActive', () => {
+    const value = '';
+    const validationOption = {};
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    wrapper.setState({ isTyping: true });
+    const instance = wrapper.instance();
+    instance.removeActive = jest.fn();
+    const $input = wrapper.find('#select__wrapper');
+    $input.simulate('click');
+    wrapper
+      .find('.select__options-item')
+      .at(SELECTED_INDEX)
+      .simulate('mouseOut');
+    expect(instance.removeActive).toHaveBeenCalled();
+  });
+
+  it('[onMouseMove]: isTyping should be false', () => {
+    const value = '';
+    const validationOption = {};
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    wrapper.setState({ isTyping: true });
+    const $input = wrapper.find('#select__wrapper');
+    $input.simulate('click');
+    wrapper
+      .find('.select__options-item')
+      .at(SELECTED_INDEX)
+      .simulate('mouseMove');
+    expect(wrapper.state().isTyping).toEqual(false);
+  });
+
+  it('[getDefaultValidationOption]: Should return default obj', () => {
+    const getDefaultValidationOption = Select.__get__('getDefaultValidationOption');
+    expect(getDefaultValidationOption({})).toEqual({
+      name: '',
+      check: true,
+      showMsg: true,
+      required: true,
+      locale: 'en-US',
+      msgOnError: '',
+      msgOnSuccess: ''
+    });
+  });
+
+  it('[getDefaultValidationOption]: Should return correct obj', () => {
+    const getDefaultValidationOption = Select.__get__('getDefaultValidationOption');
+    const o = {
+      name: 'foobar',
+      check: true,
+      showMsg: 'showMsg',
+      required: true,
+      locale: 'en-US',
+      msgOnError: 'msgOnError',
+      msgOnSuccess: 'msgOnSuccess'
+    };
+    expect(getDefaultValidationOption(o)).toEqual(o);
+  });
+
+  it('[selectOptionListItemHtml]: Should render selectOptionListItemHtml', () => {
+    const selectOptionListItemHtml = OPTION_LIST.map((i, k) => {
+      return (
+        <div className="foo" key={k}>
+          {i.name}
+        </div>
+      );
+    });
+    const wrapper = mount(<Select value="" optionList={OPTION_LIST} onChange={() => {}} validationOption={{}} selectOptionListItemHtml={selectOptionListItemHtml} />);
+    const $input = wrapper.find('#select__wrapper');
+    $input.simulate('click');
+    expect(wrapper.find('.foo').length).toEqual(3);
+  });
+
+  it('[select__input class]: Should have select__input class name', () => {
+    const validationOption = {
+      check: true,
+      required: true,
+      showMsg: true,
+      successMsg: 'successMsg'
+    };
+    const wrapper = mount(<Select optionList={OPTION_LIST} value="" onBlur={() => {}} onChange={() => {}} validationOption={validationOption} />);
+    const instance = wrapper.instance();
+    instance.onChange('ca');
+    instance.onBlur();
+    expect(wrapper.find('.select__input').length).toEqual(1);
+  });
+});
+
+describe('Select component componentWillReceiveProps', () => {
+  it('[validate]: Should call check when nextProps.validate = true', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} value="" validate={false} />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    wrapper.setProps({ validate: true });
+    expect(instance.check).toHaveBeenCalled();
+  });
+
+  it('[value]: err should be false if this.props.value != nextProps.value', () => {
+    const value = 'us';
+    const wrapper = mount(<Select optionList={OPTION_LIST} value="" />);
+    wrapper.setProps({ value });
+    expect(wrapper.state().value).toEqual(value);
+    expect(wrapper.state().err).toEqual(false);
+    expect(wrapper.state().successMsg).toEqual(undefined);
+  });
 });

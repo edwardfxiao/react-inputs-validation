@@ -241,6 +241,9 @@ class Index extends React.Component {
   scroll(direction) {
     const containerHeight = this.itemsWrapper.offsetHeight;
     const containerScrollTop = this.itemsWrapper.scrollTop;
+    if (!this.optionItems[this.currentFocus]) {
+      return;
+    }
     const itemHeight = this.optionItems[this.currentFocus].offsetHeight;
     if (direction) {
       if (direction == 'down') {
@@ -309,11 +312,11 @@ class Index extends React.Component {
     if (!check) {
       return;
     }
-    const Msg = Message[locale][TYPE];
-    if (!Msg) {
+    if (!Message[locale] || !Message[locale][TYPE]) {
       console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
       return;
     }
+    const Msg = Message[locale][TYPE];
     let nameText = name ? name : '';
     if (required) {
       if (isValidateValue(value)) {

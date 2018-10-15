@@ -251,4 +251,56 @@ describe('Select component', () => {
     instance.check(value);
     expect(instance.handleCheckEnd).toHaveBeenCalled();
   });
+
+  it('[handleCheckEnd]: Should call validationCallback', () => {
+    let value = '';
+    const msgOnError = 'foobar';
+    let valid = false;
+    const wrapper = mount(
+      <Select
+        value={value}
+        optionList={OPTION_LIST}
+        onChange={() => {}}
+        validationCallback={() => {
+          valid = true;
+        }}
+        validationOption={{
+          name: 'foobar',
+          check: true,
+          required: true,
+          msgOnError
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd(true, msgOnError);
+    expect(valid).toEqual(true);
+  });
+
+  it('[handleCheckEnd]: all validationOption', () => {
+    let value = '';
+    let valid = false;
+    const wrapper = mount(
+      <Select
+        value={value}
+        optionList={OPTION_LIST}
+        onChange={() => {}}
+        validationCallback={() => {
+          valid = true;
+        }}
+        validationOption={{
+          locale: 'en-US',
+          name: 'foobar',
+          check: true,
+          showMsg: 'showMsg',
+          required: true,
+          msgOnError: 'msgOnError',
+          msgOnSuccess: 'msgOnSuccess'
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd(true, 'msgOnError');
+    expect(valid).toEqual(true);
+  });
 });

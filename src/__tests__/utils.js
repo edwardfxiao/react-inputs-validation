@@ -6,6 +6,9 @@ describe('utils', () => {
     expect(camelize('foo bar')).equal('fooBar');
   });
   it('[toCamelCase("foo bar")(false)]: Should return the camelCase: "fooBar"', () => {
+    expect(toCamelCase('foo bar')()).equal('fooBar');
+  });
+  it('[toCamelCase("foo bar")(false)]: Should return the camelCase: "fooBar"', () => {
     expect(toCamelCase('foo bar')(false)).equal('fooBar');
   });
   it('[toCamelCase("foo bar")(true)]: Should return the camelCase: "FooBar"', () => {

@@ -60,6 +60,7 @@ describe('Checkbox component', () => {
     const checked = false;
     const hasError = false;
     const validationOption = {
+      name: 'foobar',
       check: true,
       required: true
     };
@@ -79,7 +80,8 @@ describe('Checkbox component', () => {
     const hasError = false;
     const validationOption = {
       check: true,
-      required: false
+      required: false,
+      msgOnSuccess: 'success'
     };
     const wrapper = getWrapper(checked, validationOption, hasError);
     const $input = wrapper.find('.checkbox__box');
@@ -123,7 +125,57 @@ describe('Checkbox component', () => {
     );
     const instance = wrapper.instance();
     instance.onBlur = jest.fn();
-    instance.pageClick({target: null});
+    instance.pageClick({ target: null });
     expect(instance.onBlur).not.toHaveBeenCalled();
+  });
+
+  it('[handleCheckEnd]: Should call validationCallback', () => {
+    let value = '';
+    const msgOnError = 'foobar';
+    let valid = false;
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        validationCallback={() => {
+          valid = true;
+        }}
+        validationOption={{
+          name: 'foobar',
+          check: true,
+          required: true,
+          msgOnError
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd(true, msgOnError);
+    expect(valid).toEqual(true);
+  });
+
+  it('[handleCheckEnd]: all validationOption', () => {
+    let value = '';
+    let valid = false;
+    const wrapper = mount(
+      <Checkbox
+        value={value}
+        onChange={() => {}}
+        validationCallback={() => {
+          valid = true;
+        }}
+        validationOption={{
+          locale: 'en-US',
+          name: 'foobar',
+          check: true,
+          showMsg: 'showMsg',
+          required: true,
+          msgOnError: 'msgOnError',
+          msgOnSuccess: 'msgOnSuccess'
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd(true, 'msgOnError');
+    expect(valid).toEqual(true);
   });
 });

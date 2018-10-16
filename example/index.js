@@ -173,7 +173,7 @@ import { Select } from 'react-inputs-validation';
   //       <div
   //         key={k}
   //         onClick={() => {
-  //           this.handleMovieChange(i.id);
+  //           this.handleSelectChange(i.id);
   //         }}
   //       >
   //         <span className="icon icon-person" />{i.name}
@@ -767,7 +767,7 @@ class Index extends Component {
                     //       <div
                     //         key={k}
                     //         onClick={() => {
-                    //           this.handleMovieChange(i.id);
+                    //           this.handleSelectChange(i.id);
                     //         }}
                     //       >
                     //         <span className="icon icon-person" />{i.name}
@@ -1036,7 +1036,7 @@ class Index extends Component {
                       //       <div
                       //         key={k}
                       //         onClick={() => {
-                      //           this.handleMovieChange(i.id);
+                      //           this.handleSelectChange(i.id);
                       //         }}
                       //       >
                       //         <span className="icon icon-person" />{i.name}

@@ -155,6 +155,30 @@ describe('Select component', () => {
     expect(instance.setTimeoutTyping).toHaveBeenCalled();
   });
 
+  it('[Type "C"]: Should call setTimeoutTyping when typingTimeout is undefined', () => {
+    const value = '';
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.setTimeoutTyping = jest.fn();
+    instance.toggleShow(true);
+    wrapper.typingTimeout = undefined;
+    instance.onKeyDown({ keyCode: 67 });
+    instance.onKeyDown({ keyCode: 68 });
+    expect(instance.setTimeoutTyping).toHaveBeenCalled();
+  });
+
+  it('[Type "C" and then type "A"]: keycodeList should be [67, 65]', () => {
+    const value = '';
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.setTimeoutTyping = jest.fn();
+    instance.toggleShow(true);
+    wrapper.typingTimeout = undefined;
+    instance.onKeyDown({ keyCode: 67 });
+    instance.onKeyDown({ keyCode: 65 });
+    expect(wrapper.state().keycodeList).toEqual([67, 65]);
+  });
+
   it('[ArrowUp]: Should return correct index', () => {
     const value = '';
     const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
@@ -368,7 +392,7 @@ describe('Select component', () => {
     const o = {
       name: 'foobar',
       check: true,
-      showMsg: 'showMsg',
+      showMsg: false,
       required: true,
       locale: 'en-US',
       msgOnError: 'msgOnError',
@@ -403,6 +427,58 @@ describe('Select component', () => {
     instance.onChange('ca');
     instance.onBlur();
     expect(wrapper.find('.select__input').length).toEqual(1);
+  });
+
+  it('[invalid locale]: Should return when locale is invalid', () => {
+    const value = '';
+    const validationOption = { locale: 'foobar' };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
+  });
+
+  it('[check]: Should return when check == false', () => {
+    const value = '';
+    const validationOption = { check: false };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
+  });
+
+  it('[msgOnSuccess]: Should return when required == false and msgOnSuccess is provided', () => {
+    const value = '';
+    const msgOnSuccess = 'msgOnSuccess';
+    const validationOption = { required: false, msgOnSuccess };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(wrapper.state().successMsg).toEqual(msgOnSuccess);
+  });
+
+  it('[pageClick]: Should call onBlur', () => {
+    const value = '';
+    const validationOption = { check: false };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    const instance = wrapper.instance();
+    instance.onFocus();
+    instance.onBlur = jest.fn();
+    instance.pageClick({ target: null });
+    expect(instance.onBlur).toHaveBeenCalled();
+  });
+
+  it('[STYLES]: Should have STYLES', () => {
+    Select.__Rewire__('STYLES', {
+      select__input: 'select__input_hash'
+    });
+    const value = '';
+    const validationOption = { check: false };
+    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    expect(wrapper.find('.select__input_hash').length).toEqual(1);
   });
 });
 

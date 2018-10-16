@@ -72,10 +72,6 @@ class Index extends React.Component {
     }
   }
 
-  toggleChecked(checked) {
-    this.setState({ checked });
-  }
-
   onClick(e) {
     this.onChange(e);
     const { onClick } = this.props;
@@ -115,11 +111,11 @@ class Index extends React.Component {
       return;
     }
     if (required) {
-      const Msg = Message[locale][TYPE];
-      if (!Msg) {
+      if (!Message[locale] || !Message[locale][TYPE]) {
         console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
         return;
       }
+      const Msg = Message[locale][TYPE];
       if (!this.state.checked) {
         this.handleCheckEnd(true, Msg.unchecked ? Msg.unchecked(name ? name : '') : '');
         return;

@@ -451,6 +451,415 @@ describe('Textbox component', () => {
     instance.handleCheckEnd(true, 'msgOnError');
     expect(valid).toEqual(true);
   });
+
+  it('[getDefaultValidationOption]: Should return default obj', () => {
+    const getDefaultValidationOption = Textbox.__get__('getDefaultValidationOption');
+    expect(getDefaultValidationOption({})).toEqual({
+      locale: 'en-US',
+      reg: '',
+      min: 0,
+      max: 0,
+      type: 'string',
+      name: '',
+      check: true,
+      showMsg: true,
+      length: 0,
+      regMsg: '',
+      compare: '',
+      required: true,
+      msgOnError: '',
+      msgOnSuccess: '',
+      customFunc: undefined
+    });
+  });
+
+  it('[getDefaultValidationOption]: Should return correct obj', () => {
+    const getDefaultValidationOption = Textbox.__get__('getDefaultValidationOption');
+    const o = {
+      locale: 'foobar',
+      reg: '',
+      min: 0,
+      max: 0,
+      type: 'string',
+      name: '',
+      check: true,
+      showMsg: false,
+      length: 0,
+      regMsg: '',
+      compare: '',
+      required: true,
+      msgOnError: '',
+      msgOnSuccess: '',
+      customFunc: undefined
+    };
+    expect(getDefaultValidationOption(o)).toEqual(o);
+  });
+
+  it('[check]: Message should be foobar cannot be empty', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          name: 'foobar',
+          check: true,
+          required: true
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('foobar cannot be empty');
+  });
+
+  it('[check]: Message should be foobar length must be 5', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          name: 'foobar',
+          check: true,
+          required: true,
+          type: 'string',
+          length: 5
+          // min: 0,
+          // max: 0,
+          // msgOnError
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('foobar length must be 5');
+  });
+
+  it('[check]: Should be show successMsg when msgOnSuccess is provided', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          name: 'foobar',
+          check: true,
+          required: true,
+          showMsg: true,
+          msgOnSuccess: 'successMsg'
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.onFocus();
+    instance.onBlur();
+    expect(wrapper.state().err).toEqual(false);
+    expect(wrapper.state().successMsg).toEqual('successMsg');
+  });
+
+  it('[check]: Successful msg node should be appear', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: '',
+          msgOnSuccess: 'successMsg'
+        }}
+      />
+    );
+    // const instance = wrapper.instance();
+    const $input = wrapper.find('input');
+    $input.simulate('focus');
+    // instance.input.value = '';
+    // instance.onChange();
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.success').length).toEqual(1);
+  });
+
+  it('[validationOption.type]: Should not call handleCheckEnd', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'foobar',
+          name: '',
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: '',
+          msgOnSuccess: 'successMsg'
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
+  });
+
+  // TODO: find a better way to do this
+  it('[String maxLength]: Should not longer than maxLength', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        maxLength="1"
+        validationOption={{
+          check: true,
+          showMsg: true,
+          required: true,
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.input.value = 'foobar';
+    instance.onChange();
+    expect(value).toEqual('');
+  });
+
+  it('[String onChange setState err]: Should setState err: false', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          check: true,
+          showMsg: true,
+          required: true,
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.input.value = 'foobar';
+    instance.onChange();
+    expect(wrapper.state().err).toEqual(false);
+  });
+
+  it('[String invalid locale]: Should not call handleCheckEnd', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'foobar',
+          type: 'string',
+          name: '',
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: ''
+        }}
+      />
+    );
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
+  });
+
+  it('[String reg]: Error msg node should be appear', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          reg: /^0x[a-fA-F0-9]{40}$/,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: ''
+        }}
+      />
+    );
+    // const instance = wrapper.instance();
+    const $input = wrapper.find('input');
+    $input.simulate('focus');
+    // instance.input.value = '';
+    // instance.onChange();
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.error').length).toEqual(1);
+  });
+
+  it('[String min]: Error msg node should be appear', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          min: 10,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: ''
+        }}
+      />
+    );
+    const $input = wrapper.find('input');
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.error').length).toEqual(1);
+  });
+
+  it('[String max]: Error msg node should be appear', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          max: 1,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: ''
+        }}
+      />
+    );
+    const $input = wrapper.find('input');
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.error').length).toEqual(1);
+  });
+
+  it('[Number length]: Error msg node should be appear', () => {
+    let value = 10;
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'number',
+          name: '',
+          length: 1,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: ''
+        }}
+      />
+    );
+    const $input = wrapper.find('input');
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.error').length).toEqual(1);
+  });
+
+  it('[Number min]: Error msg node should be appear', () => {
+    let value = 10;
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'number',
+          name: '',
+          min: 20,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: ''
+        }}
+      />
+    );
+    const $input = wrapper.find('input');
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.error').length).toEqual(1);
+  });
+
+  it('[Number max]: Error msg node should be appear', () => {
+    let value = 10;
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'number',
+          name: '',
+          max: 2,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: ''
+        }}
+      />
+    );
+    const $input = wrapper.find('input');
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.error').length).toEqual(1);
+  });
+
+  it('[Number invalid]: Error msg node should be appear', () => {
+    let value = 'foobar';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'number',
+          name: '',
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: ''
+        }}
+      />
+    );
+    const $input = wrapper.find('input');
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.error').length).toEqual(1);
+  });
 });
 
 describe('Textbox component componentWillReceiveProps', () => {

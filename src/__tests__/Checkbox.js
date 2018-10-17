@@ -280,19 +280,19 @@ describe('Checkbox component', () => {
   });
 });
 
-describe('Checkbox component componentWillReceiveProps', () => {
-  it('[validate]: Should call check when nextProps.validate = true', () => {
-    const wrapper = shallow(<Checkbox validate={false} />);
-    const instance = wrapper.instance();
-    instance.check = jest.fn();
-    wrapper.setProps({ validate: true });
-    expect(instance.check).toHaveBeenCalled();
-  });
+// describe('Checkbox component componentWillReceiveProps', () => {
+//   it('[validate]: Should call check when nextProps.validate = true', () => {
+//     const wrapper = shallow(<Checkbox validate={false} />);
+//     const instance = wrapper.instance();
+//     instance.check = jest.fn();
+//     wrapper.setProps({ validate: true });
+//     expect(instance.check).toHaveBeenCalled();
+//   });
 
-  it('[checked]: err should be false if this.props.checked != nextProps.checked', () => {
-    const checked = true;
-    const wrapper = shallow(<Checkbox checked={false} />);
-    wrapper.setProps({ checked });
-    expect(wrapper.state().checked).toEqual(checked);
-  });
-});
+//   it('[checked]: err should be false if this.props.checked != nextProps.checked', () => {
+//     const checked = true;
+//     const wrapper = shallow(<Checkbox checked={false} />);
+//     wrapper.setProps({ checked });
+//     expect(wrapper.state().checked).toEqual(checked);
+//   });
+// });

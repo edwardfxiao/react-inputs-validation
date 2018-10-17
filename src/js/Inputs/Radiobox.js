@@ -41,7 +41,9 @@ class Index extends React.Component {
     this.state = {
       err: false,
       msg: '',
-      successMsg: undefined
+      successMsg: undefined,
+      value: props.value,
+      validate: props.validate
     };
     if (!props.optionList.length) {
       console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
@@ -60,16 +62,27 @@ class Index extends React.Component {
     this.onBlur = this.onBlur.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.validate == false && nextProps.validate == true) {
-      this.check();
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.validate === true && prevState.validate === false) {
+      return {
+        validate: nextProps.validate
+      };
     }
-    if (this.props.value != nextProps.value) {
-      if (this.state.err) {
-        this.setState({ err: false });
+    if (nextProps.value != prevState.value) {
+      const o = { value: nextProps.value };
+      if (prevState.err) {
+        o['err'] = false;
       } else {
-        this.setState({ successMsg: undefined });
+        o['successMsg'] = undefined;
       }
+      return o;
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.validate === true && prevState.validate === false) {
+      this.check();
     }
   }
 

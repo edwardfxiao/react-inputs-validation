@@ -1,25 +1,14 @@
 const base = require('./base.js');
-const _ = require('lodash');
+const objectAssign = require('object-assign');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const PATH = require('./build_path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-const config = _.merge(base, {
-  devtool: 'cheap-module-eval-source-map',
+const config = objectAssign(base, {
+  mode: 'development',
   output: {
-    publicPath: '/'
-  },
-  devServer: {
-    historyApiFallback: true
+    publicPath: '/',
+    filename: '[name].js'
   }
 });
-
-config.plugins.push(
-  new ExtractTextPlugin({
-    filename: 'css/[name].css',
-    disable: false,
-    allChunks: true
-  })
-);
-
+config.plugins.push(new MiniCssExtractPlugin({ filename: 'css/[name].css' }));
 module.exports = config;

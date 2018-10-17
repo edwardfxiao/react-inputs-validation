@@ -482,21 +482,21 @@ describe('Select component', () => {
   });
 });
 
-describe('Select component componentWillReceiveProps', () => {
-  it('[validate]: Should call check when nextProps.validate = true', () => {
-    const wrapper = mount(<Select optionList={OPTION_LIST} value="" validate={false} />);
-    const instance = wrapper.instance();
-    instance.check = jest.fn();
-    wrapper.setProps({ validate: true });
-    expect(instance.check).toHaveBeenCalled();
-  });
+// describe('Select component componentWillReceiveProps', () => {
+//   it('[validate]: Should call check when nextProps.validate = true', () => {
+//     const wrapper = mount(<Select optionList={OPTION_LIST} value="" validate={false} />);
+//     const instance = wrapper.instance();
+//     instance.check = jest.fn();
+//     wrapper.setProps({ validate: true });
+//     expect(instance.check).toHaveBeenCalled();
+//   });
 
-  it('[value]: err should be false if this.props.value != nextProps.value', () => {
-    const value = 'us';
-    const wrapper = mount(<Select optionList={OPTION_LIST} value="" />);
-    wrapper.setProps({ value });
-    expect(wrapper.state().value).toEqual(value);
-    expect(wrapper.state().err).toEqual(false);
-    expect(wrapper.state().successMsg).toEqual(undefined);
-  });
-});
+//   it('[value]: err should be false if this.props.value != nextProps.value', () => {
+//     const value = 'us';
+//     const wrapper = mount(<Select optionList={OPTION_LIST} value="" />);
+//     wrapper.setProps({ value });
+//     expect(wrapper.state().value).toEqual(value);
+//     expect(wrapper.state().err).toEqual(false);
+//     expect(wrapper.state().successMsg).toEqual(undefined);
+//   });
+// });

@@ -53,7 +53,8 @@ class Index extends React.Component {
       err: false,
       msg: '',
       successMsg: undefined,
-      keycodeList: []
+      keycodeList: [],
+      validate: props.validate
     };
     if (!props.optionList.length) {
       console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
@@ -87,6 +88,9 @@ class Index extends React.Component {
         this.resetCurrentFocus();
       }
     }
+    if (this.state.validate === true && prevState.validate === false) {
+      this.check();
+    }
   }
 
   componentWillUnmount() {
@@ -95,17 +99,18 @@ class Index extends React.Component {
     this.wrapper.removeEventListener('keydown', this.onKeyDown);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.validate == false && nextProps.validate == true) {
-      this.check();
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.validate === true && prevState.validate === false) {
+      return {
+        validate: nextProps.validate
+      };
     }
-    if (String(this.props.value) != String(nextProps.value)) {
-      this.setState({
-        value: nextProps.value,
-        err: false,
-        successMsg: undefined
-      });
+    if (prevState.value != nextProps.value) {
+      return {
+        value: nextProps.value
+      };
     }
+    return null;
   }
 
   onChange(value, e) {

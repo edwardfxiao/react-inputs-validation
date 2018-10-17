@@ -34,7 +34,8 @@ class Index extends React.Component {
       err: false,
       msg: '',
       successMsg: undefined,
-      checked: props.checked
+      checked: props.checked,
+      validate: props.validate
     };
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -43,17 +44,27 @@ class Index extends React.Component {
     this.pageClick = this.pageClick.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.validate == false && nextProps.validate == true) {
-      this.check();
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // TODO: This was from componentWillReceiveProps()
+    // if (this.props.checked != nextProps.checked) {
+    //   this.setState({ checked: nextProps.checked });
+    // }
+    if (nextProps.validate === true && prevState.validate === false) {
+      return {
+        validate: nextProps.validate
+      };
     }
-    if (this.props.checked != nextProps.checked) {
-      this.setState({ checked: nextProps.checked });
-    }
+    return null;
   }
 
   componentDidMount() {
     window.addEventListener('mousedown', this.pageClick, false);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.validate === true && prevState.validate === false) {
+      this.check();
+    }
   }
 
   componentWillUnmount() {

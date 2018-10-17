@@ -862,12 +862,12 @@ describe('Textbox component', () => {
   });
 });
 
-describe('Textbox component componentWillReceiveProps', () => {
-  it('[validate]: Should call check when nextProps.validate = true', () => {
-    const wrapper = shallow(<Textbox validate={false} />);
-    const instance = wrapper.instance();
-    instance.check = jest.fn();
-    wrapper.setProps({ validate: true });
-    expect(instance.check).toHaveBeenCalled();
-  });
-});
+// describe('Textbox component componentWillReceiveProps', () => {
+//   it('[validate]: Should call check when nextProps.validate = true', () => {
+//     const wrapper = shallow(<Textbox validate={false} />);
+//     const instance = wrapper.instance();
+//     instance.check = jest.fn();
+//     wrapper.setProps({ validate: true });
+//     expect(instance.check).toHaveBeenCalled();
+//   });
+// });

@@ -305,25 +305,25 @@ describe('Radiobox component', () => {
   });
 });
 
-describe('Radiobox component componentWillReceiveProps', () => {
-  it('[validate]: Should call check when nextProps.validate = true', () => {
-    const wrapper = shallow(<Radiobox validate={false} />);
-    const instance = wrapper.instance();
-    instance.check = jest.fn();
-    wrapper.setProps({ validate: true });
-    expect(instance.check).toHaveBeenCalled();
-  });
+// describe('Radiobox component componentWillReceiveProps', () => {
+//   it('[validate]: Should call check when nextProps.validate = true', () => {
+//     const wrapper = shallow(<Radiobox validate={false} />);
+//     const instance = wrapper.instance();
+//     instance.check = jest.fn();
+//     wrapper.setProps({ validate: true });
+//     expect(instance.check).toHaveBeenCalled();
+//   });
 
-  it('[value]: err should be false if this.props.value != nextProps.value and this.state.err ', () => {
-    const wrapper = shallow(<Radiobox value={false} />);
-    wrapper.setState({ err: true });
-    wrapper.setProps({ value: true });
-    expect(wrapper.state().err).toEqual(false);
-  });
+//   it('[value]: err should be false if this.props.value != nextProps.value and this.state.err ', () => {
+//     const wrapper = shallow(<Radiobox value={false} />);
+//     wrapper.setState({ err: true });
+//     wrapper.setProps({ value: true });
+//     expect(wrapper.state().err).toEqual(false);
+//   });
 
-  it('[value]: successMsg should be undefined if this.props.value != nextProps.value and !this.state.err ', () => {
-    const wrapper = shallow(<Radiobox value={false} />);
-    wrapper.setProps({ value: true });
-    expect(wrapper.state().successMsg).toEqual(undefined);
-  });
-});
+//   it('[value]: successMsg should be undefined if this.props.value != nextProps.value and !this.state.err ', () => {
+//     const wrapper = shallow(<Radiobox value={false} />);
+//     wrapper.setProps({ value: true });
+//     expect(wrapper.state().successMsg).toEqual(undefined);
+//   });
+// });

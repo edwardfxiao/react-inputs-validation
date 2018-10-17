@@ -49,7 +49,8 @@ class Index extends React.Component {
     this.state = {
       err: false,
       msg: '',
-      successMsg: undefined
+      successMsg: undefined,
+      validate: props.validate
     };
     this.onChange = this.onChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
@@ -57,12 +58,20 @@ class Index extends React.Component {
     this.onFocus = this.onFocus.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.validate == false && nextProps.validate == true) {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.validate === true && prevState.validate === false) {
+      return {
+        validate: nextProps.validate
+      };
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.validate === true && prevState.validate === false) {
       this.check();
     }
   }
-
   onChange(e) {
     if (this.props.maxLength != '') {
       if (this.input.value.length > Number(this.props.maxLength)) {

@@ -127,8 +127,9 @@ class Index extends React.Component {
   }
 
   handleCheckEnd(err, msg) {
-    if (getDefaultValidationOption(this.props.validationOption).msgOnError) {
-      msg = getDefaultValidationOption(this.props.validationOption).msgOnError;
+    const { msgOnError } = getDefaultValidationOption(this.props.validationOption);
+    if (err && msgOnError) {
+      msg = msgOnError;
     }
     this.setState({ err, msg });
     const { validationCallback } = this.props;
@@ -170,10 +171,11 @@ class Index extends React.Component {
     const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
 
     let msgHtml;
-    if (getDefaultValidationOption(validationOption).showMsg && err && msg) {
+    const { showMsg } = getDefaultValidationOption(validationOption);
+    if (showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (getDefaultValidationOption(validationOption).showMsg && !err && successMsg) {
+    if (showMsg && !err && successMsg) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
 

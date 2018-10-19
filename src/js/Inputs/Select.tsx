@@ -1,14 +1,27 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import cx from 'classnames';
-import Message from './message';
+import * as React from 'react';
+import message from './message';
+import classnames from 'classnames';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
-let STYLES = {};
+interface Styles {
+  [key: string]: string;
+}
+let STYLES: Styles = {};
 try {
   STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
-const TYPE = 'select';
-const getDefaultValidationOption = obj => {
+const TYPE = 'checkbox';
+
+interface DefaultValidationOption {
+  name?: string;
+  check?: boolean;
+  showMsg?: boolean;
+  required?: boolean;
+  locale?: string;
+  msgOnError?: string;
+  msgOnSuccess?: string;
+}
+
+const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   name = typeof name !== 'undefined' ? name : '';
@@ -24,27 +37,86 @@ const getDefaultValidationOption = obj => {
     required,
     locale,
     msgOnError,
-    msgOnSuccess
+    msgOnSuccess,
   };
-};
-const isValidateValue = value => {
-  value = String(value);
-  if (value == '' || value == 'null' || value == 'undefined') {
-    return true;
-  } else {
-    return false;
-  }
 };
 
-if (!String.prototype.startsWith) {
-  String.prototype.startsWith = function(searchString, position) {
-    position = position || 0;
-    return this.indexOf(searchString, position) === position;
-  };
+interface OptionList {
+  id: string;
+  name: string;
 }
 
-class Index extends React.Component {
-  constructor(props) {
+interface Props {
+  tabIndex?: string | number;
+  id?: string;
+  name?: string;
+  value?: string | number;
+  disabled?: boolean;
+  validate?: boolean;
+  optionList: OptionList[];
+  onChange: (res: string, e: Event) => void;
+  onClick?: (e: Event) => void;
+  onBlur?: (e: Event) => void;
+  onFocus?: (e: Event) => void;
+  validationOption?: object;
+  locale?: string;
+  selectHtml?: React.ReactNode;
+  selectOptionListItemHtml?: React.ReactNode;
+  classNameWrapper?: string;
+  classNameContainer?: string;
+  classNameSelect?: string;
+  classNameOptionListContainer?: string;
+  classNameDropdownIconOptionListItem?: string;
+  classNameOptionListItem?: string;
+  customStyleWrapper?: object;
+  customStyleContainer?: object;
+  customStyleSelect?: object;
+  customStyleOptionListContainer?: object;
+  customStyleDropdownIcon?: object;
+  customStyleOptionListItem?: object;
+  validationCallback?: (res: boolean) => void;
+}
+
+interface State {
+  value: string;
+  show: boolean;
+  isTyping: boolean;
+  err: boolean;
+  msg: string;
+  successMsg: undefined | string;
+  keycodeList: Array<number>[];
+  validate: boolean;
+}
+
+class Index extends React.Component<Props, State> {
+  static defaultProps: Props = {
+    tabIndex: -1,
+    id: '',
+    name: '',
+    value: '',
+    disabled: false,
+    optionList: [],
+    classNameWrapper: '',
+    classNameContainer: '',
+    classNameOptionListItem: '',
+    classNameOptionListContainer: '',
+    classNameDropdownIconOptionListItem: '',
+    customStyleWrapper: {},
+    customStyleContainer: {},
+    customStyleOptionListItem: {},
+    customStyleOptionListContainer: {},
+    customStyleDropdownIcon: {},
+    validationOption: {},
+    onChange: () => {},
+  };
+  private wrapper: React.RefObject<HTMLInputElement>;
+  private itemsWrapper: React.RefObject<HTMLInputElement>;
+  private input: React.RefObject<HTMLInputElement>;
+  private optionItems: React.RefObject<HTMLInputElement>[];
+  private focus: boolean;
+  private typingTimeout: Timeout;
+  private currentFocus: number;
+  constructor(props: any) {
     super(props);
     this.state = {
       value: props.value,
@@ -54,35 +126,43 @@ class Index extends React.Component {
       msg: '',
       successMsg: undefined,
       keycodeList: [],
-      validate: props.validate
+      validate: props.validate,
     };
-    if (!props.optionList.length) {
-      console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
-      return;
-    } else {
-      props.optionList.map(i => {
-        if (typeof i.name == 'undefined' || typeof i.id == 'undefined') {
-          console.error('Please provide valid optionList. i.e optionList=[{id: "1", name: "title 1"}, {id: "2", name: "title 2"}]');
-        }
-        return;
-      });
-    }
-    this.optionItems = [];
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
-    this.pageClick = this.pageClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.wrapper = React.createRef();
+    this.itemsWrapper = React.createRef();
+    this.input = React.createRef();
+    this.optionItems = [];
+  }
+
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (nextProps.validate === true && prevState.validate === false) {
+      return {
+        validate: nextProps.validate,
+      };
+    }
+    if (prevState.value != nextProps.value) {
+      return {
+        value: nextProps.value,
+      };
+    }
+    return null;
   }
 
   componentDidMount() {
     window.addEventListener('mousedown', this.pageClick);
     window.addEventListener('touchstart', this.pageClick);
-    this.wrapper.addEventListener('keydown', this.onKeyDown);
+    const node = this.wrapper.current;
+    if (node) {
+      node.addEventListener('keydown', this.onKeyDown);
+    }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevState.show != this.state.show) {
       if (this.state.show) {
         this.resetCurrentFocus();
@@ -96,26 +176,15 @@ class Index extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('mousedown', this.pageClick);
     window.removeEventListener('touchstart', this.pageClick);
-    this.wrapper.removeEventListener('keydown', this.onKeyDown);
+    const node = this.wrapper.current;
+    if (node) {
+      node.removeEventListener('keydown', this.onKeyDown);
+    }
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.validate === true && prevState.validate === false) {
-      return {
-        validate: nextProps.validate
-      };
-    }
-    if (prevState.value != nextProps.value) {
-      return {
-        value: nextProps.value
-      };
-    }
-    return null;
-  }
-
-  onChange(value, e) {
+  onChange(value: string, e: Event) {
     const { onChange } = this.props;
-    onChange && onChange(value, e);
+    onChange && onChange(String(value), e);
     this.setState({ value });
     if (this.state.err) {
       this.setState({ err: false });
@@ -124,12 +193,12 @@ class Index extends React.Component {
     }
   }
 
-  onClick(e) {
+  onClick(e: Event) {
     const { onClick } = this.props;
     onClick && onClick(e);
   }
 
-  onBlur(e) {
+  onBlur(e: Event) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
@@ -137,7 +206,7 @@ class Index extends React.Component {
     }
   }
 
-  onFocus(e) {
+  onFocus(e: Event) {
     this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
@@ -145,7 +214,7 @@ class Index extends React.Component {
     }
   }
 
-  getIndex(list, val) {
+  getIndex(list: OptionList[], val: string) {
     let key = -1;
     for (let i = 0; i < list.length; i++) {
       if (list[i].id == val) {
@@ -163,7 +232,7 @@ class Index extends React.Component {
     this.scroll();
   }
 
-  onKeyDown(e) {
+  onKeyDown(e: any) {
     this.setState({ isTyping: true });
     if (e.preventDefault) {
       e.preventDefault();
@@ -204,7 +273,7 @@ class Index extends React.Component {
         this.addActive();
       } else if (keyCode == keyCodeEnter) {
         if (this.currentFocus > -1) {
-          if (x) x[this.currentFocus].click();
+          if (x) x[this.currentFocus].current.click();
         }
       }
     } else {
@@ -243,7 +312,7 @@ class Index extends React.Component {
     }, 250);
   }
 
-  scroll(direction) {
+  scroll(direction = undefined) {
     const containerHeight = this.itemsWrapper.offsetHeight;
     const containerScrollTop = this.itemsWrapper.scrollTop;
     if (!this.optionItems[this.currentFocus]) {
@@ -365,41 +434,55 @@ class Index extends React.Component {
       customStyleOptionListItem,
       selectHtml,
       selectOptionListItemHtml,
-      validationOption
+      validationOption,
     } = this.props;
 
     const { value, err, msg, show, successMsg, isTyping } = this.state;
 
-    const wrapperClass = cx(classNameWrapper, STYLES['select__wrapper'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const wrapperClass = classnames(classNameWrapper, STYLES['select__wrapper'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const containerClass = cx(classNameContainer, STYLES['select__container'], err && STYLES['error'], show && STYLES['show'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const containerClass = classnames(
+      classNameContainer,
+      STYLES['select__container'],
+      err && STYLES['error'],
+      show && STYLES['show'],
+      successMsg && !err && STYLES['success'],
+      disabled && STYLES['disabled'],
+    );
 
-    const inputClass = cx(STYLES['select__input'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const inputClass = classnames(STYLES['select__input'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const selectClass = cx(classNameSelect, STYLES['ellipsis'], STYLES['select__dropdown-menu'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const selectClass = classnames(
+      classNameSelect,
+      STYLES['ellipsis'],
+      STYLES['select__dropdown-menu'],
+      err && STYLES['error'],
+      successMsg && !err && STYLES['success'],
+      disabled && STYLES['disabled'],
+    );
 
-    const selectOptionListContainerClass = cx(
+    const selectOptionListContainerClass = classnames(
       classNameOptionListContainer,
       STYLES['select__options-container'],
       err && STYLES['error'],
       show && STYLES['show'],
       successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
+      disabled && STYLES['disabled'],
     );
 
-    const selectOptionListItemClass = cx(
+    const selectOptionListItemClass = classnames(
       !isTyping && STYLES['select__options-item-show-cursor'],
       classNameOptionListItem,
       STYLES['select__options-item'],
       err && STYLES['error'],
       successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled']
+      disabled && STYLES['disabled'],
     );
 
-    const dropdownIconClass = cx(classNameDropdownIconOptionListItem, STYLES['select__dropdown-icon']);
+    const dropdownIconClass = classnames(classNameDropdownIconOptionListItem, STYLES['select__dropdown-icon']);
 
-    const errMsgClass = cx(STYLES['msg'], err && STYLES['error']);
-    const successMsgClass = cx(STYLES['msg'], !err && STYLES['success']);
+    const errMsgClass = classnames(STYLES['msg'], err && STYLES['error']);
+    const successMsgClass = classnames(STYLES['msg'], !err && STYLES['success']);
 
     let msgHtml;
     const { showMsg } = getDefaultValidationOption(validationOption);
@@ -423,7 +506,7 @@ class Index extends React.Component {
         optionListHtml = optionList.map((i, k) => {
           return (
             <div
-              ref={ref => (this.optionItems[k] = ref)}
+              ref={this.optionItems[k]}
               onMouseOver={() => {
                 this.currentFocus = k;
                 this.addActive();
@@ -468,14 +551,14 @@ class Index extends React.Component {
         }}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
-        ref={ref => (this.wrapper = ref)}
+        ref={this.wrapper}
       >
         <div className={containerClass} style={customStyleContainer}>
-          <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} ref={ref => (this.input = ref)} />
+          <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} ref={this.input} />
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
-          <div ref={ref => (this.itemsWrapper = ref)} className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
+          <div ref={this.itemsWrapper} className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
             {optionListHtml}
           </div>
         </div>
@@ -484,57 +567,5 @@ class Index extends React.Component {
     );
   }
 }
-
-Index.defaultProps = {
-  tabIndex: -1,
-  id: '',
-  name: '',
-  value: '',
-  disabled: false,
-  optionList: [],
-  classNameWrapper: '',
-  classNameContainer: '',
-  classNameOptionListItem: '',
-  classNameOptionListContainer: '',
-  classNameDropdownIconOptionListItem: '',
-  customStyleWrapper: {},
-  customStyleContainer: {},
-  customStyleOptionListItem: {},
-  customStyleOptionListContainer: {},
-  customStyleDropdownIcon: {},
-  validationOption: {},
-  onChange: () => {}
-};
-
-Index.propTypes = {
-  tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  id: PropTypes.string,
-  name: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  disabled: PropTypes.bool,
-  validate: PropTypes.bool,
-  optionList: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onClick: PropTypes.func,
-  onBlur: PropTypes.func,
-  onFocus: PropTypes.func,
-  validationOption: PropTypes.object,
-  locale: PropTypes.string,
-  selectHtml: PropTypes.element,
-  selectOptionListItemHtml: PropTypes.array,
-  classNameWrapper: PropTypes.string,
-  classNameContainer: PropTypes.string,
-  classNameSelect: PropTypes.string,
-  classNameOptionListContainer: PropTypes.string,
-  classNameDropdownIconOptionListItem: PropTypes.string,
-  classNameOptionListItem: PropTypes.string,
-  customStyleWrapper: PropTypes.object,
-  customStyleContainer: PropTypes.object,
-  customStyleSelect: PropTypes.object,
-  customStyleOptionListContainer: PropTypes.object,
-  customStyleDropdownIcon: PropTypes.object,
-  customStyleOptionListItem: PropTypes.object,
-  validationCallback: PropTypes.func
-};
 
 export default Index;

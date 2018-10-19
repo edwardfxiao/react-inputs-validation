@@ -7,8 +7,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 var config = (module.exports = {
   context: PATH.ROOT_PATH,
   entry: {
-    index: PATH.ROOT_PATH + 'example/index.js'
-    // index: PATH.ROOT_PATH + 'example/ts.tsx'
+    // index: PATH.ROOT_PATH + 'example/index.js'
+    index: PATH.ROOT_PATH + 'example/index.tsx'
   },
   module: {
     rules: [
@@ -41,7 +41,19 @@ var config = (module.exports = {
           emitWarning: true
         }
       },
-      { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+      {
+        test: /\.(ts|tsx)$/,
+        enforce: 'pre',
+        use: [
+          {
+            loader: 'tslint-loader',
+            options: {
+              // emitWarning: true
+            }
+          }
+        ]
+      },
+      { test: /\.(ts|tsx)$/, loader: 'awesome-typescript-loader' },
       {
         test: /\.jsx?$/,
         include: [PATH.ROOT_PATH],
@@ -190,7 +202,7 @@ var config = (module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: PATH.HTML_PATH + '/layout.html',
-      title: 'Yum.games',
+      title: 'react-inputs-validation',
       page: 'index',
       filename: 'index.html',
       hash: false,

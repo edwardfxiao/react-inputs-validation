@@ -9,7 +9,7 @@ import * as ReactDOM from 'react-dom';
 // import Prism from 'prismjs';
 // import 'prismjs/themes/prism-tomorrow.css';
 // import STYLES from '../src/css/example.css';
-import { Checkbox, Select, Radiobox } from '../src/js/Inputs/index';
+import { Textbox, Checkbox, Select, Radiobox } from '../src/js/Inputs/index';
 interface Styles {
   [key: string]: string;
 }

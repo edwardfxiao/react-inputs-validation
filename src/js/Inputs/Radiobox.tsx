@@ -9,7 +9,7 @@ let STYLES: Styles = {};
 try {
   STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
-const TYPE = 'checkbox';
+const TYPE = 'radiobox';
 
 interface DefaultValidationOption {
   name?: string;
@@ -41,28 +41,40 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   };
 };
 
+const isValidateValue = (value: any) => {
+  const v = String(value);
+  if (v === '' || v === 'null' || v === 'undefined') {
+    return true;
+  }
+  return false;
+};
+
+interface OptionListItem {
+  id: string;
+  name: string;
+}
+
 interface Props {
   tabIndex?: string | number;
   id?: string;
   name?: string;
-  value?: string | boolean;
-  checked?: boolean;
+  value?: string | number;
   disabled?: boolean;
-  labelHtml?: React.ReactNode;
   validate?: boolean;
-  onChange: (res: boolean, e: Event) => void;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  optionList?: OptionListItem[];
+  onChange: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   validationOption?: object;
-  classNameInput?: string;
   classNameWrapper?: string;
-  classNameInputBox?: string;
+  classNameInput?: string;
   classNameContainer?: string;
-  customStyleInput?: object;
+  classNameOptionListItem?: string;
   customStyleWrapper?: object;
   customStyleContainer?: object;
-  customStyleInputBox?: object;
+  customStyleInput?: object;
+  customStyleOptionListItem?: object;
   validationCallback?: (res: boolean) => void;
 }
 
@@ -70,7 +82,7 @@ interface State {
   err: boolean;
   msg: string;
   successMsg: undefined | string;
-  checked: boolean;
+  value: string;
   validate: boolean;
 }
 
@@ -80,22 +92,20 @@ class Index extends React.Component<Props, State> {
     id: '',
     name: '',
     value: '',
-    checked: false,
     disabled: false,
     validate: false,
-    labelHtml: undefined,
-    classNameInput: '',
+    optionList: [],
     classNameWrapper: '',
-    classNameInputBox: '',
+    classNameInput: '',
     classNameContainer: '',
-    customStyleInput: {},
+    classNameOptionListItem: '',
     customStyleWrapper: {},
-    customStyleInputBox: {},
     customStyleContainer: {},
+    customStyleInput: {},
+    customStyleOptionListItem: {},
     validationOption: {},
     onChange: () => {},
   };
-  private input: React.RefObject<HTMLInputElement>;
   private focus: boolean;
   constructor(props: any) {
     super(props);
@@ -103,86 +113,83 @@ class Index extends React.Component<Props, State> {
       err: false,
       msg: '',
       successMsg: undefined,
-      checked: props.checked,
+      value: props.value,
       validate: props.validate,
     };
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
-    this.input = React.createRef();
   }
+
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    // TODO: This was from componentWillReceiveProps()
-    // if (this.props.checked != nextProps.checked) {
-    //   this.setState({ checked: nextProps.checked });
-    // }
     if (nextProps.validate === true && prevState.validate === false) {
       return {
         validate: nextProps.validate,
       };
     }
+    if (nextProps.value !== prevState.value) {
+      const o: { value: string | any; err?: boolean; successMsg?: undefined } = { value: nextProps.value };
+      if (prevState.err) {
+        o['err'] = false;
+      } else {
+        o['successMsg'] = undefined;
+      }
+      return o;
+    }
     return null;
   }
+
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.state.validate === true && prevState.validate === false) {
       this.check();
     }
   }
 
-  onChange(e: any) {
-    const checked = !this.state.checked;
-    this.setState({ checked });
+  onChange(val: string, e: React.ChangeEvent<HTMLDivElement>) {
     const { onChange } = this.props;
-    onChange && onChange(checked, e);
-    if (this.state.err) {
-      this.setState({ err: false });
-    } else {
-      this.setState({ successMsg: undefined });
-    }
+    onChange && onChange(val, e);
   }
-  onClick(e: React.MouseEvent<HTMLElement>) {
-    this.onChange(e);
+
+  onClick(e: React.MouseEvent<HTMLDivElement>) {
     const { onClick } = this.props;
     onClick && onClick(e);
   }
-  onBlur(e: React.FocusEvent<HTMLElement>) {
+
+  onBlur(e?: React.FocusEvent<HTMLElement>) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
       onBlur(e);
     }
   }
-  // pageClick(e: any) {
-  //   if (this.wrapper.current.contains(e.target)) {
-  //     return;
-  //   }
-  //   if (this.focus) {
-  //     // this.onBlur(e);
-  //     this.focus = false;
-  //   }
-  // }
+
   onFocus(e: React.FocusEvent<HTMLElement>) {
     this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
-      this.check();
       onFocus(e);
     }
   }
-  check() {
-    const { name, check, locale, required, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
+
+  check(val: null | string = null) {
+    let { value } = this.props;
+    if (val != null) {
+      value = val;
+    }
+    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
     if (!check) {
       return;
     }
+    if (!message[locale] || !message[locale][TYPE]) {
+      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+      return;
+    }
+    const msg = message[locale][TYPE];
+    const nameText = name ? name : '';
     if (required) {
-      if (!message[locale] || !message[locale][TYPE]) {
-        console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
-        return;
-      }
-      const msg = message[locale][TYPE];
-      if (!this.state.checked) {
-        this.handleCheckEnd(true, msg.unchecked ? msg.unchecked(name ? name : '') : '');
+      if (isValidateValue(value)) {
+        this.handleCheckEnd(true, msg.empty ? msg.empty(nameText) : '');
         return;
       }
     }
@@ -191,6 +198,7 @@ class Index extends React.Component<Props, State> {
     }
     this.handleCheckEnd(false, msgOnSuccess);
   }
+
   handleCheckEnd(err: boolean, message: string) {
     let msg = message;
     const { msgOnError } = getDefaultValidationOption(this.props.validationOption);
@@ -201,6 +209,7 @@ class Index extends React.Component<Props, State> {
     const { validationCallback } = this.props;
     validationCallback && validationCallback(err);
   }
+
   render() {
     const {
       tabIndex,
@@ -208,46 +217,29 @@ class Index extends React.Component<Props, State> {
       name,
       value,
       disabled,
-      labelHtml,
+      optionList,
       classNameWrapper,
       classNameContainer,
-      classNameInputBox,
+      classNameInput,
+      classNameOptionListItem,
       customStyleWrapper,
       customStyleContainer,
-      customStyleInputBox,
+      customStyleInput,
+      customStyleOptionListItem,
       validationOption,
     } = this.props;
 
-    const { err, msg, checked, successMsg } = this.state;
+    const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = classnames(
-      classNameWrapper,
-      STYLES['checkbox__wrapper'],
-      checked && STYLES['checked'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
-    );
+    const wrapperClass = classnames(classNameWrapper, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__wrapper'], disabled && STYLES['disabled']);
 
-    const containerClass = classnames(
-      classNameContainer,
-      STYLES['checkbox__container'],
-      checked && STYLES['checked'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
-    );
+    const containerClass = classnames(classNameContainer, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__container'], disabled && STYLES['disabled']);
 
-    const boxClass = classnames(
-      classNameInputBox,
-      STYLES['checkbox__box'],
-      err && STYLES['error'],
-      checked && STYLES['checked'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
-    );
+    const inputClass = classnames(classNameInput, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__input'], disabled && STYLES['disabled']);
 
-    const labelClass = classnames(STYLES['checkbox__label'], checked && STYLES['checked'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const labelClass = classnames(err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__label'], disabled && STYLES['disabled']);
+
+    const optionListItemClass = classnames(classNameOptionListItem, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__item'], disabled && STYLES['disabled']);
 
     const errMsgClass = classnames(STYLES['msg'], err && STYLES['error']);
     const successMsgClass = classnames(STYLES['msg'], !err && STYLES['success']);
@@ -260,14 +252,36 @@ class Index extends React.Component<Props, State> {
     if (showMsg && !err && successMsg) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
-    return (
-      <div tabIndex={Number(tabIndex)} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
-        <div className={containerClass} style={customStyleContainer}>
-          <div className={boxClass} style={customStyleInputBox}>
-            <div className={STYLES['box']} />
-            <input id={id} name={name} type="checkbox" className={STYLES['checkbox__input']} value={String(value)} checked={checked} disabled={disabled} onChange={this.onChange} ref={this.input} />
+
+    let optionHtml;
+    if (optionList.length) {
+      optionHtml = optionList.map((i, k) => {
+        const checked = String(i.id) === String(value) ? true : false;
+        return (
+          <div className={optionListItemClass} style={customStyleOptionListItem} key={k}>
+            <input
+              id={`${id}-${k}`}
+              name={name}
+              type="radio"
+              value={value}
+              checked={checked}
+              disabled={disabled}
+              className={checked ? `${STYLES['checked']} ${inputClass}` : `${inputClass}`}
+              onChange={e => this.onChange(i.id, e)}
+              style={customStyleInput}
+            />
+            <label htmlFor={`${id}-${k}`} className={checked ? `${STYLES['checked']} ${labelClass}` : `${labelClass}`}>
+              {i.name}
+            </label>
           </div>
-          <label className={labelClass}>{labelHtml}</label>
+        );
+      });
+    }
+
+    return (
+      <div id={id} tabIndex={Number(tabIndex)} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
+        <div className={containerClass} style={customStyleContainer}>
+          {optionHtml}
         </div>
         {msgHtml}
       </div>

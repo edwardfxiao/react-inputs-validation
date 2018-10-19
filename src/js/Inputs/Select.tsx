@@ -9,7 +9,14 @@ let STYLES: Styles = {};
 try {
   STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
-const TYPE = 'checkbox';
+const TYPE = 'select';
+
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) {
+    const p = position || 0;
+    return this.indexOf(searchString, p) === p;
+  };
+}
 
 interface DefaultValidationOption {
   name?: string;
@@ -41,7 +48,15 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   };
 };
 
-interface OptionList {
+const isValidateValue = (value: any) => {
+  const v = String(value);
+  if (v === '' || v === 'null' || v === 'undefined') {
+    return true;
+  }
+  return false;
+};
+
+interface OptionListItem {
   id: string;
   name: string;
 }
@@ -53,13 +68,12 @@ interface Props {
   value?: string | number;
   disabled?: boolean;
   validate?: boolean;
-  optionList: OptionList[];
-  onChange: (res: string, e: Event) => void;
-  onClick?: (e: Event) => void;
-  onBlur?: (e: Event) => void;
-  onFocus?: (e: Event) => void;
+  optionList: OptionListItem[];
+  onChange: (res: string, e: React.MouseEvent<HTMLDivElement> | Event) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   validationOption?: object;
-  locale?: string;
   selectHtml?: React.ReactNode;
   selectOptionListItemHtml?: React.ReactNode;
   classNameWrapper?: string;
@@ -84,7 +98,7 @@ interface State {
   err: boolean;
   msg: string;
   successMsg: undefined | string;
-  keycodeList: Array<number>[];
+  keycodeList: number[];
   validate: boolean;
 }
 
@@ -95,6 +109,7 @@ class Index extends React.Component<Props, State> {
     name: '',
     value: '',
     disabled: false,
+    validate: false,
     optionList: [],
     classNameWrapper: '',
     classNameContainer: '',
@@ -114,7 +129,9 @@ class Index extends React.Component<Props, State> {
   private input: React.RefObject<HTMLInputElement>;
   private optionItems: React.RefObject<HTMLInputElement>[];
   private focus: boolean;
-  private typingTimeout: Timeout;
+  private corrected: boolean;
+  // TODO: find a better type
+  private typingTimeout: any;
   private currentFocus: number;
   constructor(props: any) {
     super(props);
@@ -133,6 +150,7 @@ class Index extends React.Component<Props, State> {
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.pageClick = this.pageClick.bind(this);
     this.wrapper = React.createRef();
     this.itemsWrapper = React.createRef();
     this.input = React.createRef();
@@ -145,7 +163,7 @@ class Index extends React.Component<Props, State> {
         validate: nextProps.validate,
       };
     }
-    if (prevState.value != nextProps.value) {
+    if (prevState.value !== nextProps.value) {
       return {
         value: nextProps.value,
       };
@@ -163,7 +181,7 @@ class Index extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    if (prevState.show != this.state.show) {
+    if (prevState.show !== this.state.show) {
       if (this.state.show) {
         this.resetCurrentFocus();
       }
@@ -182,7 +200,7 @@ class Index extends React.Component<Props, State> {
     }
   }
 
-  onChange(value: string, e: Event) {
+  onChange(value: string, e: React.MouseEvent<HTMLDivElement> | Event) {
     const { onChange } = this.props;
     onChange && onChange(String(value), e);
     this.setState({ value });
@@ -193,12 +211,12 @@ class Index extends React.Component<Props, State> {
     }
   }
 
-  onClick(e: Event) {
+  onClick(e: React.MouseEvent<HTMLDivElement>) {
     const { onClick } = this.props;
     onClick && onClick(e);
   }
 
-  onBlur(e: Event) {
+  onBlur(e?: React.FocusEvent<HTMLElement>) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
@@ -206,7 +224,7 @@ class Index extends React.Component<Props, State> {
     }
   }
 
-  onFocus(e: Event) {
+  onFocus(e: React.FocusEvent<HTMLElement>) {
     this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
@@ -214,10 +232,10 @@ class Index extends React.Component<Props, State> {
     }
   }
 
-  getIndex(list: OptionList[], val: string) {
+  getIndex(list: OptionListItem[], val: string) {
     let key = -1;
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].id == val) {
+    for (let i = 0; i < list.length; i += 1) {
+      if (list[i].id === val) {
         key = i;
         break;
       }
@@ -243,7 +261,7 @@ class Index extends React.Component<Props, State> {
     }
     const x = this.optionItems;
     const { optionList } = this.props;
-    this.currentFocus = typeof this.currentFocus != 'undefined' ? this.currentFocus : this.getIndex(optionList, value);
+    this.currentFocus = typeof this.currentFocus !== 'undefined' ? this.currentFocus : this.getIndex(optionList, value);
     let direction = null;
     const { keyCode } = e;
     const keyCodeEsc = 27;
@@ -251,27 +269,27 @@ class Index extends React.Component<Props, State> {
     const keyCodeUp = 38;
     const keyCodeEnter = 13;
     const selectKeyList = [keyCodeEsc, keyCodeDown, keyCodeUp, keyCodeEnter];
-    if (selectKeyList.indexOf(keyCode) != -1) {
-      if (keyCode == keyCodeEsc) {
+    if (selectKeyList.indexOf(keyCode) !== -1) {
+      if (keyCode === keyCodeEsc) {
         this.setState({ show: false });
         this.resetCurrentFocus();
         return;
       }
-      if (keyCode == keyCodeDown) {
+      if (keyCode === keyCodeDown) {
         direction = 'down';
-        this.currentFocus++;
+        this.currentFocus += 1;
         if (this.currentFocus > optionList.length - 1) {
           this.currentFocus = optionList.length - 1;
         }
         this.addActive();
-      } else if (keyCode == keyCodeUp) {
+      } else if (keyCode === keyCodeUp) {
         direction = 'up';
-        this.currentFocus--;
+        this.currentFocus -= 1;
         if (this.currentFocus < 0) {
           this.currentFocus = 0;
         }
         this.addActive();
-      } else if (keyCode == keyCodeEnter) {
+      } else if (keyCode === keyCodeEnter) {
         if (this.currentFocus > -1) {
           if (x) x[this.currentFocus].current.click();
         }
@@ -288,12 +306,12 @@ class Index extends React.Component<Props, State> {
       optionList.filter((i, k) => {
         const { name } = i;
         if (name.toLowerCase().startsWith(str)) {
-          if (index == -1) {
+          if (index === -1) {
             index = k;
           }
         }
       });
-      if (index != -1) {
+      if (index !== -1) {
         this.currentFocus = index;
         this.addActive();
       }
@@ -312,37 +330,37 @@ class Index extends React.Component<Props, State> {
     }, 250);
   }
 
-  scroll(direction = undefined) {
-    const containerHeight = this.itemsWrapper.offsetHeight;
-    const containerScrollTop = this.itemsWrapper.scrollTop;
+  scroll(direction: undefined | string = undefined) {
+    const containerHeight = this.itemsWrapper.current.offsetHeight;
+    const containerScrollTop = this.itemsWrapper.current.scrollTop;
     if (!this.optionItems[this.currentFocus]) {
       return;
     }
-    const itemHeight = this.optionItems[this.currentFocus].offsetHeight;
+    const itemHeight = this.optionItems[this.currentFocus].current.offsetHeight;
     if (direction) {
-      if (direction == 'down') {
+      if (direction === 'down') {
         const bound = containerScrollTop + containerHeight;
         const heightItems = this.currentFocus * itemHeight;
         const heightContainer = bound - itemHeight;
         if (heightItems >= heightContainer) {
           const offset = Math.abs(heightItems - heightContainer - itemHeight);
           if (offset >= 0 && !this.corrected) {
-            this.itemsWrapper.scrollTop = containerScrollTop + itemHeight - offset;
+            this.itemsWrapper.current.scrollTop = containerScrollTop + itemHeight - offset;
             this.corrected = true;
           } else {
-            this.itemsWrapper.scrollTop = containerScrollTop + itemHeight;
+            this.itemsWrapper.current.scrollTop = containerScrollTop + itemHeight;
           }
         }
       }
-      if (direction == 'up') {
+      if (direction === 'up') {
         this.corrected = false;
         if (this.currentFocus * itemHeight <= containerScrollTop) {
-          this.itemsWrapper.scrollTop = this.currentFocus * itemHeight;
+          this.itemsWrapper.current.scrollTop = this.currentFocus * itemHeight;
         }
       }
     } else {
       this.corrected = false;
-      this.itemsWrapper.scrollTop = this.currentFocus * itemHeight;
+      this.itemsWrapper.current.scrollTop = this.currentFocus * itemHeight;
     }
   }
 
@@ -352,18 +370,18 @@ class Index extends React.Component<Props, State> {
     this.removeActive();
     if (this.currentFocus >= x.length) this.currentFocus = 0;
     if (this.currentFocus < 0) this.currentFocus = x.length - 1;
-    x[this.currentFocus].className += ' ' + STYLES['select__hover-active'];
+    x[this.currentFocus].current.className += ` ${STYLES['select__hover-active']}`;
   }
 
   removeActive() {
     const x = this.optionItems;
-    for (var i = 0; i < x.length; i++) {
-      x[i].className = x[i].className.replace(STYLES['select__hover-active'], '');
+    for (let i = 0; i < x.length; i += 1) {
+      x[i].current.className = x[i].current.className.replace(STYLES['select__hover-active'], '');
     }
   }
 
-  pageClick(e) {
-    if (this.wrapper.contains(e.target)) {
+  pageClick(e: any) {
+    if (this.wrapper.current.contains(e.target)) {
       return;
     }
     if (this.focus) {
@@ -373,11 +391,11 @@ class Index extends React.Component<Props, State> {
     this.toggleShow(false);
   }
 
-  toggleShow(show) {
+  toggleShow(show: boolean) {
     this.setState({ show });
   }
 
-  check(val = null) {
+  check(val: null | string = null) {
     let { value } = this.state;
     if (val != null) {
       value = val;
@@ -386,15 +404,15 @@ class Index extends React.Component<Props, State> {
     if (!check) {
       return;
     }
-    if (!Message[locale] || !Message[locale][TYPE]) {
+    if (!message[locale] || !message[locale][TYPE]) {
       console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
       return;
     }
-    const Msg = Message[locale][TYPE];
-    let nameText = name ? name : '';
+    const msg = message[locale][TYPE];
+    const nameText = name ? name : '';
     if (required) {
       if (isValidateValue(value)) {
-        this.handleCheckEnd(true, Msg.empty ? Msg.empty(nameText) : '');
+        this.handleCheckEnd(true, msg.empty ? msg.empty(nameText) : '');
         return;
       }
     }
@@ -404,7 +422,8 @@ class Index extends React.Component<Props, State> {
     this.handleCheckEnd(false, msgOnSuccess);
   }
 
-  handleCheckEnd(err, msg) {
+  handleCheckEnd(err: boolean, message: string) {
+    let msg = message;
     const { msgOnError } = getDefaultValidationOption(this.props.validationOption);
     if (err && msgOnError) {
       msg = msgOnError;
@@ -486,6 +505,7 @@ class Index extends React.Component<Props, State> {
 
     let msgHtml;
     const { showMsg } = getDefaultValidationOption(validationOption);
+
     if (showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
@@ -493,9 +513,9 @@ class Index extends React.Component<Props, State> {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     let optionListHtml;
-    let item;
+    let item: OptionListItem | undefined;
     optionList.filter(i => {
-      if (String(i.id) == String(value)) {
+      if (String(i.id) === String(value)) {
         item = i;
       }
     });
@@ -504,6 +524,7 @@ class Index extends React.Component<Props, State> {
         optionListHtml = selectOptionListItemHtml;
       } else {
         optionListHtml = optionList.map((i, k) => {
+          this.optionItems[k] = React.createRef();
           return (
             <div
               ref={this.optionItems[k]}
@@ -517,7 +538,7 @@ class Index extends React.Component<Props, State> {
               onMouseOut={() => {
                 this.removeActive();
               }}
-              className={String(i.id) == String(value) ? `${selectOptionListItemClass} ${STYLES['active']}` : `${selectOptionListItemClass}`}
+              className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${STYLES['active']}` : `${selectOptionListItemClass}`}
               key={k}
               style={customStyleOptionListItem}
               onClick={e => {
@@ -534,14 +555,14 @@ class Index extends React.Component<Props, State> {
     if (!selectorHtml) {
       selectorHtml = (
         <div className={STYLES['select__dropdown']}>
-          <div className={`${STYLES['select__dropdown-name']} ${STYLES['ellipsis']}`}>{item.name}</div>
+          <div className={`${STYLES['select__dropdown-name']} ${STYLES['ellipsis']}`}>{item ? item.name : ''}</div>
           <div className={dropdownIconClass} />
         </div>
       );
     }
     return (
       <div
-        tabIndex={tabIndex}
+        tabIndex={Number(tabIndex)}
         id={STYLES['select__wrapper']}
         className={wrapperClass}
         style={customStyleWrapper}

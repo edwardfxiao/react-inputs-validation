@@ -9,7 +9,7 @@ import * as ReactDOM from 'react-dom';
 // import Prism from 'prismjs';
 // import 'prismjs/themes/prism-tomorrow.css';
 // import STYLES from '../src/css/example.css';
-import { Checkbox, Select } from '../src/js/Inputs/index';
+import { Checkbox, Select, Radiobox } from '../src/js/Inputs/index';
 interface Styles {
   [key: string]: string;
 }
@@ -277,7 +277,7 @@ const COUNTRY_OPTIONS_LIST = [
   { name: 'Western Sahara', id: 'EH' },
   { name: 'Yemen', id: 'YE' },
   { name: 'Zambia', id: 'ZM' },
-  { name: 'Zimbabwe', id: 'ZW' }
+  { name: 'Zimbabwe', id: 'ZW' },
 ];
 
 class Index extends React.Component<{}, State> {
@@ -351,6 +351,45 @@ class Index extends React.Component<{}, State> {
       <div style={{ padding: '10px' }}>
         <h1>Example form</h1>
         <form onSubmit={this.validateForm}>
+          <Radiobox
+            tabIndex={2} // Optional.[String or Number].Default: -1.
+            id="job" // Optional.[String].Default: "".  Input ID.
+            name="job" // Optional.[String].Default: "". Input name.
+            disabled={false} // Optional.[Bool].Default: false.
+            value={job} // Optional.[String].Default: "".
+            validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+            validationCallback={res => this.setState({ hasJobError: res, validate: false })} // Optional.[Func].Default: none. Return the validation result.
+            optionList={JOB_OPTIONS_LIST}
+            classNameInput="" // Optional.[String].Default: "".
+            classNameWrapper="" // Optional.[String].Default: "".
+            classNameContainer="" // Optional.[String].Default: "".
+            classNameOptionListItem="" // Optional.[String].Default: "".
+            customStyleInput={{}} // Optional.[Object].Default: {}.
+            customStyleWrapper={{}} // Optional.[Object].Default: {}.
+            customStyleContainer={{
+              display: 'flex',
+              justifyContent: 'flex-start',
+            }} // Optional.[Object].Default: {}.
+            customStyleOptionListItem={{ marginRight: '20px' }} // Optional.[Object].Default: {}.
+            onChange={(job, e) => {
+              this.setState({ job });
+              console.log(e);
+            }} // Required.[Func].Default: () => {}. Will return the value.
+            onBlur={e => {
+              console.log(e);
+            }} // Optional.[Func].Default: none.
+            // onFocus={(e) => {console.log(e);}} // Optional.[Func].Default: none.
+            // onClick={(e) => {console.log(e);}} // Optional.[Func].Default: none.
+            validationOption={{
+              name: 'Name', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+              check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
+              required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
+              // showMsg: true, // Optional.[Bool].Default: true. To determin display the error message or not.
+              // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+              // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+              // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+            }}
+          />
           <Checkbox
             tabIndex="5" // Optional.[String or Number].Default: -1.
             id={'agreement'} // Optional.[String].Default: "".  Input ID.
@@ -374,8 +413,9 @@ class Index extends React.Component<{}, State> {
             onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
             // onFocus={(e) => {console.log(e);}} // Optional.[Func].Default: none.
             // onClick={(e) => {console.log(e);}} // Optional.[Func].Default: none.
-            onChange={isAgreementChecked => {
+            onChange={(isAgreementChecked, e) => {
               this.setState({ isAgreementChecked });
+              console.log(e);
             }} // Required.[Func].Default: () => {}. Will return the value.
             labelHtml={<div style={{ color: '#4a4a4a', marginTop: '2px' }}>agree?</div>} // Required.[Html].Default: none.
             validationOption={{
@@ -389,31 +429,32 @@ class Index extends React.Component<{}, State> {
             }}
           />
           <Select
-            tabIndex="6" //Optional.[String or Number].Default: -1.
-            id={'country'} //Optional.[String].Default: "". Input ID.
-            name={'country'} //Optional.[String].Default: "". Input name.
-            value={country} //Optional.[String].Default: "".
-            disabled={false} //Optional.[Bool].Default: false.
-            validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
-            validationCallback={res => this.setState({ hasMovieError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
-            optionList={COUNTRY_OPTIONS_LIST} //Required.[Array of Object(s)].Default: [].
-            classNameSelect="" //Optional.[String].Default: "".
-            classNameWrapper="" //Optional.[String].Default: "".
-            classNameContainer="" //Optional.[String].Default: "".
-            classNameOptionListContainer="" //Optional.[String].Default: "".
-            classNameOptionListItem="" //Optional.[String].Default: "".
-            customStyleSelect={{}} //Optional.[Object].Default: {}.
-            customStyleWrapper={{}} //Optional.[Object].Default: {}.
-            customStyleContainer={{}} //Optional.[Object].Default: {}.
-            customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto', fontSize: '14px' }} //Optional.[Object].Default: {}.
-            customStyleOptionListItem={{}} //Optional.[Object].Default: {}.
-            onChange={(country) => {
+            tabIndex="6" // Optional.[String or Number].Default: -1.
+            id={'country'} // Optional.[String].Default: "". Input ID.
+            name={'country'} // Optional.[String].Default: "". Input name.
+            value={country} // Optional.[String].Default: "".
+            disabled={false} // Optional.[Bool].Default: false.
+            validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+            validationCallback={res => this.setState({ hasMovieError: res, validate: false })} // Optional.[Func].Default: none. Return the validation result.
+            optionList={COUNTRY_OPTIONS_LIST} // Required.[Array of Object(s)].Default: [].
+            classNameSelect="" // Optional.[String].Default: "".
+            classNameWrapper="" // Optional.[String].Default: "".
+            classNameContainer="" // Optional.[String].Default: "".
+            classNameOptionListContainer="" // Optional.[String].Default: "".
+            classNameOptionListItem="" // Optional.[String].Default: "".
+            customStyleSelect={{}} // Optional.[Object].Default: {}.
+            customStyleWrapper={{}} // Optional.[Object].Default: {}.
+            customStyleContainer={{}} // Optional.[Object].Default: {}.
+            customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto', fontSize: '14px' }} // Optional.[Object].Default: {}.
+            customStyleOptionListItem={{}} // Optional.[Object].Default: {}.
+            onChange={(country, e) => {
               this.setState({ country });
-            }} //Optional.[Func].Default: () => {}. Will return the value.
-            onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-            // onFocus={(e) => {console.log(e);}} //Optional.[Func].Default: none.
-            // onClick={(e) => {console.log(e);}} //Optional.[Func].Default: none.
-            // selectHtml={<div>{countryItem.name}</div>} //Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
+              console.log(e);
+            }} // Optional.[Func].Default: () => {}. Will return the value.
+            onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+            // onFocus={(e) => {console.log(e);}} // Optional.[Func].Default: none.
+            // onClick={(e) => {console.log(e);}} // Optional.[Func].Default: none.
+            // selectHtml={<div>{countryItem.name}</div>} // Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
             // selectOptionListItemHtml={COUNTRY_OPTIONS_LIST.map(
             //   (i, k) => {
             //     return (
@@ -427,15 +468,15 @@ class Index extends React.Component<{}, State> {
             //       </div>
             //     );
             //   }
-            // )} //Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
+            // )} // Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
             validationOption={{
-              name: 'country', //Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
-              check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
-              required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
-              // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
-              // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
-              // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
-              // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+              name: 'country', // Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
+              check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
+              required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
+              // showMsg: true, // Optional.[Bool].Default: true. To determin display the error message or not.
+              // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
+              // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+              // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
             }}
           />
           <div style={{ height: '10px' }} />

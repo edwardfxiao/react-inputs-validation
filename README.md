@@ -51,13 +51,13 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str   |                                             |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
-|maxLength                         |  Opt  |  Str   |                                             |  ""        |
+|maxLength                         |  Opt  |  Str &#124; Num |                                    |  524288    |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
@@ -152,7 +152,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str   |                                             |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
 |**id**                            |**Req**|**Str**|**IMPORTANT if you have multiple Radiobox on the page, id is used to distinguish them for the label 'for' use**|**""**      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -235,7 +235,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str   |                                             |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -250,7 +250,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleInputBox               |  Opt  |  Obj   |                                             |  {}        |
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req.**|**Func**                  |**(val, e) => {}. Will return the value.**|**(val, e)=>{}**   |
+|**onChange**                      |**Req.**|**Func**                  |**(isChecked, e) => {}. Will return the value.**|**(val, e)=>{}**   |
 |onFocus                           |*Opt.*  |Func                      |                                                                                                            |none     |
 |onClick                           |*Opt.*  |Func                      |                                                                                                            |none     |
 |**labelHtml**                     |*Req.*  |Html                      |                                                                                                            |none     |
@@ -288,8 +288,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
-  onChange={(agreement, e) => {
-    this.setState({ agreement });
+  onChange={(isAgreementChecked, e) => {
+    this.setState({ isAgreementChecked });
     console.log(e);
   }} //Required.[Func].Default: () => {}. Will return the value.
   labelHtml={
@@ -316,7 +316,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str   |                                             |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -335,8 +335,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListContainer    |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
+|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
 |**onChange**                      |**Req**|**Func**|                                             |**(val, e) => {}**|
-|**onBlur**                        |**Opt**|**Func**|                                             |**none**    |
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
 |**selectHtml**                    |**Opt**|**Html**|**The custom html that will display when user choose. Use it if you think the default html is ugly.**|**none**    |
@@ -417,13 +417,15 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str   |                                             |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
-|maxLength                         |  Opt  |  Str   |                                             |  ""        |
+|maxLength                         |  Opt  |  Str &#124; Num |                                    |  524288    |
+|rows                              |  Opt  |  Str &#124; Num |                                    |  2         |
+|cols                              |  Opt  |  Str &#124; Num |                                    |  2         |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |

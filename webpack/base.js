@@ -7,8 +7,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 var config = (module.exports = {
   context: PATH.ROOT_PATH,
   entry: {
-    // index: PATH.ROOT_PATH + 'example/index.js'
-    index: PATH.ROOT_PATH + 'example/index.tsx'
+    index: PATH.ROOT_PATH + 'example/index.js'
+    // index: PATH.ROOT_PATH + 'example/index.tsx'
   },
   module: {
     rules: [

@@ -11,9 +11,11 @@ let STYLES: Styles = {};
 try {
   STYLES = require('./react-inputs-validation.css');
 } catch (ex) {}
-const TYPE = 'textbox';
-const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
+const TYPE = 'textarea';
+const VALIDATE_OPTION_TYPE_LIST = ['string'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
+const DEFAULT_ROWS = 2; //  Default value is 2
+const DEFAULT_COLS = 2; //  Default value is 20
 interface DefaultValidationOption {
   locale?: string;
   reg?: string;
@@ -25,7 +27,6 @@ interface DefaultValidationOption {
   showmsg?: boolean;
   length?: number;
   regMsg?: string;
-  compare?: string;
   required?: boolean;
   msgOnError?: string;
   msgOnSuccess?: string;
@@ -33,7 +34,7 @@ interface DefaultValidationOption {
 }
 
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
-  let { reg, min, max, type, name, check, length, regMsg, compare, required, showmsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
+  let { reg, min, max, type, name, check, length, regMsg, required, showmsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
@@ -44,7 +45,6 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   showmsg = typeof showmsg !== 'undefined' ? showmsg : true;
   length = typeof length !== 'undefined' ? length : 0;
   regMsg = typeof regMsg !== 'undefined' ? regMsg : '';
-  compare = typeof compare !== 'undefined' ? compare : '';
   required = typeof required !== 'undefined' ? required : true;
   msgOnError = typeof msgOnError !== 'undefined' ? msgOnError : '';
   msgOnSuccess = typeof msgOnSuccess !== 'undefined' ? msgOnSuccess : '';
@@ -59,7 +59,6 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     length,
     regMsg,
     locale,
-    compare,
     required,
     showmsg,
     msgOnError,
@@ -77,6 +76,8 @@ interface Props {
   disabled?: boolean;
   validate?: boolean;
   maxLength?: string | number;
+  cols?: string | number;
+  rows?: string | number;
   placeholder?: string;
   classNameInput?: string;
   classNameWrapper?: string;
@@ -85,7 +86,7 @@ interface Props {
   customStyleWrapper?: object;
   customStyleContainer?: object;
   validationOption?: object;
-  onChange: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
+  onChange: (res: string, e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onKeyUp?: (e: React.KeyboardEvent<HTMLElement>) => void;
@@ -96,7 +97,6 @@ interface State {
   err: boolean;
   msg: string;
   successmsg: undefined | string;
-  value: string;
   validate: boolean;
 }
 
@@ -107,6 +107,8 @@ class Index extends React.Component<Props, State> {
     name: '',
     type: 'text',
     value: '',
+    cols: DEFAULT_ROWS,
+    rows: DEFAULT_COLS,
     disabled: false,
     validate: false,
     maxLength: DEFAULT_MAX_LENGTH,
@@ -120,21 +122,20 @@ class Index extends React.Component<Props, State> {
     validationOption: {},
     onChange: () => {},
   };
-  private input: React.RefObject<HTMLInputElement>;
+  private value: string;
   constructor(props: any) {
     super(props);
     this.state = {
       err: false,
       msg: '',
       successmsg: undefined,
-      value: props.value,
       validate: props.validate,
     };
     this.onChange = this.onChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
-    this.input = React.createRef();
+    this.value = props.value;
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
@@ -152,20 +153,15 @@ class Index extends React.Component<Props, State> {
     }
   }
 
-  onChange(e: React.ChangeEvent<HTMLDivElement>) {
-    let v = this.input.current.value;
+  onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    this.value = e.target.value;
     if (this.props.maxLength !== '') {
-      if (v.length > Number(this.props.maxLength)) {
+      if (this.value.length > Number(this.props.maxLength)) {
         return;
       }
     }
-    const { type } = getDefaultValidationOption(this.props.validationOption);
-    // FORMAT NUMBER
-    if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-      v = String(this.autoFormatNumber(Number(v)));
-    }
     const { onChange } = this.props;
-    onChange && onChange(v, e);
+    onChange && onChange(this.value, e);
     if (this.state.err) {
       this.setState({ err: false });
     } else {
@@ -199,7 +195,7 @@ class Index extends React.Component<Props, State> {
 
   check(val: null | string = null) {
     const { validationOption } = this.props;
-    const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = getDefaultValidationOption(validationOption);
+    const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess, customFunc } = getDefaultValidationOption(validationOption);
     if (!check) {
       return;
     }
@@ -210,7 +206,7 @@ class Index extends React.Component<Props, State> {
           return;
         }
         const msg = message[locale][TYPE];
-        const value = val || this.input.current.value;
+        const value = val || this.value;
         const nameText = name ? name : '';
         // CHECK EMPTY
         if (required) {
@@ -257,47 +253,6 @@ class Index extends React.Component<Props, State> {
               }
             }
           }
-          // CHECK NUMBER
-          if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-            if (!validator[type](value)) {
-              this.handleCheckEnd(true, msg.invalid ? msg.invalid(nameText) : '');
-              return;
-            }
-            if (min || max) {
-              if (min && max) {
-                if (!validator[type](value, min, max)) {
-                  this.handleCheckEnd(true, msg.inBetween ? msg.inBetween(nameText)(min)(max) : '');
-                  return;
-                }
-              } else {
-                if (min) {
-                  if (!validator[type](value, min)) {
-                    this.handleCheckEnd(true, msg.lessThan ? msg.lessThan(nameText)(min) : '');
-                    return;
-                  }
-                }
-                if (max) {
-                  if (!validator[type](value, 0, max)) {
-                    this.handleCheckEnd(true, msg.greaterThan ? msg.greaterThan(nameText)(max) : '');
-                    return;
-                  }
-                }
-              }
-            }
-            if (length) {
-              if (String(value).length !== length) {
-                this.handleCheckEnd(true, msg.lengthEqual ? msg.lengthEqual(nameText)(length) : '');
-                return;
-              }
-            }
-          }
-          // CHECK EQUAL
-          if (compare && compare !== '') {
-            if (value !== compare) {
-              this.handleCheckEnd(true, msg.twoInputsNotEqual ? msg.twoInputsNotEqual() : '');
-              return;
-            }
-          }
         }
         // CHECK CUSTOM FUNCTION
         if (customFunc && typeof customFunc === 'function') {
@@ -317,27 +272,6 @@ class Index extends React.Component<Props, State> {
     } else {
       console.error('Please provide "type" in validationOption');
     }
-  }
-
-  autoFormatNumber(v: number) {
-    const DOT = '.';
-    let res = '';
-    let hasDot = false;
-    String(v)
-      .split('')
-      .filter(i => {
-        const charCode = i.toLowerCase().charCodeAt(0);
-        if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
-          if (charCode === 46) {
-            hasDot = true;
-          }
-          res += i;
-        }
-      });
-    if (res.length && res[0] === DOT) {
-      res = `0 ${res}`;
-    }
-    return res;
   }
 
   handleCheckEnd(err: boolean, message: string) {
@@ -368,15 +302,17 @@ class Index extends React.Component<Props, State> {
       customStyleContainer,
       customStyleInput,
       validationOption,
+      cols,
+      rows,
     } = this.props;
 
     const { err, msg, successmsg } = this.state;
 
-    const wrapperClass = classnames(classNameWrapper, STYLES['textbox__wrapper'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const wrapperClass = classnames(classNameWrapper, STYLES['textarea__wrapper'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const containerClass = classnames(classNameContainer, STYLES['textbox__container'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const containerClass = classnames(classNameContainer, STYLES['textarea__container'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
-    const inputClass = classnames(classNameInput, STYLES['textbox__input'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const inputClass = classnames(classNameInput, STYLES['textarea__input'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
 
     const errmsgClass = classnames(STYLES['msg'], err && STYLES['error']);
     const successmsgClass = classnames(STYLES['msg'], !err && STYLES['success']);
@@ -392,22 +328,22 @@ class Index extends React.Component<Props, State> {
     return (
       <div className={wrapperClass} style={customStyleWrapper}>
         <div className={containerClass} style={customStyleContainer}>
-          <input
+          <textarea
             tabIndex={Number(tabIndex)}
             id={id}
             name={name}
-            type={type}
             value={value}
             disabled={disabled}
-            maxLength={Number(maxLength)}
             onBlur={this.onBlur}
+            maxLength={Number(maxLength)}
             onKeyUp={this.onKeyUp}
             onFocus={this.onFocus}
             className={inputClass}
             onChange={this.onChange}
             style={customStyleInput}
             placeholder={placeholder}
-            ref={this.input}
+            cols={Number(cols)}
+            rows={Number(rows)}
           />
         </div>
         {msgHtml}

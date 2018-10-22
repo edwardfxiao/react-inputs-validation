@@ -131,6 +131,10 @@ class Index extends React.Component<Props, State> {
   }
 
   onChange(e: any) {
+    const { disabled } = this.props;
+    if (disabled) {
+      return;
+    }
     const checked = !this.state.checked;
     this.setState({ checked });
     const { onChange } = this.props;
@@ -142,6 +146,10 @@ class Index extends React.Component<Props, State> {
     }
   }
   onClick(e: React.MouseEvent<HTMLElement>) {
+    const { disabled } = this.props;
+    if (disabled) {
+      return;
+    }
     this.onChange(e);
     const { onClick } = this.props;
     onClick && onClick(e);

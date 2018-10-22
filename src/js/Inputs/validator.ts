@@ -3,7 +3,7 @@ const number = (v: number, min: number = 0, max: number = 999999999999) => {
   if (!isNumeric(v)) {
     return false;
   }
-  return v < parseInt(min) || v > parseInt(max) ? false : true;
+  return v < min || v > max ? false : true;
 };
 // TODO: find a better type for regex
 const reg = (reg: any, v: string) => {
@@ -16,8 +16,14 @@ const reg = (reg: any, v: string) => {
 const isNumeric = (v: any) => {
   return !isNaN(parseFloat(v)) && isFinite(v);
 };
-export default {
+
+interface Validator {
+  [key: string]: Function;
+}
+
+const validator: Validator = {
   reg,
   empty,
   number,
 };
+export default validator;

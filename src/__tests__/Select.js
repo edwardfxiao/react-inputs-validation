@@ -1,123 +1,33 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import Select from '../js/Inputs/Select.js';
+import mockConsole from 'jest-mock-console';
+import Select from '../js/Inputs/Select.tsx';
+configure({ adapter: new Adapter() });
 
 const SELECTED_INDEX = 2;
 
 const OPTION_LIST = [{ id: '', name: 'Please select one country' }, { id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }];
 
-class SelectWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: props.value, hasError: props.hasError };
-  }
-
-  render() {
-    const { validationOption } = this.props;
-    const { value, hasError } = this.state;
-    return (
-      <div id="wrapper">
-        <Select
-          tabIndex="1"
-          id={'country'}
-          name="Select"
-          type="text"
-          value={value}
-          validationCallback={res => {
-            this.setState({ hasError: res });
-          }}
-          optionList={OPTION_LIST}
-          onChange={res => {
-            this.setState({ value: res });
-          }}
-          onBlur={() => {}}
-          validationOption={validationOption}
-        />
-        <label id="value">{value}</label>
-        <label id="hasError">{hasError ? 'has error' : 'not has error'}</label>
-      </div>
-    );
-  }
-}
-
-SelectWrapper.defaultProps = {
-  value: '',
-  hasError: false,
-  validationOption: {}
-};
-
-SelectWrapper.propTypes = {
-  value: PropTypes.string,
-  hasError: PropTypes.bool,
-  validationOption: PropTypes.object
-};
-
-configure({ adapter: new Adapter() });
-const getWrapper = (value, validationOption, hasError) => {
-  return mount(<SelectWrapper value={value} validationOption={validationOption} hasError={hasError} />);
-};
-
 describe('Select component', () => {
-  it('[validationOption.required = true]: Should return has error when the value is empty', () => {
-    const value = '';
-    const hasError = false;
-    const validationOption = {
-      check: true,
-      required: true
-    };
-    const wrapper = getWrapper(value, validationOption, hasError);
-    const $input = wrapper.find('#select__wrapper');
-    const $labelValue = wrapper.find('#value');
-    const $labelHasError = wrapper.find('#hasError');
-    $input.simulate('focus');
-    $input.simulate('blur');
-    expect($labelValue.text()).toEqual('');
-    expect($labelHasError.text()).toEqual('has error');
+  it('[onFocus]: Should not check when onFocus is not provided', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    instance.onFocus();
+    expect(instance.check).not.toHaveBeenCalled();
   });
 
-  it('[validationOption.required = false]: Should return not has error when the value is empty', () => {
-    const value = '';
-    const hasError = false;
-    const validationOption = {
-      check: true,
-      required: false
-    };
-    const wrapper = getWrapper(value, validationOption, hasError);
-    const $input = wrapper.find('#select__wrapper');
-    const $labelValue = wrapper.find('#value');
-    const $labelHasError = wrapper.find('#hasError');
-    $input.simulate('focus');
-    $input.simulate('blur');
-    expect($labelValue.text()).toEqual('');
-    expect($labelHasError.text()).toEqual('not has error');
-  });
-
-  it('[Normal select]: Should return not has error when the value is not selected', () => {
-    const value = '';
-    const hasError = false;
-    const validationOption = {
-      check: true,
-      required: false
-    };
-    const wrapper = getWrapper(value, validationOption, hasError);
-    const $input = wrapper.find('#select__wrapper');
-    const $labelValue = wrapper.find('#value');
-    const $labelHasError = wrapper.find('#hasError');
-    $input.simulate('click');
-    wrapper
-      .find('.select__options-item')
-      .at(SELECTED_INDEX)
-      .simulate('click');
-    $input.simulate('blur');
-    expect($labelValue.text()).toEqual(OPTION_LIST[SELECTED_INDEX].id);
-    expect($labelHasError.text()).toEqual('not has error');
+  it('[onBlur]: Should not check when onBlur is not provided', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    instance.onBlur();
+    expect(instance.check).not.toHaveBeenCalled();
   });
 
   it('[ArrowDown]: Should return correct index', () => {
-    const value = '';
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     instance.toggleShow(true);
     instance.onKeyDown({ keyCode: 40 });
@@ -125,8 +35,7 @@ describe('Select component', () => {
   });
 
   it('[ArrowDown]: Should called scroll', () => {
-    const value = '';
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     instance.scroll = jest.fn();
     instance.toggleShow(true);
@@ -135,8 +44,7 @@ describe('Select component', () => {
   });
 
   it('[Type "C" and hit "Enter"]: Should call addActive', () => {
-    const value = '';
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     instance.addActive = jest.fn();
     instance.toggleShow(true);
@@ -146,8 +54,7 @@ describe('Select component', () => {
   });
 
   it('[Type "C"]: Should call setTimeoutTyping', () => {
-    const value = '';
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     instance.setTimeoutTyping = jest.fn();
     instance.toggleShow(true);
@@ -156,8 +63,7 @@ describe('Select component', () => {
   });
 
   it('[Type "C"]: Should call setTimeoutTyping when typingTimeout is undefined', () => {
-    const value = '';
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     instance.setTimeoutTyping = jest.fn();
     instance.toggleShow(true);
@@ -168,8 +74,7 @@ describe('Select component', () => {
   });
 
   it('[Type "C" and then type "A"]: keycodeList should be [67, 65]', () => {
-    const value = '';
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     instance.setTimeoutTyping = jest.fn();
     instance.toggleShow(true);
@@ -180,15 +85,13 @@ describe('Select component', () => {
   });
 
   it('[ArrowUp]: Should return correct index', () => {
-    const value = '';
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
     wrapper.instance().toggleShow(true);
     expect(wrapper.instance().onKeyDown({ keyCode: 38 })).toEqual(0);
   });
 
   it('[getIndex]: Should return correct index', () => {
-    const value = '';
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} />);
+    const wrapper = mount(<Select value="" optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     expect(instance.getIndex(OPTION_LIST, 'ca')).toEqual(2);
   });
@@ -202,7 +105,7 @@ describe('Select component', () => {
         onChange={res => {
           value = res;
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onChange('us');
@@ -218,7 +121,7 @@ describe('Select component', () => {
         onClick={() => {
           value = 'clicked';
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onClick();
@@ -234,7 +137,7 @@ describe('Select component', () => {
         onBlur={() => {
           value = 'blured';
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onBlur();
@@ -250,7 +153,7 @@ describe('Select component', () => {
         onFocus={() => {
           value = 'focused';
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onFocus();
@@ -266,9 +169,9 @@ describe('Select component', () => {
         onChange={() => {}}
         validationOption={{
           check: true,
-          required: true
+          required: true,
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.handleCheckEnd = jest.fn();
@@ -292,9 +195,9 @@ describe('Select component', () => {
           name: 'foobar',
           check: true,
           required: true,
-          msgOnError
+          msgOnError,
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.handleCheckEnd(true, msgOnError);
@@ -319,9 +222,9 @@ describe('Select component', () => {
           showMsg: 'showMsg',
           required: true,
           msgOnError: 'msgOnError',
-          msgOnSuccess: 'msgOnSuccess'
+          msgOnSuccess: 'msgOnSuccess',
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.handleCheckEnd(true, 'msgOnError');
@@ -374,33 +277,6 @@ describe('Select component', () => {
     expect(wrapper.state().isTyping).toEqual(false);
   });
 
-  it('[getDefaultValidationOption]: Should return default obj', () => {
-    const getDefaultValidationOption = Select.__get__('getDefaultValidationOption');
-    expect(getDefaultValidationOption({})).toEqual({
-      name: '',
-      check: true,
-      showMsg: true,
-      required: true,
-      locale: 'en-US',
-      msgOnError: '',
-      msgOnSuccess: ''
-    });
-  });
-
-  it('[getDefaultValidationOption]: Should return correct obj', () => {
-    const getDefaultValidationOption = Select.__get__('getDefaultValidationOption');
-    const o = {
-      name: 'foobar',
-      check: true,
-      showMsg: false,
-      required: true,
-      locale: 'en-US',
-      msgOnError: 'msgOnError',
-      msgOnSuccess: 'msgOnSuccess'
-    };
-    expect(getDefaultValidationOption(o)).toEqual(o);
-  });
-
   it('[selectOptionListItemHtml]: Should render selectOptionListItemHtml', () => {
     const selectOptionListItemHtml = OPTION_LIST.map((i, k) => {
       return (
@@ -420,7 +296,7 @@ describe('Select component', () => {
       check: true,
       required: true,
       showMsg: true,
-      successMsg: 'successMsg'
+      successMsg: 'successMsg',
     };
     const wrapper = mount(<Select optionList={OPTION_LIST} value="" onBlur={() => {}} onChange={() => {}} validationOption={validationOption} />);
     const instance = wrapper.instance();
@@ -430,9 +306,8 @@ describe('Select component', () => {
   });
 
   it('[invalid locale]: Should return when locale is invalid', () => {
-    const value = '';
     const validationOption = { locale: 'foobar' };
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    const wrapper = mount(<Select value="" optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
     const instance = wrapper.instance();
     instance.handleCheckEnd = jest.fn();
     instance.check();
@@ -440,9 +315,8 @@ describe('Select component', () => {
   });
 
   it('[check]: Should return when check == false', () => {
-    const value = '';
     const validationOption = { check: false };
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    const wrapper = mount(<Select value="" optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
     const instance = wrapper.instance();
     instance.handleCheckEnd = jest.fn();
     instance.check();
@@ -450,20 +324,49 @@ describe('Select component', () => {
   });
 
   it('[msgOnSuccess]: Should return when required == false and msgOnSuccess is provided', () => {
-    const value = '';
     const msgOnSuccess = 'msgOnSuccess';
     const validationOption = { required: false, msgOnSuccess };
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    const wrapper = mount(<Select value="" optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
     const instance = wrapper.instance();
     instance.handleCheckEnd = jest.fn();
     instance.check();
     expect(wrapper.state().successMsg).toEqual(msgOnSuccess);
   });
 
+  it('[state.err]: Should be true when props.validate toggled', () => {
+    const wrapper = mount(<Select validate={false} optionList={OPTION_LIST} onBlur={() => {}} />);
+    wrapper.setProps({ validate: true });
+    expect(wrapper.state().err).toEqual(true);
+  });
+
+  it('[state.err]: Should be false when checked', () => {
+    const wrapper = mount(<Select validate={false} optionList={OPTION_LIST} onBlur={() => {}} />);
+    const instance = wrapper.instance();
+    wrapper.setProps({ validate: true });
+    instance.onClick();
+    instance.onChange(OPTION_LIST[0].id);
+    expect(wrapper.state().err).toEqual(false);
+  });
+
+  it('[disabled]: Should not call onClick when the Textbox is disabled', () => {
+    const wrapper = mount(<Select value="" optionList={OPTION_LIST} onBlur={() => {}} disabled={true} />);
+    const instance = wrapper.instance();
+    instance.onChange = jest.fn();
+    instance.onClick();
+    instance.onBlur();
+    expect(instance.onChange).not.toHaveBeenCalled();
+  });
+
+  it('[disabled]: Should state.err not change when the Textbox is disabled', () => {
+    const wrapper = mount(<Select value="" optionList={OPTION_LIST} onBlur={() => {}} disabled={true} />);
+    const instance = wrapper.instance();
+    instance.onChange();
+    expect(wrapper.state().err).toEqual(false);
+  });
+
   it('[pageClick]: Should call onBlur', () => {
-    const value = '';
     const validationOption = { check: false };
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
+    const wrapper = mount(<Select optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
     const instance = wrapper.instance();
     instance.onFocus();
     instance.onBlur = jest.fn();
@@ -471,32 +374,82 @@ describe('Select component', () => {
     expect(instance.onBlur).toHaveBeenCalled();
   });
 
-  it('[STYLES]: Should have STYLES', () => {
-    Select.__Rewire__('STYLES', {
-      select__input: 'select__input_hash'
-    });
-    const value = '';
-    const validationOption = { check: false };
-    const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />);
-    expect(wrapper.find('.select__input_hash').length).toEqual(1);
+  it('[pageClick]: Should return if !this.wrapper', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    wrapper.setState({ show: true });
+    instance.wrapper = null;
+    instance.pageClick({ target: null });
+    expect(wrapper.state().show).toEqual(true);
+  });
+
+  it('[pageClick]: Should return if is this.wrapper self', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    wrapper.setState({ show: true });
+    instance.pageClick({ target: instance.wrapper.current });
+    expect(wrapper.state().show).toEqual(true);
+  });
+
+  it('[addActive]: Should this.currentFocus to be length - 1 if this.currentFocus < 0', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    wrapper.setState({ show: true });
+    instance.currentFocus = -1;
+    instance.addActive();
+    expect(instance.currentFocus).toEqual(OPTION_LIST.length - 1);
+  });
+
+  it('[addActive]: Should this.currentFocus to be 0 if this.currentFocus > this.currentFocus.length', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    wrapper.setState({ show: true });
+    instance.currentFocus = OPTION_LIST.length + 1;
+    instance.addActive();
+    expect(instance.currentFocus).toEqual(0);
+  });
+
+  // // TODO: find better way
+  //   it('[addActive]: Should return if x[this.currentFocus] === null', () => {
+  //     const wrapper = mount(<Select optionList={OPTION_LIST} />);
+  //     const instance = wrapper.instance();
+  //     wrapper.setState({ show: true });
+  //     instance.currentFocus = null;
+  //     instance.addActive();
+  //     // expect(instance.currentFocus).toEqual(2);
+  //   });
+  // // TODO: find better way
+  //   it('[removeActive]: Should return if x[this.currentFocus] === null', () => {
+  //     const wrapper = mount(<Select optionList={OPTION_LIST} />);
+  //     const instance = wrapper.instance();
+  //     wrapper.setState({ show: true });
+  //     instance.optionItems = null;
+  //     instance.removeActive();
+  //     // expect(instance.currentFocus).toEqual(2);
+  //   });
+
+  it("[onChange]: Should call parent's onChange using simulate click", () => {
+    let changed = false;
+    const wrapper = mount(
+      <Select
+        optionList={OPTION_LIST}
+        onChange={() => {
+          changed = true;
+        }}
+      />,
+    );
+    const $input = wrapper.find('.select__options-item').at(1);
+    $input.simulate('click');
+    expect(changed).toEqual(true);
+  });
+
+  it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
+    const restoreConsole = mockConsole();
+    const wrapper = mount(<Select optionList={OPTION_LIST} onBlur={() => {}} validationOption={{ locale: 'foobar' }} />);
+    const instance = wrapper.instance();
+    instance.onClick();
+    instance.onBlur();
+    expect(console.error).toHaveBeenCalled();
+    restoreConsole();
   });
 });
-
-// describe('Select component componentWillReceiveProps', () => {
-//   it('[validate]: Should call check when nextProps.validate = true', () => {
-//     const wrapper = mount(<Select optionList={OPTION_LIST} value="" validate={false} />);
-//     const instance = wrapper.instance();
-//     instance.check = jest.fn();
-//     wrapper.setProps({ validate: true });
-//     expect(instance.check).toHaveBeenCalled();
-//   });
-
-//   it('[value]: err should be false if this.props.value != nextProps.value', () => {
-//     const value = 'us';
-//     const wrapper = mount(<Select optionList={OPTION_LIST} value="" />);
-//     wrapper.setProps({ value });
-//     expect(wrapper.state().value).toEqual(value);
-//     expect(wrapper.state().err).toEqual(false);
-//     expect(wrapper.state().successMsg).toEqual(undefined);
-//   });
-// });

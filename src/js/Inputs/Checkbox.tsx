@@ -2,15 +2,8 @@ import * as React from 'react';
 import message from './message';
 import classnames from 'classnames';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
-interface Styles {
-  [key: string]: string;
-}
-let STYLES: Styles = {};
-try {
-  STYLES = require('./react-inputs-validation.css');
-} catch (ex) {}
+import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'checkbox';
-
 interface DefaultValidationOption {
   name?: string;
   check?: boolean;
@@ -66,6 +59,29 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 
+interface DefaultProps {
+  tabIndex: string | number;
+  id: string;
+  name: string;
+  value: string | boolean;
+  checked: boolean;
+  disabled: boolean;
+  validate: boolean;
+  labelHtml: React.ReactNode;
+  classNameInput: string;
+  classNameWrapper: string;
+  classNameInputBox: string;
+  classNameContainer: string;
+  customStyleInput: object;
+  customStyleWrapper: object;
+  customStyleInputBox: object;
+  customStyleContainer: object;
+  validationOption: object;
+  onChange: (res: boolean, e: Event) => void;
+}
+
+type PropsWithDefaults = Props & DefaultProps;
+
 interface State {
   err: boolean;
   msg: string;
@@ -75,7 +91,7 @@ interface State {
 }
 
 class Index extends React.Component<Props, State> {
-  static defaultProps: Props = {
+  static defaultProps: DefaultProps = {
     tabIndex: -1,
     id: '',
     name: '',
@@ -96,7 +112,6 @@ class Index extends React.Component<Props, State> {
     onChange: () => {},
   };
   private input: React.RefObject<HTMLInputElement>;
-  private focus: boolean;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -139,6 +154,7 @@ class Index extends React.Component<Props, State> {
     this.setState({ checked });
     const { onChange } = this.props;
     onChange && onChange(checked, e);
+    // when props.validate toggled
     if (this.state.err) {
       this.setState({ err: false });
     } else {
@@ -161,17 +177,7 @@ class Index extends React.Component<Props, State> {
       onBlur(e);
     }
   }
-  // pageClick(e: any) {
-  //   if (this.wrapper.current.contains(e.target)) {
-  //     return;
-  //   }
-  //   if (this.focus) {
-  //     // this.onBlur(e);
-  //     this.focus = false;
-  //   }
-  // }
   onFocus(e: React.FocusEvent<HTMLElement>) {
-    this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
       this.check();
@@ -179,7 +185,8 @@ class Index extends React.Component<Props, State> {
     }
   }
   check() {
-    const { name, check, locale, required, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
+    const { validationOption } = this.props as PropsWithDefaults;
+    const { name, check, locale, required, msgOnSuccess } = getDefaultValidationOption(validationOption);
     if (!check) {
       return;
     }
@@ -201,7 +208,8 @@ class Index extends React.Component<Props, State> {
   }
   handleCheckEnd(err: boolean, message: string) {
     let msg = message;
-    const { msgOnError } = getDefaultValidationOption(this.props.validationOption);
+    const { validationOption } = this.props as PropsWithDefaults;
+    const { msgOnError } = getDefaultValidationOption(validationOption);
     if (err && msgOnError) {
       msg = msgOnError;
     }
@@ -224,41 +232,41 @@ class Index extends React.Component<Props, State> {
       customStyleContainer,
       customStyleInputBox,
       validationOption,
-    } = this.props;
+    } = this.props as PropsWithDefaults;
 
     const { err, msg, checked, successMsg } = this.state;
 
     const wrapperClass = classnames(
       classNameWrapper,
-      STYLES['checkbox__wrapper'],
-      checked && STYLES['checked'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
+      reactInputsValidationCss['checkbox__wrapper'],
+      checked && reactInputsValidationCss['checked'],
+      err && reactInputsValidationCss['error'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
     );
 
     const containerClass = classnames(
       classNameContainer,
-      STYLES['checkbox__container'],
-      checked && STYLES['checked'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
+      reactInputsValidationCss['checkbox__container'],
+      checked && reactInputsValidationCss['checked'],
+      err && reactInputsValidationCss['error'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
     );
 
     const boxClass = classnames(
       classNameInputBox,
-      STYLES['checkbox__box'],
-      err && STYLES['error'],
-      checked && STYLES['checked'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
+      reactInputsValidationCss['checkbox__box'],
+      err && reactInputsValidationCss['error'],
+      checked && reactInputsValidationCss['checked'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
     );
 
-    const labelClass = classnames(STYLES['checkbox__label'], checked && STYLES['checked'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const labelClass = classnames(checked && reactInputsValidationCss['checked'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
 
-    const errMsgClass = classnames(STYLES['msg'], err && STYLES['error']);
-    const successMsgClass = classnames(STYLES['msg'], !err && STYLES['success']);
+    const errMsgClass = classnames(reactInputsValidationCss['msg'], err && reactInputsValidationCss['error']);
+    const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);
 
     let msgHtml;
     const { showMsg } = getDefaultValidationOption(validationOption);
@@ -272,8 +280,8 @@ class Index extends React.Component<Props, State> {
       <div tabIndex={Number(tabIndex)} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
         <div className={containerClass} style={customStyleContainer}>
           <div className={boxClass} style={customStyleInputBox}>
-            <div className={STYLES['box']} />
-            <input id={id} name={name} type="checkbox" className={STYLES['checkbox__input']} value={String(value)} checked={checked} disabled={disabled} onChange={this.onChange} ref={this.input} />
+            <div className={reactInputsValidationCss['box']} />
+            <input id={id} name={name} type="checkbox" className={reactInputsValidationCss['checkbox__input']} value={String(value)} checked={checked} disabled={disabled} onChange={this.onChange} ref={this.input} />
           </div>
           <label className={labelClass}>{labelHtml}</label>
         </div>

@@ -2,15 +2,8 @@ import * as React from 'react';
 import message from './message';
 import classnames from 'classnames';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
-interface Styles {
-  [key: string]: string;
-}
-let STYLES: Styles = {};
-try {
-  STYLES = require('./react-inputs-validation.css');
-} catch (ex) {}
+import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'radiobox';
-
 interface DefaultValidationOption {
   name?: string;
   check?: boolean;
@@ -78,6 +71,28 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 
+interface DefaultProps {
+  tabIndex: string | number;
+  id: string;
+  name: string;
+  value: string | number;
+  disabled: boolean;
+  validate: boolean;
+  optionList: OptionListItem[];
+  classNameWrapper: string;
+  classNameInput: string;
+  classNameContainer: string;
+  classNameOptionListItem: string;
+  customStyleWrapper: object;
+  customStyleContainer: object;
+  customStyleInput: object;
+  customStyleOptionListItem: object;
+  validationOption: object;
+  onChange: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
+}
+
+type PropsWithDefaults = Props & DefaultProps;
+
 interface State {
   err: boolean;
   msg: string;
@@ -87,7 +102,7 @@ interface State {
 }
 
 class Index extends React.Component<Props, State> {
-  static defaultProps: Props = {
+  static defaultProps: DefaultProps = {
     tabIndex: -1,
     id: '',
     name: '',
@@ -106,7 +121,6 @@ class Index extends React.Component<Props, State> {
     validationOption: {},
     onChange: () => {},
   };
-  private focus: boolean;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -156,7 +170,7 @@ class Index extends React.Component<Props, State> {
     onClick && onClick(e);
   }
 
-  onBlur(e?: React.FocusEvent<HTMLElement>) {
+  onBlur(e: React.FocusEvent<HTMLElement>) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
@@ -165,7 +179,6 @@ class Index extends React.Component<Props, State> {
   }
 
   onFocus(e: React.FocusEvent<HTMLElement>) {
-    this.focus = true;
     const { onFocus } = this.props;
     if (onFocus) {
       onFocus(e);
@@ -177,7 +190,8 @@ class Index extends React.Component<Props, State> {
     if (val != null) {
       value = val;
     }
-    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
+    const { validationOption } = this.props as PropsWithDefaults;
+    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(validationOption);
     if (!check) {
       return;
     }
@@ -201,7 +215,8 @@ class Index extends React.Component<Props, State> {
 
   handleCheckEnd(err: boolean, message: string) {
     let msg = message;
-    const { msgOnError } = getDefaultValidationOption(this.props.validationOption);
+    const { validationOption } = this.props as PropsWithDefaults;
+    const { msgOnError } = getDefaultValidationOption(validationOption);
     if (err && msgOnError) {
       msg = msgOnError;
     }
@@ -227,22 +242,22 @@ class Index extends React.Component<Props, State> {
       customStyleInput,
       customStyleOptionListItem,
       validationOption,
-    } = this.props;
+    } = this.props as PropsWithDefaults;
 
     const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = classnames(classNameWrapper, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__wrapper'], disabled && STYLES['disabled']);
+    const wrapperClass = classnames(classNameWrapper, err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__wrapper'], disabled && reactInputsValidationCss['disabled']);
 
-    const containerClass = classnames(classNameContainer, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__container'], disabled && STYLES['disabled']);
+    const containerClass = classnames(classNameContainer, err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__container'], disabled && reactInputsValidationCss['disabled']);
 
-    const inputClass = classnames(classNameInput, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__input'], disabled && STYLES['disabled']);
+    const inputClass = classnames(classNameInput, err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__input'], disabled && reactInputsValidationCss['disabled']);
 
-    const labelClass = classnames(err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__label'], disabled && STYLES['disabled']);
+    const labelClass = classnames(err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__label'], disabled && reactInputsValidationCss['disabled']);
 
-    const optionListItemClass = classnames(classNameOptionListItem, err && STYLES['error'], successMsg && !err && STYLES['success'], STYLES['radiobox__item'], disabled && STYLES['disabled']);
+    const optionListItemClass = classnames(classNameOptionListItem, err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__item'], disabled && reactInputsValidationCss['disabled']);
 
-    const errMsgClass = classnames(STYLES['msg'], err && STYLES['error']);
-    const successMsgClass = classnames(STYLES['msg'], !err && STYLES['success']);
+    const errMsgClass = classnames(reactInputsValidationCss['msg'], err && reactInputsValidationCss['error']);
+    const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);
 
     let msgHtml;
     const { showMsg } = getDefaultValidationOption(validationOption);
@@ -266,11 +281,11 @@ class Index extends React.Component<Props, State> {
               value={value}
               checked={checked}
               disabled={disabled}
-              className={checked ? `${STYLES['checked']} ${inputClass}` : `${inputClass}`}
+              className={checked ? `${reactInputsValidationCss['checked']} ${inputClass}` : `${inputClass}`}
               onChange={e => this.onChange(i.id, e)}
               style={customStyleInput}
             />
-            <label htmlFor={`${id}-${k}`} className={checked ? `${STYLES['checked']} ${labelClass}` : `${labelClass}`}>
+            <label htmlFor={`${id}-${k}`} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>
               {i.name}
             </label>
           </div>

@@ -9,7 +9,7 @@ import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 import STYLES from '../src/css/example.css';
-import { Textbox, Textarea, Radiobox, Checkbox, Select } from '../src/js/Inputs/index.tsx';
+import { Textbox, Textarea, Radiobox, Checkbox, Select } from '../src/js/Inputs/index.ts';
 
 const markdownTextboxEmptyExample = `
 \`\`\`javascript

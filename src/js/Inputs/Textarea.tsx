@@ -4,13 +4,7 @@ import classnames from 'classnames';
 import validator from './validator';
 import utils from './utils';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
-interface Styles {
-  [key: string]: string;
-}
-let STYLES: Styles = {};
-try {
-  STYLES = require('./react-inputs-validation.css');
-} catch (ex) {}
+import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textarea';
 const VALIDATE_OPTION_TYPE_LIST = ['string'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
@@ -93,10 +87,33 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 
+interface DefaultProps {
+  tabIndex: string | number;
+  id: string;
+  name: string;
+  value: string | number;
+  cols: string | number;
+  rows: string | number;
+  disabled: boolean;
+  validate: boolean;
+  maxLength: string | number;
+  placeholder: string;
+  classNameInput: string;
+  classNameWrapper: string;
+  classNameContainer: string;
+  customStyleInput: object;
+  customStyleWrapper: object;
+  customStyleContainer: object;
+  validationOption: object;
+  onChange: (res: string, e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+type PropsWithDefaults = Props & DefaultProps;
+
 interface State {
   err: boolean;
   msg: string;
-  successmsg: undefined | string;
+  successMsg: undefined | string;
   validate: boolean;
 }
 
@@ -128,7 +145,7 @@ class Index extends React.Component<Props, State> {
     this.state = {
       err: false,
       msg: '',
-      successmsg: undefined,
+      successMsg: undefined,
       validate: props.validate,
     };
     this.onChange = this.onChange.bind(this);
@@ -165,11 +182,11 @@ class Index extends React.Component<Props, State> {
     if (this.state.err) {
       this.setState({ err: false });
     } else {
-      this.setState({ successmsg: undefined });
+      this.setState({ successMsg: undefined });
     }
   }
 
-  onBlur(e?: React.FocusEvent<HTMLElement>) {
+  onBlur(e: React.FocusEvent<HTMLElement>) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
@@ -194,7 +211,7 @@ class Index extends React.Component<Props, State> {
   }
 
   check(val: null | string = null) {
-    const { validationOption } = this.props;
+    const { validationOption } = this.props as PropsWithDefaults;
     const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess, customFunc } = getDefaultValidationOption(validationOption);
     if (!check) {
       return;
@@ -263,7 +280,7 @@ class Index extends React.Component<Props, State> {
           }
         }
         if (msgOnSuccess) {
-          this.setState({ successmsg: msgOnSuccess });
+          this.setState({ successMsg: msgOnSuccess });
         }
         this.handleCheckEnd(false, msgOnSuccess);
       } else {
@@ -276,7 +293,8 @@ class Index extends React.Component<Props, State> {
 
   handleCheckEnd(err: boolean, message: string) {
     let msg = message;
-    const { msgOnError } = getDefaultValidationOption(this.props.validationOption);
+    const { validationOption } = this.props as PropsWithDefaults;
+    const { msgOnError } = getDefaultValidationOption(validationOption);
     if (err && msgOnError) {
       msg = msgOnError;
     }
@@ -304,26 +322,26 @@ class Index extends React.Component<Props, State> {
       validationOption,
       cols,
       rows,
-    } = this.props;
+    } = this.props as PropsWithDefaults;
 
-    const { err, msg, successmsg } = this.state;
+    const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = classnames(classNameWrapper, STYLES['textarea__wrapper'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const wrapperClass = classnames(classNameWrapper, reactInputsValidationCss['textarea__wrapper'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
 
-    const containerClass = classnames(classNameContainer, STYLES['textarea__container'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const containerClass = classnames(classNameContainer, reactInputsValidationCss['textarea__container'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
 
-    const inputClass = classnames(classNameInput, STYLES['textarea__input'], err && STYLES['error'], successmsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const inputClass = classnames(classNameInput, reactInputsValidationCss['textarea__input'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
 
-    const errmsgClass = classnames(STYLES['msg'], err && STYLES['error']);
-    const successmsgClass = classnames(STYLES['msg'], !err && STYLES['success']);
+    const errmsgClass = classnames(reactInputsValidationCss['msg'], err && reactInputsValidationCss['error']);
+    const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);
 
     let msgHtml;
     const { showmsg } = getDefaultValidationOption(validationOption);
     if (showmsg && err && msg) {
       msgHtml = <div className={errmsgClass}>{msg}</div>;
     }
-    if (showmsg && !err && successmsg) {
-      msgHtml = <div className={successmsgClass}>{successmsg}</div>;
+    if (showmsg && !err && successMsg) {
+      msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (
       <div className={wrapperClass} style={customStyleWrapper}>

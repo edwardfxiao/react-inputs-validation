@@ -7,7 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 var config = (module.exports = {
   context: PATH.ROOT_PATH,
   entry: {
-    index: PATH.ROOT_PATH + 'example/index.js'
+    index: PATH.ROOT_PATH + 'example/index.js',
     // index: PATH.ROOT_PATH + 'example/index.tsx'
   },
   module: {
@@ -16,30 +16,19 @@ var config = (module.exports = {
         test: /\.mp3?$/,
         include: [PATH.ROOT_PATH],
         exclude: [PATH.NODE_MODULES_PATH],
-        loader: 'file-loader?name=audio/[name]-[hash].[ext]'
+        loader: 'file-loader?name=audio/[name]-[hash].[ext]',
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)\??.*$/,
         include: [PATH.ROOT_PATH],
         // exclude: [PATH.NODE_MODULES_PATH],
-        loader: 'url-loader?limit=1&name=font/[name]-[hash].[ext]'
+        loader: 'url-loader?limit=1&name=font/[name]-[hash].[ext]',
       },
       {
         test: /\.(jpe?g|png|gif|svg)\??.*$/,
         include: [PATH.ROOT_PATH],
         // exclude: [PATH.NODE_MODULES_PATH],
-        loader: 'url-loader?limit=1&name=img/[name]-[hash].[ext]'
-      },
-      {
-        test: /\.jsx?$/,
-        include: [PATH.ROOT_PATH],
-        exclude: [PATH.NODE_MODULES_PATH],
-        enforce: 'pre',
-        enforce: 'post',
-        loader: 'eslint-loader',
-        options: {
-          emitWarning: true
-        }
+        loader: 'url-loader?limit=1&name=img/[name]-[hash].[ext]',
       },
       {
         test: /\.(ts|tsx)$/,
@@ -49,9 +38,9 @@ var config = (module.exports = {
             loader: 'tslint-loader',
             options: {
               // emitWarning: true
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       { test: /\.(ts|tsx)$/, loader: 'awesome-typescript-loader' },
       {
@@ -60,7 +49,18 @@ var config = (module.exports = {
         exclude: [PATH.NODE_MODULES_PATH],
         enforce: 'pre',
         enforce: 'post',
-        loader: 'babel-loader'
+        loader: 'eslint-loader',
+        options: {
+          emitWarning: true,
+        },
+      },
+      {
+        test: /\.jsx?$/,
+        include: [PATH.ROOT_PATH],
+        exclude: [PATH.NODE_MODULES_PATH],
+        enforce: 'pre',
+        enforce: 'post',
+        loader: 'babel-loader',
       },
       {
         test: /\.css$/,
@@ -73,22 +73,22 @@ var config = (module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
           {
             loader: 'postcss-loader',
             options: {
               plugins: loader => [
                 require('postcss-import')({
-                  root: loader.resourcePath
+                  root: loader.resourcePath,
                 }),
                 require('autoprefixer')(),
-                require('cssnano')()
-              ]
-            }
-          }
-        ]
+                require('cssnano')(),
+              ],
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
@@ -103,22 +103,22 @@ var config = (module.exports = {
             options: {
               modules: true,
               importLoaders: 1,
-              localIdentName: '[name]__[local]___[hash:base64:5]'
-            }
+              localIdentName: '[name]__[local]___[hash:base64:5]',
+            },
           },
           {
             loader: 'postcss-loader',
             options: {
               plugins: loader => [
                 require('postcss-import')({
-                  root: loader.resourcePath
+                  root: loader.resourcePath,
                 }),
                 require('autoprefixer')(),
-                require('cssnano')({ safe: true })
-              ]
-            }
-          }
-        ]
+                require('cssnano')({ safe: true }),
+              ],
+            },
+          },
+        ],
       },
       {
         test: /\.scss$/,
@@ -127,25 +127,25 @@ var config = (module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
           {
-            loader: 'sass-loader'
-          }
-        ]
+            loader: 'sass-loader',
+          },
+        ],
       },
       {
         oneOf: [
           /* rules */
-        ]
+        ],
       },
       // only use one of these nested rules
 
       {
         rules: [
           /* rules */
-        ]
+        ],
       },
       // use all of these nested rules (combine with conditions to be useful)
 
@@ -153,8 +153,8 @@ var config = (module.exports = {
         resource: {
           and: [
             /* conditions */
-          ]
-        }
+          ],
+        },
       },
       // matches only if all conditions are matched
 
@@ -162,19 +162,19 @@ var config = (module.exports = {
         resource: {
           or: [
             /* conditions */
-          ]
-        }
+          ],
+        },
       },
       {
         resource: [
           /* conditions */
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   resolve: {
     modules: ['node_modules', path.resolve(__dirname, 'app')],
-    extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.css']
+    extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.css'],
   },
   devtool: 'source-map',
   devServer: {
@@ -184,7 +184,7 @@ var config = (module.exports = {
     historyApiFallback: true,
 
     host: '0.0.0.0',
-    port: 9000
+    port: 9000,
   },
   plugins: [
     new webpack.ContextReplacementPlugin(/\.\/locale$/, 'empty-module', false, /js$/),
@@ -195,10 +195,10 @@ var config = (module.exports = {
       'window.React': 'React',
       $: 'jquery',
       jQuery: 'jquery',
-      'window.jQuery': 'jquery'
+      'window.jQuery': 'jquery',
     }),
     new WebpackAssetsManifest({
-      fileName: 'manifest-rev.json'
+      fileName: 'manifest-rev.json',
     }),
     new HtmlWebpackPlugin({
       template: PATH.HTML_PATH + '/layout.html',
@@ -217,7 +217,7 @@ var config = (module.exports = {
         } else {
           return 0;
         }
-      }
-    })
-  ]
+      },
+    }),
+  ],
 });

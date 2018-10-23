@@ -1,256 +1,244 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import Radiobox from '../js/Inputs/Radiobox.js';
+import mockConsole from 'jest-mock-console';
+import Radiobox from '../js/Inputs/Radiobox.tsx';
+configure({ adapter: new Adapter() });
 
-const SELECTED_INDEX = 2;
 const OPTION_LIST = [{ id: 'engineer', name: 'engineer' }, { id: 'teacher', name: 'teacher' }, { id: 'student', name: 'student' }];
 
-class RadioboxWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: props.checked, hasError: props.hasError };
-  }
-
-  render() {
-    const { validationOption } = this.props;
-    const { value, hasError } = this.state;
-    return (
-      <div id="wrapper">
-        <Radiobox
-          tabIndex="1"
-          id={'Radiobox'}
-          name="Radiobox"
-          type="text"
-          value={value}
-          optionList={OPTION_LIST}
-          validationCallback={res => {
-            this.setState({ hasError: res });
-          }}
-          onChange={res => {
-            this.setState({ value: res });
-          }}
-          onBlur={() => {}}
-          validationOption={validationOption}
-        />
-        <label id="value">{value}</label>
-        <label id="hasError">{hasError ? 'has error' : 'not has error'}</label>
-      </div>
-    );
-  }
-}
-
-RadioboxWrapper.defaultProps = {
-  checked: '',
-  hasError: false,
-  validationOption: {}
-};
-
-RadioboxWrapper.propTypes = {
-  checked: PropTypes.string,
-  hasError: PropTypes.bool,
-  validationOption: PropTypes.object
-};
-
-configure({ adapter: new Adapter() });
-const getWrapper = (value, validationOption, hasError) => {
-  return mount(<RadioboxWrapper value={value} validationOption={validationOption} hasError={hasError} />);
-};
-
 describe('Radiobox component', () => {
-  it('[validationOption.required = true]: Should return has error because of it is not checked any', () => {
-    const value = '';
-    const hasError = false;
-    const validationOption = {
-      check: true,
-      required: true
-    };
-    const wrapper = getWrapper(value, validationOption, hasError);
-    const $input = wrapper.find('.radiobox__wrapper');
-    const $labelValue = wrapper.find('#value');
-    const $labelHasError = wrapper.find('#hasError');
-    $input.simulate('focus');
-    $input.simulate('blur');
-    expect($labelValue.text()).toEqual(value);
-    expect($labelHasError.text()).toEqual('has error');
+  it('[onFocus]: Should not check when onFocus is not provided', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    instance.onFocus();
+    expect(instance.check).not.toHaveBeenCalled();
   });
 
-  it('[validationOption.required = false]:Should return not has error when it is not checked because of it is not required', () => {
-    const value = '';
-    const hasError = false;
-    const validationOption = {
-      check: true,
-      required: false
-    };
-    const wrapper = getWrapper(value, validationOption, hasError);
-    const $input = wrapper.find('.radiobox__wrapper');
-    const $labelValue = wrapper.find('#value');
-    const $labelHasError = wrapper.find('#hasError');
-    $input.simulate('focus');
-    $input.simulate('blur');
-    expect($labelValue.text()).toEqual(value);
-    expect($labelHasError.text()).toEqual('not has error');
+  it('[onBlur]: Should not check when onBlur is not provided', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    instance.onBlur();
+    expect(instance.check).not.toHaveBeenCalled();
   });
 
-  it('[validationOption.required = false]:Should return not has error when it selected something', () => {
-    const value = '';
-    const hasError = false;
-    const validationOption = {
-      check: true,
-      required: true
-    };
-    const wrapper = getWrapper(value, validationOption, hasError);
-    const $input = wrapper.find('.radiobox__wrapper');
-    const $labelValue = wrapper.find('#value');
-    const $labelHasError = wrapper.find('#hasError');
-    $input.simulate('focus');
-    wrapper
-      .find('.radiobox__input')
-      .at(SELECTED_INDEX)
-      .simulate('change', { target: { value: OPTION_LIST[SELECTED_INDEX].id } });
-    $input.simulate('blur');
-    expect($labelValue.text()).toEqual(OPTION_LIST[SELECTED_INDEX].id);
-    expect($labelHasError.text()).toEqual('not has error');
+  it("[onChange]: Should call parent's onChange using simulate click", () => {
+    let changed = false;
+    const wrapper = mount(
+      <Radiobox
+        optionList={OPTION_LIST}
+        onChange={() => {
+          changed = true;
+        }}
+      />,
+    );
+    const $input = wrapper.find('.radiobox__input').at(1);
+    $input.simulate('change');
+    expect(changed).toEqual(true);
   });
 
   it("[onChange]: Should call parent's onChange", () => {
-    let value = '';
+    let changed = false;
     const wrapper = mount(
       <Radiobox
-        value={value}
         optionList={OPTION_LIST}
-        onChange={res => {
-          value = res;
+        onChange={() => {
+          changed = true;
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
-    instance.onChange('us');
-    expect(value).toEqual('us');
+    instance.onChange();
+    expect(changed).toEqual(true);
   });
 
   it("[onClick]: Should call parent's onClick", () => {
-    let value = '';
+    let clicked = false;
     const wrapper = mount(
       <Radiobox
-        value={value}
         optionList={OPTION_LIST}
         onClick={() => {
-          value = 'clicked';
+          clicked = true;
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onClick();
-    expect(value).toEqual('clicked');
+    expect(clicked).toEqual(true);
   });
 
   it("[onBlur]: Should call parent's onBlur", () => {
-    let value = '';
+    let blured = false;
     const wrapper = mount(
       <Radiobox
-        value={value}
         optionList={OPTION_LIST}
         onBlur={() => {
-          value = 'blured';
+          blured = true;
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onBlur();
-    expect(value).toEqual('blured');
+    expect(blured).toEqual(true);
   });
 
   it("[onFocus]: Should call parent's onFocus", () => {
-    let value = '';
+    let focused = false;
     const wrapper = mount(
       <Radiobox
-        value={value}
         optionList={OPTION_LIST}
         onFocus={() => {
-          value = 'focused';
+          focused = true;
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onFocus();
-    expect(value).toEqual('focused');
+    expect(focused).toEqual(true);
   });
 
   it('[check]: Should call handleCheckEnd when empty', () => {
-    let value = '';
-    const msgOnSuccess = 'foobar';
-    const wrapper = mount(
-      <Radiobox
-        value={value}
-        optionList={OPTION_LIST}
-        onChange={() => {}}
-        validationOption={{
-          check: true,
-          required: true,
-          msgOnSuccess
-        }}
-      />
-    );
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     instance.handleCheckEnd = jest.fn();
-    instance.check(value);
+    instance.check('');
     expect(instance.handleCheckEnd).toHaveBeenCalled();
   });
 
-  it('[check]: Should not call handleCheckEnd when locale is invalid', () => {
-    let value = '';
-    const wrapper = mount(
-      <Radiobox
-        value={value}
-        optionList={OPTION_LIST}
-        onChange={() => {}}
-        validationOption={{
-          locale: 'foobar'
-        }}
-      />
-    );
+  it('[check]: Should not call handleCheckEnd when is not checked and check is false', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} validationOption={{ check: false }} />);
     const instance = wrapper.instance();
     instance.handleCheckEnd = jest.fn();
-    instance.check(value);
+    instance.check();
     expect(instance.handleCheckEnd).not.toHaveBeenCalled();
   });
 
-  it('[handleCheckEnd]: Should call validationCallback', () => {
-    let value = '';
-    const msgOnError = 'foobar';
+  it('[check]: Should call handleCheckEnd when is not checked and required is false with name provided', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} validationOption={{ check: true, required: false }} />);
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it('[check]: Should call handleCheckEnd when is not checked and required is false', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} validationOption={{ name: 'foobar', check: true, required: true }} />);
+    const instance = wrapper.instance();
+    wrapper.setState({ checked: false });
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it('[check]: Should call check when state.validate is true and prev.state.validate is false', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    wrapper.setState({ validate: true });
+    expect(instance.check).toHaveBeenCalled();
+  });
+
+  it('[handleCheckEnd]: Should state.err be msgOnSuccess when msgOnSuccess is provided', () => {
     const msgOnSuccess = 'foobar';
+    const wrapper = mount(
+      <Radiobox
+        value={OPTION_LIST[0].id}
+        optionList={OPTION_LIST}
+        onBlur={() => {}}
+        validationOption={{
+          msgOnSuccess,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onClick();
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual(msgOnSuccess);
+  });
+
+  it('[nextProps.value]: Should state.value ===  nextProps.value', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
+    wrapper.setProps({ value: OPTION_LIST[1].id });
+    expect(wrapper.state().value).toEqual(OPTION_LIST[1].id);
+  });
+
+  it('[nextProps.value]: Should state.err === false', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
+    wrapper.setState({ err: true });
+    wrapper.setProps({ value: OPTION_LIST[1].id });
+    expect(wrapper.state().err).toEqual(false);
+  });
+
+  it('[nextProps.value]: Should state.successMsg === undefined', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
+    wrapper.setProps({ value: OPTION_LIST[1].id });
+    expect(wrapper.state().successMsg).toEqual(undefined);
+  });
+
+  it('[nextProps.validate]: Should state.validate === nextProps.validate', () => {
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
+    wrapper.setProps({ validate: true });
+    expect(wrapper.state().validate).toEqual(true);
+  });
+
+  it('[disabled]: Should not call onClick when the Radiobox is disabled', () => {
+    const wrapper = mount(<Radiobox ptionList={OPTION_LIST} onBlur={() => {}} disabled={true} />);
+    const instance = wrapper.instance();
+    instance.onChange = jest.fn();
+    instance.onClick();
+    instance.onBlur();
+    expect(instance.onChange).not.toHaveBeenCalled();
+  });
+
+  it('[disabled]: Should state.err not change when the Radiobox is disabled', () => {
+    const wrapper = mount(<Radiobox ptionList={OPTION_LIST} onBlur={() => {}} disabled={true} />);
+    const instance = wrapper.instance();
+    instance.onChange();
+    expect(wrapper.state().err).toEqual(false);
+  });
+
+  it('[check]: Should call handleCheckEnd when is not checked and required is false with name provided', () => {
+    const wrapper = mount(<Radiobox value={OPTION_LIST[0].id} cptionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check(OPTION_LIST[0].id);
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it('[handleCheckEnd]: Should call validationCallback', () => {
     let valid = false;
     const wrapper = mount(
       <Radiobox
-        value={value}
         optionList={OPTION_LIST}
-        onChange={() => {}}
-        validationCallback={() => {
-          valid = true;
+        onBlur={() => {}}
+        validationCallback={res => {
+          valid = res;
         }}
-        validationOption={{
-          name: 'foobar',
-          locale: 'en-US',
-          check: true,
-          required: true,
-          msgOnError,
-          msgOnSuccess
-        }}
-      />
+      />,
     );
     const instance = wrapper.instance();
-    instance.handleCheckEnd(true, msgOnError);
+    instance.onClick();
+    instance.onBlur();
     expect(valid).toEqual(true);
   });
 
-  it('[handleCheckEnd]: all validationOption', () => {
-    let value = '';
+  it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
+    const restoreConsole = mockConsole();
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} onBlur={() => {}} validationOption={{ locale: 'foobar' }} />);
+    const instance = wrapper.instance();
+    instance.onClick();
+    instance.onBlur();
+    expect(console.error).toHaveBeenCalled();
+    restoreConsole();
+  });
+
+  it('[handleCheckEnd]: All validationOption', () => {
     let valid = false;
     const wrapper = mount(
       <Radiobox
-        value={value}
+        value=""
         optionList={OPTION_LIST}
         onChange={() => {}}
         validationCallback={() => {
@@ -263,67 +251,12 @@ describe('Radiobox component', () => {
           showMsg: 'showMsg',
           required: true,
           msgOnError: 'msgOnError',
-          msgOnSuccess: 'msgOnSuccess'
+          msgOnSuccess: 'msgOnSuccess',
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.handleCheckEnd(true, 'msgOnError');
     expect(valid).toEqual(true);
   });
-
-  it('[getDefaultValidationOption]: Should return default obj', () => {
-    const getDefaultValidationOption = Radiobox.__get__('getDefaultValidationOption');
-    expect(getDefaultValidationOption({})).toEqual({
-      name: '',
-      check: true,
-      showMsg: true,
-      required: true,
-      locale: 'en-US',
-      msgOnError: '',
-      msgOnSuccess: ''
-    });
-  });
-
-  it('[getDefaultValidationOption]: Should return correct obj', () => {
-    const getDefaultValidationOption = Radiobox.__get__('getDefaultValidationOption');
-    const o = {
-      name: 'foobar',
-      check: true,
-      showMsg: 'showMsg',
-      required: true,
-      locale: 'en-US',
-      msgOnError: 'msgOnError',
-      msgOnSuccess: 'msgOnSuccess'
-    };
-    expect(getDefaultValidationOption(o)).toEqual(o);
-  });
-
-  it('[getDefaultValidationOption]: Should return correct obj', () => {
-    const isValidateValue = Radiobox.__get__('isValidateValue');
-    expect(isValidateValue('null')).toEqual(true);
-  });
 });
-
-// describe('Radiobox component componentWillReceiveProps', () => {
-//   it('[validate]: Should call check when nextProps.validate = true', () => {
-//     const wrapper = shallow(<Radiobox validate={false} />);
-//     const instance = wrapper.instance();
-//     instance.check = jest.fn();
-//     wrapper.setProps({ validate: true });
-//     expect(instance.check).toHaveBeenCalled();
-//   });
-
-//   it('[value]: err should be false if this.props.value != nextProps.value and this.state.err ', () => {
-//     const wrapper = shallow(<Radiobox value={false} />);
-//     wrapper.setState({ err: true });
-//     wrapper.setProps({ value: true });
-//     expect(wrapper.state().err).toEqual(false);
-//   });
-
-//   it('[value]: successMsg should be undefined if this.props.value != nextProps.value and !this.state.err ', () => {
-//     const wrapper = shallow(<Radiobox value={false} />);
-//     wrapper.setProps({ value: true });
-//     expect(wrapper.state().successMsg).toEqual(undefined);
-//   });
-// });

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { toCamelCase, camelize } from '../js/Inputs/utils.js';
+import { toCamelCase, camelize } from '../js/Inputs/utils.ts';
 
 describe('utils', () => {
   it('[camelize("foo bar")]: Should return the camelCase: "fooBar"', () => {

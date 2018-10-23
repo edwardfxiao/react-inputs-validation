@@ -2,13 +2,7 @@ import * as React from 'react';
 import message from './message';
 import classnames from 'classnames';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
-interface Styles {
-  [key: string]: string;
-}
-let STYLES: Styles = {};
-try {
-  STYLES = require('./react-inputs-validation.css');
-} catch (ex) {}
+import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'select';
 
 if (!String.prototype.startsWith) {
@@ -71,7 +65,7 @@ interface Props {
   optionList: OptionListItem[];
   onChange: (res: string, e: React.MouseEvent<HTMLDivElement> | Event) => void;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLElement> | Event) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   validationOption?: object;
   selectHtml?: React.ReactNode;
@@ -91,6 +85,30 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 
+interface DefaultProps {
+  tabIndex: string | number;
+  id: string;
+  name: string;
+  value: string | number;
+  disabled: boolean;
+  validate: boolean;
+  optionList: OptionListItem[];
+  classNameWrapper: string;
+  classNameContainer: string;
+  classNameOptionListItem: string;
+  classNameOptionListContainer: string;
+  classNameDropdownIconOptionListItem: string;
+  customStyleWrapper: object;
+  customStyleContainer: object;
+  customStyleOptionListItem: object;
+  customStyleOptionListContainer: object;
+  customStyleDropdownIcon: object;
+  validationOption: object;
+  onChange: (res: string, e: React.MouseEvent<HTMLDivElement> | Event) => void;
+}
+
+type PropsWithDefaults = Props & DefaultProps;
+
 interface State {
   value: string;
   show: boolean;
@@ -100,6 +118,10 @@ interface State {
   successMsg: undefined | string;
   keycodeList: number[];
   validate: boolean;
+}
+
+interface Node {
+  [key: string]: any;
 }
 
 class Index extends React.Component<Props, State> {
@@ -132,7 +154,7 @@ class Index extends React.Component<Props, State> {
   private corrected: boolean;
   // TODO: find a better type
   private typingTimeout: any;
-  private currentFocus: number;
+  private currentFocus: number | undefined;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -155,6 +177,9 @@ class Index extends React.Component<Props, State> {
     this.itemsWrapper = React.createRef();
     this.input = React.createRef();
     this.optionItems = [];
+    this.focus = false;
+    this.corrected = false;
+    this.currentFocus = undefined;
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
@@ -216,7 +241,7 @@ class Index extends React.Component<Props, State> {
     onClick && onClick(e);
   }
 
-  onBlur(e?: React.FocusEvent<HTMLElement>) {
+  onBlur(e: React.FocusEvent<HTMLElement> | Event) {
     const { onBlur } = this.props;
     if (onBlur) {
       this.check();
@@ -262,7 +287,7 @@ class Index extends React.Component<Props, State> {
     const x = this.optionItems;
     const { optionList } = this.props;
     this.currentFocus = typeof this.currentFocus !== 'undefined' ? this.currentFocus : this.getIndex(optionList, value);
-    let direction = null;
+    let direction = undefined;
     const { keyCode } = e;
     const keyCodeEsc = 27;
     const keyCodeDown = 40;
@@ -291,7 +316,13 @@ class Index extends React.Component<Props, State> {
         this.addActive();
       } else if (keyCode === keyCodeEnter) {
         if (this.currentFocus > -1) {
-          if (x) x[this.currentFocus].current.click();
+          if (x) {
+            const node: Node | null = x[this.currentFocus];
+            if (node === null) {
+              return;
+            }
+            node.current.click();
+          }
         }
       }
     } else {
@@ -331,12 +362,20 @@ class Index extends React.Component<Props, State> {
   }
 
   scroll(direction: undefined | string = undefined) {
-    const containerHeight = this.itemsWrapper.current.offsetHeight;
-    const containerScrollTop = this.itemsWrapper.current.scrollTop;
-    if (!this.optionItems[this.currentFocus]) {
+    const itemsWrapperNode: Node | null = this.itemsWrapper;
+    if (itemsWrapperNode === null) {
       return;
     }
-    const itemHeight = this.optionItems[this.currentFocus].current.offsetHeight;
+    const containerHeight = itemsWrapperNode.current.offsetHeight;
+    const containerScrollTop = itemsWrapperNode.current.scrollTop;
+    if (!this.currentFocus || !this.optionItems[this.currentFocus]) {
+      return;
+    }
+    const optionItemsNode: Node | null = this.optionItems[this.currentFocus];
+    if (optionItemsNode === null) {
+      return;
+    }
+    const itemHeight = optionItemsNode.current.offsetHeight;
     if (direction) {
       if (direction === 'down') {
         const bound = containerScrollTop + containerHeight;
@@ -345,22 +384,22 @@ class Index extends React.Component<Props, State> {
         if (heightItems >= heightContainer) {
           const offset = Math.abs(heightItems - heightContainer - itemHeight);
           if (offset >= 0 && !this.corrected) {
-            this.itemsWrapper.current.scrollTop = containerScrollTop + itemHeight - offset;
+            itemsWrapperNode.current.scrollTop = containerScrollTop + itemHeight - offset;
             this.corrected = true;
           } else {
-            this.itemsWrapper.current.scrollTop = containerScrollTop + itemHeight;
+            itemsWrapperNode.current.scrollTop = containerScrollTop + itemHeight;
           }
         }
       }
       if (direction === 'up') {
         this.corrected = false;
         if (this.currentFocus * itemHeight <= containerScrollTop) {
-          this.itemsWrapper.current.scrollTop = this.currentFocus * itemHeight;
+          itemsWrapperNode.current.scrollTop = this.currentFocus * itemHeight;
         }
       }
     } else {
       this.corrected = false;
-      this.itemsWrapper.current.scrollTop = this.currentFocus * itemHeight;
+      itemsWrapperNode.current.scrollTop = this.currentFocus * itemHeight;
     }
   }
 
@@ -368,24 +407,37 @@ class Index extends React.Component<Props, State> {
     const x = this.optionItems;
     if (!x) return false;
     this.removeActive();
+    if (typeof this.currentFocus === 'undefined') return;
     if (this.currentFocus >= x.length) this.currentFocus = 0;
     if (this.currentFocus < 0) this.currentFocus = x.length - 1;
-    x[this.currentFocus].current.className += ` ${STYLES['select__hover-active']}`;
+    const node: Node | null = x[this.currentFocus];
+    if (node === null) {
+      return;
+    }
+    node.current.className += ` ${reactInputsValidationCss['select__hover-active']}`;
   }
 
   removeActive() {
     const x = this.optionItems;
     for (let i = 0; i < x.length; i += 1) {
-      x[i].current.className = x[i].current.className.replace(STYLES['select__hover-active'], '');
+      const node: Node | null = x[i];
+      if (node === null) {
+        break;
+      }
+      node.current.className = node.current.className.replace(reactInputsValidationCss['select__hover-active'], '');
     }
   }
 
-  pageClick(e: any) {
-    if (this.wrapper.current.contains(e.target)) {
+  pageClick(e: Event) {
+    const node: Node | null = this.wrapper;
+    if (node === null) {
+      return;
+    }
+    if (node.current.contains(e.target)) {
       return;
     }
     if (this.focus) {
-      this.onBlur();
+      this.onBlur(e);
       this.focus = false;
     }
     this.toggleShow(false);
@@ -400,7 +452,8 @@ class Index extends React.Component<Props, State> {
     if (val != null) {
       value = val;
     }
-    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(this.props.validationOption);
+    const { validationOption } = this.props as PropsWithDefaults;
+    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(validationOption);
     if (!check) {
       return;
     }
@@ -424,7 +477,8 @@ class Index extends React.Component<Props, State> {
 
   handleCheckEnd(err: boolean, message: string) {
     let msg = message;
-    const { msgOnError } = getDefaultValidationOption(this.props.validationOption);
+    const { validationOption } = this.props as PropsWithDefaults;
+    const { msgOnError } = getDefaultValidationOption(validationOption);
     if (err && msgOnError) {
       msg = msgOnError;
     }
@@ -454,54 +508,53 @@ class Index extends React.Component<Props, State> {
       selectHtml,
       selectOptionListItemHtml,
       validationOption,
-    } = this.props;
+    } = this.props as PropsWithDefaults;
 
     const { value, err, msg, show, successMsg, isTyping } = this.state;
 
-    const wrapperClass = classnames(classNameWrapper, STYLES['select__wrapper'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const wrapperClass = classnames(classNameWrapper, reactInputsValidationCss['select__wrapper'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
 
     const containerClass = classnames(
       classNameContainer,
-      STYLES['select__container'],
-      err && STYLES['error'],
-      show && STYLES['show'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
+      reactInputsValidationCss['select__container'],
+      err && reactInputsValidationCss['error'],
+      show && reactInputsValidationCss['show'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
     );
 
-    const inputClass = classnames(STYLES['select__input'], err && STYLES['error'], successMsg && !err && STYLES['success'], disabled && STYLES['disabled']);
+    const inputClass = classnames(reactInputsValidationCss['select__input'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
 
     const selectClass = classnames(
       classNameSelect,
-      STYLES['ellipsis'],
-      STYLES['select__dropdown-menu'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
+      reactInputsValidationCss['ellipsis'],
+      err && reactInputsValidationCss['error'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
     );
 
     const selectOptionListContainerClass = classnames(
       classNameOptionListContainer,
-      STYLES['select__options-container'],
-      err && STYLES['error'],
-      show && STYLES['show'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
+      reactInputsValidationCss['select__options-container'],
+      err && reactInputsValidationCss['error'],
+      show && reactInputsValidationCss['show'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
     );
 
     const selectOptionListItemClass = classnames(
-      !isTyping && STYLES['select__options-item-show-cursor'],
+      !isTyping && reactInputsValidationCss['select__options-item-show-cursor'],
       classNameOptionListItem,
-      STYLES['select__options-item'],
-      err && STYLES['error'],
-      successMsg && !err && STYLES['success'],
-      disabled && STYLES['disabled'],
+      reactInputsValidationCss['select__options-item'],
+      err && reactInputsValidationCss['error'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
     );
 
-    const dropdownIconClass = classnames(classNameDropdownIconOptionListItem, STYLES['select__dropdown-icon']);
+    const dropdownIconClass = classnames(classNameDropdownIconOptionListItem, reactInputsValidationCss['select__dropdown-icon']);
 
-    const errMsgClass = classnames(STYLES['msg'], err && STYLES['error']);
-    const successMsgClass = classnames(STYLES['msg'], !err && STYLES['success']);
+    const errMsgClass = classnames(reactInputsValidationCss['msg'], err && reactInputsValidationCss['error']);
+    const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);
 
     let msgHtml;
     const { showMsg } = getDefaultValidationOption(validationOption);
@@ -538,7 +591,7 @@ class Index extends React.Component<Props, State> {
               onMouseOut={() => {
                 this.removeActive();
               }}
-              className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${STYLES['active']}` : `${selectOptionListItemClass}`}
+              className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
               key={k}
               style={customStyleOptionListItem}
               onClick={e => {
@@ -554,8 +607,8 @@ class Index extends React.Component<Props, State> {
     let selectorHtml = selectHtml;
     if (!selectorHtml) {
       selectorHtml = (
-        <div className={STYLES['select__dropdown']}>
-          <div className={`${STYLES['select__dropdown-name']} ${STYLES['ellipsis']}`}>{item ? item.name : ''}</div>
+        <div className={reactInputsValidationCss['select__dropdown']}>
+          <div className={`${reactInputsValidationCss['select__dropdown-name']} ${reactInputsValidationCss['ellipsis']}`}>{item ? item.name : ''}</div>
           <div className={dropdownIconClass} />
         </div>
       );
@@ -563,7 +616,7 @@ class Index extends React.Component<Props, State> {
     return (
       <div
         tabIndex={Number(tabIndex)}
-        id={STYLES['select__wrapper']}
+        id={reactInputsValidationCss['select__wrapper']}
         className={wrapperClass}
         style={customStyleWrapper}
         onClick={e => {

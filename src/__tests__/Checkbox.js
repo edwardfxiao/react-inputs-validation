@@ -1,98 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import Checkbox from '../js/Inputs/Checkbox.js';
-
-class CheckboxWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: props.checked, hasError: props.hasError };
-  }
-
-  render() {
-    const { validationOption } = this.props;
-    const { value, hasError } = this.state;
-    return (
-      <div id="wrapper">
-        <Checkbox
-          tabIndex="1"
-          id={'Checkbox'}
-          name="Checkbox"
-          type="text"
-          value={value}
-          validationCallback={res => {
-            this.setState({ hasError: res });
-          }}
-          onChange={res => {
-            this.setState({ value: res });
-          }}
-          onBlur={() => {}}
-          validationOption={validationOption}
-        />
-        <label id="value">{value ? 'checked' : 'not checked'}</label>
-        <label id="hasError">{hasError ? 'has error' : 'not has error'}</label>
-      </div>
-    );
-  }
-}
-
-CheckboxWrapper.defaultProps = {
-  checked: false,
-  hasError: false,
-  validationOption: {}
-};
-
-CheckboxWrapper.propTypes = {
-  checked: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  hasError: PropTypes.bool,
-  validationOption: PropTypes.object
-};
-
+import mockConsole from 'jest-mock-console';
+import Checkbox from '../js/Inputs/Checkbox';
 configure({ adapter: new Adapter() });
-const getWrapper = (value, validationOption, hasError) => {
-  return mount(<CheckboxWrapper value={value} validationOption={validationOption} hasError={hasError} />);
-};
-
 describe('Checkbox component', () => {
-  it('[validationOption.required = true]: Should return has error because of it is not checked', () => {
-    const result = 'not checked';
-    const checked = false;
-    const hasError = false;
-    const validationOption = {
-      name: 'foobar',
-      check: true,
-      required: true
-    };
-    const wrapper = getWrapper(checked, validationOption, hasError);
-    const $input = wrapper.find('.checkbox__box');
-    const $labelValue = wrapper.find('#value');
-    const $labelHasError = wrapper.find('#hasError');
-    $input.simulate('focus');
-    $input.simulate('blur');
-    expect($labelValue.text()).toEqual(result);
-    expect($labelHasError.text()).toEqual('has error');
-  });
-
-  it('[validationOption.required = false]:Should return not has error when it is not checked because of it is not required', () => {
-    const result = 'not checked';
-    const checked = false;
-    const hasError = false;
-    const validationOption = {
-      check: true,
-      required: false,
-      msgOnSuccess: 'success'
-    };
-    const wrapper = getWrapper(checked, validationOption, hasError);
-    const $input = wrapper.find('.checkbox__box');
-    const $labelValue = wrapper.find('#value');
-    const $labelHasError = wrapper.find('#hasError');
-    $input.simulate('focus');
-    $input.simulate('blur');
-    expect($labelValue.text()).toEqual(result);
-    expect($labelHasError.text()).toEqual('not has error');
-  });
-
   it('[check]: Should call handleCheckEnd when empty', () => {
     let value = '';
     const wrapper = mount(
@@ -101,9 +13,9 @@ describe('Checkbox component', () => {
         onChange={() => {}}
         validationOption={{
           check: true,
-          required: true
+          required: true,
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.handleCheckEnd = jest.fn();
@@ -111,118 +23,91 @@ describe('Checkbox component', () => {
     expect(instance.handleCheckEnd).toHaveBeenCalled();
   });
 
-  it('[check]: Should call handleCheckEnd when empty', () => {
-    let value = '';
-    const wrapper = mount(
-      <Checkbox
-        value={value}
-        onChange={() => {}}
-        validationOption={{
-          check: false,
-          required: true
-        }}
-      />
-    );
+  it('[check]: Should call handleCheckEnd when is not checked', () => {
+    const wrapper = mount(<Checkbox checked={false} />);
     const instance = wrapper.instance();
     instance.handleCheckEnd = jest.fn();
-    instance.check(value);
+    instance.check();
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  });
+
+  it('[check]: Should not call handleCheckEnd when is not checked and check is false', () => {
+    const wrapper = mount(<Checkbox checked={false} validationOption={{ check: false }} />);
+    const instance = wrapper.instance();
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
     expect(instance.handleCheckEnd).not.toHaveBeenCalled();
   });
 
-  it('[pageClick]: Should call onBlur', () => {
-    let value = '';
-    const wrapper = mount(
-      <Checkbox
-        value={value}
-        onChange={() => {}}
-        validationOption={{
-          check: true,
-          required: true
-        }}
-      />
-    );
+  it('[check]: Should call handleCheckEnd when is not checked and required is false with name provided', () => {
+    const wrapper = mount(<Checkbox checked={false} validationOption={{ check: true, required: false }} />);
     const instance = wrapper.instance();
-    instance.onFocus();
-    instance.onBlur = jest.fn();
-    instance.pageClick({ target: null });
-    expect(instance.onBlur).toHaveBeenCalled();
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
   });
 
-  it('[pageClick]: Should not call onBlur', () => {
-    let value = '';
-    const wrapper = mount(
-      <Checkbox
-        value={value}
-        onChange={() => {}}
-        validationOption={{
-          check: true,
-          required: true
-        }}
-      />
-    );
+  it('[check]: Should call handleCheckEnd when is not checked and required is false', () => {
+    const wrapper = mount(<Checkbox checked={false} validationOption={{ name: 'foobar', check: true, required: true }} />);
     const instance = wrapper.instance();
-    instance.onBlur = jest.fn();
-    instance.pageClick({ target: null });
-    expect(instance.onBlur).not.toHaveBeenCalled();
+    wrapper.setState({ checked: false });
+    instance.handleCheckEnd = jest.fn();
+    instance.check();
+    expect(instance.handleCheckEnd).toHaveBeenCalled();
   });
 
-  it("[onFocus]: Should not call parent's onFocus", () => {
-    let value = '';
+  it("[onFocus]: Should call parent's onFocus", () => {
     let focused = false;
     const wrapper = mount(
       <Checkbox
-        value={value}
-        onChange={() => {}}
         onFocus={() => {
           focused = true;
         }}
-        validationOption={{
-          check: true,
-          required: true
-        }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onFocus();
     expect(focused).toEqual(true);
   });
 
-  it("[onBlur]: Should not call parent's onBlur", () => {
-    let value = '';
+  it('[onFocus]: Should not check when onFocus is not provided', () => {
+    const wrapper = mount(<Checkbox />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    instance.onFocus();
+    expect(instance.check).not.toHaveBeenCalled();
+  });
+
+  it("[onBlur]: Should call parent's onBlur", () => {
     let blured = false;
     const wrapper = mount(
       <Checkbox
-        value={value}
-        onChange={() => {}}
         onBlur={() => {
           blured = true;
         }}
-        validationOption={{
-          check: true,
-          required: true
-        }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onBlur();
     expect(blured).toEqual(true);
   });
 
+  it('[onBlur]: Should not check when onBlur is not provided', () => {
+    const wrapper = mount(<Checkbox />);
+    const instance = wrapper.instance();
+    instance.check = jest.fn();
+    instance.onBlur();
+    expect(instance.check).not.toHaveBeenCalled();
+  });
+
   it("[onClick]: Should not call parent's onClick", () => {
-    let value = '';
     let clicked = false;
     const wrapper = mount(
       <Checkbox
-        value={value}
-        onChange={() => {}}
         onClick={() => {
           clicked = true;
         }}
-        validationOption={{
-          check: true,
-          required: true
-        }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.onClick();
@@ -230,35 +115,84 @@ describe('Checkbox component', () => {
   });
 
   it('[handleCheckEnd]: Should call validationCallback', () => {
-    let value = '';
     const msgOnError = 'foobar';
     let valid = false;
     const wrapper = mount(
       <Checkbox
-        value={value}
-        onChange={() => {}}
         validationCallback={() => {
           valid = true;
         }}
         validationOption={{
           name: 'foobar',
-          check: true,
-          required: true,
-          msgOnError
+          msgOnError,
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.handleCheckEnd(true, msgOnError);
     expect(valid).toEqual(true);
   });
 
-  it('[handleCheckEnd]: all validationOption', () => {
-    let value = '';
+  it('[successMsg]: Should setState successMsg to msgOnSuccess', () => {
+    const wrapper = mount(
+      <Checkbox
+        onBlur={() => {}}
+        validationOption={{
+          msgOnSuccess: 'msgOnSuccess',
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange();
+    instance.onBlur();
+    expect(wrapper.state().successMsg).toEqual('msgOnSuccess');
+  });
+
+  it('[state.err]: Should be true when props.validate toggled', () => {
+    const wrapper = mount(<Checkbox validate={false} checked={false} onBlur={() => {}} />);
+    wrapper.setProps({ validate: true });
+    expect(wrapper.state().err).toEqual(true);
+  });
+
+  it('[state.err]: Should be false when checked', () => {
+    const wrapper = mount(<Checkbox validate={false} checked={false} onBlur={() => {}} />);
+    const instance = wrapper.instance();
+    wrapper.setProps({ validate: true });
+    instance.onClick();
+    expect(wrapper.state().err).toEqual(false);
+  });
+
+  it('[disabled]: Should not call onClick when the Checkbox is disabled', () => {
+    const wrapper = mount(<Checkbox onBlur={() => {}} disabled={true} />);
+    const instance = wrapper.instance();
+    instance.onChange = jest.fn();
+    instance.onClick();
+    instance.onBlur();
+    expect(instance.onChange).not.toHaveBeenCalled();
+  });
+
+  it('[disabled]: Should state.err not change when the Checkbox is disabled', () => {
+    const wrapper = mount(<Checkbox onBlur={() => {}} disabled={true} />);
+    const instance = wrapper.instance();
+    instance.onChange();
+    expect(wrapper.state().err).toEqual(false);
+  });
+
+  it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
+    const restoreConsole = mockConsole();
+    const wrapper = mount(<Checkbox onBlur={() => {}} validationOption={{ locale: 'foobar' }} />);
+    const instance = wrapper.instance();
+    instance.onClick();
+    instance.onBlur();
+    expect(console.error).toHaveBeenCalled();
+    restoreConsole();
+  });
+
+  it('[handleCheckEnd]: All validationOption', () => {
     let valid = false;
     const wrapper = mount(
       <Checkbox
-        value={value}
+        value=""
         onChange={() => {}}
         validationCallback={() => {
           valid = true;
@@ -270,29 +204,12 @@ describe('Checkbox component', () => {
           showMsg: 'showMsg',
           required: true,
           msgOnError: 'msgOnError',
-          msgOnSuccess: 'msgOnSuccess'
+          msgOnSuccess: 'msgOnSuccess',
         }}
-      />
+      />,
     );
     const instance = wrapper.instance();
     instance.handleCheckEnd(true, 'msgOnError');
     expect(valid).toEqual(true);
   });
 });
-
-// describe('Checkbox component componentWillReceiveProps', () => {
-//   it('[validate]: Should call check when nextProps.validate = true', () => {
-//     const wrapper = shallow(<Checkbox validate={false} />);
-//     const instance = wrapper.instance();
-//     instance.check = jest.fn();
-//     wrapper.setProps({ validate: true });
-//     expect(instance.check).toHaveBeenCalled();
-//   });
-
-//   it('[checked]: err should be false if this.props.checked != nextProps.checked', () => {
-//     const checked = true;
-//     const wrapper = shallow(<Checkbox checked={false} />);
-//     wrapper.setProps({ checked });
-//     expect(wrapper.state().checked).toEqual(checked);
-//   });
-// });

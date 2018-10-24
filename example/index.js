@@ -68,7 +68,7 @@ import { Textbox } from 'react-inputs-validation';
   tabIndex="1" // Optional.[String or Number].Default: -1.
   id={'Number'} // Optional.[String].Default: "".  Input ID.
   name="Number" // Optional.[String].Default: "". Input name.
-  type="text" // Optional.[String].Default: "text". Input type [text, password, number].
+  type="text" // Optional.[String].Default: "text". Input type [text, password, number]. NOTE: provide "text" for better performance since different browsers run differently with "number".
   value={number} // Optional.[String].Default: "".
   placeholder="Place your number here ^-^" // Optional.[String].Default: "".
   onChange={(number, e) => {

@@ -8,7 +8,7 @@ const config = objectAssign(base, {
   mode: 'production',
   devtool: 'cheap-source-map',
   output: {
-    publicPath: '/dist/',
+    publicPath: './dist/',
     filename: '[name]-[chunkhash].js'
   },
   optimization: {

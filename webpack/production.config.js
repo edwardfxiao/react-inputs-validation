@@ -1,26 +1,32 @@
 const base = require('./base.js');
-const _ = require('lodash');
+const objectAssign = require('object-assign');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-const config = _.merge(base, {
+const config = objectAssign(base, {
+  mode: 'production',
   devtool: 'cheap-source-map',
   output: {
     publicPath: '/',
-    filename: '[name].js'
+    filename: '[name]-[chunkhash].js'
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJSPlugin({
+        uglifyOptions: {
+          output: {
+            comments: false
+          },
+          compress: {
+            warnings: false
+          }
+        }
+      })
+    ]
   }
 });
 
-config.plugins.push(
-  new webpack.LoaderOptionsPlugin({
-    minimize: true,
-    debug: false
-  }),
-  new ExtractTextPlugin({
-    filename: 'css/[name].css',
-    disable: false,
-    allChunks: true
-  })
-);
+config.plugins.push(new MiniCssExtractPlugin({ filename: 'css/[name]-[hash].css' }));
 
 module.exports = config;

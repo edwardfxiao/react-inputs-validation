@@ -183,7 +183,7 @@ class Index extends React.Component<Props, State> {
     const { type } = getDefaultValidationOption(validationOption);
     // FORMAT NUMBER
     if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-      v = String(this.autoFormatNumber(Number(v)));
+      v = String(this.autoFormatNumber(v));
     }
     const { onChange } = this.props;
     onChange && onChange(v, e);
@@ -344,7 +344,7 @@ class Index extends React.Component<Props, State> {
     }
   }
 
-  autoFormatNumber(v: number) {
+  autoFormatNumber(v: number | string) {
     const DOT = '.';
     let res = '';
     let hasDot = false;
@@ -398,11 +398,29 @@ class Index extends React.Component<Props, State> {
 
     const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = classnames(classNameWrapper, reactInputsValidationCss['textbox__wrapper'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
+    const wrapperClass = classnames(
+      classNameWrapper,
+      reactInputsValidationCss['textbox__wrapper'],
+      err && reactInputsValidationCss['error'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
+    );
 
-    const containerClass = classnames(classNameContainer, reactInputsValidationCss['textbox__container'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
+    const containerClass = classnames(
+      classNameContainer,
+      reactInputsValidationCss['textbox__container'],
+      err && reactInputsValidationCss['error'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
+    );
 
-    const inputClass = classnames(classNameInput, reactInputsValidationCss['textbox__input'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
+    const inputClass = classnames(
+      classNameInput,
+      reactInputsValidationCss['textbox__input'],
+      err && reactInputsValidationCss['error'],
+      successMsg && !err && reactInputsValidationCss['success'],
+      disabled && reactInputsValidationCss['disabled'],
+    );
 
     const errmsgClass = classnames(reactInputsValidationCss['msg'], err && reactInputsValidationCss['error']);
     const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);

@@ -5,16 +5,6 @@ import mockConsole from 'jest-mock-console';
 import Textbox from '../js/Inputs/Textbox.tsx';
 configure({ adapter: new Adapter() });
 
-// const MIN = 10;
-// const MAX = 20;
-// const VALUE_OUT_OF_RAGE_NUMBER = '30';
-// const VALUE_IN_THE_RAGE_NUMBER = '15';
-// const VALUE_OUT_OF_RAGE_LENGTH = '11';
-// const VALUE_IN_THE_RAGE_LENGTH = '111111111111111';
-// const LENGTH = '5';
-// const VALUE_OUT_OF_RAGE_LENGTH_EXACT = 'abcdefghijk';
-// const VALUE_IN_THE_RAGE_LENGTH_EXACT = 'abcde';
-
 describe('Textbox component', () => {
   it('[onChange]: Should call autoFormatNumber when type is numer', () => {
     let value = '';
@@ -35,21 +25,40 @@ describe('Textbox component', () => {
     expect(instance.autoFormatNumber).toHaveBeenCalled();
   });
 
-  it('[autoFormatNumber]: Should auto format .5 to 0.5 when type is numer', () => {
-    let value = '';
-    const wrapper = mount(
-      <Textbox
-        value={value}
-        onChange={() => {}}
-        validationOption={{
-          check: true,
-          required: true,
-          type: 'number',
-        }}
-      />,
-    );
+  it('[autoFormatNumber]: Should auto format .5 to 0.5', () => {
+    const wrapper = mount(<Textbox />);
     const instance = wrapper.instance();
     expect(instance.autoFormatNumber('.5')).toEqual('0.5');
+  });
+
+  it('[autoFormatNumber]: Should auto format .5. to 0.5', () => {
+    const wrapper = mount(<Textbox />);
+    const instance = wrapper.instance();
+    expect(instance.autoFormatNumber('.5.')).toEqual('0.5');
+  });
+
+  it('[autoFormatNumber]: Should auto format - to ""', () => {
+    const wrapper = mount(<Textbox />);
+    const instance = wrapper.instance();
+    expect(instance.autoFormatNumber('-')).toEqual('');
+  });
+
+  it('[autoFormatNumber]: Should auto format ? to ""', () => {
+    const wrapper = mount(<Textbox />);
+    const instance = wrapper.instance();
+    expect(instance.autoFormatNumber('?')).toEqual('');
+  });
+
+  it('[autoFormatNumber]: Should auto format ? to "', () => {
+    const wrapper = mount(<Textbox />);
+    const instance = wrapper.instance();
+    expect(instance.autoFormatNumber('?')).toEqual('');
+  });
+
+  it('[autoFormatNumber]: Should auto format A to "', () => {
+    const wrapper = mount(<Textbox />);
+    const instance = wrapper.instance();
+    expect(instance.autoFormatNumber('A')).toEqual('');
   });
 
   it('[check]: Should call handleCheckEnd', () => {
@@ -158,7 +167,7 @@ describe('Textbox component', () => {
     expect(valid).toEqual(true);
   });
 
-  it('[handleCheckEnd]: all validationOption', () => {
+  it('[handleCheckEnd]: All validationOption', () => {
     let value = '';
     let valid = false;
     const wrapper = mount(
@@ -304,7 +313,7 @@ describe('Textbox component', () => {
     const errorMessage = 'Description cannot be other things but milk';
     const wrapper = mount(
       <Textbox
-        value={'success'}
+        value={'foobar'}
         onBlur={() => {}}
         validationOption={{
           customFunc: res => {
@@ -322,6 +331,93 @@ describe('Textbox component', () => {
     expect(wrapper.state().msg).toEqual(errorMessage);
   });
 
+  it('[customFunc]: Should setState msg to ""', () => {
+    const errorMessage = 'Description cannot be other things but milk';
+    const wrapper = mount(
+      <Textbox
+        value={'milk'}
+        onBlur={() => {}}
+        validationOption={{
+          customFunc: res => {
+            if (res != 'milk') {
+              return errorMessage;
+            }
+            return true;
+          },
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange();
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('');
+  });
+
+  it('[validationOption.length]: Should show error when the length is not valid', () => {
+    const wrapper = mount(
+      <Textbox
+        value={'success'}
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange();
+    instance.onBlur();
+    expect(wrapper.state().err).toEqual(true);
+  });
+
+  it('[validationOption.length]: Should state.msg to be error message with name', () => {
+    const wrapper = mount(
+      <Textbox
+        value={'success'}
+        onBlur={() => {}}
+        validationOption={{
+          name: 'foobar',
+          length: 5,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange();
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('foobar length must be 5');
+  });
+
+  it('[validationOption.length]: Should state.msg to be error message', () => {
+    const wrapper = mount(
+      <Textbox
+        value={'success'}
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange();
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('length must be 5');
+  });
+
+  it('[validationOption.length]: Should state.msg not to be error message', () => {
+    const wrapper = mount(
+      <Textbox
+        value={'abcde'}
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange();
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('');
+  });
+
   it('[validationOption.compare]: Should show error when it is not equal to compared value', () => {
     const wrapper = mount(
       <Textbox
@@ -336,6 +432,22 @@ describe('Textbox component', () => {
     instance.onChange();
     instance.onBlur();
     expect(wrapper.state().err).toEqual(true);
+  });
+
+  it('[validationOption.compare]: Should not show error when it is equal to compared value', () => {
+    const wrapper = mount(
+      <Textbox
+        value={'abc'}
+        onBlur={() => {}}
+        validationOption={{
+          compare: 'abc',
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange();
+    instance.onBlur();
+    expect(wrapper.state().err).toEqual(false);
   });
 
   it('[validationOption.min string]: Should show error when the length is less than min length', () => {
@@ -488,6 +600,15 @@ describe('Textbox component', () => {
     expect(wrapper.state().successMsg).toEqual('msgOnSuccess');
   });
 
+  it('[this.input === null]: Should return or not call handleCheckEnd when this.input === null', () => {
+    const wrapper = mount(<Textbox />);
+    const instance = wrapper.instance();
+    instance.input = null;
+    instance.check();
+    instance.handleCheckEnd = jest.fn();
+    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
+  });
+
   it('[state.err]: Should be true when props.validate toggled', () => {
     const wrapper = mount(<Textbox validate={false} onBlur={() => {}} />);
     wrapper.setProps({ validate: true });
@@ -495,12 +616,24 @@ describe('Textbox component', () => {
   });
 
   it('[state.err]: Should be false when supplied value', () => {
-    const wrapper = mount(<Textbox validate={false} onBlur={() => {}} />);
+    let v = '';
+    const wrapper = mount(
+      <Textbox
+        validate={false}
+        onBlur={() => {}}
+        onChange={res => {
+          v = res;
+        }}
+      />,
+    );
     const instance = wrapper.instance();
-    wrapper.setProps({ validate: true });
-    instance.input.current.value = 'foobar';
+    instance.onFocus();
     instance.onBlur();
-    expect(wrapper.state().err).toEqual(false);
+    instance.onFocus();
+    instance.input.current.value = 'foobar';
+    instance.onChange();
+    instance.onBlur();
+    expect(v).toEqual('foobar');
   });
 
   it('[disabled]: Should not call onFocus when the Textbox is disabled', () => {
@@ -807,9 +940,9 @@ describe('Textbox component', () => {
     restoreConsole();
   });
 
-  it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
+  it('[console.error type null]: Should console.error Please provide "type" in validationOption', () => {
     const restoreConsole = mockConsole();
-    const wrapper = mount(<Textbox onBlur={() => {}} validationOption={{ type: 'foobar' }} />);
+    const wrapper = mount(<Textbox onBlur={() => {}} validationOption={{ type: null }} />);
     const instance = wrapper.instance();
     instance.onFocus();
     instance.onBlur();

@@ -1,7 +1,7 @@
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE } from './const';
 
 const getEnglishName = (name: string) => {
-  let res = "";
+  let res = '';
   if (name) {
     res = `${name} `;
   }
@@ -105,7 +105,8 @@ let message: Message = {
   },
 };
 
-const getCustomErrorMessage = (o: any, m: any) => {
+// TODO: find a rewire way to handle non-export function
+export const getCustomErrorMessage = (o: any, m: any) => {
   if (!o || typeof o !== 'object' || o.constructor !== Object || !Object.keys(o).length) {
     console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
     return false;
@@ -136,7 +137,8 @@ declare global {
 
 window.REACT_INPUTS_VALIDATION = window.REACT_INPUTS_VALIDATION || {};
 
-const handleCustomErrorMessage = (message: any, w: Window) => {
+// TODO: find a rewire way to handle non-export function
+export const handleCustomErrorMessage = (message: any, w: Window) => {
   let res;
   if (typeof w !== 'undefined') {
     if (w.REACT_INPUTS_VALIDATION && w.REACT_INPUTS_VALIDATION['customErrorMessage']) {

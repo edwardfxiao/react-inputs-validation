@@ -5,16 +5,6 @@ import mockConsole from 'jest-mock-console';
 import Textarea from '../js/Inputs/Textarea.tsx';
 configure({ adapter: new Adapter() });
 
-// const MIN = 10;
-// const MAX = 20;
-// const VALUE_OUT_OF_RAGE_NUMBER = '30';
-// const VALUE_IN_THE_RAGE_NUMBER = '15';
-// const VALUE_OUT_OF_RAGE_LENGTH = '11';
-// const VALUE_IN_THE_RAGE_LENGTH = '111111111111111';
-// const LENGTH = '5';
-// const VALUE_OUT_OF_RAGE_LENGTH_EXACT = 'abcdefghijk';
-// const VALUE_IN_THE_RAGE_LENGTH_EXACT = 'abcde';
-
 describe('Textarea component', () => {
   it('[check]: Should call handleCheckEnd when empty', () => {
     let value = '';
@@ -250,7 +240,6 @@ describe('Textarea component', () => {
     const errorMessage = 'Description cannot be other things but milk';
     const wrapper = mount(
       <Textarea
-        value={'success'}
         onBlur={() => {}}
         validationOption={{
           customFunc: res => {
@@ -263,10 +252,93 @@ describe('Textarea component', () => {
       />,
     );
     const instance = wrapper.instance();
-    instance.value = 'success';
-    instance.onChange({ target: { value: 'success' } });
+    instance.value = 'foobar';
+    instance.onChange({ target: { value: 'foobar' } });
     instance.onBlur();
     expect(wrapper.state().msg).toEqual(errorMessage);
+  });
+
+  it('[customFunc]: Should setState msg to ""', () => {
+    const errorMessage = 'Description cannot be other things but milk';
+    const wrapper = mount(
+      <Textarea
+        onBlur={() => {}}
+        validationOption={{
+          customFunc: res => {
+            if (res != 'milk') {
+              return errorMessage;
+            }
+            return true;
+          },
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.value = 'milk';
+    instance.onChange({ target: { value: 'milk' } });
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('');
+  });
+
+    it('[validationOption.length]: Should show error when the length is not valid', () => {
+    const wrapper = mount(
+      <Textarea
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange({ target: { value: 'success' } });
+    instance.onBlur();
+    expect(wrapper.state().err).toEqual(true);
+  });
+
+  it('[validationOption.length]: Should state.msg to be error message with name', () => {
+    const wrapper = mount(
+      <Textarea
+        onBlur={() => {}}
+        validationOption={{
+          name: 'foobar',
+          length: 5,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange({ target: { value: 'success' } });
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('foobar length must be 5');
+  });
+
+  it('[validationOption.length]: Should state.msg to be error message', () => {
+    const wrapper = mount(
+      <Textarea
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange({ target: { value: 'success' } });
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('length must be 5');
+  });
+
+  it('[validationOption.length]: Should state.msg not to be error message', () => {
+    const wrapper = mount(
+      <Textarea
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange({ target: { value: 'abcde' } });
+    instance.onBlur();
+    expect(wrapper.state().msg).toEqual('');
   });
 
   it('[validationOption.min string]: Should show error when the length is less than min length', () => {
@@ -360,12 +432,23 @@ describe('Textarea component', () => {
   });
 
   it('[state.err]: Should be false when supplied value', () => {
-    const wrapper = mount(<Textarea validate={false} onBlur={() => {}} />);
+    let v = '';
+    const wrapper = mount(
+      <Textarea
+        validate={false}
+        onBlur={() => {}}
+        onChange={res => {
+          v = res;
+        }}
+      />,
+    );
     const instance = wrapper.instance();
-    wrapper.setProps({ validate: true });
-    instance.value = 'foobar';
+    instance.onFocus();
     instance.onBlur();
-    expect(wrapper.state().err).toEqual(false);
+    instance.onFocus();
+    instance.onChange({ target: { value: 'foobar' } });
+    instance.onBlur();
+    expect(v).toEqual('foobar');
   });
 
   it('[disabled]: Should not call onFocus when the Textarea is disabled', () => {
@@ -427,18 +510,29 @@ describe('Textarea component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength="1"
-        validationOption={{
-          check: true,
-          showMsg: true,
-          required: true,
-        }}
+        maxLength={1}
       />,
     );
     const instance = wrapper.instance();
-    instance.value = 'foobar';
-    instance.onChange({ target: { value: '' } });
+    instance.onChange({ target: { value: 'foobar' } });
     expect(value).toEqual('');
+  });
+
+  it('[String maxLength]: Should not longer than maxLength', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        maxLength="10"
+      />,
+    );
+    const instance = wrapper.instance();
+    instance.onChange({ target: { value: 'foobar' } });
+    expect(value).toEqual('foobar');
   });
 
   it('[String onChange setState err]: Should setState err: false', () => {
@@ -470,12 +564,6 @@ describe('Textarea component', () => {
         onChange={() => {}}
         validationOption={{
           locale: 'foobar',
-          type: 'string',
-          name: '',
-          check: true,
-          showMsg: true,
-          required: true,
-          msgOnError: '',
         }}
       />,
     );
@@ -493,14 +581,7 @@ describe('Textarea component', () => {
         onBlur={() => {}}
         onChange={() => {}}
         validationOption={{
-          locale: 'en-US',
-          type: 'string',
-          name: '',
           reg: /^0x[a-fA-F0-9]{40}$/,
-          check: true,
-          showMsg: true,
-          required: true,
-          msgOnError: '',
         }}
       />,
     );
@@ -521,14 +602,7 @@ describe('Textarea component', () => {
         onBlur={() => {}}
         onChange={() => {}}
         validationOption={{
-          locale: 'en-US',
-          type: 'string',
-          name: '',
           min: 10,
-          check: true,
-          showMsg: true,
-          required: true,
-          msgOnError: '',
         }}
       />,
     );
@@ -546,14 +620,24 @@ describe('Textarea component', () => {
         onBlur={() => {}}
         onChange={() => {}}
         validationOption={{
-          locale: 'en-US',
-          type: 'string',
-          name: '',
           max: 1,
-          check: true,
-          showMsg: true,
-          required: true,
-          msgOnError: '',
+        }}
+      />,
+    );
+    const $input = wrapper.find('textarea');
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find('.msg.error').length).toEqual(1);
+  });
+
+  it('[validationOption.min and max string]: Should show error when the length is out out range', () => {
+    const wrapper = mount(
+      <Textarea
+        value="12345"
+        onBlur={() => {}}
+        validationOption={{
+          min: 1,
+          max: 3,
         }}
       />,
     );
@@ -576,6 +660,16 @@ describe('Textarea component', () => {
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
     const restoreConsole = mockConsole();
     const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ type: 'foobar' }} />);
+    const instance = wrapper.instance();
+    instance.onFocus();
+    instance.onBlur();
+    expect(console.error).toHaveBeenCalled();
+    restoreConsole();
+  });
+
+  it('[console.error type null: Should console.error Please provide "type" in validationOption', () => {
+    const restoreConsole = mockConsole();
+    const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ type: null }} />);
     const instance = wrapper.instance();
     instance.onFocus();
     instance.onBlur();

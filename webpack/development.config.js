@@ -1,5 +1,4 @@
 const base = require('./base.js');
-const PATH = require('./build_path');
 const objectAssign = require('object-assign');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');

@@ -135,7 +135,9 @@ declare global {
   }
 }
 
-window.REACT_INPUTS_VALIDATION = window.REACT_INPUTS_VALIDATION || {};
+if (typeof window !== 'undefined') {
+  window.REACT_INPUTS_VALIDATION = window.REACT_INPUTS_VALIDATION || {};
+}
 
 // TODO: find a rewire way to handle non-export function
 export const handleCustomErrorMessage = (message: any, w: Window) => {
@@ -151,6 +153,8 @@ export const handleCustomErrorMessage = (message: any, w: Window) => {
   return res;
 };
 
-message = handleCustomErrorMessage(message, window);
+if (typeof window !== 'undefined') {
+  message = handleCustomErrorMessage(message, window);
+}
 
 export default message;

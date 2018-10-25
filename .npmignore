@@ -1,10 +1,10 @@
-/examples
+/coverage
+/example
 /webpack
-/test
 /src
 /.babelrc
 /.eslintrc.json
-/.eslintignore.json
+/eslintignore.json
 /.gitignore
 /.travis.yml
 /jest.config.js

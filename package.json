@@ -47,8 +47,8 @@
     "compile": "npm run clean && npm run compile_webpack && npm run babel"
   },
   "peerDependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0"
   },
   "dependencies": {
     "classnames": "^2.2.5"

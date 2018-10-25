@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "2.0.1",
+  "version": "2.0.7",
   "description": "a react inputs validation component",
   "main": "index.js",
   "repository": {
@@ -47,8 +47,8 @@
     "compile": "npm run clean && npm run compile_webpack && npm run babel"
   },
   "peerDependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0"
   },
   "dependencies": {
     "classnames": "^2.2.5"

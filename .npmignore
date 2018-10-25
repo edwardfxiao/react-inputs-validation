@@ -1,0 +1,14 @@
+/coverage
+/example
+/webpack
+/src
+/.babelrc
+/.eslintrc.json
+/eslintignore.json
+/.gitignore
+/.travis.yml
+/jest.config.js
+/postcss.config.js
+/stylelint.config.js
+/tsconfig.json
+/tslint.json

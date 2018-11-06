@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "2.0.7",
+  "version": "2.1.0",
   "description": "a react inputs validation component",
   "main": "index.js",
   "repository": {
@@ -21,7 +21,7 @@
     "textarea"
   ],
   "author": "Edward Xiao",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/edwardfhsiao/react-inputs-validation/issues"
   },

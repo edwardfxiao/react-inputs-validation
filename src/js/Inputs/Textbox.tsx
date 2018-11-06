@@ -16,7 +16,7 @@ interface DefaultValidationOption {
   type?: string;
   name?: string;
   check?: boolean;
-  showmsg?: boolean;
+  showMsg?: boolean;
   length?: number;
   regMsg?: string;
   compare?: string;
@@ -27,7 +27,7 @@ interface DefaultValidationOption {
 }
 
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
-  let { reg, min, max, type, name, check, length, regMsg, compare, required, showmsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
+  let { reg, min, max, type, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
@@ -35,7 +35,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   type = typeof type !== 'undefined' ? type : 'string';
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
-  showmsg = typeof showmsg !== 'undefined' ? showmsg : true;
+  showMsg = typeof showMsg !== 'undefined' ? showMsg : true;
   length = typeof length !== 'undefined' ? length : 0;
   regMsg = typeof regMsg !== 'undefined' ? regMsg : '';
   compare = typeof compare !== 'undefined' ? compare : '';
@@ -55,7 +55,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     locale,
     compare,
     required,
-    showmsg,
+    showMsg,
     msgOnError,
     msgOnSuccess,
     customFunc,
@@ -426,11 +426,11 @@ class Index extends React.Component<Props, State> {
     const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);
 
     let msgHtml;
-    const { showmsg } = getDefaultValidationOption(validationOption);
-    if (showmsg && err && msg) {
+    const { showMsg } = getDefaultValidationOption(validationOption);
+    if (showMsg && err && msg) {
       msgHtml = <div className={errmsgClass}>{msg}</div>;
     }
-    if (showmsg && !err && successMsg) {
+    if (showMsg && !err && successMsg) {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (

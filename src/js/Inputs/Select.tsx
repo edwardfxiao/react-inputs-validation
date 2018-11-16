@@ -1,6 +1,5 @@
 import * as React from 'react';
 import message from './message';
-import classnames from 'classnames';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'select';
@@ -363,6 +362,7 @@ class Index extends React.Component<Props, State> {
 
   scroll(direction: undefined | string = undefined) {
     const itemsWrapperNode: Node | null = this.itemsWrapper;
+    /* istanbul ignore next */
     if (itemsWrapperNode === null) {
       return;
     }
@@ -372,6 +372,7 @@ class Index extends React.Component<Props, State> {
       return;
     }
     const optionItemsNode: Node | null = this.optionItems[this.currentFocus];
+    /* istanbul ignore next */
     if (optionItemsNode === null) {
       return;
     }
@@ -391,6 +392,7 @@ class Index extends React.Component<Props, State> {
           }
         }
       }
+      /* istanbul ignore next */
       if (direction === 'up') {
         this.corrected = false;
         if (this.currentFocus * itemHeight <= containerScrollTop) {
@@ -411,6 +413,7 @@ class Index extends React.Component<Props, State> {
     if (this.currentFocus >= x.length) this.currentFocus = 0;
     if (this.currentFocus < 0) this.currentFocus = x.length - 1;
     const node: Node | null = x[this.currentFocus];
+    /* istanbul ignore next */
     if (node === null) {
       return;
     }
@@ -421,6 +424,7 @@ class Index extends React.Component<Props, State> {
     const x = this.optionItems;
     for (let i = 0; i < x.length; i += 1) {
       const node: Node | null = x[i];
+      /* istanbul ignore next */
       if (node === null) {
         break;
       }
@@ -430,6 +434,7 @@ class Index extends React.Component<Props, State> {
 
   pageClick(e: Event) {
     const node: Node | null = this.wrapper;
+    /* istanbul ignore next */
     if (node === null) {
       return;
     }
@@ -512,49 +517,31 @@ class Index extends React.Component<Props, State> {
 
     const { value, err, msg, show, successMsg, isTyping } = this.state;
 
-    const wrapperClass = classnames(classNameWrapper, reactInputsValidationCss['select__wrapper'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
+    const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['select__wrapper']} ${err && reactInputsValidationCss['error']} ${successMsg &&
+      !err &&
+      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
 
-    const containerClass = classnames(
-      classNameContainer,
-      reactInputsValidationCss['select__container'],
-      err && reactInputsValidationCss['error'],
-      show && reactInputsValidationCss['show'],
-      successMsg && !err && reactInputsValidationCss['success'],
-      disabled && reactInputsValidationCss['disabled'],
-    );
+    const containerClass = `${classNameContainer} ${reactInputsValidationCss['select__container']} ${err && reactInputsValidationCss['error']} ${show &&
+      reactInputsValidationCss['show']} ${successMsg && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
 
-    const inputClass = classnames(reactInputsValidationCss['select__input'], err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], disabled && reactInputsValidationCss['disabled']);
+    const inputClass = `${reactInputsValidationCss['select__input']} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${disabled &&
+      reactInputsValidationCss['disabled']};`;
 
-    const selectClass = classnames(
-      classNameSelect,
-      reactInputsValidationCss['ellipsis'],
-      err && reactInputsValidationCss['error'],
-      successMsg && !err && reactInputsValidationCss['success'],
-      disabled && reactInputsValidationCss['disabled'],
-    );
+    const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${successMsg &&
+      !err &&
+      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
 
-    const selectOptionListContainerClass = classnames(
-      classNameOptionListContainer,
-      reactInputsValidationCss['select__options-container'],
-      err && reactInputsValidationCss['error'],
-      show && reactInputsValidationCss['show'],
-      successMsg && !err && reactInputsValidationCss['success'],
-      disabled && reactInputsValidationCss['disabled'],
-    );
+    const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss['select__options-container']} ${err && reactInputsValidationCss['error']} ${show &&
+      reactInputsValidationCss['show']} ${successMsg && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
 
-    const selectOptionListItemClass = classnames(
-      !isTyping && reactInputsValidationCss['select__options-item-show-cursor'],
-      classNameOptionListItem,
-      reactInputsValidationCss['select__options-item'],
-      err && reactInputsValidationCss['error'],
-      successMsg && !err && reactInputsValidationCss['success'],
-      disabled && reactInputsValidationCss['disabled'],
-    );
+    const selectOptionListItemClass = `${!isTyping && reactInputsValidationCss['select__options-item-show-cursor']} ${classNameOptionListItem} ${
+      reactInputsValidationCss['select__options-item']
+    } ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
 
-    const dropdownIconClass = classnames(classNameDropdownIconOptionListItem, reactInputsValidationCss['select__dropdown-icon']);
+    const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss['select__dropdown-icon']}`;
 
-    const errMsgClass = classnames(reactInputsValidationCss['msg'], err && reactInputsValidationCss['error']);
-    const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);
+    const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+    const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
 
     let msgHtml;
     const { showMsg } = getDefaultValidationOption(validationOption);

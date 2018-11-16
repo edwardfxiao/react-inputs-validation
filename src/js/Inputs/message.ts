@@ -135,10 +135,6 @@ declare global {
   }
 }
 
-if (typeof window !== 'undefined') {
-  window.REACT_INPUTS_VALIDATION = window.REACT_INPUTS_VALIDATION || {};
-}
-
 // TODO: find a rewire way to handle non-export function
 export const handleCustomErrorMessage = (message: any, w: Window) => {
   let res;
@@ -153,7 +149,9 @@ export const handleCustomErrorMessage = (message: any, w: Window) => {
   return res;
 };
 
+/* istanbul ignore else */
 if (typeof window !== 'undefined') {
+  window.REACT_INPUTS_VALIDATION = window.REACT_INPUTS_VALIDATION || {};
   message = handleCustomErrorMessage(message, window);
 }
 

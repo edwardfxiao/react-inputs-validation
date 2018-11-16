@@ -1,6 +1,5 @@
 import * as React from 'react';
 import message from './message';
-import classnames from 'classnames';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'radiobox';
@@ -246,18 +245,27 @@ class Index extends React.Component<Props, State> {
 
     const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = classnames(classNameWrapper, err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__wrapper'], disabled && reactInputsValidationCss['disabled']);
+    const wrapperClass = `${classNameWrapper} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${
+      reactInputsValidationCss['radiobox__wrapper']
+    } ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const containerClass = classnames(classNameContainer, err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__container'], disabled && reactInputsValidationCss['disabled']);
+    const containerClass = `${classNameContainer} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${
+      reactInputsValidationCss['radiobox__container']
+    } ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const inputClass = classnames(classNameInput, err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__input'], disabled && reactInputsValidationCss['disabled']);
+    const inputClass = `${classNameInput} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${
+      reactInputsValidationCss['radiobox__input']
+    } ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const labelClass = classnames(err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__label'], disabled && reactInputsValidationCss['disabled']);
+    const labelClass = `${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${reactInputsValidationCss['radiobox__label']} ${disabled &&
+      reactInputsValidationCss['disabled']}`;
 
-    const optionListItemClass = classnames(classNameOptionListItem, err && reactInputsValidationCss['error'], successMsg && !err && reactInputsValidationCss['success'], reactInputsValidationCss['radiobox__item'], disabled && reactInputsValidationCss['disabled']);
+    const optionListItemClass = `${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${
+      reactInputsValidationCss['radiobox__item']
+    } ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const errMsgClass = classnames(reactInputsValidationCss['msg'], err && reactInputsValidationCss['error']);
-    const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);
+    const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+    const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
 
     let msgHtml;
     const { showMsg } = getDefaultValidationOption(validationOption);

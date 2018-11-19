@@ -15,6 +15,7 @@ import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-vali
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
 # Codesandbox Examples
+* <a href="https://codesandbox.io/s/v3wq0llmo3">Online demo form example playground</a>
 * <a href="https://codesandbox.io/s/pjom8r78x7">Custom control</a>(when ```check: false```)
 * <a href="https://codesandbox.io/s/1r77ozkrk7">Custom function</a>(when providing ```customFunc```)
 * <a href="https://codesandbox.io/s/q9vqmk4j84">Custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)

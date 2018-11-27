@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/react-inputs-validation.svg)](https://badge.fury.io/js/react-inputs-validation) [![Build Status](https://travis-ci.org/edwardfhsiao/react-inputs-validation.svg?branch=master)](https://travis-ci.org/edwardfhsiao/react-inputs-validation) [![react-inputs-validation](http://img.shields.io/npm/dm/react-inputs-validation.svg)](https://www.npmjs.com/package/react-inputs-validation) [![Package Quality](http://npm.packagequality.com/shield/react-inputs-validation.svg)](http://packagequality.com/#?package=react-inputs-validation) [![Coverage Status](https://coveralls.io/repos/github/edwardfhsiao/react-inputs-validation/badge.svg?branch=master)](https://coveralls.io/github/edwardfhsiao/react-inputs-validation?branch=master) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-inputs-validation.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/LICENSE)
 
 A react inputs validation component.
-# <img src="http://oc54ddm6x.bkt.clouddn.com/react-inputs.gif" />
+# <img src="http://cdn.edwardxiao.zuhe.me/react-inputs.gif" />
 
 # Online Demo
 <a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>

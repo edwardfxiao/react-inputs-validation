@@ -317,7 +317,8 @@ class Index extends React.Component<Props, State> {
         if (this.currentFocus > -1) {
           if (x) {
             const node: Node | null = x[this.currentFocus];
-            if (node === null) {
+            /* istanbul ignore next */
+            if (!node) {
               return;
             }
             node.current.click();
@@ -326,9 +327,6 @@ class Index extends React.Component<Props, State> {
       }
     } else {
       const { keycodeList } = this.state;
-      if (!(keyCode >= 48 || keyCode <= 57 || keyCode >= 65 || keyCode <= 90 || keyCode >= 96 || keyCode <= 105)) {
-        return;
-      }
       this.setTimeoutTyping();
       const newkeyCodeList = [...keycodeList, keyCode];
       const str = String.fromCharCode(...newkeyCodeList).toLowerCase();
@@ -368,6 +366,7 @@ class Index extends React.Component<Props, State> {
     }
     const containerHeight = itemsWrapperNode.current.offsetHeight;
     const containerScrollTop = itemsWrapperNode.current.scrollTop;
+    /* istanbul ignore next */
     if (!this.currentFocus || !this.optionItems[this.currentFocus]) {
       return;
     }
@@ -392,7 +391,6 @@ class Index extends React.Component<Props, State> {
           }
         }
       }
-      /* istanbul ignore next */
       if (direction === 'up') {
         this.corrected = false;
         if (this.currentFocus * itemHeight <= containerScrollTop) {
@@ -414,7 +412,7 @@ class Index extends React.Component<Props, State> {
     if (this.currentFocus < 0) this.currentFocus = x.length - 1;
     const node: Node | null = x[this.currentFocus];
     /* istanbul ignore next */
-    if (node === null) {
+    if (!node) {
       return;
     }
     node.current.className += ` ${reactInputsValidationCss['select__hover-active']}`;
@@ -424,10 +422,6 @@ class Index extends React.Component<Props, State> {
     const x = this.optionItems;
     for (let i = 0; i < x.length; i += 1) {
       const node: Node | null = x[i];
-      /* istanbul ignore next */
-      if (node === null) {
-        break;
-      }
       node.current.className = node.current.className.replace(reactInputsValidationCss['select__hover-active'], '');
     }
   }
@@ -435,9 +429,10 @@ class Index extends React.Component<Props, State> {
   pageClick(e: Event) {
     const node: Node | null = this.wrapper;
     /* istanbul ignore next */
-    if (node === null) {
+    if (!node) {
       return;
     }
+    /* istanbul ignore next */
     if (node.current.contains(e.target)) {
       return;
     }
@@ -470,7 +465,7 @@ class Index extends React.Component<Props, State> {
     const nameText = name ? name : '';
     if (required) {
       if (isValidateValue(value)) {
-        this.handleCheckEnd(true, msg.empty ? msg.empty(nameText) : '');
+        this.handleCheckEnd(true, msg.empty(nameText));
         return;
       }
     }

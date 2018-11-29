@@ -41,7 +41,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```sh
 npm install react-inputs-validation --save
 ```
-# Donate
+# Donation
 <a href="https://www.paypal.me/XIAOMENGXIAO/0.99" target="_blank" alt="PayPal Donate">Thanks for donating me a donut!&nbsp;&nbsp;⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</a>
 
 # Browser support

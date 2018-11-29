@@ -195,8 +195,9 @@ class Index extends React.Component<Props, State> {
         return;
       }
       const msg = message[locale][TYPE];
+      const nameText = name ? name : '';
       if (!this.state.checked) {
-        this.handleCheckEnd(true, msg.unchecked ? msg.unchecked(name ? name : '') : '');
+        this.handleCheckEnd(true, msg.unchecked(nameText));
         return;
       }
     }

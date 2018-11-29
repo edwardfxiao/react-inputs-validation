@@ -202,7 +202,7 @@ class Index extends React.Component<Props, State> {
     const nameText = name ? name : '';
     if (required) {
       if (isValidateValue(value)) {
-        this.handleCheckEnd(true, msg.empty ? msg.empty(nameText) : '');
+        this.handleCheckEnd(true, msg.empty(nameText));
         return;
       }
     }

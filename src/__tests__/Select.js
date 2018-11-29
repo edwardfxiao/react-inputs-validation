@@ -7,7 +7,7 @@ configure({ adapter: new Adapter() });
 
 const SELECTED_INDEX = 2;
 
-const OPTION_LIST = [{ id: '', name: 'Please select one country' }, { id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }];
+const OPTION_LIST = [{ id: '', name: 'Please select one country' }, { id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }, { id: 'uk', name: 'UK' }, { id: 'fr', name: 'France' }];
 
 describe('Select component', () => {
   it('[onFocus]: Should not check when onFocus is not provided', () => {
@@ -24,6 +24,22 @@ describe('Select component', () => {
     instance.check = jest.fn();
     instance.onBlur();
     expect(instance.check).not.toHaveBeenCalled();
+  });
+
+  it('[ArrowUp]: Should return correct index', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
+    wrapper.instance().toggleShow(true);
+    expect(wrapper.instance().onKeyDown({ keyCode: 38 })).toEqual(0);
+  });
+
+  it('[ArrowDown then ArrowUp]: Should return correct index', () => {
+    const wrapper = mount(<Select optionList={OPTION_LIST} />);
+    const instance = wrapper.instance();
+    instance.toggleShow(true);
+    instance.onKeyDown({ keyCode: 40 });
+    instance.onKeyDown({ keyCode: 40 });
+    instance.onKeyDown({ keyCode: 38 });
+    expect(instance.onKeyDown({ keyCode: 38 })).toEqual(0);
   });
 
   it('[ArrowDown]: Should return correct index', () => {
@@ -82,12 +98,6 @@ describe('Select component', () => {
     instance.onKeyDown({ keyCode: 67 });
     instance.onKeyDown({ keyCode: 65 });
     expect(wrapper.state().keycodeList).toEqual([67, 65]);
-  });
-
-  it('[ArrowUp]: Should return correct index', () => {
-    const wrapper = mount(<Select optionList={OPTION_LIST} />);
-    wrapper.instance().toggleShow(true);
-    expect(wrapper.instance().onKeyDown({ keyCode: 38 })).toEqual(0);
   });
 
   it('[getIndex]: Should return correct index', () => {
@@ -288,7 +298,7 @@ describe('Select component', () => {
     const wrapper = mount(<Select value="" optionList={OPTION_LIST} onChange={() => {}} validationOption={{}} selectOptionListItemHtml={selectOptionListItemHtml} />);
     const $input = wrapper.find('#select__wrapper');
     $input.simulate('click');
-    expect(wrapper.find('.foo').length).toEqual(3);
+    expect(wrapper.find('.foo').length).toEqual(OPTION_LIST.length);
   });
 
   it('[select__input class]: Should have select__input class name', () => {
@@ -374,15 +384,6 @@ describe('Select component', () => {
     expect(instance.onBlur).toHaveBeenCalled();
   });
 
-  it('[pageClick]: Should return if !this.wrapper', () => {
-    const wrapper = mount(<Select optionList={OPTION_LIST} />);
-    const instance = wrapper.instance();
-    wrapper.setState({ show: true });
-    instance.wrapper = null;
-    instance.pageClick({ target: null });
-    expect(wrapper.state().show).toEqual(true);
-  });
-
   it('[pageClick]: Should return if is this.wrapper self', () => {
     const wrapper = mount(<Select optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
@@ -408,25 +409,6 @@ describe('Select component', () => {
     instance.addActive();
     expect(instance.currentFocus).toEqual(0);
   });
-
-  // // TODO: find better way
-  //   it('[addActive]: Should return if x[this.currentFocus] === null', () => {
-  //     const wrapper = mount(<Select optionList={OPTION_LIST} />);
-  //     const instance = wrapper.instance();
-  //     wrapper.setState({ show: true });
-  //     instance.currentFocus = null;
-  //     instance.addActive();
-  //     // expect(instance.currentFocus).toEqual(2);
-  //   });
-  // // TODO: find better way
-  //   it('[removeActive]: Should return if x[this.currentFocus] === null', () => {
-  //     const wrapper = mount(<Select optionList={OPTION_LIST} />);
-  //     const instance = wrapper.instance();
-  //     wrapper.setState({ show: true });
-  //     instance.optionItems = null;
-  //     instance.removeActive();
-  //     // expect(instance.currentFocus).toEqual(2);
-  //   });
 
   it("[onChange]: Should call parent's onChange using simulate click", () => {
     let changed = false;

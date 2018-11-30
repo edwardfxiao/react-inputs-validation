@@ -518,7 +518,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 <a href="https://codesandbox.io/s/13qo2rqxjj">codesandbox example</a>
 ```js
  import validator from 'validator';
- import { Textarea } from 'react-inputs-validation';
+ import { Textbox } from 'react-inputs-validation';
  import 'react-inputs-validation/lib/react-inputs-validation.min.css';
  // Phone
   <Textbox

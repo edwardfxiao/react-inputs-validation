@@ -7,6 +7,7 @@ import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
+const DEFAULT_AUTO_COMPLETE = 'on'; //  Default value is on
 interface DefaultValidationOption {
   locale?: string;
   reg?: string;
@@ -69,6 +70,7 @@ interface Props {
   value?: string;
   disabled?: boolean;
   validate?: boolean;
+  autoComplete?: string;
   maxLength?: string | number;
   placeholder?: string;
   classNameInput?: string;
@@ -93,6 +95,7 @@ interface DefaultProps {
   value: string | number;
   disabled: boolean;
   validate: boolean;
+  autoComplete: string;
   maxLength: string | number;
   placeholder: string;
   classNameInput: string;
@@ -124,6 +127,7 @@ class Index extends React.Component<Props, State> {
     value: '',
     disabled: false,
     validate: false,
+    autoComplete: DEFAULT_AUTO_COMPLETE,
     maxLength: DEFAULT_MAX_LENGTH,
     placeholder: '',
     classNameInput: '',
@@ -385,6 +389,7 @@ class Index extends React.Component<Props, State> {
       value,
       disabled,
       maxLength,
+      autoComplete,
       placeholder,
       classNameWrapper,
       classNameContainer,
@@ -430,6 +435,7 @@ class Index extends React.Component<Props, State> {
             type={type}
             value={value}
             disabled={disabled}
+            autoComplete={autoComplete}
             maxLength={Number(maxLength)}
             onBlur={this.onBlur}
             onKeyUp={this.onKeyUp}

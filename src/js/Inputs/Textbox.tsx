@@ -1,6 +1,5 @@
 import * as React from 'react';
 import message from './message';
-import classnames from 'classnames';
 import validator from './validator';
 import utils from './utils';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
@@ -240,7 +239,7 @@ class Index extends React.Component<Props, State> {
         // CHECK EMPTY
         if (required) {
           if (validator.empty(value)) {
-            this.handleCheckEnd(true, msg.empty ? msg.empty(nameText) : '');
+            this.handleCheckEnd(true, msg.empty(nameText));
             return;
           }
         }
@@ -248,7 +247,7 @@ class Index extends React.Component<Props, State> {
           // CHECK REGEX
           if (reg) {
             if (validator['reg'](reg, value)) {
-              this.handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid ? msg.invalid(nameText) : '');
+              this.handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
               return;
             }
           }
@@ -257,19 +256,19 @@ class Index extends React.Component<Props, State> {
             if (min || max) {
               if (min && max) {
                 if (String(value).length < min || String(value).length > max) {
-                  this.handleCheckEnd(true, msg.inBetween ? msg.inBetween(nameText)(min)(max) : '');
+                  this.handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
                   return;
                 }
               } else {
                 if (min) {
                   if (String(value).length < min) {
-                    this.handleCheckEnd(true, msg.lessThan ? msg.lessThan(nameText)(min) : '');
+                    this.handleCheckEnd(true, msg.lessThan(nameText)(min));
                     return;
                   }
                 }
                 if (max) {
                   if (String(value).length > max) {
-                    this.handleCheckEnd(true, msg.greaterThan ? msg.greaterThan(nameText)(max) : '');
+                    this.handleCheckEnd(true, msg.greaterThan(nameText)(max));
                     return;
                   }
                 }
@@ -277,7 +276,7 @@ class Index extends React.Component<Props, State> {
             }
             if (length) {
               if (String(value).length !== length) {
-                this.handleCheckEnd(true, msg.lengthEqual ? msg.lengthEqual(nameText)(length) : '');
+                this.handleCheckEnd(true, msg.lengthEqual(nameText)(length));
                 return;
               }
             }
@@ -285,25 +284,25 @@ class Index extends React.Component<Props, State> {
           // CHECK NUMBER
           if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
             if (!validator[type](value)) {
-              this.handleCheckEnd(true, msg.invalid ? msg.invalid(nameText) : '');
+              this.handleCheckEnd(true, msg.invalid(nameText));
               return;
             }
             if (min || max) {
               if (min && max) {
                 if (!validator[type](value, min, max)) {
-                  this.handleCheckEnd(true, msg.inBetween ? msg.inBetween(nameText)(min)(max) : '');
+                  this.handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
                   return;
                 }
               } else {
                 if (min) {
                   if (!validator[type](value, min)) {
-                    this.handleCheckEnd(true, msg.lessThan ? msg.lessThan(nameText)(min) : '');
+                    this.handleCheckEnd(true, msg.lessThan(nameText)(min));
                     return;
                   }
                 }
                 if (max) {
                   if (!validator[type](value, 0, max)) {
-                    this.handleCheckEnd(true, msg.greaterThan ? msg.greaterThan(nameText)(max) : '');
+                    this.handleCheckEnd(true, msg.greaterThan(nameText)(max));
                     return;
                   }
                 }
@@ -311,7 +310,7 @@ class Index extends React.Component<Props, State> {
             }
             if (length) {
               if (String(value).length !== length) {
-                this.handleCheckEnd(true, msg.lengthEqual ? msg.lengthEqual(nameText)(length) : '');
+                this.handleCheckEnd(true, msg.lengthEqual(nameText)(length));
                 return;
               }
             }
@@ -319,7 +318,7 @@ class Index extends React.Component<Props, State> {
           // CHECK EQUAL
           if (compare && compare !== '') {
             if (value !== compare) {
-              this.handleCheckEnd(true, msg.twoInputsNotEqual ? msg.twoInputsNotEqual() : '');
+              this.handleCheckEnd(true, msg.twoInputsNotEqual());
               return;
             }
           }
@@ -398,32 +397,20 @@ class Index extends React.Component<Props, State> {
 
     const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = classnames(
-      classNameWrapper,
-      reactInputsValidationCss['textbox__wrapper'],
-      err && reactInputsValidationCss['error'],
-      successMsg && !err && reactInputsValidationCss['success'],
-      disabled && reactInputsValidationCss['disabled'],
-    );
+    const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['textbox__wrapper']} ${err && reactInputsValidationCss['error']} ${successMsg &&
+      !err &&
+      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const containerClass = classnames(
-      classNameContainer,
-      reactInputsValidationCss['textbox__container'],
-      err && reactInputsValidationCss['error'],
-      successMsg && !err && reactInputsValidationCss['success'],
-      disabled && reactInputsValidationCss['disabled'],
-    );
+    const containerClass = `${classNameContainer} ${reactInputsValidationCss['textbox__container']} ${err && reactInputsValidationCss['error']} ${successMsg &&
+      !err &&
+      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const inputClass = classnames(
-      classNameInput,
-      reactInputsValidationCss['textbox__input'],
-      err && reactInputsValidationCss['error'],
-      successMsg && !err && reactInputsValidationCss['success'],
-      disabled && reactInputsValidationCss['disabled'],
-    );
+    const inputClass = `${classNameInput} ${reactInputsValidationCss['textbox__input']} ${err && reactInputsValidationCss['error']} ${successMsg &&
+      !err &&
+      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const errmsgClass = classnames(reactInputsValidationCss['msg'], err && reactInputsValidationCss['error']);
-    const successMsgClass = classnames(reactInputsValidationCss['msg'], !err && reactInputsValidationCss['success']);
+    const errmsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+    const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
 
     let msgHtml;
     const { showMsg } = getDefaultValidationOption(validationOption);

@@ -59,6 +59,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
+|autoComplete                      |  Opt  |  Str   |                                             |  "on"      |
 |maxLength                         |  Opt  |  Str &#124; Num |                                    |  524288    |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |

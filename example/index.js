@@ -128,6 +128,7 @@ import { Checkbox } from 'react-inputs-validation';
   name={'agreement'} // Optional.[String].Default: "". Input name
   value={agreement} // Required.[String].Default: "".
   onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  checked={isAgreementChecked} // Required.[Bool].Default: false.
   onChange={(isAgreementChecked, e) => {
     this.setState({ isAgreementChecked });
     console.log(e);

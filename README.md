@@ -173,8 +173,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
 |**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
 |**onChange**                      |**Req.**|**Func**                  |**(val, e) => {}. Will return the value.**|**(val, e)=>{}**   |
-|onFocus                           |*Opt.*  |Func                      |                                                                                                            |none     |
-|onClick                           |*Opt.*  |Func                      |                                                                                                            |none     |
+|onFocus                           |Opt  |Func                      |                                                                                                            |none     |
+|onClick                           |Opt  |Func                      |                                                                                                            |none     |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -242,7 +242,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
-|**checked**                       |**Req.**|**Bool**|**Recommend using the value returned from ```onChange``` callback, which is ```isChecked```.**                                            |**false**   |
+|**checked**                       |**Req**|**Bool**|**Recommend using the value returned from ```onChange``` callback, which is ```isChecked```.**                                            |**false**   |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
@@ -252,11 +252,11 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
 |customStyleInputBox               |  Opt  |  Obj   |                                             |  {}        |
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
-|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req.**|**Func**                  |**(isChecked, e) => {}. Will return the value.**|**(val, e)=>{}**   |
-|onFocus                           |*Opt.*  |Func                      |                                                                                                            |none     |
-|onClick                           |*Opt.*  |Func                      |                                                                                                            |none     |
-|**labelHtml**                     |*Req.*  |Html                      |                                                                                                            |none     |
+|**onBlur**                       |**Opt**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
+|**onChange**                      |**Req**|**Func**                  |**(isChecked, e) => {}. Will return the value.**|**(val, e)=>{}**   |
+|onFocus                           |Opt  |Func                      |                                                                                                            |none     |
+|onClick                           |Opt  |Func                      |                                                                                                            |none     |
+|**labelHtml**                     |Req  |Html                      |                                                                                                            |none     |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -274,7 +274,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   id={'agreement'} //Optional.[String].Default: "".  Input ID.
   name={'agreement'} //Optional.[String].Default: "". Input name
   value={agreement} //Required.[String].Default: "".
-  checked={isAgreementChecked} //Optional.[Bool].Default: false.
+  checked={isAgreementChecked} //Required.[Bool].Default: false.
   disabled={false} //Optional.[Bool].Default: false.
   validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>

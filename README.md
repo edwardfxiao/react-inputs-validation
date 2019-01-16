@@ -171,8 +171,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
-|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req.**|**Func**                  |**(val, e) => {}. Will return the value.**|**(val, e)=>{}**   |
+|**onBlur**                       |**Opt**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
+|**onChange**                      |**Req**|**Func**                  |**(val, e) => {}. Will return the value.**|**(val, e)=>{}**   |
 |onFocus                           |Opt  |Func                      |                                                                                                            |none     |
 |onClick                           |Opt  |Func                      |                                                                                                            |none     |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
@@ -338,7 +338,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListContainer    |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
-|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
+|**onBlur**                       |**Opt**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
 |**onChange**                      |**Req**|**Func**|                                             |**(val, e) => {}**|
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |

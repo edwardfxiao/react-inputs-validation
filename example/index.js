@@ -68,7 +68,7 @@ import { Textbox } from 'react-inputs-validation';
   tabIndex="1" // Optional.[String or Number].Default: -1.
   id={'Number'} // Optional.[String].Default: "".  Input ID.
   name="Number" // Optional.[String].Default: "". Input name.
-  type="number" // Optional.[String].Default: "text". Input type [text, password, number].
+  type="text" // Optional.[String].Default: "text". Input type [text, password, number]. NOTE: provide "text" for better performance since different browsers run differently with "number".
   value={number} // Optional.[String].Default: "".
   placeholder="Place your number here ^-^" // Optional.[String].Default: "".
   onChange={(number, e) => {
@@ -639,7 +639,7 @@ class Index extends Component {
                     tabIndex="1" // Optional.[String or Number].Default: -1.
                     id={'Number'} // Optional.[String].Default: "".  Input ID.
                     name="Number" // Optional.[String].Default: "". Input name.
-                    type="number" // Optional.[String].Default: "text". Input type [text, password, number].
+                    type="text" // Optional.[String].Default: "text". Input type [text, password, number].
                     value={number} // Optional.[String].Default: "".
                     placeholder="Place your number here ^-^" // Optional.[String].Default: "".
                     onChange={(number, e) => {
@@ -719,6 +719,7 @@ class Index extends Component {
                     tabIndex="5" // Optional.[String or Number].Default: -1.
                     id={'agreement'} // Optional.[String].Default: "".  Input ID.
                     name={'agreement'} // Optional.[String].Default: "". Input name
+                    checked={isAgreementChecked} // Required.[Bool].Default: false.
                     value={agreement} // Required.[String].Default: "".
                     onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     onChange={(isAgreementChecked, e) => {
@@ -959,7 +960,7 @@ class Index extends Component {
                       id={'agreement'} // Optional.[String].Default: "".  Input ID.
                       name={'agreement'} // Optional.[String].Default: "". Input name
                       value={agreement} // Required.[String].Default: "".
-                      checked={false} // Required.[Bool].Default: false.
+                      checked={isAgreementChecked} // Required.[Bool].Default: false.
                       disabled={false} // Optional.[Bool].Default: false.
                       validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
                       validationCallback={res => {

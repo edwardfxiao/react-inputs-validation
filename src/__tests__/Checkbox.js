@@ -136,6 +136,7 @@ describe('Checkbox component', () => {
   it('[successMsg]: Should setState successMsg to msgOnSuccess', () => {
     const wrapper = mount(
       <Checkbox
+        checked={true}
         onBlur={() => {}}
         validationOption={{
           msgOnSuccess: 'msgOnSuccess',

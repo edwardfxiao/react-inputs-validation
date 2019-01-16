@@ -245,22 +245,22 @@ class Index extends React.Component<Props, State> {
 
     const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = `${classNameWrapper} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${
+    const wrapperClass = `${classNameWrapper} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
       reactInputsValidationCss['radiobox__wrapper']
     } ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const containerClass = `${classNameContainer} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${
+    const containerClass = `${classNameContainer} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
       reactInputsValidationCss['radiobox__container']
     } ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const inputClass = `${classNameInput} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${
+    const inputClass = `${classNameInput} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
       reactInputsValidationCss['radiobox__input']
     } ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const labelClass = `${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${reactInputsValidationCss['radiobox__label']} ${disabled &&
+    const labelClass = `${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${reactInputsValidationCss['radiobox__label']} ${disabled &&
       reactInputsValidationCss['disabled']}`;
 
-    const optionListItemClass = `${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${
+    const optionListItemClass = `${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
       reactInputsValidationCss['radiobox__item']
     } ${disabled && reactInputsValidationCss['disabled']}`;
 
@@ -272,7 +272,7 @@ class Index extends React.Component<Props, State> {
     if (showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (showMsg && !err && successMsg) {
+    if (showMsg && !err && typeof successMsg !== 'undefined') {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
 

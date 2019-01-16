@@ -402,15 +402,15 @@ class Index extends React.Component<Props, State> {
 
     const { err, msg, successMsg } = this.state;
 
-    const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['textbox__wrapper']} ${err && reactInputsValidationCss['error']} ${successMsg &&
+    const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['textbox__wrapper']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
       !err &&
       reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const containerClass = `${classNameContainer} ${reactInputsValidationCss['textbox__container']} ${err && reactInputsValidationCss['error']} ${successMsg &&
+    const containerClass = `${classNameContainer} ${reactInputsValidationCss['textbox__container']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
       !err &&
       reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const inputClass = `${classNameInput} ${reactInputsValidationCss['textbox__input']} ${err && reactInputsValidationCss['error']} ${successMsg &&
+    const inputClass = `${classNameInput} ${reactInputsValidationCss['textbox__input']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
       !err &&
       reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
@@ -422,7 +422,7 @@ class Index extends React.Component<Props, State> {
     if (showMsg && err && msg) {
       msgHtml = <div className={errmsgClass}>{msg}</div>;
     }
-    if (showMsg && !err && successMsg) {
+    if (showMsg && !err && typeof successMsg !== 'undefined') {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (

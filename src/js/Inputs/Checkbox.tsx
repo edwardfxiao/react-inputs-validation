@@ -127,13 +127,14 @@ class Index extends React.Component<Props, State> {
     this.input = React.createRef();
   }
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    // TODO: This was from componentWillReceiveProps()
-    // if (this.props.checked != nextProps.checked) {
-    //   this.setState({ checked: nextProps.checked });
-    // }
     if (nextProps.validate === true && prevState.validate === false) {
       return {
         validate: nextProps.validate,
+      };
+    }
+    if (nextProps.checked !== prevState.checked) {
+      return {
+        checked: nextProps.checked,
       };
     }
     return null;
@@ -237,16 +238,16 @@ class Index extends React.Component<Props, State> {
     const { err, msg, checked, successMsg } = this.state;
 
     const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['checkbox__wrapper']} ${checked && reactInputsValidationCss['checked']} ${err &&
-      reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+      reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
     const containerClass = `${classNameContainer} ${reactInputsValidationCss['checkbox__container']} ${checked && reactInputsValidationCss['checked']} ${err &&
-      reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+      reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const boxClass = `${classNameInputBox} ${reactInputsValidationCss['checkbox__box']} ${err && reactInputsValidationCss['error']} ${checked && reactInputsValidationCss['checked']} ${successMsg &&
+    const boxClass = `${classNameInputBox} ${reactInputsValidationCss['checkbox__box']} ${err && reactInputsValidationCss['error']} ${checked && reactInputsValidationCss['checked']} ${typeof successMsg !== 'undefined' &&
       !err &&
       reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const labelClass = `${checked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${successMsg && !err && reactInputsValidationCss['success']} ${disabled &&
+    const labelClass = `${checked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled &&
       reactInputsValidationCss['disabled']}`;
 
     const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
@@ -257,7 +258,7 @@ class Index extends React.Component<Props, State> {
     if (showMsg && err && msg) {
       msgHtml = <div className={errMsgClass}>{msg}</div>;
     }
-    if (showMsg && !err && successMsg) {
+    if (showMsg && !err && typeof successMsg !== 'undefined') {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (
@@ -271,7 +272,7 @@ class Index extends React.Component<Props, State> {
               type="checkbox"
               className={reactInputsValidationCss['checkbox__input']}
               value={String(value)}
-              checked={checked}
+              defaultChecked={checked}
               disabled={disabled}
               onChange={this.onChange}
               ref={this.input}

@@ -242,7 +242,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
-|checked                          |**Req.**|  Bool  |                                             |  false     |
+|**checked**                       |**Req.**|**Bool**|**Recommend using the value returned from ```onChange``` callback, which is ```isChecked```.**                                            |**false**   |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |

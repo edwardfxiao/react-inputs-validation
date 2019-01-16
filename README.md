@@ -242,7 +242,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
-|checked                           |  Opt  |  Bool  |                                             |  false      |
+|**checked**                       |**Req.**|**Bool**|**Recommend using the value returned from ```onChange``` callback, which is ```isChecked```.**                                            |**false**   |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
@@ -274,7 +274,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   id={'agreement'} //Optional.[String].Default: "".  Input ID.
   name={'agreement'} //Optional.[String].Default: "". Input name
   value={agreement} //Required.[String].Default: "".
-  checked={false} //Optional.[Bool].Default: false.
+  checked={isAgreementChecked} //Optional.[Bool].Default: false.
   disabled={false} //Optional.[Bool].Default: false.
   validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>

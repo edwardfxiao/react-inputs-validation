@@ -182,7 +182,7 @@ class Index extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.validate === true && prevState.validate === false) {
+    if (nextProps.validate !== prevState.validate) {
       return {
         validate: nextProps.validate,
       };
@@ -210,7 +210,7 @@ class Index extends React.Component<Props, State> {
         this.resetCurrentFocus();
       }
     }
-    if (this.state.validate === true && prevState.validate === false) {
+    if (this.state.validate !== prevState.validate) {
       this.check();
     }
   }
@@ -519,8 +519,9 @@ class Index extends React.Component<Props, State> {
     const containerClass = `${classNameContainer} ${reactInputsValidationCss['select__container']} ${err && reactInputsValidationCss['error']} ${show &&
       reactInputsValidationCss['show']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
 
-    const inputClass = `${reactInputsValidationCss['select__input']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled &&
-      reactInputsValidationCss['disabled']};`;
+    const inputClass = `${reactInputsValidationCss['select__input']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
+      !err &&
+      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
 
     const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
       !err &&

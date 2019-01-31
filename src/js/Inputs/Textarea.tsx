@@ -155,7 +155,7 @@ class Index extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.validate === true && prevState.validate === false) {
+    if (nextProps.validate !== prevState.validate) {
       return {
         validate: nextProps.validate,
       };
@@ -164,7 +164,7 @@ class Index extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.validate === true && prevState.validate === false) {
+    if (this.state.validate !== prevState.validate) {
       this.check();
     }
   }

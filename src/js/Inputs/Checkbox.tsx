@@ -127,7 +127,7 @@ class Index extends React.Component<Props, State> {
     this.input = React.createRef();
   }
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.validate === true && prevState.validate === false) {
+    if (nextProps.validate !== prevState.validate) {
       return {
         validate: nextProps.validate,
       };
@@ -140,7 +140,7 @@ class Index extends React.Component<Props, State> {
     return null;
   }
   componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.validate === true && prevState.validate === false) {
+    if (this.state.validate !== prevState.validate) {
       this.check();
     }
   }
@@ -243,12 +243,12 @@ class Index extends React.Component<Props, State> {
     const containerClass = `${classNameContainer} ${reactInputsValidationCss['checkbox__container']} ${checked && reactInputsValidationCss['checked']} ${err &&
       reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
 
-    const boxClass = `${classNameInputBox} ${reactInputsValidationCss['checkbox__box']} ${err && reactInputsValidationCss['error']} ${checked && reactInputsValidationCss['checked']} ${typeof successMsg !== 'undefined' &&
+    const boxClass = `${classNameInputBox} ${reactInputsValidationCss['checkbox__box']} ${err && reactInputsValidationCss['error']} ${checked &&
+      reactInputsValidationCss['checked']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+
+    const labelClass = `${checked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
       !err &&
       reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const labelClass = `${checked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled &&
-      reactInputsValidationCss['disabled']}`;
 
     const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
     const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;

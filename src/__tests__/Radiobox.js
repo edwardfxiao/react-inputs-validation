@@ -136,7 +136,7 @@ describe('Radiobox component', () => {
     const wrapper = mount(<Radiobox optionList={OPTION_LIST} />);
     const instance = wrapper.instance();
     instance.check = jest.fn();
-    wrapper.setState({ validate: true });
+    wrapper.setProps({ validate: true });
     expect(instance.check).toHaveBeenCalled();
   });
 

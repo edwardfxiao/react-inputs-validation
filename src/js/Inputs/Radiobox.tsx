@@ -155,7 +155,6 @@ class Index extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.state.validate !== prevState.validate) {
-      debugger;
       this.check();
     }
   }

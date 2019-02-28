@@ -3,7 +3,7 @@
 [![Join the chat at https://gitter.im/react-inputs-validation/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-inputs-validation/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A react inputs validation component.
-# <img src="https://edwardxiao.com/react-inputs-validation.gif" />
+# <img src="https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/react-inputs-validation.gif" />
 
 # Online Demo
 <a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>

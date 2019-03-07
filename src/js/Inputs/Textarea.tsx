@@ -196,7 +196,6 @@ class Index extends React.Component<Props, State> {
   onFocus(e: React.FocusEvent<HTMLElement>) {
     const { onFocus } = this.props;
     if (onFocus) {
-      // this.check();
       onFocus(e);
     }
   }

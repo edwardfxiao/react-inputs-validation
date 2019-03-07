@@ -1,7 +1,7 @@
 {
     "name": "react-inputs-validation",
-    "version": "2.1.4",
-    "description": "a react inputs validation component",
+    "version": "2.2.0",
+    "description": "React inputs validation component",
     "main": "index.js",
     "repository": {
         "type": "git",

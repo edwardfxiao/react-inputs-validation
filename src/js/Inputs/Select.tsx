@@ -55,7 +55,7 @@ interface OptionListItem {
 }
 
 interface Props {
-  tabIndex?: string | number;
+  tabIndex?: string | number | undefined;
   id?: string;
   name?: string;
   value?: string | number;
@@ -85,7 +85,7 @@ interface Props {
 }
 
 interface DefaultProps {
-  tabIndex: string | number;
+  tabIndex: string | number | undefined;
   id: string;
   name: string;
   value: string | number;
@@ -125,7 +125,7 @@ interface Node {
 
 class Index extends React.Component<Props, State> {
   static defaultProps: Props = {
-    tabIndex: -1,
+    tabIndex: undefined,
     id: '',
     name: '',
     value: '',
@@ -147,7 +147,6 @@ class Index extends React.Component<Props, State> {
   };
   private wrapper: React.RefObject<HTMLInputElement>;
   private itemsWrapper: React.RefObject<HTMLInputElement>;
-  private input: React.RefObject<HTMLInputElement>;
   private optionItems: React.RefObject<HTMLInputElement>[];
   private focus: boolean;
   private corrected: boolean;
@@ -174,7 +173,6 @@ class Index extends React.Component<Props, State> {
     this.pageClick = this.pageClick.bind(this);
     this.wrapper = React.createRef();
     this.itemsWrapper = React.createRef();
-    this.input = React.createRef();
     this.optionItems = [];
     this.focus = false;
     this.corrected = false;
@@ -198,9 +196,8 @@ class Index extends React.Component<Props, State> {
   componentDidMount() {
     window.addEventListener('mousedown', this.pageClick);
     window.addEventListener('touchstart', this.pageClick);
-    const node = this.wrapper.current;
-    if (node) {
-      node.addEventListener('keydown', this.onKeyDown);
+    if (this.wrapper.current && this.props.tabIndex) {
+      this.wrapper.current.setAttribute('tabindex', String(this.props.tabIndex));
     }
   }
 
@@ -208,6 +205,9 @@ class Index extends React.Component<Props, State> {
     if (prevState.show !== this.state.show) {
       if (this.state.show) {
         this.resetCurrentFocus();
+        if (this.wrapper.current) {
+          this.wrapper.current.addEventListener('keydown', this.onKeyDown);
+        }
       }
     }
     if (this.state.validate !== prevState.validate) {
@@ -598,7 +598,7 @@ class Index extends React.Component<Props, State> {
     }
     return (
       <div
-        tabIndex={Number(tabIndex)}
+        ref={this.wrapper}
         id={reactInputsValidationCss['select__wrapper']}
         className={wrapperClass}
         style={customStyleWrapper}
@@ -608,10 +608,9 @@ class Index extends React.Component<Props, State> {
         }}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
-        ref={this.wrapper}
       >
         <div className={containerClass} style={customStyleContainer}>
-          <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} ref={this.input} />
+          <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} />
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>

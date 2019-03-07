@@ -34,7 +34,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
 };
 
 interface Props {
-  tabIndex?: string | number;
+  tabIndex?: string | number | undefined;
   id?: string;
   name?: string;
   value?: string | boolean;
@@ -59,7 +59,7 @@ interface Props {
 }
 
 interface DefaultProps {
-  tabIndex: string | number;
+  tabIndex: string | number | undefined;
   id: string;
   name: string;
   value: string | boolean;
@@ -91,7 +91,7 @@ interface State {
 
 class Index extends React.Component<Props, State> {
   static defaultProps: DefaultProps = {
-    tabIndex: -1,
+    tabIndex: undefined,
     id: '',
     name: '',
     value: '',
@@ -110,7 +110,7 @@ class Index extends React.Component<Props, State> {
     validationOption: {},
     onChange: () => {},
   };
-  private input: React.RefObject<HTMLInputElement>;
+  private wrapper: React.RefObject<HTMLDivElement>;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -124,8 +124,9 @@ class Index extends React.Component<Props, State> {
     this.onClick = this.onClick.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
-    this.input = React.createRef();
+    this.wrapper = React.createRef();
   }
+
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (nextProps.validate !== prevState.validate) {
       return {
@@ -139,6 +140,13 @@ class Index extends React.Component<Props, State> {
     }
     return null;
   }
+
+  componentDidMount() {
+    if (this.wrapper.current && this.props.tabIndex) {
+      this.wrapper.current.setAttribute('tabindex', String(this.props.tabIndex));
+    }
+  }
+
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.state.validate !== prevState.validate) {
       this.check();
@@ -154,7 +162,6 @@ class Index extends React.Component<Props, State> {
     this.setState({ checked });
     const { onChange } = this.props;
     onChange && onChange(checked, e);
-    // when props.validate toggled
     if (this.state.err) {
       this.setState({ err: false });
     } else {
@@ -261,7 +268,7 @@ class Index extends React.Component<Props, State> {
       msgHtml = <div className={successMsgClass}>{successMsg}</div>;
     }
     return (
-      <div tabIndex={Number(tabIndex)} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
+      <div ref={this.wrapper} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
         <div className={containerClass} style={customStyleContainer}>
           <div className={boxClass} style={customStyleInputBox}>
             <div className={reactInputsValidationCss['box']} />
@@ -274,7 +281,6 @@ class Index extends React.Component<Props, State> {
               defaultChecked={checked}
               disabled={disabled}
               onChange={this.onChange}
-              ref={this.input}
             />
           </div>
           <label className={labelClass}>{labelHtml}</label>

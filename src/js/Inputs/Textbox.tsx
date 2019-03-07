@@ -63,7 +63,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
 };
 
 interface Props {
-  tabIndex?: string | number;
+  tabIndex?: string | number | undefined;
   id?: string;
   name?: string;
   type?: string;
@@ -88,7 +88,7 @@ interface Props {
 }
 
 interface DefaultProps {
-  tabIndex: string | number;
+  tabIndex: string | number | undefined;
   id: string;
   name: string;
   type: string;
@@ -120,7 +120,7 @@ interface State {
 
 class Index extends React.Component<Props, State> {
   static defaultProps: Props = {
-    tabIndex: -1,
+    tabIndex: undefined,
     id: '',
     name: '',
     type: 'text',
@@ -163,6 +163,12 @@ class Index extends React.Component<Props, State> {
       };
     }
     return null;
+  }
+
+  componentDidMount() {
+    if (this.input.current && this.props.tabIndex) {
+      this.input.current.setAttribute('tabindex', String(this.props.tabIndex));
+    }
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
@@ -247,14 +253,12 @@ class Index extends React.Component<Props, State> {
           }
         }
         if (String(value) !== '') {
-          // CHECK REGEX
           if (reg) {
             if (validator['reg'](reg, value)) {
               this.handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
               return;
             }
           }
-          // CHECK STRING
           if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
             if (min || max) {
               if (min && max) {
@@ -284,7 +288,6 @@ class Index extends React.Component<Props, State> {
               }
             }
           }
-          // CHECK NUMBER
           if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
             if (!validator[type](value)) {
               this.handleCheckEnd(true, msg.invalid(nameText));
@@ -318,7 +321,6 @@ class Index extends React.Component<Props, State> {
               }
             }
           }
-          // CHECK EQUAL
           if (compare && compare !== '') {
             if (value !== compare) {
               this.handleCheckEnd(true, msg.twoInputsNotEqual());
@@ -326,7 +328,6 @@ class Index extends React.Component<Props, State> {
             }
           }
         }
-        // CHECK CUSTOM FUNCTION
         if (customFunc && typeof customFunc === 'function') {
           const customFuncResult = customFunc(value);
           if (customFuncResult !== true) {
@@ -428,7 +429,6 @@ class Index extends React.Component<Props, State> {
       <div className={wrapperClass} style={customStyleWrapper}>
         <div className={containerClass} style={customStyleContainer}>
           <input
-            tabIndex={Number(tabIndex)}
             id={id}
             name={name}
             type={type}

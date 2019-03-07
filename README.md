@@ -1,9 +1,9 @@
 # react-inputs-validation
-[![npm version](https://badge.fury.io/js/react-inputs-validation.svg)](https://badge.fury.io/js/react-inputs-validation) [![Build Status](https://travis-ci.org/edwardfhsiao/react-inputs-validation.svg?branch=master)](https://travis-ci.org/edwardfhsiao/react-inputs-validation) [![react-inputs-validation](http://img.shields.io/npm/dm/react-inputs-validation.svg)](https://www.npmjs.com/package/react-inputs-validation) [![Package Quality](http://npm.packagequality.com/shield/react-inputs-validation.svg)](http://packagequality.com/#?package=react-inputs-validation) [![Coverage Status](https://coveralls.io/repos/github/edwardfhsiao/react-inputs-validation/badge.svg?branch=master)](https://coveralls.io/github/edwardfhsiao/react-inputs-validation?branch=master) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-inputs-validation.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/LICENSE)
+[![npm version](https://badge.fury.io/js/react-inputs-validation.svg)](https://badge.fury.io/js/react-inputs-validation) [![Build Status](https://travis-ci.org/edwardfhsiao/react-inputs-validation.svg?branch=master)](https://travis-ci.org/edwardfhsiao/react-inputs-validation) [![react-inputs-validation](http://img.shields.io/npm/dm/react-inputs-validation.svg)](https://www.npmjs.com/package/react-inputs-validation) [![Package Quality](https://npm.packagequality.com/shield/react-inputs-validation.svg)](http://packagequality.com/#?package=react-inputs-validation) [![Coverage Status](https://coveralls.io/repos/github/edwardfhsiao/react-inputs-validation/badge.svg?branch=master)](https://coveralls.io/github/edwardfhsiao/react-inputs-validation?branch=master) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-inputs-validation.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/LICENSE)
 [![Join the chat at https://gitter.im/react-inputs-validation/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-inputs-validation/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A react inputs validation component.
-# <img src="https://edwardxiao.com/react-inputs-validation.gif" />
+# <img src="https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/react-inputs-validation.gif" />
 
 # Online Demo
 <a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>
@@ -53,12 +53,13 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
+|autoComplete                      |  Opt  |  Str   |                                             |  "on"      |
 |maxLength                         |  Opt  |  Str &#124; Num |                                    |  524288    |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
@@ -98,7 +99,7 @@ import { Textbox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textbox
-  tabIndex="1" //Optional.[String or Number].Default: -1.
+  tabIndex="1" //Optional.[String or Number].Default: none.
   id={'Name'} //Optional.[String].Default: "".  Input ID.
   name="Name" //Optional.[String].Default: "". Input name.
   type="text" //Optional.[String].Default: "text". Input type [text, password, number].
@@ -154,7 +155,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |**id**                            |**Req**|**Str**|**IMPORTANT if you have multiple Radiobox on the page, id is used to distinguish them for the label 'for' use**|**""**      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -170,10 +171,10 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
-|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req.**|**Func**                  |**(val, e) => {}. Will return the value.**|**(val, e)=>{}**   |
-|onFocus                           |*Opt.*  |Func                      |                                                                                                            |none     |
-|onClick                           |*Opt.*  |Func                      |                                                                                                            |none     |
+|**onBlur**                       |**Opt**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
+|**onChange**                      |**Req**|**Func**                  |**(val, e) => {}. Will return the value.**|**(val, e)=>{}**   |
+|onFocus                           |Opt  |Func                      |                                                                                                            |none     |
+|onClick                           |Opt  |Func                      |                                                                                                            |none     |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -188,7 +189,7 @@ import { Radiobox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Radiobox
-  tabIndex={2} //Optional.[String or Number].Default: -1.
+  tabIndex={2} //Optional.[String or Number].Default: none.
   id="job" //Optional.[String].Default: "".  Input ID.
   name="job" //Optional.[String].Default: "". Input name.
   disabled={false} //Optional.[Bool].Default: false.
@@ -237,11 +238,11 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
-|checked                           |  Opt  |  Bool  |                                             |  false      |
+|**checked**                       |**Req**|**Bool**|**Recommend using the value returned from ```onChange``` callback, which is ```isChecked```.**                                            |**false**   |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
@@ -251,11 +252,11 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
 |customStyleInputBox               |  Opt  |  Obj   |                                             |  {}        |
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
-|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req.**|**Func**                  |**(isChecked, e) => {}. Will return the value.**|**(val, e)=>{}**   |
-|onFocus                           |*Opt.*  |Func                      |                                                                                                            |none     |
-|onClick                           |*Opt.*  |Func                      |                                                                                                            |none     |
-|**labelHtml**                     |*Req.*  |Html                      |                                                                                                            |none     |
+|**onBlur**                       |**Opt**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
+|**onChange**                      |**Req**|**Func**                  |**(isChecked, e) => {}. Will return the value.**|**(val, e)=>{}**   |
+|onFocus                           |Opt  |Func                      |                                                                                                            |none     |
+|onClick                           |Opt  |Func                      |                                                                                                            |none     |
+|**labelHtml**                     |Req  |Html                      |                                                                                                            |none     |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -269,11 +270,11 @@ import { Checkbox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Checkbox
-  tabIndex="5" //Optional.[String or Number].Default: -1.
+  tabIndex="5" //Optional.[String or Number].Default: none.
   id={'agreement'} //Optional.[String].Default: "".  Input ID.
   name={'agreement'} //Optional.[String].Default: "". Input name
   value={agreement} //Required.[String].Default: "".
-  checked={false} //Optional.[Bool].Default: false.
+  checked={isAgreementChecked} //Required.[Bool].Default: false.
   disabled={false} //Optional.[Bool].Default: false.
   validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
@@ -318,7 +319,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -337,7 +338,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleContainer              |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListContainer    |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
-|**onBlur**                       |**Opt.**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
+|**onBlur**                       |**Opt**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
 |**onChange**                      |**Req**|**Func**|                                             |**(val, e) => {}**|
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
@@ -358,7 +359,7 @@ import { Select } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Select
-  tabIndex="6" //Optional.[String or Number].Default: -1.
+  tabIndex="6" //Optional.[String or Number].Default: none.
   id={'movie'} //Optional.[String].Default: "". Input ID.
   name={'movie'} //Optional.[String].Default: "". Input name.
   value={movie} //Optional.[String].Default: "".
@@ -419,7 +420,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -463,7 +464,7 @@ import { Textarea } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textarea
-  tabIndex="7" //Optional.[String or Number].Default: -1.
+  tabIndex="7" //Optional.[String or Number].Default: none.
   id="description" //Optional.[String].Default: "".  Textarea ID.
   name="description" //Optional.[String].Default: "". Textarea name.
   value={description} //Optional.[String].Default: "".
@@ -712,7 +713,7 @@ Then in the component...
 
 ```js
 <Textbox
-  tabIndex="1" //Optional.[String or Number].Default: -1.
+  tabIndex="1" //Optional.[String or Number].Default: none.
   ...
   validationOption={{
     ...

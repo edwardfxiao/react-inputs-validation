@@ -61,7 +61,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
 };
 
 interface Props {
-  tabIndex?: string | number;
+  tabIndex?: string | number | undefined;
   id?: string;
   name?: string;
   type?: string;
@@ -87,7 +87,7 @@ interface Props {
 }
 
 interface DefaultProps {
-  tabIndex: string | number;
+  tabIndex: string | number | undefined;
   id: string;
   name: string;
   value: string | number;
@@ -118,7 +118,7 @@ interface State {
 
 class Index extends React.Component<Props, State> {
   static defaultProps: Props = {
-    tabIndex: -1,
+    tabIndex: undefined,
     id: '',
     name: '',
     type: 'text',
@@ -139,6 +139,7 @@ class Index extends React.Component<Props, State> {
     onChange: () => {},
   };
   private value: string;
+  private textarea: any;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -152,6 +153,7 @@ class Index extends React.Component<Props, State> {
     this.onFocus = this.onFocus.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
     this.value = props.value;
+    this.textarea = React.createRef();
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
@@ -161,6 +163,12 @@ class Index extends React.Component<Props, State> {
       };
     }
     return null;
+  }
+
+  componentDidMount() {
+    if (this.textarea.current && this.props.tabIndex) {
+      this.textarea.current.setAttribute('tabindex', String(this.props.tabIndex));
+    }
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
@@ -196,7 +204,6 @@ class Index extends React.Component<Props, State> {
   onFocus(e: React.FocusEvent<HTMLElement>) {
     const { onFocus } = this.props;
     if (onFocus) {
-      this.check();
       onFocus(e);
     }
   }
@@ -224,7 +231,6 @@ class Index extends React.Component<Props, State> {
         const msg = message[locale][TYPE];
         const value = val || this.value;
         const nameText = name ? name : '';
-        // CHECK EMPTY
         if (required) {
           if (validator.empty(value)) {
             this.handleCheckEnd(true, msg.empty(nameText));
@@ -232,14 +238,12 @@ class Index extends React.Component<Props, State> {
           }
         }
         if (String(value) !== '') {
-          // CHECK REGEX
           if (reg) {
             if (validator['reg'](reg, value)) {
               this.handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
               return;
             }
           }
-          // CHECK STRING
           if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
             if (min || max) {
               if (min && max) {
@@ -270,7 +274,6 @@ class Index extends React.Component<Props, State> {
             }
           }
         }
-        // CHECK CUSTOM FUNCTION
         if (customFunc && typeof customFunc === 'function') {
           const customFuncResult = customFunc(value);
           if (customFuncResult !== true) {
@@ -352,7 +355,6 @@ class Index extends React.Component<Props, State> {
       <div className={wrapperClass} style={customStyleWrapper}>
         <div className={containerClass} style={customStyleContainer}>
           <textarea
-            tabIndex={Number(tabIndex)}
             id={id}
             name={name}
             value={value}
@@ -367,6 +369,7 @@ class Index extends React.Component<Props, State> {
             placeholder={placeholder}
             cols={Number(cols)}
             rows={Number(rows)}
+            ref={this.textarea}
           />
         </div>
         {msgHtml}

@@ -47,7 +47,7 @@ interface OptionListItem {
 }
 
 interface Props {
-  tabIndex?: string | number;
+  tabIndex?: string | number | undefined;
   id?: string;
   name?: string;
   value?: string | number;
@@ -71,7 +71,7 @@ interface Props {
 }
 
 interface DefaultProps {
-  tabIndex: string | number;
+  tabIndex: string | number | undefined;
   id: string;
   name: string;
   value: string | number;
@@ -102,7 +102,7 @@ interface State {
 
 class Index extends React.Component<Props, State> {
   static defaultProps: DefaultProps = {
-    tabIndex: -1,
+    tabIndex: undefined,
     id: '',
     name: '',
     value: '',
@@ -120,6 +120,7 @@ class Index extends React.Component<Props, State> {
     validationOption: {},
     onChange: () => {},
   };
+  private wrapper: React.RefObject<HTMLDivElement>;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -133,6 +134,7 @@ class Index extends React.Component<Props, State> {
     this.onClick = this.onClick.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
+    this.wrapper = React.createRef();
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
@@ -153,9 +155,14 @@ class Index extends React.Component<Props, State> {
     return null;
   }
 
+  componentDidMount() {
+    if (this.wrapper.current && this.props.tabIndex) {
+      this.wrapper.current.setAttribute('tabindex', String(this.props.tabIndex));
+    }
+  }
+
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.state.validate !== prevState.validate) {
-      debugger;
       this.check();
     }
   }
@@ -304,7 +311,7 @@ class Index extends React.Component<Props, State> {
     }
 
     return (
-      <div id={id} tabIndex={Number(tabIndex)} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
+      <div ref={this.wrapper} id={id} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
         <div className={containerClass} style={customStyleContainer}>
           {optionHtml}
         </div>

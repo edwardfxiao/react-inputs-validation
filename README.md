@@ -53,7 +53,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -99,7 +99,7 @@ import { Textbox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textbox
-  tabIndex="1" //Optional.[String or Number].Default: -1.
+  tabIndex="1" //Optional.[String or Number].Default: none.
   id={'Name'} //Optional.[String].Default: "".  Input ID.
   name="Name" //Optional.[String].Default: "". Input name.
   type="text" //Optional.[String].Default: "text". Input type [text, password, number].
@@ -155,7 +155,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |**id**                            |**Req**|**Str**|**IMPORTANT if you have multiple Radiobox on the page, id is used to distinguish them for the label 'for' use**|**""**      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -189,7 +189,7 @@ import { Radiobox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Radiobox
-  tabIndex={2} //Optional.[String or Number].Default: -1.
+  tabIndex={2} //Optional.[String or Number].Default: none.
   id="job" //Optional.[String].Default: "".  Input ID.
   name="job" //Optional.[String].Default: "". Input name.
   disabled={false} //Optional.[Bool].Default: false.
@@ -238,7 +238,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -270,7 +270,7 @@ import { Checkbox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Checkbox
-  tabIndex="5" //Optional.[String or Number].Default: -1.
+  tabIndex="5" //Optional.[String or Number].Default: none.
   id={'agreement'} //Optional.[String].Default: "".  Input ID.
   name={'agreement'} //Optional.[String].Default: "". Input name
   value={agreement} //Required.[String].Default: "".
@@ -319,7 +319,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -359,7 +359,7 @@ import { Select } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Select
-  tabIndex="6" //Optional.[String or Number].Default: -1.
+  tabIndex="6" //Optional.[String or Number].Default: none.
   id={'movie'} //Optional.[String].Default: "". Input ID.
   name={'movie'} //Optional.[String].Default: "". Input name.
   value={movie} //Optional.[String].Default: "".
@@ -420,7 +420,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -464,7 +464,7 @@ import { Textarea } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textarea
-  tabIndex="7" //Optional.[String or Number].Default: -1.
+  tabIndex="7" //Optional.[String or Number].Default: none.
   id="description" //Optional.[String].Default: "".  Textarea ID.
   name="description" //Optional.[String].Default: "". Textarea name.
   value={description} //Optional.[String].Default: "".
@@ -713,7 +713,7 @@ Then in the component...
 
 ```js
 <Textbox
-  tabIndex="1" //Optional.[String or Number].Default: -1.
+  tabIndex="1" //Optional.[String or Number].Default: none.
   ...
   validationOption={{
     ...

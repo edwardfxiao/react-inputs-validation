@@ -162,7 +162,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
-|**optionList**                    |**Req**|**Array**|**[{id: 'teacher', name: 'teacher']**           |**[]**
+|**optionList**                    |**Req**|**Array**|**[{id: 'teacher', name: 'teacher'}]**           |**[]**
 |classNameInput                    |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |

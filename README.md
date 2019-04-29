@@ -1,9 +1,8 @@
 # react-inputs-validation
-[![npm version](https://badge.fury.io/js/react-inputs-validation.svg)](https://badge.fury.io/js/react-inputs-validation) [![Build Status](https://travis-ci.org/edwardfhsiao/react-inputs-validation.svg?branch=master)](https://travis-ci.org/edwardfhsiao/react-inputs-validation) [![react-inputs-validation](http://img.shields.io/npm/dm/react-inputs-validation.svg)](https://www.npmjs.com/package/react-inputs-validation) [![Package Quality](http://npm.packagequality.com/shield/react-inputs-validation.svg)](http://packagequality.com/#?package=react-inputs-validation) [![Coverage Status](https://coveralls.io/repos/github/edwardfhsiao/react-inputs-validation/badge.svg?branch=master)](https://coveralls.io/github/edwardfhsiao/react-inputs-validation?branch=master) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-inputs-validation.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/LICENSE)
-[![Join the chat at https://gitter.im/react-inputs-validation/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-inputs-validation/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![npm version](https://badge.fury.io/js/react-inputs-validation.svg)](https://badge.fury.io/js/react-inputs-validation) [![Build Status](https://travis-ci.org/edwardfhsiao/react-inputs-validation.svg?branch=master)](https://travis-ci.org/edwardfhsiao/react-inputs-validation) [![react-inputs-validation](http://img.shields.io/npm/dm/react-inputs-validation.svg)](https://www.npmjs.com/package/react-inputs-validation) [![Package Quality](https://npm.packagequality.com/shield/react-inputs-validation.svg)](http://packagequality.com/#?package=react-inputs-validation) [![Coverage Status](https://coveralls.io/repos/github/edwardfhsiao/react-inputs-validation/badge.svg?branch=master)](https://coveralls.io/github/edwardfhsiao/react-inputs-validation?branch=master) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-inputs-validation.svg) [![Join the chat at https://gitter.im/react-inputs-validation/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-inputs-validation/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/LICENSE)[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 A react inputs validation component.
-# <img src="https://edwardxiao.com/react-inputs-validation.gif" />
+# <img src="https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/react-inputs-validation.gif" />
 
 # Online Demo
 <a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>
@@ -53,7 +52,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -99,7 +98,7 @@ import { Textbox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textbox
-  tabIndex="1" //Optional.[String or Number].Default: -1.
+  tabIndex="1" //Optional.[String or Number].Default: none.
   id={'Name'} //Optional.[String].Default: "".  Input ID.
   name="Name" //Optional.[String].Default: "". Input name.
   type="text" //Optional.[String].Default: "text". Input type [text, password, number].
@@ -155,14 +154,14 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |**id**                            |**Req**|**Str**|**IMPORTANT if you have multiple Radiobox on the page, id is used to distinguish them for the label 'for' use**|**""**      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
-|**optionList**                    |**Req**|**Array**|**[{id: 'teacher', name: 'teacher']**           |**[]**
+|**optionList**                    |**Req**|**Array**|**[{id: 'teacher', name: 'teacher'}]**           |**[]**
 |classNameInput                    |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
@@ -189,7 +188,7 @@ import { Radiobox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Radiobox
-  tabIndex={2} //Optional.[String or Number].Default: -1.
+  tabIndex={2} //Optional.[String or Number].Default: none.
   id="job" //Optional.[String].Default: "".  Input ID.
   name="job" //Optional.[String].Default: "". Input name.
   disabled={false} //Optional.[Bool].Default: false.
@@ -238,7 +237,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -270,7 +269,7 @@ import { Checkbox } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Checkbox
-  tabIndex="5" //Optional.[String or Number].Default: -1.
+  tabIndex="5" //Optional.[String or Number].Default: none.
   id={'agreement'} //Optional.[String].Default: "".  Input ID.
   name={'agreement'} //Optional.[String].Default: "". Input name
   value={agreement} //Required.[String].Default: "".
@@ -319,7 +318,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -359,7 +358,7 @@ import { Select } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Select
-  tabIndex="6" //Optional.[String or Number].Default: -1.
+  tabIndex="6" //Optional.[String or Number].Default: none.
   id={'movie'} //Optional.[String].Default: "". Input ID.
   name={'movie'} //Optional.[String].Default: "". Input name.
   value={movie} //Optional.[String].Default: "".
@@ -420,7 +419,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
-|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  -1        |
+|tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
 |id                                |  Opt  |  Str   |                                             |  ""        |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
@@ -464,7 +463,7 @@ import { Textarea } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 <Textarea
-  tabIndex="7" //Optional.[String or Number].Default: -1.
+  tabIndex="7" //Optional.[String or Number].Default: none.
   id="description" //Optional.[String].Default: "".  Textarea ID.
   name="description" //Optional.[String].Default: "". Textarea name.
   value={description} //Optional.[String].Default: "".
@@ -713,7 +712,7 @@ Then in the component...
 
 ```js
 <Textbox
-  tabIndex="1" //Optional.[String or Number].Default: -1.
+  tabIndex="1" //Optional.[String or Number].Default: none.
   ...
   validationOption={{
     ...

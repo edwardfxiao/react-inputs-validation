@@ -16,7 +16,7 @@ const markdownTextboxEmptyExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  tabIndex="1" // Optional.[String or Number].Default: -1.
+  tabIndex="1" // Optional.[String or Number].Default: none.
   id={'Name'} // Optional.[String].Default: "".  Input ID.
   name="Name" // Optional.[String].Default: "". Input name.
   type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -41,7 +41,7 @@ const markdownTextboxRegexExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  tabIndex="1" // Optional.[String or Number].Default: -1.
+  tabIndex="1" // Optional.[String or Number].Default: none.
   id={'Name'} // Optional.[String].Default: "".  Input ID.
   name="Name" // Optional.[String].Default: "". Input name.
   type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -65,7 +65,7 @@ const markdownTextboxNumberExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  tabIndex="1" // Optional.[String or Number].Default: -1.
+  tabIndex="1" // Optional.[String or Number].Default: none.
   id={'Number'} // Optional.[String].Default: "".  Input ID.
   name="Number" // Optional.[String].Default: "". Input name.
   type="text" // Optional.[String].Default: "text". Input type [text, password, number]. NOTE: provide "text" for better performance since different browsers run differently with "number".
@@ -90,7 +90,7 @@ const markdownRadioboxEmptyExample = `
 import { Radiobox } from 'react-inputs-validation';
 
 <Radiobox
-  tabIndex={2} // Optional.[String or Number].Default: -1.
+  tabIndex={2} // Optional.[String or Number].Default: none.
   id="job" // Optional.[String].Default: "".  Input ID.
   name="job" // Optional.[String].Default: "". Input name.
   value={job} // Optional.[String].Default: "".
@@ -123,11 +123,12 @@ const markdownCheckboxEmptyExample = `
 import { Checkbox } from 'react-inputs-validation';
 
 <Checkbox
-  tabIndex="5" // Optional.[String or Number].Default: -1.
+  tabIndex="5" // Optional.[String or Number].Default: none.
   id={'agreement'} // Optional.[String].Default: "".  Input ID.
   name={'agreement'} // Optional.[String].Default: "". Input name
   value={agreement} // Required.[String].Default: "".
   onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+  checked={isAgreementChecked} // Required.[Bool].Default: false.
   onChange={(isAgreementChecked, e) => {
     this.setState({ isAgreementChecked });
     console.log(e);
@@ -151,7 +152,7 @@ const markdownSelectEmptyExample = `
 import { Select } from 'react-inputs-validation';
 
 <Select
-  tabIndex="6" // Optional.[String or Number].Default: -1.
+  tabIndex="6" // Optional.[String or Number].Default: none.
   id={'country'} // Optional.[String].Default: "". Input ID.
   name={'country'} // Optional.[String].Default: "". Input name.
   value={country} // Optional.[String].Default: "".
@@ -196,7 +197,7 @@ const markdownTextareaEmptyExample = `
 import { Textarea } from 'react-inputs-validation';
 
 <Textarea
-  tabIndex="1" // Optional.[String or Number].Default: -1.
+  tabIndex="1" // Optional.[String or Number].Default: none.
   id="description" // Optional.[String].Default: "".  Textarea ID.
   name="description" // Optional.[String].Default: "". Input name.
   value={description} // Optional.[String].Default: "".
@@ -571,7 +572,7 @@ class Index extends Component {
                 <div>
                   <h1>Validate Textbox Empty by onBlur Example:</h1>
                   <Textbox
-                    tabIndex="1" // Optional.[String or Number].Default: -1.
+                    tabIndex="1" // Optional.[String or Number].Default: none.
                     id={'Name'} // Optional.[String].Default: "".  Input ID.
                     name="Name" // Optional.[String].Default: "". Input name.
                     type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -604,7 +605,7 @@ class Index extends Component {
                 <div>
                   <h1>Validate Textbox Regex by onBlur Example:</h1>
                   <Textbox
-                    tabIndex="1" // Optional.[String or Number].Default: -1.
+                    tabIndex="1" // Optional.[String or Number].Default: none.
                     id={'Name'} // Optional.[String].Default: "".  Input ID.
                     name="Name" // Optional.[String].Default: "". Input name.
                     type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -636,7 +637,7 @@ class Index extends Component {
                 <div>
                   <h1>Validate Textbox Number by onBlur Example:</h1>
                   <Textbox
-                    tabIndex="1" // Optional.[String or Number].Default: -1.
+                    tabIndex="1" // Optional.[String or Number].Default: none.
                     id={'Number'} // Optional.[String].Default: "".  Input ID.
                     name="Number" // Optional.[String].Default: "". Input name.
                     type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -674,7 +675,7 @@ class Index extends Component {
                 <div>
                   <h1>Validate Radiobox Empty by onBlur Example:</h1>
                   <Radiobox
-                    tabIndex={2} // Optional.[String or Number].Default: -1.
+                    tabIndex={2} // Optional.[String or Number].Default: none.
                     id="job" // Optional.[String].Default: "".  Input ID.
                     name="job" // Optional.[String].Default: "". Input name.
                     value={job} // Optional.[String].Default: "".
@@ -716,7 +717,7 @@ class Index extends Component {
                 <div>
                   <h1>Validate Checkbox Empty by onBlur Example:</h1>
                   <Checkbox
-                    tabIndex="5" // Optional.[String or Number].Default: -1.
+                    tabIndex="5" // Optional.[String or Number].Default: none.
                     id={'agreement'} // Optional.[String].Default: "".  Input ID.
                     name={'agreement'} // Optional.[String].Default: "". Input name
                     checked={isAgreementChecked} // Required.[Bool].Default: false.
@@ -752,7 +753,7 @@ class Index extends Component {
                 <div>
                   <h1>Validate Select Empty by onBlur Example:</h1>
                   <Select
-                    tabIndex="6" // Optional.[String or Number].Default: -1.
+                    tabIndex="6" // Optional.[String or Number].Default: none.
                     id={'country'} // Optional.[String].Default: "". Input ID.
                     name={'country'} // Optional.[String].Default: "". Input name.
                     value={country} // Optional.[String].Default: "".
@@ -803,7 +804,7 @@ class Index extends Component {
                 <div>
                   <h1>Validate Textarea Empty by onBlur Example:</h1>
                   <Textarea
-                    tabIndex="1" // Optional.[String or Number].Default: -1.
+                    tabIndex="1" // Optional.[String or Number].Default: none.
                     id="description" // Optional.[String].Default: "".  Textarea ID.
                     name="description" // Optional.[String].Default: "". Textarea name.
                     value={description} // Optional.[String].Default: "".
@@ -843,7 +844,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Textbox
-                      tabIndex="1" // Optional.[String or Number].Default: -1.
+                      tabIndex="1" // Optional.[String or Number].Default: none.
                       id={'Name'} // Optional.[String].Default: "".  Input ID.
                       name="Name" // Optional.[String].Default: "". Input name.
                       type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -904,7 +905,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px', display: 'flex' })}>
                     <Radiobox
-                      tabIndex={2} // Optional.[String or Number].Default: -1.
+                      tabIndex={2} // Optional.[String or Number].Default: none.
                       id="job" // Optional.[String].Default: "".  Input ID.
                       name="job" // Optional.[String].Default: "". Input name.
                       disabled={false} // Optional.[Bool].Default: false.
@@ -956,7 +957,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Checkbox
-                      tabIndex="5" // Optional.[String or Number].Default: -1.
+                      tabIndex="5" // Optional.[String or Number].Default: none.
                       id={'agreement'} // Optional.[String].Default: "".  Input ID.
                       name={'agreement'} // Optional.[String].Default: "". Input name
                       value={agreement} // Required.[String].Default: "".
@@ -1006,7 +1007,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Select
-                      tabIndex="6" // Optional.[String or Number].Default: -1.
+                      tabIndex="6" // Optional.[String or Number].Default: none.
                       id={'country'} // Optional.[String].Default: "". Input ID.
                       name={'country'} // Optional.[String].Default: "". Input name.
                       value={country} // Optional.[String].Default: "".
@@ -1069,7 +1070,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Textarea
-                      tabIndex="7" // Optional.[String or Number].Default: -1.
+                      tabIndex="7" // Optional.[String or Number].Default: none.
                       id="description" // Optional.[String].Default: "".  Textarea ID.
                       name="description" // Optional.[String].Default: "". Textarea name.
                       value={description} // Optional.[String].Default: "".

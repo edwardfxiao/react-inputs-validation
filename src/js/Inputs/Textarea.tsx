@@ -1,4 +1,5 @@
 import * as React from 'react';
+const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
 import validator from './validator';
 import utils from './utils';
@@ -23,7 +24,7 @@ interface DefaultValidationOption {
   required?: boolean;
   msgOnError?: string;
   msgOnSuccess?: string;
-  customFunc?: undefined | Function;
+  customFunc?: Function | undefined;
 }
 
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
@@ -61,7 +62,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
 };
 
 interface Props {
-  tabIndex?: string | number | undefined;
+  tabIndex?: string | number | null;
   id?: string;
   name?: string;
   type?: string;
@@ -82,143 +83,87 @@ interface Props {
   onChange: (res: string, e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
+  onClick?: (e: React.FocusEvent<HTMLElement>) => void;
   onKeyUp?: (e: React.KeyboardEvent<HTMLElement>) => void;
   validationCallback?: (res: boolean) => void;
 }
 
-interface DefaultProps {
-  tabIndex: string | number | undefined;
-  id: string;
-  name: string;
-  value: string | number;
-  cols: string | number;
-  rows: string | number;
-  disabled: boolean;
-  validate: boolean;
-  maxLength: string | number;
-  placeholder: string;
-  classNameInput: string;
-  classNameWrapper: string;
-  classNameContainer: string;
-  customStyleInput: object;
-  customStyleWrapper: object;
-  customStyleContainer: object;
-  validationOption: object;
-  onChange: (res: string, e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}
-
-type PropsWithDefaults = Props & DefaultProps;
-
-interface State {
-  err: boolean;
-  msg: string;
-  successMsg: undefined | string;
-  validate: boolean;
-}
-
-class Index extends React.Component<Props, State> {
-  static defaultProps: Props = {
-    tabIndex: undefined,
-    id: '',
-    name: '',
-    type: 'text',
-    value: '',
-    cols: DEFAULT_ROWS,
-    rows: DEFAULT_COLS,
-    disabled: false,
-    validate: false,
-    maxLength: DEFAULT_MAX_LENGTH,
-    placeholder: '',
-    classNameInput: '',
-    classNameWrapper: '',
-    classNameContainer: '',
-    customStyleInput: {},
-    customStyleWrapper: {},
-    customStyleContainer: {},
-    validationOption: {},
-    onChange: () => {},
-  };
-  private value: string;
-  private textarea: any;
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      err: false,
-      msg: '',
-      successMsg: undefined,
-      validate: props.validate,
-    };
-    this.onChange = this.onChange.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
-    this.value = props.value;
-    this.textarea = React.createRef();
-  }
-
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.validate !== prevState.validate) {
-      return {
-        validate: nextProps.validate,
-      };
-    }
-    return null;
-  }
-
-  componentDidMount() {
-    if (this.textarea.current && this.props.tabIndex) {
-      this.textarea.current.setAttribute('tabindex', String(this.props.tabIndex));
-    }
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.validate !== prevState.validate) {
-      this.check();
-    }
-  }
-
-  onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    this.value = e.target.value;
-    if (this.props.maxLength !== '') {
-      if (this.value.length > Number(this.props.maxLength)) {
-        return;
-      }
-    }
-    const { onChange } = this.props;
-    onChange && onChange(this.value, e);
-    if (this.state.err) {
-      this.setState({ err: false });
-    } else {
-      this.setState({ successMsg: undefined });
-    }
-  }
-
-  onBlur(e: React.FocusEvent<HTMLElement>) {
-    const { onBlur } = this.props;
+const component: React.FC<Props> = ({
+  tabIndex = null,
+  id = '',
+  name = '',
+  type = 'text',
+  value = '',
+  cols = DEFAULT_ROWS,
+  rows = DEFAULT_COLS,
+  disabled = false,
+  validate = false,
+  maxLength = DEFAULT_MAX_LENGTH,
+  placeholder = '',
+  classNameInput = '',
+  classNameWrapper = '',
+  classNameContainer = '',
+  customStyleInput = {},
+  customStyleWrapper = {},
+  customStyleContainer = {},
+  validationOption = {},
+  onChange = () => {},
+  onBlur = undefined,
+  onFocus = undefined,
+  onClick = undefined,
+  onKeyUp = undefined,
+  validationCallback = undefined,
+}) => {
+  const [err, setErr] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const option = getDefaultValidationOption(validationOption);
+  const $input = useRef(null);
+  const $el: { [key: string]: any } | null = $input;
+  const handleOnBlur = useCallback(e => {
     if (onBlur) {
-      this.check();
+      check();
       onBlur(e);
     }
-  }
-
-  onFocus(e: React.FocusEvent<HTMLElement>) {
-    const { onFocus } = this.props;
+  }, []);
+  const handleOnFocus = useCallback(e => {
     if (onFocus) {
       onFocus(e);
     }
-  }
-
-  onKeyUp(e: React.KeyboardEvent<HTMLElement>) {
-    const { onKeyUp } = this.props;
+  }, []);
+  const handleOnClick = useCallback(e => {
+    if (onClick) {
+      onClick(e);
+    }
+  }, []);
+  const handleOnKeyUp = useCallback(e => {
     if (onKeyUp) {
-      this.check();
+      check();
       onKeyUp(e);
     }
-  }
-
-  check(val: null | string = null) {
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess, customFunc } = getDefaultValidationOption(validationOption);
+  }, []);
+  const handleOnChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (disabled || $el === null) {
+        return;
+      }
+      const v = $el.current.value;
+      if ((typeof maxLength === 'string' && maxLength !== '') || (typeof maxLength === 'number' && maxLength !== 0)) {
+        if (v.length > Number(maxLength)) {
+          return;
+        }
+      }
+      onChange && onChange(v, e);
+      if (err) {
+        setErr(false);
+      } else {
+        setSuccessMsg('');
+      }
+    },
+    [err],
+  );
+  const check = useCallback((val: null | string = null) => {
+    const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess, customFunc } = option;
     if (!check) {
       return;
     }
@@ -229,18 +174,21 @@ class Index extends React.Component<Props, State> {
           return;
         }
         const msg = message[locale][TYPE];
-        const value = val || this.value;
+        if ($el === null) {
+          return;
+        }
+        const value = val || $el.current.value;
         const nameText = name ? name : '';
         if (required) {
           if (validator.empty(value)) {
-            this.handleCheckEnd(true, msg.empty(nameText));
+            handleCheckEnd(true, msg.empty(nameText));
             return;
           }
         }
         if (String(value) !== '') {
           if (reg) {
             if (validator['reg'](reg, value)) {
-              this.handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
+              handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
               return;
             }
           }
@@ -248,19 +196,19 @@ class Index extends React.Component<Props, State> {
             if (min || max) {
               if (min && max) {
                 if (String(value).length < min || String(value).length > max) {
-                  this.handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+                  handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
                   return;
                 }
               } else {
                 if (min) {
                   if (String(value).length < min) {
-                    this.handleCheckEnd(true, msg.lessThan(nameText)(min));
+                    handleCheckEnd(true, msg.lessThan(nameText)(min));
                     return;
                   }
                 }
                 if (max) {
                   if (String(value).length > max) {
-                    this.handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                    handleCheckEnd(true, msg.greaterThan(nameText)(max));
                     return;
                   }
                 }
@@ -268,7 +216,7 @@ class Index extends React.Component<Props, State> {
             }
             if (length) {
               if (String(value).length !== length) {
-                this.handleCheckEnd(true, msg.lengthEqual(nameText)(length));
+                handleCheckEnd(true, msg.lengthEqual(nameText)(length));
                 return;
               }
             }
@@ -277,105 +225,90 @@ class Index extends React.Component<Props, State> {
         if (customFunc && typeof customFunc === 'function') {
           const customFuncResult = customFunc(value);
           if (customFuncResult !== true) {
-            this.handleCheckEnd(true, customFuncResult);
+            handleCheckEnd(true, customFuncResult);
             return;
           }
         }
         if (msgOnSuccess) {
-          this.setState({ successMsg: msgOnSuccess });
+          setSuccessMsg(msgOnSuccess);
         }
-        this.handleCheckEnd(false, msgOnSuccess);
+        handleCheckEnd(false, msgOnSuccess);
       } else {
         console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
       }
     } else {
       console.error('Please provide "type" in validationOption');
     }
-  }
-
-  handleCheckEnd(err: boolean, message: string) {
+  }, []);
+  const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { msgOnError } = getDefaultValidationOption(validationOption);
+    const { msgOnError } = option;
     if (err && msgOnError) {
       msg = msgOnError;
     }
-    this.setState({ err, msg });
-    const { validationCallback } = this.props;
+    setErr(err);
+    setMsg(msg);
     validationCallback && validationCallback(err);
+  }, []);
+  useEffect(() => {
+    if ($el === null) {
+      return;
+    }
+    if (tabIndex) {
+      $el.current.setAttribute('tabindex', String(tabIndex));
+    }
+  }, []);
+  useEffect(
+    () => {
+      if (validate) {
+        check();
+      }
+    },
+    [validate],
+  );
+  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const inputClass = `${classNameInput} ${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
+  let msgHtml;
+  const { showMsg } = option;
+  if (showMsg && err && msg) {
+    msgHtml = <div className={errMsgClass}>{msg}</div>;
   }
-
-  render() {
-    const {
-      tabIndex,
-      id,
-      name,
-      type,
-      value,
-      disabled,
-      maxLength,
-      placeholder,
-      classNameWrapper,
-      classNameContainer,
-      classNameInput,
-      customStyleWrapper,
-      customStyleContainer,
-      customStyleInput,
-      validationOption,
-      cols,
-      rows,
-    } = this.props as PropsWithDefaults;
-
-    const { err, msg, successMsg } = this.state;
-
-    const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['textarea__wrapper']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const containerClass = `${classNameContainer} ${reactInputsValidationCss['textarea__container']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const inputClass = `${classNameInput} ${reactInputsValidationCss['textarea__input']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const errmsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
-    const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
-
-    let msgHtml;
-    const { showMsg } = getDefaultValidationOption(validationOption);
-    if (showMsg && err && msg) {
-      msgHtml = <div className={errmsgClass}>{msg}</div>;
-    }
-    if (showMsg && !err && typeof successMsg !== 'undefined') {
-      msgHtml = <div className={successMsgClass}>{successMsg}</div>;
-    }
-    return (
-      <div className={wrapperClass} style={customStyleWrapper}>
-        <div className={containerClass} style={customStyleContainer}>
-          <textarea
-            id={id}
-            name={name}
-            value={value}
-            disabled={disabled}
-            onBlur={this.onBlur}
-            maxLength={Number(maxLength)}
-            onKeyUp={this.onKeyUp}
-            onFocus={this.onFocus}
-            className={inputClass}
-            onChange={this.onChange}
-            style={customStyleInput}
-            placeholder={placeholder}
-            cols={Number(cols)}
-            rows={Number(rows)}
-            ref={this.textarea}
-          />
-        </div>
-        {msgHtml}
+  if (showMsg && !err && successMsg !== '') {
+    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+  }
+  return (
+    <div className={wrapperClass} style={customStyleWrapper}>
+      <div className={containerClass} style={customStyleContainer}>
+        <textarea
+          id={id}
+          name={name}
+          value={value}
+          disabled={disabled}
+          onBlur={handleOnBlur}
+          maxLength={Number(maxLength)}
+          onKeyUp={handleOnKeyUp}
+          onFocus={handleOnFocus}
+          onClick={handleOnClick}
+          className={inputClass}
+          onChange={handleOnChange}
+          style={customStyleInput}
+          placeholder={placeholder}
+          cols={Number(cols)}
+          rows={Number(rows)}
+          ref={$input}
+        />
       </div>
-    );
-  }
-}
-
-export default Index;
+      {msgHtml}
+    </div>
+  );
+};
+export default memo(component);

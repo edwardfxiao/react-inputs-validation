@@ -1,4 +1,5 @@
 import * as React from 'react';
+const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
@@ -33,12 +34,17 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   };
 };
 
-const isValidateValue = (value: any) => {
-  const v = String(value);
-  if (v === '' || v === 'null' || v === 'undefined') {
-    return true;
+const isValidateValue = (list: OptionListItem[], value: any) => {
+  let res = false;
+  if (list.length) {
+    for (let i = 0; i < list.length; i += 1) {
+      if (list[i].id === value) {
+        res = true;
+        break;
+      }
+    }
   }
-  return false;
+  return res;
 };
 
 interface OptionListItem {
@@ -70,255 +76,232 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 
-interface DefaultProps {
-  tabIndex: string | number | undefined;
-  id: string;
-  name: string;
-  value: string | number;
-  disabled: boolean;
-  validate: boolean;
-  optionList: OptionListItem[];
-  classNameWrapper: string;
-  classNameInput: string;
-  classNameContainer: string;
-  classNameOptionListItem: string;
-  customStyleWrapper: object;
-  customStyleContainer: object;
-  customStyleInput: object;
-  customStyleOptionListItem: object;
-  validationOption: object;
-  onChange: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
-}
-
-type PropsWithDefaults = Props & DefaultProps;
-
-interface State {
-  err: boolean;
-  msg: string;
-  successMsg: undefined | string;
-  value: string;
-  validate: boolean;
-}
-
-class Index extends React.Component<Props, State> {
-  static defaultProps: DefaultProps = {
-    tabIndex: undefined,
-    id: '',
-    name: '',
-    value: '',
-    disabled: false,
-    validate: false,
-    optionList: [],
-    classNameWrapper: '',
-    classNameInput: '',
-    classNameContainer: '',
-    classNameOptionListItem: '',
-    customStyleWrapper: {},
-    customStyleContainer: {},
-    customStyleInput: {},
-    customStyleOptionListItem: {},
-    validationOption: {},
-    onChange: () => {},
-  };
-  private wrapper: React.RefObject<HTMLDivElement>;
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      err: false,
-      msg: '',
-      successMsg: undefined,
-      value: props.value,
-      validate: props.validate,
-    };
-    this.onChange = this.onChange.bind(this);
-    this.onClick = this.onClick.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.wrapper = React.createRef();
-  }
-
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.validate !== prevState.validate) {
-      return {
-        validate: nextProps.validate,
-      };
-    }
-    if (nextProps.value !== prevState.value) {
-      const o: { value: string | any; err?: boolean; successMsg?: undefined } = { value: nextProps.value };
-      if (prevState.err) {
-        o['err'] = false;
-      } else {
-        o['successMsg'] = undefined;
+const component: React.FC<Props> = ({
+  tabIndex = null,
+  id = '',
+  name = '',
+  value = '',
+  disabled = false,
+  validate = false,
+  optionList = [],
+  classNameWrapper = '',
+  classNameInput = '',
+  classNameContainer = '',
+  classNameOptionListItem = '',
+  customStyleWrapper = {},
+  customStyleContainer = {},
+  customStyleInput = {},
+  customStyleOptionListItem = {},
+  validationOption = {},
+  onChange = () => {},
+  onBlur = undefined,
+  onFocus = undefined,
+  onClick = undefined,
+  validationCallback = undefined,
+}) => {
+  const [err, setErr] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const option = getDefaultValidationOption(validationOption);
+  const $input = useRef(null);
+  const $el: { [key: string]: any } | null = $input;
+  const handleOnBlur = useCallback(
+    e => {
+      if (onBlur) {
+        check();
+        onBlur(e);
       }
-      return o;
-    }
-    return null;
-  }
-
-  componentDidMount() {
-    if (this.wrapper.current && this.props.tabIndex) {
-      this.wrapper.current.setAttribute('tabindex', String(this.props.tabIndex));
-    }
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.validate !== prevState.validate) {
-      this.check();
-    }
-  }
-
-  onChange(val: string, e: React.ChangeEvent<HTMLDivElement>) {
-    const { onChange } = this.props;
-    onChange && onChange(val, e);
-  }
-
-  onClick(e: React.MouseEvent<HTMLDivElement>) {
-    const { onClick } = this.props;
-    onClick && onClick(e);
-  }
-
-  onBlur(e: React.FocusEvent<HTMLElement>) {
-    const { onBlur } = this.props;
-    if (onBlur) {
-      this.check();
-      onBlur(e);
-    }
-  }
-
-  onFocus(e: React.FocusEvent<HTMLElement>) {
-    const { onFocus } = this.props;
+    },
+    [value],
+  );
+  const handleOnFocus = useCallback(e => {
     if (onFocus) {
       onFocus(e);
     }
-  }
-
-  check(val: null | string = null) {
-    let { value } = this.props;
-    if (val != null) {
-      value = val;
+  }, []);
+  const handleOnClick = useCallback(e => {
+    if (onClick) {
+      onClick(e);
     }
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(validationOption);
-    if (!check) {
+  }, []);
+  const handleOnChange = useCallback((val: string, e: React.ChangeEvent<HTMLDivElement>) => {
+    if (disabled || $el === null) {
       return;
     }
-    if (!message[locale] || !message[locale][TYPE]) {
-      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
-      return;
-    }
-    const msg = message[locale][TYPE];
-    const nameText = name ? name : '';
-    if (required) {
-      if (isValidateValue(value)) {
-        this.handleCheckEnd(true, msg.empty(nameText));
+    onChange && onChange(val, e);
+  }, []);
+  const check = useCallback(
+    (val: null | string = null) => {
+      const { name, check, locale, required, msgOnSuccess } = option;
+      if (!check) {
         return;
       }
-    }
-    if (msgOnSuccess) {
-      this.setState({ successMsg: msgOnSuccess });
-    }
-    this.handleCheckEnd(false, msgOnSuccess);
-  }
-
-  handleCheckEnd(err: boolean, message: string) {
+      if (!message[locale] || !message[locale][TYPE]) {
+        console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+        return;
+      }
+      if (required) {
+        const msg = message[locale][TYPE];
+        const nameText = name ? name : '';
+        if (!isValidateValue(optionList, value)) {
+          handleCheckEnd(true, msg.empty(nameText));
+          return;
+        }
+      }
+      if (msgOnSuccess) {
+        setSuccessMsg(msgOnSuccess);
+      }
+      handleCheckEnd(false, msgOnSuccess);
+    },
+    [value],
+  );
+  const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { msgOnError } = getDefaultValidationOption(validationOption);
+    const { msgOnError } = option;
     if (err && msgOnError) {
       msg = msgOnError;
     }
-    this.setState({ err, msg });
-    const { validationCallback } = this.props;
+    setErr(err);
+    setMsg(msg);
     validationCallback && validationCallback(err);
+  }, []);
+  useEffect(() => {
+    if ($el === null) {
+      return;
+    }
+    if (tabIndex) {
+      $el.current.setAttribute('tabindex', String(tabIndex));
+    }
+  }, []);
+  useEffect(
+    () => {
+      if (validate) {
+        check();
+      }
+    },
+    [validate],
+  );
+  useEffect(
+    () => {
+      if (value && isValidateValue(optionList, value)) {
+        setErr(false);
+      } else {
+        setSuccessMsg('');
+      }
+    },
+    [value],
+  );
+  const wrapperClass = `${classNameWrapper} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    reactInputsValidationCss[`${TYPE}__wrapper`]
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${classNameContainer} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    reactInputsValidationCss[`${TYPE}__container`]
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const inputClass = `${classNameInput} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    reactInputsValidationCss[`${TYPE}__input`]
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const labelClass = `${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${reactInputsValidationCss[`${TYPE}__label`]} ${disabled &&
+    reactInputsValidationCss['disabled']}`;
+  const optionListItemClass = `${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    reactInputsValidationCss[`${TYPE}__item`]
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
+  let msgHtml;
+  const { showMsg } = option;
+  if (showMsg && err && msg) {
+    msgHtml = <div className={errMsgClass}>{msg}</div>;
   }
-
-  render() {
-    const {
-      tabIndex,
-      id,
-      name,
-      value,
-      disabled,
-      optionList,
-      classNameWrapper,
-      classNameContainer,
-      classNameInput,
-      classNameOptionListItem,
-      customStyleWrapper,
-      customStyleContainer,
-      customStyleInput,
-      customStyleOptionListItem,
-      validationOption,
-    } = this.props as PropsWithDefaults;
-
-    const { err, msg, successMsg } = this.state;
-
-    const wrapperClass = `${classNameWrapper} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
-      reactInputsValidationCss['radiobox__wrapper']
-    } ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const containerClass = `${classNameContainer} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
-      reactInputsValidationCss['radiobox__container']
-    } ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const inputClass = `${classNameInput} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
-      reactInputsValidationCss['radiobox__input']
-    } ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const labelClass = `${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
-      reactInputsValidationCss['radiobox__label']
-    } ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const optionListItemClass = `${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${
-      reactInputsValidationCss['radiobox__item']
-    } ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
-    const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
-
-    let msgHtml;
-    const { showMsg } = getDefaultValidationOption(validationOption);
-    if (showMsg && err && msg) {
-      msgHtml = <div className={errMsgClass}>{msg}</div>;
-    }
-    if (showMsg && !err && typeof successMsg !== 'undefined') {
-      msgHtml = <div className={successMsgClass}>{successMsg}</div>;
-    }
-
-    let optionHtml;
-    if (optionList.length) {
-      optionHtml = optionList.map((i, k) => {
-        const checked = String(i.id) === String(value) ? true : false;
-        return (
-          <div className={optionListItemClass} style={customStyleOptionListItem} key={k}>
-            <input
-              id={`${id}-${k}`}
-              name={name}
-              type="radio"
-              value={value}
-              checked={checked}
-              disabled={disabled}
-              className={checked ? `${reactInputsValidationCss['checked']} ${inputClass}` : `${inputClass}`}
-              onChange={e => this.onChange(i.id, e)}
-              style={customStyleInput}
-            />
-            <label htmlFor={`${id}-${k}`} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>
-              {i.name}
-            </label>
-          </div>
-        );
-      });
-    }
-
-    return (
-      <div ref={this.wrapper} id={id} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
-        <div className={containerClass} style={customStyleContainer}>
-          {optionHtml}
-        </div>
-        {msgHtml}
+  if (showMsg && !err && successMsg !== '') {
+    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+  }
+  let optionHtml;
+  if (optionList.length) {
+    optionHtml = optionList.map((i, k) => {
+      const checked = String(i.id) === String(value) ? true : false;
+      return (
+        <Option
+          key={k}
+          index={k}
+          checked={checked}
+          id={id}
+          name={name}
+          item={i}
+          inputClass={inputClass}
+          value={value}
+          disabled={disabled}
+          optionListItemClass={optionListItemClass}
+          customStyleOptionListItem={customStyleOptionListItem}
+          customStyleInput={customStyleInput}
+          labelClass={labelClass}
+          onChange={handleOnChange}
+        />
+      );
+    });
+  }
+  return (
+    <div ref={$input} id={id} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus}>
+      <div className={containerClass} style={customStyleContainer}>
+        {optionHtml}
       </div>
-    );
-  }
+      {msgHtml}
+    </div>
+  );
+};
+
+interface OptionProps {
+  index?: number;
+  checked?: boolean;
+  id?: string;
+  name?: string;
+  optionListItemClass?: string;
+  labelClass?: string;
+  inputClass?: string;
+  value?: string | number;
+  disabled?: boolean;
+  item?: OptionListItem;
+  customStyleOptionListItem?: object;
+  customStyleInput?: object;
+  onChange?: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
 }
 
-export default Index;
+const Option: React.FC<OptionProps> = memo(
+  ({
+    index = '',
+    checked = false,
+    id = '',
+    name = '',
+    optionListItemClass = '',
+    labelClass = '',
+    inputClass = '',
+    value = '',
+    disabled = false,
+    item = { id: '', name: '' },
+    customStyleOptionListItem = {},
+    customStyleInput = {},
+    onChange = () => {},
+  }) => {
+    const change = useCallback(e => {
+      onChange(item.id, e);
+    }, []);
+    return (
+      <div className={optionListItemClass} style={customStyleOptionListItem}>
+        <input
+          id={`${id}-${index}`}
+          name={name}
+          type="radio"
+          value={value}
+          checked={checked}
+          disabled={disabled}
+          className={checked ? `${reactInputsValidationCss['checked']} ${inputClass}` : `${inputClass}`}
+          onChange={change}
+          style={customStyleInput}
+        />
+        <label htmlFor={`${id}-${index}`} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>
+          {item.name}
+        </label>
+      </div>
+    );
+  },
+);
+export default memo(component);

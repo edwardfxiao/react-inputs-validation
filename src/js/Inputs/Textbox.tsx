@@ -82,6 +82,7 @@ interface Props {
   onChange: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
+  onClick?: (e: React.FocusEvent<HTMLElement>) => void;
   onKeyUp?: (e: React.KeyboardEvent<HTMLElement>) => void;
   validationCallback?: (res: boolean) => void;
 }
@@ -126,6 +127,7 @@ const component: React.FC<Props> = ({
   onChange = (v: string, e: React.ChangeEvent<HTMLDivElement>) => {},
   onBlur = undefined,
   onFocus = undefined,
+  onClick = undefined,
   onKeyUp = undefined,
   validationCallback = undefined,
 }) => {
@@ -146,6 +148,11 @@ const component: React.FC<Props> = ({
       onFocus(e);
     }
   }, []);
+  const handleOnClick = useCallback(e => {
+    if (onClick) {
+      onClick(e);
+    }
+  }, []);
   const handleOnKeyUp = useCallback(e => {
     if (onKeyUp) {
       check();
@@ -154,7 +161,7 @@ const component: React.FC<Props> = ({
   }, []);
   const handleOnChange = useCallback(
     (e: React.ChangeEvent<HTMLDivElement>) => {
-      if ($el === null) {
+      if (disabled || $el === null) {
         return;
       }
       let v = $el.current.value;
@@ -188,7 +195,6 @@ const component: React.FC<Props> = ({
           return;
         }
         const msg = message[locale][TYPE];
-
         if ($el === null) {
           return;
         }
@@ -320,21 +326,21 @@ const component: React.FC<Props> = ({
     },
     [validate],
   );
-  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['textbox__wrapper']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const containerClass = `${classNameContainer} ${reactInputsValidationCss['textbox__container']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const inputClass = `${classNameInput} ${reactInputsValidationCss['textbox__input']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+  const inputClass = `${classNameInput} ${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const errmsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
   const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;
   const { showMsg } = option;
   if (showMsg && err && msg) {
-    msgHtml = <div className={errmsgClass}>{msg}</div>;
+    msgHtml = <div className={errMsgClass}>{msg}</div>;
   }
   if (showMsg && !err && successMsg !== '') {
     msgHtml = <div className={successMsgClass}>{successMsg}</div>;
@@ -353,6 +359,7 @@ const component: React.FC<Props> = ({
           onBlur={handleOnBlur}
           onKeyUp={handleOnKeyUp}
           onFocus={handleOnFocus}
+          onClick={handleOnClick}
           className={inputClass}
           onChange={handleOnChange}
           style={customStyleInput}

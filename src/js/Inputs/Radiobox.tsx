@@ -34,7 +34,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   };
 };
 
-const isValidateValue = (list: OptionListItem[], value: any) => {
+const isValidValue = (list: OptionListItem[], value: any) => {
   let res = false;
   if (list.length) {
     for (let i = 0; i < list.length; i += 1) {
@@ -60,10 +60,10 @@ interface Props {
   disabled?: boolean;
   validate?: boolean;
   optionList?: OptionListItem[];
-  onChange: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
-  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onChange: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   validationOption?: object;
   classNameWrapper?: string;
   classNameInput?: string;
@@ -94,10 +94,10 @@ const component: React.FC<Props> = ({
   customStyleOptionListItem = {},
   validationOption = {},
   onChange = () => {},
-  onBlur = undefined,
-  onFocus = undefined,
-  onClick = undefined,
-  validationCallback = undefined,
+  onBlur = null,
+  onFocus = null,
+  onClick = null,
+  validationCallback = null,
 }) => {
   const [err, setErr] = useState(false);
   const [msg, setMsg] = useState('');
@@ -106,7 +106,7 @@ const component: React.FC<Props> = ({
   const $input = useRef(null);
   const $el: { [key: string]: any } | null = $input;
   const handleOnBlur = useCallback(
-    e => {
+    (e: React.FocusEvent<HTMLElement>) => {
       if (onBlur) {
         check();
         onBlur(e);
@@ -114,17 +114,17 @@ const component: React.FC<Props> = ({
     },
     [value],
   );
-  const handleOnFocus = useCallback(e => {
+  const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
       onFocus(e);
     }
   }, []);
-  const handleOnClick = useCallback(e => {
+  const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (onClick) {
       onClick(e);
     }
   }, []);
-  const handleOnChange = useCallback((val: string, e: React.ChangeEvent<HTMLDivElement>) => {
+  const handleOnChange = useCallback((val: string, e: React.ChangeEvent<HTMLElement>) => {
     if (disabled || $el === null) {
       return;
     }
@@ -143,7 +143,7 @@ const component: React.FC<Props> = ({
       if (required) {
         const msg = message[locale][TYPE];
         const nameText = name ? name : '';
-        if (!isValidateValue(optionList, value)) {
+        if (!isValidValue(optionList, value)) {
           handleCheckEnd(true, msg.empty(nameText));
           return;
         }
@@ -183,7 +183,7 @@ const component: React.FC<Props> = ({
   );
   useEffect(
     () => {
-      if (value && isValidateValue(optionList, value)) {
+      if (value && isValidValue(optionList, value)) {
         setErr(false);
       } else {
         setSuccessMsg('');
@@ -248,7 +248,6 @@ const component: React.FC<Props> = ({
     </div>
   );
 };
-
 interface OptionProps {
   index?: number;
   checked?: boolean;
@@ -262,9 +261,8 @@ interface OptionProps {
   item?: OptionListItem;
   customStyleOptionListItem?: object;
   customStyleInput?: object;
-  onChange?: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
+  onChange?: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
 }
-
 const Option: React.FC<OptionProps> = memo(
   ({
     index = '',
@@ -281,7 +279,7 @@ const Option: React.FC<OptionProps> = memo(
     customStyleInput = {},
     onChange = () => {},
   }) => {
-    const change = useCallback(e => {
+    const handleOnChange = useCallback(e => {
       onChange(item.id, e);
     }, []);
     return (
@@ -294,7 +292,7 @@ const Option: React.FC<OptionProps> = memo(
           checked={checked}
           disabled={disabled}
           className={checked ? `${reactInputsValidationCss['checked']} ${inputClass}` : `${inputClass}`}
-          onChange={change}
+          onChange={handleOnChange}
           style={customStyleInput}
         />
         <label htmlFor={`${id}-${index}`} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>

@@ -43,7 +43,7 @@ interface Props {
   disabled?: boolean;
   labelHtml?: React.ReactNode;
   validate?: boolean;
-  onChange: (res: boolean, e: React.ChangeEvent<HTMLDivElement>) => void;
+  onChange: (res: boolean, e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -78,10 +78,10 @@ const component: React.FC<Props> = ({
   customStyleContainer = {},
   validationOption = {},
   onChange = () => {},
-  onBlur = undefined,
-  onFocus = undefined,
-  onClick = undefined,
-  validationCallback = undefined,
+  onBlur = null,
+  onFocus = null,
+  onClick = null,
+  validationCallback = null,
 }) => {
   const [err, setErr] = useState(false);
   const [msg, setMsg] = useState('');
@@ -90,7 +90,7 @@ const component: React.FC<Props> = ({
   const $input = useRef(null);
   const $el: { [key: string]: any } | null = $input;
   const handleOnBlur = useCallback(
-    e => {
+    (e: React.FocusEvent<HTMLElement>) => {
       if (onBlur) {
         check();
         onBlur(e);
@@ -99,7 +99,7 @@ const component: React.FC<Props> = ({
     [checked],
   );
   const handleOnFocus = useCallback(
-    e => {
+    (e: React.FocusEvent<HTMLElement>) => {
       if (onFocus) {
         onFocus(e);
       }
@@ -107,7 +107,7 @@ const component: React.FC<Props> = ({
     [checked],
   );
   const handleOnClick = useCallback(
-    e => {
+    (e: React.MouseEvent<HTMLElement>) => {
       handleOnChange(e);
       if (onClick) {
         onClick(e);
@@ -116,7 +116,7 @@ const component: React.FC<Props> = ({
     [err, checked],
   );
   const handleOnChange = useCallback(
-    (e: React.ChangeEvent<HTMLDivElement>) => {
+    (e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => {
       if (disabled || $el === null) {
         return;
       }

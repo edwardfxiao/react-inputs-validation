@@ -1,4 +1,5 @@
 import * as React from 'react';
+const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
@@ -41,12 +42,41 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   };
 };
 
-const isValidateValue = (value: any) => {
-  const v = String(value);
-  if (v === '' || v === 'null' || v === 'undefined') {
-    return true;
+const isValidValue = (list: OptionListItem[], value: any) => {
+  let res = false;
+  if (list.length) {
+    for (let i = 0; i < list.length; i += 1) {
+      if (list[i].id === value) {
+        res = true;
+        break;
+      }
+    }
   }
-  return false;
+  return res;
+};
+
+const getItem = (list: OptionListItem[], value: any) => {
+  let res = null;
+  if (list.length) {
+    for (let i = 0; i < list.length; i += 1) {
+      if (list[i].id === value) {
+        res = list[i];
+        break;
+      }
+    }
+  }
+  return res;
+};
+
+const getIndex = (list: OptionListItem[], value: string) => {
+  let key = -1;
+  for (let i = 0; i < list.length; i += 1) {
+    if (list[i].id === value) {
+      key = i;
+      break;
+    }
+  }
+  return key;
 };
 
 interface OptionListItem {
@@ -62,10 +92,10 @@ interface Props {
   disabled?: boolean;
   validate?: boolean;
   optionList: OptionListItem[];
-  onChange: (res: string, e: React.MouseEvent<HTMLDivElement> | Event) => void;
-  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onChange: (res: string, e: React.MouseEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement> | Event) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   validationOption?: object;
   selectHtml?: React.ReactNode;
   selectOptionListItemHtml?: React.ReactNode;
@@ -84,544 +114,468 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 
-interface DefaultProps {
-  tabIndex: string | number | undefined;
-  id: string;
-  name: string;
-  value: string | number;
-  disabled: boolean;
-  validate: boolean;
-  optionList: OptionListItem[];
-  classNameWrapper: string;
-  classNameContainer: string;
-  classNameOptionListItem: string;
-  classNameOptionListContainer: string;
-  classNameDropdownIconOptionListItem: string;
-  customStyleWrapper: object;
-  customStyleContainer: object;
-  customStyleOptionListItem: object;
-  customStyleOptionListContainer: object;
-  customStyleDropdownIcon: object;
-  validationOption: object;
-  onChange: (res: string, e: React.MouseEvent<HTMLDivElement> | Event) => void;
-}
-
-type PropsWithDefaults = Props & DefaultProps;
-
-interface State {
-  value: string;
-  show: boolean;
-  isTyping: boolean;
-  err: boolean;
-  msg: string;
-  successMsg: undefined | string;
-  keycodeList: number[];
-  validate: boolean;
-}
-
 interface Node {
   [key: string]: any;
 }
 
-class Index extends React.Component<Props, State> {
-  static defaultProps: Props = {
-    tabIndex: undefined,
-    id: '',
-    name: '',
-    value: '',
-    disabled: false,
-    validate: false,
-    optionList: [],
-    classNameWrapper: '',
-    classNameContainer: '',
-    classNameOptionListItem: '',
-    classNameOptionListContainer: '',
-    classNameDropdownIconOptionListItem: '',
-    customStyleWrapper: {},
-    customStyleContainer: {},
-    customStyleOptionListItem: {},
-    customStyleOptionListContainer: {},
-    customStyleDropdownIcon: {},
-    validationOption: {},
-    onChange: () => {},
-  };
-  private wrapper: React.RefObject<HTMLInputElement>;
-  private itemsWrapper: React.RefObject<HTMLInputElement>;
-  private optionItems: React.RefObject<HTMLInputElement>[];
-  private focus: boolean;
-  private corrected: boolean;
-  // TODO: find a better type
-  private typingTimeout: any;
-  private currentFocus: number | undefined;
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      value: props.value,
-      show: false,
-      isTyping: false,
-      err: false,
-      msg: '',
-      successMsg: undefined,
-      keycodeList: [],
-      validate: props.validate,
-    };
-    this.onChange = this.onChange.bind(this);
-    this.onClick = this.onClick.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.pageClick = this.pageClick.bind(this);
-    this.wrapper = React.createRef();
-    this.itemsWrapper = React.createRef();
-    this.optionItems = [];
-    this.focus = false;
-    this.corrected = false;
-    this.currentFocus = undefined;
-  }
+let globalVariableIsFocusing: boolean = false;
+let globalVariableIsCorrected: boolean = false;
+let globalVariableAddedOnKeyDown: boolean = false;
+let globalVariableCurrentFocus: number | null = null;
+let globalVariableTypingTimeout: number | null = null;
 
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.validate !== prevState.validate) {
-      return {
-        validate: nextProps.validate,
-      };
-    }
-    if (prevState.value !== nextProps.value) {
-      return {
-        value: nextProps.value,
-      };
-    }
-    return null;
-  }
-
-  componentDidMount() {
-    window.addEventListener('mousedown', this.pageClick);
-    window.addEventListener('touchstart', this.pageClick);
-    if (this.wrapper.current && this.props.tabIndex) {
-      this.wrapper.current.setAttribute('tabindex', String(this.props.tabIndex));
+const component: React.FC<Props> = ({
+  tabIndex = null,
+  id = '',
+  name = '',
+  value = '',
+  disabled = false,
+  validate = false,
+  optionList = [],
+  classNameWrapper = '',
+  classNameContainer = '',
+  classNameSelect = '',
+  classNameOptionListItem = '',
+  classNameOptionListContainer = '',
+  classNameDropdownIconOptionListItem = '',
+  customStyleWrapper = {},
+  customStyleContainer = {},
+  customStyleSelect = {},
+  customStyleOptionListItem = {},
+  customStyleOptionListContainer = {},
+  customStyleDropdownIcon = {},
+  validationOption = {},
+  selectHtml = null,
+  selectOptionListItemHtml = null,
+  onChange = () => {},
+  onBlur = null,
+  onFocus = null,
+  onClick = null,
+  validationCallback = null,
+}) => {
+  const [err, setErr] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const [show, setShow] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const initKeycodeList: number[] = [];
+  const [keycodeList, setKeycodeList] = useState(initKeycodeList);
+  const option = getDefaultValidationOption(validationOption);
+  const $wrapper = useRef(null);
+  const $itemsWrapper = useRef(null);
+  const $elWrapper: { [key: string]: any } | null = $wrapper;
+  const $elItemsWrapper: { [key: string]: any } | null = $itemsWrapper;
+  const $itemsRef: { [key: string]: any } = [];
+  if (optionList.length) {
+    for (let i = 0; i < optionList.length; i += 1) {
+      $itemsRef.push(useRef(null));
     }
   }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (prevState.show !== this.state.show) {
-      if (this.state.show) {
-        this.resetCurrentFocus();
-        if (this.wrapper.current) {
-          this.wrapper.current.addEventListener('keydown', this.onKeyDown);
-        }
+  const handleOnBlur = useCallback(
+    (e: React.FocusEvent<HTMLElement> | Event) => {
+      if (onBlur) {
+        check();
+        onBlur(e);
       }
-    }
-    if (this.state.validate !== prevState.validate) {
-      this.check();
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('mousedown', this.pageClick);
-    window.removeEventListener('touchstart', this.pageClick);
-    const node = this.wrapper.current;
-    if (node) {
-      node.removeEventListener('keydown', this.onKeyDown);
-    }
-  }
-
-  onChange(value: string, e: React.MouseEvent<HTMLDivElement> | Event) {
-    const { onChange } = this.props;
-    onChange && onChange(String(value), e);
-    this.setState({ value });
-    if (this.state.err) {
-      this.setState({ err: false });
-    } else {
-      this.setState({ successMsg: undefined });
-    }
-  }
-
-  onClick(e: React.MouseEvent<HTMLDivElement>) {
-    const { onClick } = this.props;
-    onClick && onClick(e);
-  }
-
-  onBlur(e: React.FocusEvent<HTMLElement> | Event) {
-    const { onBlur } = this.props;
-    if (onBlur) {
-      this.check();
-      onBlur(e);
-    }
-  }
-
-  onFocus(e: React.FocusEvent<HTMLElement>) {
-    this.focus = true;
-    const { onFocus } = this.props;
+    },
+    [value],
+  );
+  const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
       onFocus(e);
     }
-  }
-
-  getIndex(list: OptionListItem[], val: string) {
-    let key = -1;
-    for (let i = 0; i < list.length; i += 1) {
-      if (list[i].id === val) {
-        key = i;
-        break;
-      }
+  }, []);
+  const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (onClick) {
+      onClick(e);
     }
-    return key;
-  }
-
-  resetCurrentFocus() {
-    const { value } = this.state;
-    const { optionList } = this.props;
-    this.currentFocus = this.getIndex(optionList, value);
-    this.scroll();
-  }
-
-  onKeyDown(e: any) {
-    this.setState({ isTyping: true });
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    const { show, value } = this.state;
-    if (!show) {
+  }, []);
+  const handleOnChange = useCallback((v: string, e: React.MouseEvent<HTMLElement>) => {
+    if (disabled || $elWrapper === null) {
       return;
     }
-    const x = this.optionItems;
-    const { optionList } = this.props;
-    this.currentFocus = typeof this.currentFocus !== 'undefined' ? this.currentFocus : this.getIndex(optionList, value);
-    let direction = undefined;
-    const { keyCode } = e;
-    const keyCodeEsc = 27;
-    const keyCodeDown = 40;
-    const keyCodeUp = 38;
-    const keyCodeEnter = 13;
-    const selectKeyList = [keyCodeEsc, keyCodeDown, keyCodeUp, keyCodeEnter];
-    if (selectKeyList.indexOf(keyCode) !== -1) {
-      if (keyCode === keyCodeEsc) {
-        this.setState({ show: false });
-        this.resetCurrentFocus();
+    onChange && onChange(String(v), e);
+  }, []);
+  const check = useCallback(
+    () => {
+      const { name, check, locale, required, msgOnSuccess } = option;
+      if (!check) {
         return;
       }
-      if (keyCode === keyCodeDown) {
-        direction = 'down';
-        this.currentFocus += 1;
-        if (this.currentFocus > optionList.length - 1) {
-          this.currentFocus = optionList.length - 1;
-        }
-        this.addActive();
-      } else if (keyCode === keyCodeUp) {
-        direction = 'up';
-        this.currentFocus -= 1;
-        if (this.currentFocus < 0) {
-          this.currentFocus = 0;
-        }
-        this.addActive();
-      } else if (keyCode === keyCodeEnter) {
-        if (this.currentFocus > -1) {
-          if (x) {
-            const node: Node | null = x[this.currentFocus];
-            /* istanbul ignore next */
-            if (!node) {
-              return;
-            }
-            node.current.click();
-          }
+      if (!message[locale] || !message[locale][TYPE]) {
+        console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+        return;
+      }
+      if (required) {
+        const msg = message[locale][TYPE];
+        const nameText = name ? name : '';
+        const v = String(value);
+        if (!isValidValue(optionList, v) || v === '' || v === 'null' || v === 'undefined') {
+          handleCheckEnd(true, msg.empty(nameText));
+          return;
         }
       }
-    } else {
-      const { keycodeList } = this.state;
-      this.setTimeoutTyping();
-      const newkeyCodeList = [...keycodeList, keyCode];
-      const str = String.fromCharCode(...newkeyCodeList).toLowerCase();
-      let index = -1;
-      optionList.filter((i, k) => {
-        const { name } = i;
-        if (name.toLowerCase().startsWith(str)) {
-          if (index === -1) {
-            index = k;
-          }
-        }
-      });
-      if (index !== -1) {
-        this.currentFocus = index;
-        this.addActive();
+      if (msgOnSuccess) {
+        setSuccessMsg(msgOnSuccess);
       }
-      this.setState({ keycodeList: newkeyCodeList });
+      handleCheckEnd(false, msgOnSuccess);
+    },
+    [value],
+  );
+  const handleCheckEnd = useCallback((err: boolean, message: string) => {
+    let msg = message;
+    const { msgOnError } = option;
+    if (err && msgOnError) {
+      msg = msgOnError;
     }
-    this.scroll(direction);
-    return this.currentFocus;
-  }
-
-  setTimeoutTyping() {
-    if (this.typingTimeout) {
-      clearTimeout(this.typingTimeout);
+    setErr(err);
+    setMsg(msg);
+    validationCallback && validationCallback(err);
+  }, []);
+  useEffect(() => {
+    if ($elWrapper === null) {
+      return;
     }
-    this.typingTimeout = setTimeout(() => {
-      this.setState({ keycodeList: [] });
+    window.addEventListener('mousedown', pageClick);
+    window.addEventListener('touchstart', pageClick);
+    if (tabIndex) {
+      $elWrapper.current.setAttribute('tabindex', String(tabIndex));
+    }
+    return () => {
+      window.removeEventListener('mousedown', pageClick);
+      window.removeEventListener('touchstart', pageClick);
+      $elWrapper.current.removeEventListener('keydown', onKeyDown);
+    };
+  }, []);
+  const pageClick = useCallback((e: Event) => {
+    /* istanbul ignore next */
+    if ($elWrapper === null || $elWrapper.current.contains(e.target)) {
+      return;
+    }
+    if (globalVariableIsFocusing) {
+      handleOnBlur(e);
+      globalVariableIsFocusing = false;
+    }
+    setShow(false);
+  }, []);
+  const resetCurrentFocus = useCallback(
+    () => {
+      globalVariableCurrentFocus = getIndex(optionList, String(value));
+      scroll();
+    },
+    [value],
+  );
+  const setTimeoutTyping = useCallback(() => {
+    if (globalVariableTypingTimeout) {
+      clearTimeout(globalVariableTypingTimeout);
+    }
+    globalVariableTypingTimeout = setTimeout(() => {
+      setKeycodeList([]);
     }, 250);
-  }
-
-  scroll(direction: undefined | string = undefined) {
-    const itemsWrapperNode: Node | null = this.itemsWrapper;
+  }, []);
+  const scroll = useCallback((direction: undefined | string = undefined) => {
     /* istanbul ignore next */
-    if (itemsWrapperNode === null) {
+    if ($elItemsWrapper === null) {
       return;
     }
-    const containerHeight = itemsWrapperNode.current.offsetHeight;
-    const containerScrollTop = itemsWrapperNode.current.scrollTop;
+    const containerHeight = $elItemsWrapper.current.offsetHeight;
+    const containerScrollTop = $elItemsWrapper.current.scrollTop;
     /* istanbul ignore next */
-    if (!this.currentFocus || !this.optionItems[this.currentFocus]) {
+    if (!globalVariableCurrentFocus || !$itemsRef[globalVariableCurrentFocus]) {
       return;
     }
-    const optionItemsNode: Node | null = this.optionItems[this.currentFocus];
+    const $elOptionItem: Node | null = $itemsRef[globalVariableCurrentFocus];
     /* istanbul ignore next */
-    if (optionItemsNode === null) {
+    if ($elOptionItem === null) {
       return;
     }
-    const itemHeight = optionItemsNode.current.offsetHeight;
+    const itemHeight = $elOptionItem.current.offsetHeight;
     if (direction) {
       if (direction === 'down') {
         const bound = containerScrollTop + containerHeight;
-        const heightItems = this.currentFocus * itemHeight;
+        const heightItems = globalVariableCurrentFocus * itemHeight;
         const heightContainer = bound - itemHeight;
         if (heightItems >= heightContainer) {
           const offset = Math.abs(heightItems - heightContainer - itemHeight);
-          if (offset >= 0 && !this.corrected) {
-            itemsWrapperNode.current.scrollTop = containerScrollTop + itemHeight - offset;
-            this.corrected = true;
+          if (offset >= 0 && !globalVariableIsCorrected) {
+            $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight - offset;
+            globalVariableIsCorrected = true;
           } else {
-            itemsWrapperNode.current.scrollTop = containerScrollTop + itemHeight;
+            $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight;
           }
         }
       }
       if (direction === 'up') {
-        this.corrected = false;
-        if (this.currentFocus * itemHeight <= containerScrollTop) {
-          itemsWrapperNode.current.scrollTop = this.currentFocus * itemHeight;
+        globalVariableIsCorrected = false;
+        if (globalVariableCurrentFocus * itemHeight <= containerScrollTop) {
+          $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
         }
       }
     } else {
-      this.corrected = false;
-      itemsWrapperNode.current.scrollTop = this.currentFocus * itemHeight;
+      globalVariableIsCorrected = false;
+      $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
     }
-  }
-
-  addActive() {
-    const x = this.optionItems;
-    if (!x) return false;
-    this.removeActive();
-    if (typeof this.currentFocus === 'undefined') return;
-    if (this.currentFocus >= x.length) this.currentFocus = 0;
-    if (this.currentFocus < 0) this.currentFocus = x.length - 1;
-    const node: Node | null = x[this.currentFocus];
+  }, []);
+  const handleOnItemClick = useCallback((v: string, e: React.MouseEvent<HTMLElement>) => {
+    handleOnChange(v, e);
+  }, []);
+  const handleOnItemMouseOver = useCallback((index: number) => {
+    globalVariableCurrentFocus = index;
+    addActive();
+  }, []);
+  const handleOnItemMouseMove = useCallback(() => {
+    setIsTyping(false);
+  }, []);
+  const handleOnItemMouseOut = useCallback(() => {
+    removeActive();
+  }, []);
+  const addActive = useCallback(() => {
+    if (!$itemsRef) return;
+    removeActive();
+    if (globalVariableCurrentFocus === null) return;
+    if (globalVariableCurrentFocus >= $itemsRef.length) globalVariableCurrentFocus = 0;
+    if (globalVariableCurrentFocus < 0) globalVariableCurrentFocus = $itemsRef.length - 1;
+    const $node: Node | null = $itemsRef[globalVariableCurrentFocus];
     /* istanbul ignore next */
-    if (!node) {
+    if (!$node) {
       return;
     }
-    node.current.className += ` ${reactInputsValidationCss['select__hover-active']}`;
-  }
-
-  removeActive() {
-    const x = this.optionItems;
-    for (let i = 0; i < x.length; i += 1) {
-      const node: Node | null = x[i];
-      node.current.className = node.current.className.replace(reactInputsValidationCss['select__hover-active'], '');
+    $itemsRef[globalVariableCurrentFocus].current.className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
+  }, []);
+  const removeActive = useCallback(() => {
+    for (let i = 0; i < $itemsRef.length; i += 1) {
+      const $node: Node | null = $itemsRef[i];
+      /* istanbul ignore next */
+      if (!$node) {
+        break;
+      }
+      if ($node && $node.current) {
+        $node.current.className = $node.current.className.replace(reactInputsValidationCss[`${TYPE}__hover-active`], '');
+      }
     }
-  }
-
-  pageClick(e: Event) {
-    const node: Node | null = this.wrapper;
-    /* istanbul ignore next */
-    if (!node) {
-      return;
-    }
-    /* istanbul ignore next */
-    if (node.current.contains(e.target)) {
-      return;
-    }
-    if (this.focus) {
-      this.onBlur(e);
-      this.focus = false;
-    }
-    this.toggleShow(false);
-  }
-
-  toggleShow(show: boolean) {
-    this.setState({ show });
-  }
-
-  check(val: null | string = null) {
-    let { value } = this.state;
-    if (val != null) {
-      value = val;
-    }
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { name, check, required, locale, msgOnSuccess } = getDefaultValidationOption(validationOption);
-    if (!check) {
-      return;
-    }
-    if (!message[locale] || !message[locale][TYPE]) {
-      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
-      return;
-    }
-    const msg = message[locale][TYPE];
-    const nameText = name ? name : '';
-    if (required) {
-      if (isValidateValue(value)) {
-        this.handleCheckEnd(true, msg.empty(nameText));
+  }, []);
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      setIsTyping(true);
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      if (!show) {
         return;
       }
-    }
-    if (msgOnSuccess) {
-      this.setState({ successMsg: msgOnSuccess });
-    }
-    this.handleCheckEnd(false, msgOnSuccess);
-  }
-
-  handleCheckEnd(err: boolean, message: string) {
-    let msg = message;
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { msgOnError } = getDefaultValidationOption(validationOption);
-    if (err && msgOnError) {
-      msg = msgOnError;
-    }
-    this.setState({ err, msg });
-    const { validationCallback } = this.props;
-    validationCallback && validationCallback(err);
-  }
-
-  render() {
-    const {
-      tabIndex,
-      id,
-      name,
-      optionList,
-      disabled,
-      classNameWrapper,
-      classNameContainer,
-      classNameSelect,
-      classNameOptionListContainer,
-      classNameOptionListItem,
-      classNameDropdownIconOptionListItem,
-      customStyleWrapper,
-      customStyleContainer,
-      customStyleSelect,
-      customStyleOptionListContainer,
-      customStyleOptionListItem,
-      selectHtml,
-      selectOptionListItemHtml,
-      validationOption,
-    } = this.props as PropsWithDefaults;
-
-    const { value, err, msg, show, successMsg, isTyping } = this.state;
-
-    const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['select__wrapper']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
-
-    const containerClass = `${classNameContainer} ${reactInputsValidationCss['select__container']} ${err && reactInputsValidationCss['error']} ${show &&
-      reactInputsValidationCss['show']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
-
-    const inputClass = `${reactInputsValidationCss['select__input']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
-
-    const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
-
-    const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss['select__options-container']} ${err && reactInputsValidationCss['error']} ${show &&
-      reactInputsValidationCss['show']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
-
-    const selectOptionListItemClass = `${!isTyping && reactInputsValidationCss['select__options-item-show-cursor']} ${classNameOptionListItem} ${
-      reactInputsValidationCss['select__options-item']
-    } ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
-
-    const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss['select__dropdown-icon']}`;
-
-    const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
-    const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
-
-    let msgHtml;
-    const { showMsg } = getDefaultValidationOption(validationOption);
-
-    if (showMsg && err && msg) {
-      msgHtml = <div className={errMsgClass}>{msg}</div>;
-    }
-    if (showMsg && !err && typeof successMsg !== 'undefined') {
-      msgHtml = <div className={successMsgClass}>{successMsg}</div>;
-    }
-    let optionListHtml;
-    let item: OptionListItem | undefined;
-    optionList.filter(i => {
-      if (String(i.id) === String(value)) {
-        item = i;
-      }
-    });
-    if (optionList.length) {
-      if (selectOptionListItemHtml) {
-        optionListHtml = selectOptionListItemHtml;
+      globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(optionList, String(value)) : globalVariableCurrentFocus;
+      let direction = undefined;
+      const { keyCode } = e;
+      const keyCodeEsc = 27;
+      const keyCodeDown = 40;
+      const keyCodeUp = 38;
+      const keyCodeEnter = 13;
+      const selectKeyList = [keyCodeEsc, keyCodeDown, keyCodeUp, keyCodeEnter];
+      if (selectKeyList.indexOf(keyCode) !== -1) {
+        if (keyCode === keyCodeEsc) {
+          setShow(false);
+          resetCurrentFocus();
+          return;
+        }
+        if (keyCode === keyCodeDown) {
+          direction = 'down';
+          globalVariableCurrentFocus += 1;
+          if (globalVariableCurrentFocus > optionList.length - 1) {
+            globalVariableCurrentFocus = optionList.length - 1;
+          }
+          addActive();
+        } else if (keyCode === keyCodeUp) {
+          direction = 'up';
+          globalVariableCurrentFocus -= 1;
+          if (globalVariableCurrentFocus < 0) {
+            globalVariableCurrentFocus = 0;
+          }
+          addActive();
+        } else if (keyCode === keyCodeEnter) {
+          if (globalVariableCurrentFocus > -1) {
+            if ($itemsRef[globalVariableCurrentFocus]) {
+              $itemsRef[globalVariableCurrentFocus].current.click();
+            } else {
+              return;
+            }
+          }
+        }
       } else {
-        optionListHtml = optionList.map((i, k) => {
-          this.optionItems[k] = React.createRef();
-          return (
-            <div
-              ref={this.optionItems[k]}
-              onMouseOver={() => {
-                this.currentFocus = k;
-                this.addActive();
-              }}
-              onMouseMove={() => {
-                this.setState({ isTyping: false });
-              }}
-              onMouseOut={() => {
-                this.removeActive();
-              }}
-              className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
-              key={k}
-              style={customStyleOptionListItem}
-              onClick={e => {
-                this.onChange(i.id, e);
-              }}
-            >
-              {i.name}
-            </div>
-          );
+        setTimeoutTyping();
+        const newkeyCodeList = [...keycodeList, keyCode];
+        const str = String.fromCharCode(...newkeyCodeList).toLowerCase();
+        let index = -1;
+        optionList.filter((i, k) => {
+          const { name } = i;
+          if (name.toLowerCase().startsWith(str)) {
+            if (index === -1) {
+              index = k;
+            }
+          }
         });
+        if (index !== -1) {
+          globalVariableCurrentFocus = index;
+          addActive();
+        }
+        setKeycodeList(newkeyCodeList);
       }
+      scroll(direction);
+      return globalVariableCurrentFocus;
+    },
+    [show, value, keycodeList],
+  );
+  useEffect(
+    () => {
+      if (show && $elWrapper) {
+        $elWrapper.current.addEventListener('keydown', onKeyDown);
+      }
+      return () => {
+        $elWrapper.current.removeEventListener('keydown', onKeyDown);
+      };
+    },
+    [show, value, keycodeList],
+  );
+  useEffect(
+    () => {
+      if (validate) {
+        check();
+      }
+    },
+    [validate],
+  );
+  useEffect(
+    () => {
+      const v = String(value);
+      if (!(!isValidValue(optionList, v) || v === '' || v === 'null' || v === 'undefined')) {
+        setErr(false);
+      } else {
+        setSuccessMsg('');
+      }
+    },
+    [value],
+  );
+  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${show &&
+    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+  const inputClass = `${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled &&
+    reactInputsValidationCss['disabled']};`;
+  const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+  const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss[`${TYPE}__options-container`]} ${err && reactInputsValidationCss['error']} ${show &&
+    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+  const selectOptionListItemClass = `${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
+    reactInputsValidationCss[`${TYPE}__options-item`]
+  } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+  const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss[`${TYPE}__dropdown-icon`]}`;
+  const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
+  let msgHtml;
+  const { showMsg } = option;
+  if (showMsg && err && msg) {
+    msgHtml = <div className={errMsgClass}>{msg}</div>;
+  }
+  if (showMsg && !err && successMsg !== '') {
+    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+  }
+  let optionListHtml;
+  const item = getItem(optionList, String(value));
+  if (optionList.length) {
+    if (selectOptionListItemHtml) {
+      optionListHtml = selectOptionListItemHtml;
+    } else {
+      optionListHtml = optionList.map((i, k) => (
+        <Option
+          key={k}
+          index={k}
+          refItem={$itemsRef[k]}
+          className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
+          item={i}
+          customStyleOptionListItem={customStyleOptionListItem}
+          onClick={handleOnItemClick}
+          onMouseOver={handleOnItemMouseOver}
+          onMouseMove={handleOnItemMouseMove}
+          onMouseOut={handleOnItemMouseOut}
+        />
+      ));
     }
-    let selectorHtml = selectHtml;
-    if (!selectorHtml) {
-      selectorHtml = (
-        <div className={reactInputsValidationCss['select__dropdown']}>
-          <div className={`${reactInputsValidationCss['select__dropdown-name']} ${reactInputsValidationCss['ellipsis']}`}>{item ? item.name : ''}</div>
-          <div className={dropdownIconClass} />
+  }
+  const selectorHtml = selectHtml ? (
+    selectHtml
+  ) : (
+    <div className={reactInputsValidationCss[`${TYPE}__dropdown`]}>
+      <div className={`${reactInputsValidationCss[`${TYPE}__dropdown-name`]} ${reactInputsValidationCss['ellipsis']}`}>{item ? item.name : ''}</div>
+      <div className={dropdownIconClass} />
+    </div>
+  );
+  return (
+    <div
+      ref={$wrapper}
+      id={reactInputsValidationCss[`${TYPE}__wrapper`]}
+      className={wrapperClass}
+      style={customStyleWrapper}
+      onClick={e => {
+        handleOnClick(e);
+        !disabled ? setShow(!show) : ``;
+      }}
+      onFocus={handleOnFocus}
+      onBlur={handleOnBlur}
+    >
+      <div className={containerClass} style={customStyleContainer}>
+        <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} />
+        <div className={selectClass} style={customStyleSelect}>
+          {selectorHtml}
         </div>
-      );
-    }
+        <div ref={$itemsWrapper} className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
+          {optionListHtml}
+        </div>
+      </div>
+      {msgHtml}
+    </div>
+  );
+};
+interface OptionProps {
+  index?: number;
+  refItem?: React.RefObject<HTMLDivElement>;
+  className?: string;
+  item?: OptionListItem;
+  customStyleOptionListItem?: object;
+  onClick?: (res: string, e: React.MouseEvent<HTMLElement>) => void;
+  onMouseOver?: (res: number) => void;
+  onMouseMove?: () => void;
+  onMouseOut?: () => void;
+}
+const Option: React.FC<OptionProps> = memo(
+  ({
+    index = -1,
+    refItem = null,
+    className = '',
+    item = { id: '', name: '' },
+    customStyleOptionListItem = {},
+    onClick = () => {},
+    onMouseOver = () => {},
+    onMouseMove = () => {},
+    onMouseOut = () => {},
+  }) => {
+    const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
+      onClick(item.id, e);
+    }, []);
+    const handleOnMouseOver = useCallback(() => {
+      onMouseOver(index);
+    }, []);
+    const handleOnMouseMove = useCallback(() => {
+      onMouseMove();
+    }, []);
+    const handleOnMouseOut = useCallback(() => {
+      onMouseOut();
+    }, []);
     return (
-      <div
-        ref={this.wrapper}
-        id={reactInputsValidationCss['select__wrapper']}
-        className={wrapperClass}
-        style={customStyleWrapper}
-        onClick={e => {
-          this.onClick(e);
-          !disabled ? this.toggleShow(!show) : ``;
-        }}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-      >
-        <div className={containerClass} style={customStyleContainer}>
-          <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} />
-          <div className={selectClass} style={customStyleSelect}>
-            {selectorHtml}
-          </div>
-          <div ref={this.itemsWrapper} className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
-            {optionListHtml}
-          </div>
-        </div>
-        {msgHtml}
+      <div ref={refItem} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
+        {item.name}
       </div>
     );
-  }
-}
-
-export default Index;
+  },
+);
+export default memo(component);

@@ -79,10 +79,10 @@ interface Props {
   customStyleWrapper?: object;
   customStyleContainer?: object;
   validationOption?: object;
-  onChange: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
+  onChange: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
-  onClick?: (e: React.FocusEvent<HTMLElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   onKeyUp?: (e: React.KeyboardEvent<HTMLElement>) => void;
   validationCallback?: (res: boolean) => void;
 }
@@ -124,12 +124,12 @@ const component: React.FC<Props> = ({
   customStyleWrapper = {},
   customStyleContainer = {},
   validationOption = {},
-  onChange = (v: string, e: React.ChangeEvent<HTMLDivElement>) => {},
-  onBlur = undefined,
-  onFocus = undefined,
-  onClick = undefined,
-  onKeyUp = undefined,
-  validationCallback = undefined,
+  onChange = (v: string, e: React.ChangeEvent<HTMLElement>) => {},
+  onBlur = null,
+  onFocus = null,
+  onClick = null,
+  onKeyUp = null,
+  validationCallback = null,
 }) => {
   const [err, setErr] = useState(false);
   const [msg, setMsg] = useState('');
@@ -137,30 +137,30 @@ const component: React.FC<Props> = ({
   const option = getDefaultValidationOption(validationOption);
   const $input = useRef(null);
   const $el: { [key: string]: any } | null = $input;
-  const handleOnBlur = useCallback(e => {
+  const handleOnBlur = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onBlur) {
       check();
       onBlur(e);
     }
   }, []);
-  const handleOnFocus = useCallback(e => {
+  const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
       onFocus(e);
     }
   }, []);
-  const handleOnClick = useCallback(e => {
+  const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (onClick) {
       onClick(e);
     }
   }, []);
-  const handleOnKeyUp = useCallback(e => {
+  const handleOnKeyUp = useCallback((e: React.KeyboardEvent<HTMLElement>) => {
     if (onKeyUp) {
       check();
       onKeyUp(e);
     }
   }, []);
   const handleOnChange = useCallback(
-    (e: React.ChangeEvent<HTMLDivElement>) => {
+    (e: React.ChangeEvent<HTMLElement>) => {
       if (disabled || $el === null) {
         return;
       }

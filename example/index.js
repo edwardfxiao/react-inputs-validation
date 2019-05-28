@@ -174,7 +174,7 @@ import { Select } from 'react-inputs-validation';
   //       <div
   //         key={k}
   //         onClick={() => {
-  //           this.handleSelectChange(i.id);
+  //           this.setState({ country: i.id });
   //         }}
   //       >
   //         <span className="icon icon-person" />{i.name}
@@ -548,12 +548,12 @@ class Index extends Component {
       verticalAlign: 'middle',
     };
 
-    // let countryItem;
-    // COUNTRY_OPTIONS_LIST.filter(i => {
-    //   if (String(i.id) == String(country)) {
-    //     countryItem = i;
-    //   }
-    // });
+    let countryItem;
+    COUNTRY_OPTIONS_LIST.filter(i => {
+      if (String(i.id) == String(country)) {
+        countryItem = i;
+      }
+    });
 
     return (
       <div style={{ padding: '10px' }}>
@@ -770,7 +770,7 @@ class Index extends Component {
                     //       <div
                     //         key={k}
                     //         onClick={() => {
-                    //           this.handleSelectChange(i.id);
+                    //           this.setState({ country: i.id });
                     //         }}
                     //       >
                     //         <span className="icon icon-person" />{i.name}
@@ -1034,20 +1034,19 @@ class Index extends Component {
                       // onFocus={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       // onClick={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       // selectHtml={<div>{countryItem.name}</div>} // Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
-                      // selectOptionListItemHtml={COUNTRY_OPTIONS_LIST.map(
-                      //   (i, k) => {
-                      //     return (
-                      //       <div
-                      //         key={k}
-                      //         onClick={() => {
-                      //           this.handleSelectChange(i.id);
-                      //         }}
-                      //       >
-                      //         <span className="icon icon-person" />{i.name}
-                      //       </div>
-                      //     );
-                      //   }
-                      // )} // Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
+                      // selectOptionListItemHtml={COUNTRY_OPTIONS_LIST.map((i, k) => {
+                      //   return (
+                      //     <div
+                      //       key={k}
+                      //       onClick={() => {
+                      //         this.setState({ country: i.id });
+                      //       }}
+                      //     >
+                      //       <span className="icon icon-person" />
+                      //       {i.name}
+                      //     </div>
+                      //   );
+                      // })} // Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
                       validationOption={{
                         name: 'country', // Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
                         check: true, // Optional.[Bool].Default: true. To determin if you need to validate.

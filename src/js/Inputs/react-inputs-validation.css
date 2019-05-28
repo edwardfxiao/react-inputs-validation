@@ -4,6 +4,7 @@ input[type='password'],
 input[type='phone'],
 input[type='number'],
 input[type='text'],
+textarea,
 select {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;

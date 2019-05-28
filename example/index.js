@@ -8,7 +8,7 @@ import Markdown from 'react-markdown';
 import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
-import STYLES from '../src/css/example.css';
+import CSS from '../src/css/example.css';
 import { Textbox, Textarea, Radiobox, Checkbox, Select } from '../src/js/Inputs/index.ts';
 
 const markdownTextboxEmptyExample = `
@@ -556,19 +556,19 @@ class Index extends Component {
     });
 
     return (
-      <div style={{ padding: '10px' }}>
+      <div className={CSS['wrapper']}>
         <div style={{ padding: '10px', border: '1px solid #e5e5e5' }}>
           <div>
             <h1>Basic Usage</h1>
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Textbox</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Textbox</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Textbox Empty by onBlur Example:</h1>
                   <Textbox
@@ -601,7 +601,7 @@ class Index extends Component {
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Textbox Regex by onBlur Example:</h1>
                   <Textbox
@@ -633,7 +633,7 @@ class Index extends Component {
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Textbox Number by onBlur Example:</h1>
                   <Textbox
@@ -666,12 +666,12 @@ class Index extends Component {
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Radiobox</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Radiobox</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Radiobox Empty by onBlur Example:</h1>
                   <Radiobox
@@ -708,12 +708,12 @@ class Index extends Component {
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Checkbox</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Checkbox</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Checkbox Empty by onBlur Example:</h1>
                   <Checkbox
@@ -744,12 +744,12 @@ class Index extends Component {
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Select</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Select</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Select Empty by onBlur Example:</h1>
                   <Select
@@ -795,12 +795,12 @@ class Index extends Component {
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Textarea</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Textarea</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Textarea Empty by onBlur Example:</h1>
                   <Textarea
@@ -1129,7 +1129,7 @@ class Index extends Component {
               </div>
             </div>
             <div style={{ height: '10px' }} />
-            <div className={`${STYLES['my-button']} ${STYLES['my-button__red']} ${STYLES['save-button']}`} onClick={this.validateForm}>
+            <div className={`${CSS['my-button']} ${CSS['my-button__red']} ${CSS['save-button']}`} onClick={this.validateForm}>
               validate!
             </div>
             <input type="submit" style={{ display: 'none' }} />

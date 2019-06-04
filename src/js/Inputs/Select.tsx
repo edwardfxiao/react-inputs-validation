@@ -120,7 +120,6 @@ interface Node {
 
 let globalVariableIsFocusing: boolean = false;
 let globalVariableIsCorrected: boolean = false;
-let globalVariableAddedOnKeyDown: boolean = false;
 let globalVariableCurrentFocus: number | null = null;
 let globalVariableTypingTimeout: number | null = null;
 

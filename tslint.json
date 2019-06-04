@@ -1,4 +1,7 @@
 {
   "extends": ["tslint-config-airbnb", "tslint-config-prettier"],
-  "rules": {}
+  "rules": {
+    // This rule is here for now because of https://github.com/palantir/tslint-react/issues/120
+    "variable-name": [true, "allow-pascal-case"]
+  }
 }

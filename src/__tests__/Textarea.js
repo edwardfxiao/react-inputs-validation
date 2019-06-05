@@ -123,38 +123,6 @@ describe('Textarea component', () => {
   });
 
   it('[successMsg]: Should show successMsg when msgOnSuccess is provided', () => {
-    const msgOnSuccess = 'msgOnSuccess';
-    const value = 'foobar';
-    const wrapper = mount(
-      <Textarea
-        onBlur={() => {}}
-        onChange={() => {}}
-        validationOption={{
-          name: 'foobar',
-          check: true,
-          required: true,
-          showMsg: true,
-          msgOnSuccess,
-        }}
-      />,
-    );
-    const $input = wrapper.find(INPUT);
-    $input.simulate('focus');
-    $input.simulate('blur');
-    $input.simulate('focus');
-    $input.simulate('change', { target: { value: value } });
-    setTimeout(() => {
-      $input.simulate('blur');
-      expect(
-        wrapper
-          .update()
-          .find(`.${MSG_CLASS_IDENTITIFIER}`)
-          .text(),
-      ).toEqual(msgOnSuccess);
-    }, 0);
-  });
-
-  it('[successMsg]: Should show successMsg when msgOnSuccess is provided', () => {
     const value = 'foobar';
     const wrapper = mount(
       <Textarea
@@ -171,16 +139,10 @@ describe('Textarea component', () => {
     $input.simulate('focus');
     $input.simulate('blur');
     $input.simulate('focus');
-    $input.simulate('change', { target: { value: value } });
-    setTimeout(() => {
-      $input.simulate('blur');
-      expect(
-        wrapper
-          .update()
-          .find(`.${MSG_CLASS_IDENTITIFIER}`)
-          .length(),
-      ).toEqual(0);
-    }, 0);
+    $input.at(0).instance().value = value;
+    $input.simulate('change');
+    $input.simulate('blur');
+    expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
   it('[customFunc]: Should setState msg to customFunc.errorMessage', () => {

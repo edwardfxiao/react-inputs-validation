@@ -29,6 +29,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "test:coverage": "npm run tslint && npm run jslint && npm test -- --coverage",
+    "test_single": "node_modules/.bin/jest Checkbox.js --coverage",
     "prepublish": "npm run test:coverage",
     "jslint": "eslint ./src",
     "tslint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",

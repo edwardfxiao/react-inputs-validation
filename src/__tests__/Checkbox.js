@@ -142,9 +142,9 @@ describe('Checkbox component', () => {
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
     const restoreConsole = mockConsole();
     const wrapper = mount(<Checkbox onBlur={() => {}} validationOption={{ locale: 'foobar' }} />);
-    const $input = wrapper.find(INPUT);
-    $input.simulate('focus');
-    $input.simulate('blur');
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('click');
+    $wrapper.simulate('blur');
     expect(console.error).toHaveBeenCalled();
     restoreConsole();
   });

@@ -503,6 +503,7 @@ const component: React.FC<Props> = ({
         <Option
           key={k}
           index={k}
+          id={`react-inputs-validation__select_option-${id}`}
           refItem={$itemsRef[k]}
           className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
           item={i}
@@ -551,6 +552,7 @@ const component: React.FC<Props> = ({
 };
 interface OptionProps {
   index?: number;
+  id?: string;
   refItem?: React.RefObject<HTMLDivElement>;
   className?: string;
   item?: OptionListItem;
@@ -564,6 +566,7 @@ const Option: React.FC<OptionProps> = memo(
   ({
     index = -1,
     refItem = null,
+    id = '',
     className = '',
     item = { id: '', name: '' },
     customStyleOptionListItem = {},
@@ -585,7 +588,16 @@ const Option: React.FC<OptionProps> = memo(
       onMouseOut();
     }, []);
     return (
-      <div ref={refItem} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
+      <div
+        id={`${id}-${index}`}
+        ref={refItem}
+        onMouseOver={handleOnMouseOver}
+        onMouseMove={handleOnMouseMove}
+        onMouseOut={handleOnMouseOut}
+        className={className}
+        style={customStyleOptionListItem}
+        onClick={handleOnClick}
+      >
         {item.name}
       </div>
     );

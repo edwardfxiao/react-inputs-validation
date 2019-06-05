@@ -1,7 +1,7 @@
 import * as React from 'react';
 const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'radiobox';
 interface DefaultValidationOption {
@@ -102,6 +102,8 @@ const component: React.FC<Props> = ({
   const [err, setErr] = useState(false);
   const [msg, setMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [internalValue, setInternalValue] = useState(String(value));
+  const prevInternalValue = usePrevious(internalValue);
   const option = getDefaultValidationOption(validationOption);
   const $input = useRef(null);
   const $el: { [key: string]: any } | null = $input;
@@ -112,7 +114,7 @@ const component: React.FC<Props> = ({
         onBlur(e);
       }
     },
-    [value],
+    [internalValue],
   );
   const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
@@ -128,10 +130,11 @@ const component: React.FC<Props> = ({
     if (disabled || $el === null) {
       return;
     }
+    setInternalValue(val);
     onChange && onChange(val, e);
   }, []);
   const check = useCallback(
-    (val: null | string = null) => {
+    () => {
       const { name, check, locale, required, msgOnSuccess } = option;
       if (!check) {
         return;
@@ -143,7 +146,7 @@ const component: React.FC<Props> = ({
       if (required) {
         const msg = message[locale][TYPE];
         const nameText = name ? name : '';
-        if (!isValidValue(optionList, value)) {
+        if (!isValidValue(optionList, internalValue)) {
           handleCheckEnd(true, msg.empty(nameText));
           return;
         }
@@ -153,7 +156,7 @@ const component: React.FC<Props> = ({
       }
       handleCheckEnd(false, msgOnSuccess);
     },
-    [value],
+    [internalValue],
   );
   const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
@@ -166,6 +169,7 @@ const component: React.FC<Props> = ({
     validationCallback && validationCallback(err);
   }, []);
   useEffect(() => {
+    /* istanbul ignore if  */
     if ($el === null) {
       return;
     }
@@ -183,15 +187,29 @@ const component: React.FC<Props> = ({
   );
   useEffect(
     () => {
-      if (value && isValidValue(optionList, value)) {
+      if (internalValue && isValidValue(optionList, internalValue)) {
         setErr(false);
       } else {
         setSuccessMsg('');
       }
     },
+    [internalValue],
+  );
+  useEffect(
+    () => {
+      setInternalValue(String(value));
+    },
     [value],
   );
-  const wrapperClass = `${classNameWrapper} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+  useEffect(
+    () => {
+      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+        check();
+      }
+    },
+    [prevInternalValue, internalValue],
+  );
+  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
     reactInputsValidationCss[`${TYPE}__wrapper`]
   } ${disabled && reactInputsValidationCss['disabled']}`;
   const containerClass = `${classNameContainer} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
@@ -205,8 +223,8 @@ const component: React.FC<Props> = ({
   const optionListItemClass = `${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
     reactInputsValidationCss[`${TYPE}__item`]
   } ${disabled && reactInputsValidationCss['disabled']}`;
-  const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
-  const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
+  const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;
   const { showMsg } = option;
   if (showMsg && err && msg) {
@@ -218,7 +236,7 @@ const component: React.FC<Props> = ({
   let optionHtml;
   if (optionList.length) {
     optionHtml = optionList.map((i, k) => {
-      const checked = String(i.id) === String(value) ? true : false;
+      const checked = String(i.id) === String(internalValue) ? true : false;
       return (
         <Option
           key={k}
@@ -228,7 +246,7 @@ const component: React.FC<Props> = ({
           name={name}
           item={i}
           inputClass={inputClass}
-          value={value}
+          value={internalValue}
           disabled={disabled}
           optionListItemClass={optionListItemClass}
           customStyleOptionListItem={customStyleOptionListItem}

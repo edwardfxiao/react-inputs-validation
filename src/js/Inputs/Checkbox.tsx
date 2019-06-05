@@ -1,7 +1,7 @@
 import * as React from 'react';
 const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'checkbox';
 interface DefaultValidationOption {
@@ -86,6 +86,8 @@ const component: React.FC<Props> = ({
   const [err, setErr] = useState(false);
   const [msg, setMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [internalChecked, setInternalChecked] = useState(checked);
+  const prevInternalChecked = usePrevious(internalChecked);
   const option = getDefaultValidationOption(validationOption);
   const $input = useRef(null);
   const $el: { [key: string]: any } | null = $input;
@@ -96,7 +98,7 @@ const component: React.FC<Props> = ({
         onBlur(e);
       }
     },
-    [checked],
+    [internalChecked],
   );
   const handleOnFocus = useCallback(
     (e: React.FocusEvent<HTMLElement>) => {
@@ -104,7 +106,7 @@ const component: React.FC<Props> = ({
         onFocus(e);
       }
     },
-    [checked],
+    [internalChecked],
   );
   const handleOnClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
@@ -113,24 +115,25 @@ const component: React.FC<Props> = ({
         onClick(e);
       }
     },
-    [err, checked],
+    [err, internalChecked],
   );
   const handleOnChange = useCallback(
     (e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => {
       if (disabled || $el === null) {
         return;
       }
-      onChange && onChange(!checked, e);
+      setInternalChecked(!internalChecked);
+      onChange && onChange(!internalChecked, e);
       if (err) {
         setErr(false);
       } else {
         setSuccessMsg('');
       }
     },
-    [err, checked],
+    [err, internalChecked],
   );
   const check = useCallback(
-    (val: null | string = null) => {
+    () => {
       const { name, check, locale, required, msgOnSuccess } = option;
       if (!check) {
         return;
@@ -142,7 +145,7 @@ const component: React.FC<Props> = ({
       if (required) {
         const msg = message[locale][TYPE];
         const nameText = name ? name : '';
-        if (!checked) {
+        if (!internalChecked) {
           handleCheckEnd(true, msg.unchecked(nameText));
           return;
         }
@@ -152,7 +155,7 @@ const component: React.FC<Props> = ({
       }
       handleCheckEnd(false, msgOnSuccess);
     },
-    [checked],
+    [internalChecked],
   );
   const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
@@ -165,6 +168,7 @@ const component: React.FC<Props> = ({
     validationCallback && validationCallback(err);
   }, []);
   useEffect(() => {
+    /* istanbul ignore if  */
     if ($el === null) {
       return;
     }
@@ -178,20 +182,33 @@ const component: React.FC<Props> = ({
         check();
       }
     },
-    [validate, checked],
+    [validate, internalChecked],
   );
-  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${checked && reactInputsValidationCss['checked']} ${err &&
+  useEffect(
+    () => {
+      setInternalChecked(checked);
+    },
+    [checked],
+  );
+  useEffect(
+    () => {
+      if (typeof prevInternalChecked !== 'undefined' && prevInternalChecked !== internalChecked) {
+        check();
+      }
+    },
+    [prevInternalChecked, internalChecked],
+  );
+  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
     reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${checked && reactInputsValidationCss['checked']} ${err &&
+  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
     reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const boxClass = `${classNameInputBox} ${reactInputsValidationCss[`${TYPE}__box`]} ${err && reactInputsValidationCss['error']} ${checked && reactInputsValidationCss['checked']} ${successMsg !==
-    '' &&
+  const boxClass = `${classNameInputBox} ${reactInputsValidationCss[`${TYPE}__box`]} ${err && reactInputsValidationCss['error']} ${internalChecked &&
+    reactInputsValidationCss['checked']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const labelClass = `${internalChecked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const labelClass = `${checked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled &&
-    reactInputsValidationCss['disabled']}`;
-  const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
-  const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
+  const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;
   const { showMsg } = option;
   if (showMsg && err && msg) {
@@ -205,7 +222,16 @@ const component: React.FC<Props> = ({
       <div className={containerClass} style={customStyleContainer}>
         <div className={boxClass} style={customStyleInputBox}>
           <div className={reactInputsValidationCss['box']} />
-          <input id={id} name={name} type={TYPE} className={reactInputsValidationCss[`${TYPE}__input`]} value={String(value)} defaultChecked={checked} disabled={disabled} onChange={handleOnChange} />
+          <input
+            id={id}
+            name={name}
+            type={TYPE}
+            className={reactInputsValidationCss[`${TYPE}__input`]}
+            value={String(value)}
+            defaultChecked={internalChecked}
+            disabled={disabled}
+            onChange={handleOnChange}
+          />
         </div>
         <label className={labelClass}>{labelHtml}</label>
       </div>

@@ -891,6 +891,14 @@ class Index extends Component {
                         // }
                       }}
                     />
+                    {/*<div>
+                      <input
+                        id="textOutsideController"
+                        onChange={() => {
+                          this.setState({ name: document.getElementById('textOutsideController').value });
+                        }}
+                      />
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -944,6 +952,13 @@ class Index extends Component {
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
+                    {/*<div
+                      onClick={() => {
+                        this.setState({ job: '' });
+                      }}
+                    >
+                      Clear radio value
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -995,6 +1010,13 @@ class Index extends Component {
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
+                    {/*<div
+                      onClick={() => {
+                        this.setState({ isAgreementChecked: !isAgreementChecked });
+                      }}
+                    >
+                      toggle checked
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -1057,6 +1079,13 @@ class Index extends Component {
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
+                    {/*<div
+                      onClick={() => {
+                        this.setState({ country: '' });
+                      }}
+                    >
+                      Clear select value
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -1124,6 +1153,14 @@ class Index extends Component {
                         // }
                       }}
                     />
+                    {/*<div>
+                      <input
+                        id="textareaOutsideController"
+                        onChange={() => {
+                          this.setState({ description: document.getElementById('textareaOutsideController').value });
+                        }}
+                      />
+                    </div>*/}
                   </div>
                 </div>
               </div>

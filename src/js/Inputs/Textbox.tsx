@@ -3,7 +3,7 @@ const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
 import validator from './validator';
 import utils from './utils';
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
@@ -134,15 +134,20 @@ const component: React.FC<Props> = ({
   const [err, setErr] = useState(false);
   const [msg, setMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [internalValue, setInternalValue] = useState(String(value));
+  const prevInternalValue = usePrevious(internalValue);
   const option = getDefaultValidationOption(validationOption);
   const $input = useRef(null);
   const $el: { [key: string]: any } | null = $input;
-  const handleOnBlur = useCallback((e: React.FocusEvent<HTMLElement>) => {
-    if (onBlur) {
-      check();
-      onBlur(e);
-    }
-  }, []);
+  const handleOnBlur = useCallback(
+    (e: React.FocusEvent<HTMLElement>) => {
+      if (onBlur) {
+        check();
+        onBlur(e);
+      }
+    },
+    [internalValue],
+  );
   const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
       onFocus(e);
@@ -153,12 +158,15 @@ const component: React.FC<Props> = ({
       onClick(e);
     }
   }, []);
-  const handleOnKeyUp = useCallback((e: React.KeyboardEvent<HTMLElement>) => {
-    if (onKeyUp) {
-      check();
-      onKeyUp(e);
-    }
-  }, []);
+  const handleOnKeyUp = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      if (onKeyUp) {
+        check();
+        onKeyUp(e);
+      }
+    },
+    [internalValue],
+  );
   const handleOnChange = useCallback(
     (e: React.ChangeEvent<HTMLElement>) => {
       if (disabled || $el === null) {
@@ -174,6 +182,7 @@ const component: React.FC<Props> = ({
       if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
         v = String(autoFormatNumber(v));
       }
+      setInternalValue(v);
       onChange && onChange(v, e);
       if (err) {
         setErr(false);
@@ -183,123 +192,122 @@ const component: React.FC<Props> = ({
     },
     [err],
   );
-  const check = useCallback((val: null | string = null) => {
-    const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = option;
-    if (!check) {
-      return;
-    }
-    if (type) {
-      if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) !== -1) {
-        if (!message[locale] || !message[locale][TYPE]) {
-          console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
-          return;
-        }
-        const msg = message[locale][TYPE];
-        if ($el === null) {
-          return;
-        }
-        const value = val || $el.current.value;
-        const nameText = name ? name : '';
-        if (required) {
-          if (validator.empty(value)) {
-            handleCheckEnd(true, msg.empty(nameText));
-            return;
-          }
-        }
-        if (String(value) !== '') {
-          if (reg) {
-            if (validator['reg'](reg, value)) {
-              handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
-              return;
-            }
-          }
-          if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
-            if (min || max) {
-              if (min && max) {
-                if (String(value).length < min || String(value).length > max) {
-                  handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
-                  return;
-                }
-              } else {
-                if (min) {
-                  if (String(value).length < min) {
-                    handleCheckEnd(true, msg.lessThan(nameText)(min));
-                    return;
-                  }
-                }
-                if (max) {
-                  if (String(value).length > max) {
-                    handleCheckEnd(true, msg.greaterThan(nameText)(max));
-                    return;
-                  }
-                }
-              }
-            }
-            if (length) {
-              if (String(value).length !== length) {
-                handleCheckEnd(true, msg.lengthEqual(nameText)(length));
-                return;
-              }
-            }
-          }
-          if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-            if (!validator[type](value)) {
-              handleCheckEnd(true, msg.invalid(nameText));
-              return;
-            }
-            if (min || max) {
-              if (min && max) {
-                if (!validator[type](value, min, max)) {
-                  handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
-                  return;
-                }
-              } else {
-                if (min) {
-                  if (!validator[type](value, min)) {
-                    handleCheckEnd(true, msg.lessThan(nameText)(min));
-                    return;
-                  }
-                }
-                if (max) {
-                  if (!validator[type](value, 0, max)) {
-                    handleCheckEnd(true, msg.greaterThan(nameText)(max));
-                    return;
-                  }
-                }
-              }
-            }
-            if (length) {
-              if (String(value).length !== length) {
-                handleCheckEnd(true, msg.lengthEqual(nameText)(length));
-                return;
-              }
-            }
-          }
-          if (compare && compare !== '') {
-            if (value !== compare) {
-              handleCheckEnd(true, msg.twoInputsNotEqual());
-              return;
-            }
-          }
-        }
-        if (customFunc && typeof customFunc === 'function') {
-          const customFuncResult = customFunc(value);
-          if (customFuncResult !== true) {
-            handleCheckEnd(true, customFuncResult);
-            return;
-          }
-        }
-        if (msgOnSuccess) {
-          setSuccessMsg(msgOnSuccess);
-        }
-        handleCheckEnd(false, msgOnSuccess);
-      } else {
-        console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
+  const check = useCallback(
+    () => {
+      const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = option;
+      if (!check) {
+        return;
       }
-    } else {
-      console.error('Please provide "type" in validationOption');
-    }
-  }, []);
+      if (type) {
+        if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) !== -1) {
+          if (!message[locale] || !message[locale][TYPE]) {
+            console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+            return;
+          }
+          const msg = message[locale][TYPE];
+          const nameText = name ? name : '';
+          if (required) {
+            if (validator.empty(internalValue)) {
+              handleCheckEnd(true, msg.empty(nameText));
+              return;
+            }
+          }
+          if (String(internalValue) !== '') {
+            if (reg) {
+              if (validator['reg'](reg, internalValue)) {
+                handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
+                return;
+              }
+            }
+            if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
+              if (min || max) {
+                if (min && max) {
+                  if (String(internalValue).length < min || String(internalValue).length > max) {
+                    handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+                    return;
+                  }
+                } else {
+                  if (min) {
+                    if (String(internalValue).length < min) {
+                      handleCheckEnd(true, msg.lessThan(nameText)(min));
+                      return;
+                    }
+                  }
+                  if (max) {
+                    if (String(internalValue).length > max) {
+                      handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                      return;
+                    }
+                  }
+                }
+              }
+              if (length) {
+                if (String(internalValue).length !== length) {
+                  handleCheckEnd(true, msg.lengthEqual(nameText)(length));
+                  return;
+                }
+              }
+            }
+            if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
+              if (!validator[type](internalValue)) {
+                handleCheckEnd(true, msg.invalid(nameText));
+                return;
+              }
+              if (min || max) {
+                if (min && max) {
+                  if (!validator[type](internalValue, min, max)) {
+                    handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+                    return;
+                  }
+                } else {
+                  if (min) {
+                    if (!validator[type](internalValue, min)) {
+                      handleCheckEnd(true, msg.lessThan(nameText)(min));
+                      return;
+                    }
+                  }
+                  if (max) {
+                    if (!validator[type](internalValue, 0, max)) {
+                      handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                      return;
+                    }
+                  }
+                }
+              }
+              if (length) {
+                if (String(internalValue).length !== length) {
+                  handleCheckEnd(true, msg.lengthEqual(nameText)(length));
+                  return;
+                }
+              }
+            }
+            if (compare && compare !== '') {
+              if (internalValue !== compare) {
+                handleCheckEnd(true, msg.twoInputsNotEqual());
+                return;
+              }
+            }
+          }
+          if (customFunc && typeof customFunc === 'function') {
+            const customFuncResult = customFunc(internalValue);
+            if (customFuncResult !== true) {
+              handleCheckEnd(true, customFuncResult);
+              return;
+            }
+          }
+          if (msgOnSuccess) {
+            setSuccessMsg(msgOnSuccess);
+          }
+          handleCheckEnd(false, msgOnSuccess);
+        } else {
+          console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
+        }
+      } else {
+        console.error('Please provide "type" in validationOption');
+      }
+    },
+    [internalValue],
+  );
   const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
     const { msgOnError } = option;
@@ -311,7 +319,7 @@ const component: React.FC<Props> = ({
     validationCallback && validationCallback(err);
   }, []);
   useEffect(() => {
-    /* istanbul ignore else */
+    /* istanbul ignore if  */
     if ($el === null) {
       return;
     }
@@ -326,6 +334,20 @@ const component: React.FC<Props> = ({
       }
     },
     [validate],
+  );
+  useEffect(
+    () => {
+      setInternalValue(String(value));
+    },
+    [value],
+  );
+  useEffect(
+    () => {
+      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+        check();
+      }
+    },
+    [prevInternalValue, internalValue],
   );
   const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
@@ -353,7 +375,7 @@ const component: React.FC<Props> = ({
           id={id}
           name={name}
           type={type}
-          value={value}
+          value={internalValue}
           disabled={disabled}
           autoComplete={autoComplete}
           maxLength={Number(maxLength)}

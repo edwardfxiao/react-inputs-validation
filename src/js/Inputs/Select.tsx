@@ -1,7 +1,7 @@
 import * as React from 'react';
 const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'select';
 
@@ -155,6 +155,8 @@ const component: React.FC<Props> = ({
   const [err, setErr] = useState(false);
   const [msg, setMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [internalValue, setInternalValue] = useState(String(value));
+  const prevInternalValue = usePrevious(internalValue);
   const [show, setShow] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const initKeycodeList: number[] = [];
@@ -177,7 +179,7 @@ const component: React.FC<Props> = ({
         onBlur(e);
       }
     },
-    [value],
+    [internalValue],
   );
   const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
@@ -208,8 +210,7 @@ const component: React.FC<Props> = ({
       if (required) {
         const msg = message[locale][TYPE];
         const nameText = name ? name : '';
-        const v = String(value);
-        if (!isValidValue(optionList, v) || v === '' || v === 'null' || v === 'undefined') {
+        if (!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined') {
           handleCheckEnd(true, msg.empty(nameText));
           return;
         }
@@ -219,7 +220,7 @@ const component: React.FC<Props> = ({
       }
       handleCheckEnd(false, msgOnSuccess);
     },
-    [value],
+    [internalValue],
   );
   const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
@@ -259,10 +260,10 @@ const component: React.FC<Props> = ({
   }, []);
   const resetCurrentFocus = useCallback(
     () => {
-      globalVariableCurrentFocus = getIndex(optionList, String(value));
+      globalVariableCurrentFocus = getIndex(optionList, internalValue);
       scroll();
     },
-    [value],
+    [internalValue],
   );
   const setTimeoutTyping = useCallback(() => {
     if (globalVariableTypingTimeout) {
@@ -444,16 +445,29 @@ const component: React.FC<Props> = ({
   );
   useEffect(
     () => {
-      const v = String(value);
-      if (!(!isValidValue(optionList, v) || v === '' || v === 'null' || v === 'undefined')) {
+      if (!(!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined')) {
         setErr(false);
       } else {
         setSuccessMsg('');
       }
     },
+    [internalValue],
+  );
+  useEffect(
+    () => {
+      setInternalValue(String(value));
+    },
     [value],
   );
-  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+  useEffect(
+    () => {
+      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+        check();
+      }
+    },
+    [prevInternalValue, internalValue],
+  );
+  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
   const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${show &&
@@ -469,8 +483,8 @@ const component: React.FC<Props> = ({
     reactInputsValidationCss[`${TYPE}__options-item`]
   } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
   const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss[`${TYPE}__dropdown-icon`]}`;
-  const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
-  const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
+  const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;
   const { showMsg } = option;
   if (showMsg && err && msg) {

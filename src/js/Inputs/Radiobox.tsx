@@ -240,9 +240,8 @@ const component: React.FC<Props> = ({
       return (
         <Option
           key={k}
-          index={k}
           checked={checked}
-          id={`react-inputs-validation__radiobox_option-${id}`}
+          id={`react-inputs-validation__radiobox_option-${i.id}`}
           name={name}
           item={i}
           inputClass={inputClass}
@@ -267,7 +266,6 @@ const component: React.FC<Props> = ({
   );
 };
 interface OptionProps {
-  index?: number;
   checked?: boolean;
   id?: string;
   name?: string;
@@ -283,7 +281,6 @@ interface OptionProps {
 }
 const Option: React.FC<OptionProps> = memo(
   ({
-    index = '',
     checked = false,
     id = '',
     name = '',
@@ -303,7 +300,7 @@ const Option: React.FC<OptionProps> = memo(
     return (
       <div className={optionListItemClass} style={customStyleOptionListItem}>
         <input
-          id={`${id}-${index}`}
+          id={id}
           name={name}
           type="radio"
           value={value}
@@ -313,7 +310,7 @@ const Option: React.FC<OptionProps> = memo(
           onChange={handleOnChange}
           style={customStyleInput}
         />
-        <label htmlFor={`${id}-${index}`} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>
+        <label htmlFor={id} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>
           {item.name}
         </label>
       </div>

@@ -6,15 +6,14 @@ import mockConsole from 'jest-mock-console';
 import Radiobox from '../js/Inputs/Radiobox.tsx';
 configure({ adapter: new Adapter() });
 
-const INPUT = 'input';
+// const INPUT = 'input';
 const WRAPPER = `.${WRAPPER_CLASS_IDENTITIFIER}`;
-const WRAPPER_ID = 'job';
 
 const OPTION_LIST = [{ id: 'engineer', name: 'engineer' }, { id: 'teacher', name: 'teacher' }, { id: 'student', name: 'student' }];
 
 describe('Radiobox component', () => {
   it('[Toggling "validate"]: Should show msgHtml(err) when toggling "validate"', () => {
-    const wrapper = mount(<Radiobox id={WRAPPER_ID} optionList={OPTION_LIST} onBlur={() => {}} validate={false} />);
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} onBlur={() => {}} validate={false} />);
     wrapper.setProps({ validate: true });
     expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
@@ -31,7 +30,7 @@ describe('Radiobox component', () => {
 
   it('[Providing msgOnError]: Should msg be msgOnError', () => {
     const msgOnError = 'msgOnError';
-    const wrapper = mount(<Radiobox id={WRAPPER_ID} optionList={OPTION_LIST} onBlur={() => {}} validationOption={{ msgOnError }} />);
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} onBlur={() => {}} validationOption={{ msgOnError }} />);
     const $wrapper = wrapper.find(WRAPPER);
     $wrapper.simulate('click');
     $wrapper.simulate('blur');
@@ -42,7 +41,6 @@ describe('Radiobox component', () => {
     const msgOnSuccess = 'msgOnSuccess';
     const wrapper = mount(
       <Radiobox
-        id={WRAPPER_ID}
         optionList={OPTION_LIST}
         value={OPTION_LIST[2].id}
         onBlur={() => {}}
@@ -63,8 +61,8 @@ describe('Radiobox component', () => {
   });
 
   it('[disabled]: Should msgHtml not be appeared when disabled', () => {
-    const wrapper = mount(<Radiobox id={WRAPPER_ID} optionList={OPTION_LIST} onBlur={() => {}} disabled={true} />);
-    wrapper.find(`#react-inputs-validation__radiobox_option-${WRAPPER_ID}-${1}`).simulate('change');
+    const wrapper = mount(<Radiobox optionList={OPTION_LIST} onBlur={() => {}} disabled={true} />);
+    wrapper.find(`#react-inputs-validation__radiobox_option-${OPTION_LIST[1].id}`).hostNodes().simulate('change');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
@@ -108,7 +106,6 @@ describe('Radiobox component', () => {
     let value = '';
     const wrapper = mount(
       <Radiobox
-        id={WRAPPER_ID}
         optionList={OPTION_LIST}
         onBlur={() => {}}
         validate={false}
@@ -117,7 +114,7 @@ describe('Radiobox component', () => {
         }}
       />,
     );
-    wrapper.find(`#react-inputs-validation__radiobox_option-${WRAPPER_ID}-${1}`).simulate('change');
+    wrapper.find(`#react-inputs-validation__radiobox_option-${OPTION_LIST[1].id}`).hostNodes().simulate('change');
     expect(value).toEqual(OPTION_LIST[1].id);
   });
 

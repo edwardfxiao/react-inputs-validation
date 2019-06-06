@@ -1,10 +1,11 @@
 import * as React from 'react';
 const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, CONTAINER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'select';
 
+/* istanbul ignore next */
 if (!String.prototype.startsWith) {
   String.prototype.startsWith = function(searchString, position) {
     const p = position || 0;
@@ -42,7 +43,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   };
 };
 
-const isValidValue = (list: OptionListItem[], value: any) => {
+export const isValidValue = (list: OptionListItem[], value: any) => {
   let res = false;
   if (list.length) {
     for (let i = 0; i < list.length; i += 1) {
@@ -55,7 +56,7 @@ const isValidValue = (list: OptionListItem[], value: any) => {
   return res;
 };
 
-const getItem = (list: OptionListItem[], value: any) => {
+export const getItem = (list: OptionListItem[], value: any) => {
   let res = null;
   if (list.length) {
     for (let i = 0; i < list.length; i += 1) {
@@ -68,7 +69,7 @@ const getItem = (list: OptionListItem[], value: any) => {
   return res;
 };
 
-const getIndex = (list: OptionListItem[], value: string) => {
+export const getIndex = (list: OptionListItem[], value: string) => {
   let key = -1;
   for (let i = 0; i < list.length; i += 1) {
     if (list[i].id === value) {
@@ -120,8 +121,8 @@ interface Node {
 
 let globalVariableIsFocusing: boolean = false;
 let globalVariableIsCorrected: boolean = false;
-let globalVariableCurrentFocus: number | null = null;
-let globalVariableTypingTimeout: number | null = null;
+let globalVariableCurrentFocus: any | null = null;
+let globalVariableTypingTimeout: any | null = null;
 
 const component: React.FC<Props> = ({
   tabIndex = null,
@@ -232,6 +233,7 @@ const component: React.FC<Props> = ({
     setMsg(msg);
     validationCallback && validationCallback(err);
   }, []);
+  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
   useEffect(() => {
     if ($elWrapper === null) {
       return;
@@ -247,6 +249,7 @@ const component: React.FC<Props> = ({
       $elWrapper.current.removeEventListener('keydown', onKeyDown);
     };
   }, []);
+  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
   const pageClick = useCallback((e: Event) => {
     /* istanbul ignore next */
     if ($elWrapper === null || $elWrapper.current.contains(e.target)) {
@@ -258,6 +261,7 @@ const component: React.FC<Props> = ({
     }
     setShow(false);
   }, []);
+  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
   const resetCurrentFocus = useCallback(
     () => {
       globalVariableCurrentFocus = getIndex(optionList, internalValue);
@@ -265,6 +269,7 @@ const component: React.FC<Props> = ({
     },
     [internalValue],
   );
+  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
   const setTimeoutTyping = useCallback(() => {
     if (globalVariableTypingTimeout) {
       clearTimeout(globalVariableTypingTimeout);
@@ -273,6 +278,7 @@ const component: React.FC<Props> = ({
       setKeycodeList([]);
     }, 250);
   }, []);
+  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
   const scroll = useCallback((direction: undefined | string = undefined) => {
     /* istanbul ignore next */
     if ($elItemsWrapper === null) {
@@ -354,6 +360,8 @@ const component: React.FC<Props> = ({
       }
     }
   }, []);
+
+  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
       setIsTyping(true);
@@ -469,19 +477,19 @@ const component: React.FC<Props> = ({
   );
   const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
-  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${show &&
-    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${CONTAINER_CLASS_IDENTITIFIER} ${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${show &&
+    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const inputClass = `${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled &&
-    reactInputsValidationCss['disabled']};`;
+    reactInputsValidationCss['disabled']}`;
   const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss[`${TYPE}__options-container`]} ${err && reactInputsValidationCss['error']} ${show &&
-    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const selectOptionListItemClass = `${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
     reactInputsValidationCss[`${TYPE}__options-item`]
-  } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']};`;
+  } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss[`${TYPE}__dropdown-icon`]}`;
   const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
   const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
@@ -503,7 +511,7 @@ const component: React.FC<Props> = ({
         <Option
           key={k}
           index={k}
-          id={`react-inputs-validation__select_option-${id}`}
+          id={`react-inputs-validation__select_option-${i.id}`}
           refItem={$itemsRef[k]}
           className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
           item={i}
@@ -589,7 +597,7 @@ const Option: React.FC<OptionProps> = memo(
     }, []);
     return (
       <div
-        id={`${id}-${index}`}
+        id={id}
         ref={refItem}
         onMouseOver={handleOnMouseOver}
         onMouseMove={handleOnMouseMove}

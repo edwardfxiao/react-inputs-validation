@@ -319,11 +319,10 @@ const component: React.FC<Props> = ({
     validationCallback && validationCallback(err);
   }, []);
   useEffect(() => {
-    /* istanbul ignore next because it won't happen  */
+    /* istanbul ignore if because it won't happen */
     if ($el === null) {
       return;
     }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/2154 */
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }

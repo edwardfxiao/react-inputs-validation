@@ -251,7 +251,6 @@ const component: React.FC<Props> = ({
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const pageClick = useCallback((e: Event) => {
-    /* istanbul ignore next */
     if ($elWrapper === null || $elWrapper.current.contains(e.target)) {
       return;
     }
@@ -280,18 +279,15 @@ const component: React.FC<Props> = ({
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const scroll = useCallback((direction: undefined | string = undefined) => {
-    /* istanbul ignore next because it won't happen */
     if ($elItemsWrapper === null) {
       return;
     }
     const containerHeight = $elItemsWrapper.current.offsetHeight;
     const containerScrollTop = $elItemsWrapper.current.scrollTop;
-    /* istanbul ignore next */
     if (!globalVariableCurrentFocus || !$itemsRef[globalVariableCurrentFocus]) {
       return;
     }
     const $elOptionItem: Node | null = $itemsRef[globalVariableCurrentFocus];
-    /* istanbul ignore next because it won't happen */
     if ($elOptionItem === null) {
       return;
     }
@@ -351,7 +347,6 @@ const component: React.FC<Props> = ({
   const removeActive = useCallback(() => {
     for (let i = 0; i < $itemsRef.length; i += 1) {
       const $node: Node | null = $itemsRef[i];
-      /* istanbul ignore next */
       if (!$node) {
         break;
       }

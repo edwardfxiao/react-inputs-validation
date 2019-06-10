@@ -20,9 +20,7 @@ const config = objectAssign(base, {
           output: {
             comments: false,
           },
-          compress: {
-            warnings: false,
-          },
+          warnings: false,
         },
       }),
     ],

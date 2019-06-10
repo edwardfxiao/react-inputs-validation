@@ -1,6 +1,7 @@
 import * as React from 'react';
+const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'checkbox';
 interface DefaultValidationOption {
@@ -34,7 +35,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
 };
 
 interface Props {
-  tabIndex?: string | number | undefined;
+  tabIndex?: string | number | null;
   id?: string;
   name?: string;
   value?: string | boolean;
@@ -42,10 +43,10 @@ interface Props {
   disabled?: boolean;
   labelHtml?: React.ReactNode;
   validate?: boolean;
-  onChange: (res: boolean, e: Event) => void;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  onChange: (res: boolean, e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   validationOption?: object;
   classNameInput?: string;
   classNameWrapper?: string;
@@ -58,237 +59,184 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 
-interface DefaultProps {
-  tabIndex: string | number | undefined;
-  id: string;
-  name: string;
-  value: string | boolean;
-  checked: boolean;
-  disabled: boolean;
-  validate: boolean;
-  labelHtml: React.ReactNode;
-  classNameInput: string;
-  classNameWrapper: string;
-  classNameInputBox: string;
-  classNameContainer: string;
-  customStyleInput: object;
-  customStyleWrapper: object;
-  customStyleInputBox: object;
-  customStyleContainer: object;
-  validationOption: object;
-  onChange: (res: boolean, e: Event) => void;
-}
-
-type PropsWithDefaults = Props & DefaultProps;
-
-interface State {
-  err: boolean;
-  msg: string;
-  successMsg: undefined | string;
-  checked: boolean;
-  validate: boolean;
-}
-
-class Index extends React.Component<Props, State> {
-  static defaultProps: DefaultProps = {
-    tabIndex: undefined,
-    id: '',
-    name: '',
-    value: '',
-    checked: false,
-    disabled: false,
-    validate: false,
-    labelHtml: undefined,
-    classNameInput: '',
-    classNameWrapper: '',
-    classNameInputBox: '',
-    classNameContainer: '',
-    customStyleInput: {},
-    customStyleWrapper: {},
-    customStyleInputBox: {},
-    customStyleContainer: {},
-    validationOption: {},
-    onChange: () => {},
-  };
-  private wrapper: React.RefObject<HTMLDivElement>;
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      err: false,
-      msg: '',
-      successMsg: undefined,
-      checked: props.checked,
-      validate: props.validate,
-    };
-    this.onChange = this.onChange.bind(this);
-    this.onClick = this.onClick.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.wrapper = React.createRef();
-  }
-
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.validate !== prevState.validate) {
-      return {
-        validate: nextProps.validate,
-      };
-    }
-    if (nextProps.checked !== prevState.checked) {
-      return {
-        checked: nextProps.checked,
-      };
-    }
-    return null;
-  }
-
-  componentDidMount() {
-    if (this.wrapper.current && this.props.tabIndex) {
-      this.wrapper.current.setAttribute('tabindex', String(this.props.tabIndex));
-    }
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.validate !== prevState.validate) {
-      this.check();
-    }
-  }
-
-  onChange(e: any) {
-    const { disabled } = this.props;
-    if (disabled) {
-      return;
-    }
-    const checked = !this.state.checked;
-    this.setState({ checked });
-    const { onChange } = this.props;
-    onChange && onChange(checked, e);
-    if (this.state.err) {
-      this.setState({ err: false });
-    } else {
-      this.setState({ successMsg: undefined });
-    }
-  }
-  onClick(e: React.MouseEvent<HTMLElement>) {
-    const { disabled } = this.props;
-    if (disabled) {
-      return;
-    }
-    this.onChange(e);
-    const { onClick } = this.props;
-    onClick && onClick(e);
-  }
-  onBlur(e: React.FocusEvent<HTMLElement>) {
-    const { onBlur } = this.props;
-    if (onBlur) {
-      this.check();
-      onBlur(e);
-    }
-  }
-  onFocus(e: React.FocusEvent<HTMLElement>) {
-    const { onFocus } = this.props;
-    if (onFocus) {
-      onFocus(e);
-    }
-  }
-  check() {
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { name, check, locale, required, msgOnSuccess } = getDefaultValidationOption(validationOption);
-    if (!check) {
-      return;
-    }
-    if (required) {
+const component: React.FC<Props> = ({
+  tabIndex = null,
+  id = '',
+  name = '',
+  value = '',
+  checked = false,
+  disabled = false,
+  validate = false,
+  labelHtml = null,
+  classNameInput = '',
+  classNameWrapper = '',
+  classNameInputBox = '',
+  classNameContainer = '',
+  customStyleInput = {},
+  customStyleWrapper = {},
+  customStyleInputBox = {},
+  customStyleContainer = {},
+  validationOption = {},
+  onChange = () => {},
+  onBlur = null,
+  onFocus = null,
+  onClick = null,
+  validationCallback = null,
+}) => {
+  const [err, setErr] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const [internalChecked, setInternalChecked] = useState(checked);
+  const prevInternalChecked = usePrevious(internalChecked);
+  const option = getDefaultValidationOption(validationOption);
+  const $input = useRef(null);
+  const $el: { [key: string]: any } | null = $input;
+  const handleOnBlur = useCallback(
+    (e: React.FocusEvent<HTMLElement>) => {
+      if (onBlur) {
+        check();
+        onBlur(e);
+      }
+    },
+    [internalChecked],
+  );
+  const handleOnFocus = useCallback(
+    (e: React.FocusEvent<HTMLElement>) => {
+      if (onFocus) {
+        onFocus(e);
+      }
+    },
+    [internalChecked],
+  );
+  const handleOnClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      handleOnChange(e);
+      if (onClick) {
+        onClick(e);
+      }
+    },
+    [err, internalChecked],
+  );
+  const handleOnChange = useCallback(
+    (e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => {
+      if (disabled || $el === null) {
+        return;
+      }
+      setInternalChecked(!internalChecked);
+      onChange && onChange(!internalChecked, e);
+      if (err) {
+        setErr(false);
+      } else {
+        setSuccessMsg('');
+      }
+    },
+    [err, internalChecked],
+  );
+  const check = useCallback(
+    () => {
+      const { name, check, locale, required, msgOnSuccess } = option;
+      if (!check) {
+        return;
+      }
       if (!message[locale] || !message[locale][TYPE]) {
         console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
         return;
       }
-      const msg = message[locale][TYPE];
-      const nameText = name ? name : '';
-      if (!this.state.checked) {
-        this.handleCheckEnd(true, msg.unchecked(nameText));
-        return;
+      if (required) {
+        const msg = message[locale][TYPE];
+        const nameText = name ? name : '';
+        if (!internalChecked) {
+          handleCheckEnd(true, msg.unchecked(nameText));
+          return;
+        }
       }
-    }
-    if (msgOnSuccess) {
-      this.setState({ successMsg: msgOnSuccess });
-    }
-    this.handleCheckEnd(false, msgOnSuccess);
-  }
-  handleCheckEnd(err: boolean, message: string) {
+      if (msgOnSuccess) {
+        setSuccessMsg(msgOnSuccess);
+      }
+      handleCheckEnd(false, msgOnSuccess);
+    },
+    [internalChecked],
+  );
+  const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { msgOnError } = getDefaultValidationOption(validationOption);
+    const { msgOnError } = option;
     if (err && msgOnError) {
       msg = msgOnError;
     }
-    this.setState({ err, msg });
-    const { validationCallback } = this.props;
+    setErr(err);
+    setMsg(msg);
     validationCallback && validationCallback(err);
+  }, []);
+  useEffect(() => {
+    /* istanbul ignore if because it won't happen */
+    if ($el === null) {
+      return;
+    }
+    if (tabIndex) {
+      $el.current.setAttribute('tabindex', String(tabIndex));
+    }
+  }, []);
+  useEffect(
+    () => {
+      if (validate) {
+        check();
+      }
+    },
+    [validate, internalChecked],
+  );
+  useEffect(
+    () => {
+      setInternalChecked(checked);
+    },
+    [checked],
+  );
+  useEffect(
+    () => {
+      if (typeof prevInternalChecked !== 'undefined' && prevInternalChecked !== internalChecked) {
+        check();
+      }
+    },
+    [prevInternalChecked, internalChecked],
+  );
+  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
+    reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
+    reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const boxClass = `${classNameInputBox} ${reactInputsValidationCss[`${TYPE}__box`]} ${err && reactInputsValidationCss['error']} ${internalChecked &&
+    reactInputsValidationCss['checked']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const labelClass = `${internalChecked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
+  let msgHtml;
+  const { showMsg } = option;
+  if (showMsg && err && msg) {
+    msgHtml = <div className={errMsgClass}>{msg}</div>;
   }
-  render() {
-    const {
-      tabIndex,
-      id,
-      name,
-      value,
-      disabled,
-      labelHtml,
-      classNameWrapper,
-      classNameContainer,
-      classNameInputBox,
-      customStyleWrapper,
-      customStyleContainer,
-      customStyleInputBox,
-      validationOption,
-    } = this.props as PropsWithDefaults;
-
-    const { err, msg, checked, successMsg } = this.state;
-
-    const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['checkbox__wrapper']} ${checked && reactInputsValidationCss['checked']} ${err &&
-      reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const containerClass = `${classNameContainer} ${reactInputsValidationCss['checkbox__container']} ${checked && reactInputsValidationCss['checked']} ${err &&
-      reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const boxClass = `${classNameInputBox} ${reactInputsValidationCss['checkbox__box']} ${err && reactInputsValidationCss['error']} ${checked &&
-      reactInputsValidationCss['checked']} ${typeof successMsg !== 'undefined' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const labelClass = `${checked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const errMsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
-    const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
-
-    let msgHtml;
-    const { showMsg } = getDefaultValidationOption(validationOption);
-    if (showMsg && err && msg) {
-      msgHtml = <div className={errMsgClass}>{msg}</div>;
-    }
-    if (showMsg && !err && typeof successMsg !== 'undefined') {
-      msgHtml = <div className={successMsgClass}>{successMsg}</div>;
-    }
-    return (
-      <div ref={this.wrapper} className={wrapperClass} style={customStyleWrapper} onClick={this.onClick} onBlur={this.onBlur} onFocus={this.onFocus}>
-        <div className={containerClass} style={customStyleContainer}>
-          <div className={boxClass} style={customStyleInputBox}>
-            <div className={reactInputsValidationCss['box']} />
-            <input
-              id={id}
-              name={name}
-              type="checkbox"
-              className={reactInputsValidationCss['checkbox__input']}
-              value={String(value)}
-              defaultChecked={checked}
-              disabled={disabled}
-              onChange={this.onChange}
-            />
-          </div>
-          <label className={labelClass}>{labelHtml}</label>
+  if (showMsg && !err && successMsg !== '') {
+    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+  }
+  return (
+    <div ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus}>
+      <div className={containerClass} style={customStyleContainer}>
+        <div className={boxClass} style={customStyleInputBox}>
+          <div className={reactInputsValidationCss['box']} />
+          <input
+            id={id}
+            name={name}
+            type={TYPE}
+            className={reactInputsValidationCss[`${TYPE}__input`]}
+            value={String(value)}
+            defaultChecked={internalChecked}
+            disabled={disabled}
+            onChange={handleOnChange}
+          />
         </div>
-        {msgHtml}
+        <label className={labelClass}>{labelHtml}</label>
       </div>
-    );
-  }
-}
-
-export default Index;
+      {msgHtml}
+    </div>
+  );
+};
+export default memo(component);

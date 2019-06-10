@@ -9,6 +9,14 @@ React form input validation components. Online demo examples.
 
 <a href="https://github.com/edwardfhsiao/react-inputs-validation/blob/gh-pages/example/index.js">Demo source code</a>
 
+###  :tada: For version >= 3.0.0, please update react and react-dom to at least ```16.8.6```, since it is rewrited with hooks.
+```js
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+```
+
 ### For version >= 1.1.4, please import css manually.
 ```js
 import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-validation';

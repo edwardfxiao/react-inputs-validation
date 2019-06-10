@@ -4,7 +4,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER } from '../js/Inputs/const.ts';
 import mockConsole from 'jest-mock-console';
-import Select, { isValidValue, getIndex } from '../js/Inputs/Select.tsx';
+import Select, { isValidValue, getIndex, Option } from '../js/Inputs/Select.tsx';
 configure({ adapter: new Adapter() });
 
 // const INPUT = 'input';
@@ -212,6 +212,14 @@ describe('Select component', () => {
     expect(value).toEqual(OPTION_LIST[2].id);
   });
 
+  it("[onBlur]: Should not show msgHtml if it's not provide", () => {
+    const wrapper = mount(<Select />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
   it('[onMouseOver]: Should option item add active class', () => {
     const value = '';
     const wrapper = mount(<Select value={value} optionList={OPTION_LIST} onChange={() => {}} />);
@@ -242,6 +250,60 @@ describe('Select component', () => {
     $el.simulate('mouseover');
     $el.simulate('mouseout');
     expect($el.instance().className).toEqual('select__options-item-show-cursor  select__options-item false false false ');
+  });
+
+  it('[<Option/>]: Should not render <Option/>', () => {
+    const id = `react-inputs-validation__select_option-${OPTION_LIST[0].id}`;
+    const wrapper = mount(<Option />);
+    expect(wrapper.find(`#${id}`).hostNodes().length).toEqual(0);
+  });
+
+  it('[<Option/>]: Should not render <Option/>', () => {
+    const id = 'selectHtml';
+    const wrapper = mount(<Select optionList={OPTION_LIST} selectHtml={<div id={id}>selectHtml</div>} />);
+    expect(wrapper.find(`#${id}`).hostNodes().length).toEqual(1);
+  });
+
+  it('[validationCallback]: Should call validationCallback', () => {
+    let valid = false;
+    const wrapper = mount(
+      <Select
+        optionList={OPTION_LIST}
+        onBlur={() => {}}
+        validationCallback={res => {
+          valid = res;
+        }}
+      />,
+    );
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('click');
+    $wrapper.simulate('blur');
+    expect(valid).toEqual(true);
+  });
+
+  it('[All props]: Should pass all props', () => {
+    const wrapper = mount(
+      <Select
+        id="id"
+        name="name"
+        tabIndex="1"
+        value=""
+        optionList={OPTION_LIST}
+        classNameWrapper="classNameWrapper"
+        classNameContainer="classNameContainer"
+        classNameSelect="classNameSelect"
+        classNameOptionListItem="classNameOptionListItem"
+        classNameOptionListContainer="classNameOptionListContainer"
+        classNameDropdownIconOptionListItem="classNameDropdownIconOptionListItem"
+        customStyleWrapper={{}}
+        customStyleContainer={{}}
+        customStyleSelect={{}}
+        customStyleOptionListItem={{}}
+        customStyleOptionListContainer={{}}
+        customStyleDropdownIcon={{}}
+      />,
+    );
+    expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
   });
 
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {

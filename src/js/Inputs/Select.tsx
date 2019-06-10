@@ -233,7 +233,7 @@ const component: React.FC<Props> = ({
     setMsg(msg);
     validationCallback && validationCallback(err);
   }, []);
-  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
+  /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   useEffect(() => {
     if ($elWrapper === null) {
       return;
@@ -249,7 +249,7 @@ const component: React.FC<Props> = ({
       $elWrapper.current.removeEventListener('keydown', onKeyDown);
     };
   }, []);
-  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
+  /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const pageClick = useCallback((e: Event) => {
     /* istanbul ignore next */
     if ($elWrapper === null || $elWrapper.current.contains(e.target)) {
@@ -261,7 +261,7 @@ const component: React.FC<Props> = ({
     }
     setShow(false);
   }, []);
-  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
+  /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const resetCurrentFocus = useCallback(
     () => {
       globalVariableCurrentFocus = getIndex(optionList, internalValue);
@@ -269,7 +269,7 @@ const component: React.FC<Props> = ({
     },
     [internalValue],
   );
-  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
+  /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const setTimeoutTyping = useCallback(() => {
     if (globalVariableTypingTimeout) {
       clearTimeout(globalVariableTypingTimeout);
@@ -278,9 +278,9 @@ const component: React.FC<Props> = ({
       setKeycodeList([]);
     }, 250);
   }, []);
-  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
+  /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const scroll = useCallback((direction: undefined | string = undefined) => {
-    /* istanbul ignore next */
+    /* istanbul ignore next because it won't happen */
     if ($elItemsWrapper === null) {
       return;
     }
@@ -291,7 +291,7 @@ const component: React.FC<Props> = ({
       return;
     }
     const $elOptionItem: Node | null = $itemsRef[globalVariableCurrentFocus];
-    /* istanbul ignore next */
+    /* istanbul ignore next because it won't happen */
     if ($elOptionItem === null) {
       return;
     }
@@ -342,7 +342,7 @@ const component: React.FC<Props> = ({
     if (globalVariableCurrentFocus >= $itemsRef.length) globalVariableCurrentFocus = 0;
     if (globalVariableCurrentFocus < 0) globalVariableCurrentFocus = $itemsRef.length - 1;
     const $node: Node | null = $itemsRef[globalVariableCurrentFocus];
-    /* istanbul ignore next */
+    /* istanbul ignore next because it won't happen */
     if (!$node) {
       return;
     }
@@ -361,7 +361,7 @@ const component: React.FC<Props> = ({
     }
   }, []);
 
-  /* istanbul ignore next Because of https://github.com/airbnb/enzyme/issues/441 */
+  /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
       setIsTyping(true);
@@ -570,7 +570,7 @@ interface OptionProps {
   onMouseMove?: () => void;
   onMouseOut?: () => void;
 }
-const Option: React.FC<OptionProps> = memo(
+export const Option: React.FC<OptionProps> = memo(
   ({
     index = -1,
     refItem = null,

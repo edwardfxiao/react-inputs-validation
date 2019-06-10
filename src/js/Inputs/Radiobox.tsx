@@ -1,7 +1,7 @@
 import * as React from 'react';
 const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, OPTION_LIST_ITEM_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'radiobox';
 interface DefaultValidationOption {
@@ -34,7 +34,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   };
 };
 
-const isValidValue = (list: OptionListItem[], value: any) => {
+export const isValidValue = (list: OptionListItem[], value: any) => {
   let res = false;
   if (list.length) {
     for (let i = 0; i < list.length; i += 1) {
@@ -169,10 +169,11 @@ const component: React.FC<Props> = ({
     validationCallback && validationCallback(err);
   }, []);
   useEffect(() => {
-    /* istanbul ignore if  */
+    /* istanbul ignore next because it won't happen  */
     if ($el === null) {
       return;
     }
+    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/2154 */
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -220,7 +221,7 @@ const component: React.FC<Props> = ({
   } ${disabled && reactInputsValidationCss['disabled']}`;
   const labelClass = `${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${reactInputsValidationCss[`${TYPE}__label`]} ${disabled &&
     reactInputsValidationCss['disabled']}`;
-  const optionListItemClass = `${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+  const optionListItemClass = `${OPTION_LIST_ITEM_IDENTITIFIER} ${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
     reactInputsValidationCss[`${TYPE}__item`]
   } ${disabled && reactInputsValidationCss['disabled']}`;
   const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
@@ -279,7 +280,7 @@ interface OptionProps {
   customStyleInput?: object;
   onChange?: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
 }
-const Option: React.FC<OptionProps> = memo(
+export const Option: React.FC<OptionProps> = memo(
   ({
     checked = false,
     id = '',

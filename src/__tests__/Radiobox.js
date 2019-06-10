@@ -1,9 +1,10 @@
 import React from 'react';
+import { expect as chaiExpect } from 'chai';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER } from '../js/Inputs/const.ts';
+import { WRAPPER_CLASS_IDENTITIFIER, OPTION_LIST_ITEM_IDENTITIFIER, MSG_CLASS_IDENTITIFIER } from '../js/Inputs/const.ts';
 import mockConsole from 'jest-mock-console';
-import Radiobox from '../js/Inputs/Radiobox.tsx';
+import Radiobox, { Option, isValidValue } from '../js/Inputs/Radiobox.tsx';
 configure({ adapter: new Adapter() });
 
 // const INPUT = 'input';
@@ -60,9 +61,35 @@ describe('Radiobox component', () => {
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(msgOnSuccess);
   });
 
+  it('[validationCallback]: Should call validationCallback', () => {
+    let valid = false;
+    const wrapper = mount(
+      <Radiobox
+        optionList={OPTION_LIST}
+        onBlur={() => {}}
+        validationCallback={res => {
+          valid = res;
+        }}
+      />,
+    );
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('click');
+    $wrapper.simulate('blur');
+    expect(valid).toEqual(true);
+  });
+
+  it('[<Option/>]: Should not render <Option/>', () => {
+    const id = `react-inputs-validation__radiobox_option-${OPTION_LIST[0].id}`;
+    const wrapper = mount(<Option />);
+    expect(wrapper.find(`#${id}`).hostNodes().length).toEqual(0);
+  });
+
   it('[disabled]: Should msgHtml not be appeared when disabled', () => {
     const wrapper = mount(<Radiobox optionList={OPTION_LIST} onBlur={() => {}} disabled={true} />);
-    wrapper.find(`#react-inputs-validation__radiobox_option-${OPTION_LIST[1].id}`).hostNodes().simulate('change');
+    wrapper
+      .find(`#react-inputs-validation__radiobox_option-${OPTION_LIST[1].id}`)
+      .hostNodes()
+      .simulate('change');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
@@ -94,12 +121,66 @@ describe('Radiobox component', () => {
     expect(value).toEqual('focused');
   });
 
+  it("[onBlur]: Should not show msgHtml if it's not provide", () => {
+    const wrapper = mount(<Radiobox />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
   it('[validationOption.check]: Should msgHtml not be appeared when check is false', () => {
     const wrapper = mount(<Radiobox onBlur={() => {}} validationOption={{ check: false }} />);
     const $wrapper = wrapper.find(WRAPPER);
     $wrapper.simulate('focus');
     $wrapper.simulate('blur');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[validationOption.required]: Should msgHtml not be appeared when required is false', () => {
+    const wrapper = mount(<Radiobox onBlur={() => {}} validationOption={{ check: true, required: false }} />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[All props]: Should pass all props', () => {
+    const wrapper = mount(
+      <Radiobox
+        id="id"
+        name="name"
+        tabIndex="1"
+        classNameWrapper={'classNameWrapper'}
+        classNameInput={'classNameInput'}
+        classNameContainer={'classNameContainer'}
+        classNameOptionListItem={'classNameOptionListItem'}
+        optionList={OPTION_LIST}
+        customStyleWrapper={{ backgroundColor: '#000' }}
+        customStyleContainer={{ backgroundColor: '#000' }}
+        customStyleInput={{ backgroundColor: '#000' }}
+        customStyleOptionListItem={{ backgroundColor: '#000' }}
+      />,
+    );
+    expect(
+      wrapper
+        .find(`.${OPTION_LIST_ITEM_IDENTITIFIER}`)
+        .at(0)
+        .instance().style[0],
+    ).toEqual('background-color');
+    expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
+  });
+
+  it('[isValidValue]: Should retrun true', () => {
+    chaiExpect(isValidValue(OPTION_LIST, OPTION_LIST[0].id)).equal(true);
+  });
+
+  it('[isValidValue]: Should retrun false', () => {
+    chaiExpect(isValidValue(OPTION_LIST, 'foo')).equal(false);
+  });
+
+  it('[isValidValue]: Should retrun false', () => {
+    chaiExpect(isValidValue([], 'foo')).equal(false);
   });
 
   it('[Change value]: Should change the value when click the option', () => {
@@ -114,7 +195,10 @@ describe('Radiobox component', () => {
         }}
       />,
     );
-    wrapper.find(`#react-inputs-validation__radiobox_option-${OPTION_LIST[1].id}`).hostNodes().simulate('change');
+    wrapper
+      .find(`#react-inputs-validation__radiobox_option-${OPTION_LIST[1].id}`)
+      .hostNodes()
+      .simulate('change');
     expect(value).toEqual(OPTION_LIST[1].id);
   });
 

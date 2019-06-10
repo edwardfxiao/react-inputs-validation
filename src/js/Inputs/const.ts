@@ -6,6 +6,7 @@ export const REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE =
 export const DEFAULT_LOCALE = 'en-US';
 export const WRAPPER_CLASS_IDENTITIFIER = 'react-inputs-validation__wrapper_identifier';
 export const CONTAINER_CLASS_IDENTITIFIER = 'react-inputs-validation__container_identifier';
+export const OPTION_LIST_ITEM_IDENTITIFIER = 'react-inputs-validation__option-list-item_identifier';
 export const MSG_CLASS_IDENTITIFIER = 'react-inputs-validation__msg_identifier';
 export const usePrevious = (value: any) => {
   const ref = useRef();

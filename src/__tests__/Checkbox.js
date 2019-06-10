@@ -131,12 +131,82 @@ describe('Checkbox component', () => {
     expect(value).toEqual('focused');
   });
 
+  it("[onBlur]: Should not show msgHtml if it's not provide", () => {
+    const wrapper = mount(<Checkbox />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[validationCallback]: Should call validationCallback', () => {
+    let valid = false;
+    const wrapper = mount(
+      <Checkbox
+        onBlur={() => {}}
+        validationCallback={res => {
+          valid = res;
+        }}
+      />,
+    );
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    expect(valid).toEqual(true);
+  });
+
   it('[validationOption.check]: Should msgHtml not be appeared when check is false', () => {
     const wrapper = mount(<Checkbox onBlur={() => {}} validationOption={{ check: false }} />);
     const $wrapper = wrapper.find(WRAPPER);
     $wrapper.simulate('focus');
     $wrapper.simulate('blur');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[validationOption.check]: Should name in msgHtml when name provided', () => {
+    const wrapper = mount(<Checkbox onBlur={() => {}} validationOption={{ check: true, name: 'Foo' }} />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual('Foo must be checked');
+  });
+
+  it('[validationOption.check]: Should name in msgHtml when name provided', () => {
+    const wrapper = mount(<Checkbox onBlur={() => {}} validationOption={{ check: true, showMsg: false }} />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[validationOption.required]: Should msgHtml not be appeared when required is false', () => {
+    const wrapper = mount(<Checkbox onBlur={() => {}} validationOption={{ check: true, required: false }} />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[All props]: Should pass all props', () => {
+    const wrapper = mount(
+      <Checkbox
+        id="id"
+        name="name"
+        tabIndex="1"
+        value=""
+        labelHtml="foo"
+        classNameInput="classNameInput"
+        classNameWrapper="classNameWrapper"
+        classNameInputBox="classNameInputBox"
+        classNameContainer="classNameContainer"
+        customStyleInput={{}}
+        customStyleWrapper={{}}
+        customStyleInputBox={{}}
+        customStyleContainer={{}}
+        validationOption={{}}
+      />,
+    );
+    expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
   });
 
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {

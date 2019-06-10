@@ -92,7 +92,6 @@ const component: React.FC<Props> = ({
   tabIndex = null,
   id = '',
   name = '',
-  type = 'text',
   value = '',
   cols = DEFAULT_ROWS,
   rows = DEFAULT_COLS,
@@ -198,33 +197,31 @@ const component: React.FC<Props> = ({
                 return;
               }
             }
-            if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
-              if (min || max) {
-                if (min && max) {
-                  if (String(internalValue).length < min || String(internalValue).length > max) {
-                    handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+            if (min || max) {
+              if (min && max) {
+                if (String(internalValue).length < min || String(internalValue).length > max) {
+                  handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+                  return;
+                }
+              } else {
+                if (min) {
+                  if (String(internalValue).length < min) {
+                    handleCheckEnd(true, msg.lessThan(nameText)(min));
                     return;
                   }
-                } else {
-                  if (min) {
-                    if (String(internalValue).length < min) {
-                      handleCheckEnd(true, msg.lessThan(nameText)(min));
-                      return;
-                    }
-                  }
-                  if (max) {
-                    if (String(internalValue).length > max) {
-                      handleCheckEnd(true, msg.greaterThan(nameText)(max));
-                      return;
-                    }
+                }
+                if (max) {
+                  if (String(internalValue).length > max) {
+                    handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                    return;
                   }
                 }
               }
-              if (length) {
-                if (String(internalValue).length !== length) {
-                  handleCheckEnd(true, msg.lengthEqual(nameText)(length));
-                  return;
-                }
+            }
+            if (length) {
+              if (String(internalValue).length !== length) {
+                handleCheckEnd(true, msg.lengthEqual(nameText)(length));
+                return;
               }
             }
           }
@@ -259,10 +256,11 @@ const component: React.FC<Props> = ({
     validationCallback && validationCallback(err);
   }, []);
   useEffect(() => {
-    /* istanbul ignore if  */
+    /* istanbul ignore next because it won't happen  */
     if ($el === null) {
       return;
     }
+    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/2154 */
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }

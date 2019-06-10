@@ -1,8 +1,9 @@
 import * as React from 'react';
+const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
 import validator from './validator';
 import utils from './utils';
-import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE } from './const';
+import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
@@ -23,9 +24,8 @@ interface DefaultValidationOption {
   required?: boolean;
   msgOnError?: string;
   msgOnSuccess?: string;
-  customFunc?: undefined | Function;
+  customFunc?: Function | undefined;
 }
-
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   let { reg, min, max, type, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
@@ -61,9 +61,8 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     customFunc,
   };
 };
-
 interface Props {
-  tabIndex?: string | number | undefined;
+  tabIndex?: string | number | null;
   id?: string;
   name?: string;
   type?: string;
@@ -80,376 +79,319 @@ interface Props {
   customStyleWrapper?: object;
   customStyleContainer?: object;
   validationOption?: object;
-  onChange: (res: string, e: React.ChangeEvent<HTMLDivElement>) => void;
+  onChange: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   onKeyUp?: (e: React.KeyboardEvent<HTMLElement>) => void;
   validationCallback?: (res: boolean) => void;
 }
-
-interface DefaultProps {
-  tabIndex: string | number | undefined;
-  id: string;
-  name: string;
-  type: string;
-  value: string | number;
-  disabled: boolean;
-  validate: boolean;
-  autoComplete: string;
-  maxLength: string | number;
-  placeholder: string;
-  classNameInput: string;
-  classNameWrapper: string;
-  classNameContainer: string;
-  customStyleInput: object;
-  customStyleWrapper: object;
-  customStyleContainer: object;
-  validationOption: object;
-  onChange: (res: string, e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}
-
-type PropsWithDefaults = Props & DefaultProps;
-
-interface State {
-  err: boolean;
-  msg: string;
-  successMsg: undefined | string;
-  value: string;
-  validate: boolean;
-}
-
-class Index extends React.Component<Props, State> {
-  static defaultProps: Props = {
-    tabIndex: undefined,
-    id: '',
-    name: '',
-    type: 'text',
-    value: '',
-    disabled: false,
-    validate: false,
-    autoComplete: DEFAULT_AUTO_COMPLETE,
-    maxLength: DEFAULT_MAX_LENGTH,
-    placeholder: '',
-    classNameInput: '',
-    classNameWrapper: '',
-    classNameContainer: '',
-    customStyleInput: {},
-    customStyleWrapper: {},
-    customStyleContainer: {},
-    validationOption: {},
-    onChange: () => {},
-  };
-  private input: React.RefObject<HTMLInputElement>;
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      err: false,
-      msg: '',
-      successMsg: undefined,
-      value: props.value,
-      validate: props.validate,
-    };
-    this.onChange = this.onChange.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
-    this.input = React.createRef();
-  }
-
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.validate !== prevState.validate) {
-      return {
-        validate: nextProps.validate,
-      };
-    }
-    return null;
-  }
-
-  componentDidMount() {
-    if (this.input.current && this.props.tabIndex) {
-      this.input.current.setAttribute('tabindex', String(this.props.tabIndex));
-    }
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.validate !== prevState.validate) {
-      this.check();
-    }
-  }
-
-  onChange(e: React.ChangeEvent<HTMLDivElement>) {
-    const node: { [key: string]: any } | null = this.input;
-    if (node === null) {
-      return;
-    }
-    let v = node.current.value;
-    if (this.props.maxLength !== '') {
-      if (v.length > Number(this.props.maxLength)) {
-        return;
+const autoFormatNumber = (v: number | string) => {
+  const DOT = '.';
+  let res = '';
+  let hasDot = false;
+  String(v)
+    .split('')
+    .filter(i => {
+      const charCode = i.toLowerCase().charCodeAt(0);
+      if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
+        if (charCode === 46) {
+          hasDot = true;
+        }
+        res += i;
       }
-    }
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { type } = getDefaultValidationOption(validationOption);
-    // FORMAT NUMBER
-    if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-      v = String(this.autoFormatNumber(v));
-    }
-    const { onChange } = this.props;
-    onChange && onChange(v, e);
-    if (this.state.err) {
-      this.setState({ err: false });
-    } else {
-      this.setState({ successMsg: undefined });
-    }
+    });
+  if (res.length && res[0] === DOT) {
+    res = `0${res}`;
   }
-
-  onBlur(e: React.FocusEvent<HTMLElement>) {
-    const { onBlur } = this.props;
-    if (onBlur) {
-      this.check();
-      onBlur(e);
-    }
-  }
-
-  onFocus(e: React.FocusEvent<HTMLElement>) {
-    const { onFocus } = this.props;
+  return res;
+};
+const component: React.FC<Props> = ({
+  tabIndex = null,
+  id = '',
+  name = '',
+  type = 'text',
+  value = '',
+  disabled = false,
+  validate = false,
+  autoComplete = DEFAULT_AUTO_COMPLETE,
+  maxLength = DEFAULT_MAX_LENGTH,
+  placeholder = '',
+  classNameInput = '',
+  classNameWrapper = '',
+  classNameContainer = '',
+  customStyleInput = {},
+  customStyleWrapper = {},
+  customStyleContainer = {},
+  validationOption = {},
+  onChange = (v: string, e: React.ChangeEvent<HTMLElement>) => {},
+  onBlur = null,
+  onFocus = null,
+  onClick = null,
+  onKeyUp = null,
+  validationCallback = null,
+}) => {
+  const [err, setErr] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const [internalValue, setInternalValue] = useState(String(value));
+  const prevInternalValue = usePrevious(internalValue);
+  const option = getDefaultValidationOption(validationOption);
+  const $input = useRef(null);
+  const $el: { [key: string]: any } | null = $input;
+  const handleOnBlur = useCallback(
+    (e: React.FocusEvent<HTMLElement>) => {
+      if (onBlur) {
+        check();
+        onBlur(e);
+      }
+    },
+    [internalValue],
+  );
+  const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
       onFocus(e);
     }
-  }
-
-  onKeyUp(e: React.KeyboardEvent<HTMLElement>) {
-    const { onKeyUp } = this.props;
-    if (onKeyUp) {
-      this.check();
-      onKeyUp(e);
+  }, []);
+  const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (onClick) {
+      onClick(e);
     }
-  }
-
-  check(val: null | string = null) {
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = getDefaultValidationOption(validationOption);
-    if (!check) {
-      return;
-    }
-    if (type) {
-      if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) !== -1) {
-        if (!message[locale] || !message[locale][TYPE]) {
-          console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
-          return;
-        }
-        const msg = message[locale][TYPE];
-        const node: { [key: string]: any } | null = this.input;
-        if (node === null) {
-          return;
-        }
-        const value = val || node.current.value;
-        const nameText = name ? name : '';
-        // CHECK EMPTY
-        if (required) {
-          if (validator.empty(value)) {
-            this.handleCheckEnd(true, msg.empty(nameText));
-            return;
-          }
-        }
-        if (String(value) !== '') {
-          if (reg) {
-            if (validator['reg'](reg, value)) {
-              this.handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
-              return;
-            }
-          }
-          if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
-            if (min || max) {
-              if (min && max) {
-                if (String(value).length < min || String(value).length > max) {
-                  this.handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
-                  return;
-                }
-              } else {
-                if (min) {
-                  if (String(value).length < min) {
-                    this.handleCheckEnd(true, msg.lessThan(nameText)(min));
-                    return;
-                  }
-                }
-                if (max) {
-                  if (String(value).length > max) {
-                    this.handleCheckEnd(true, msg.greaterThan(nameText)(max));
-                    return;
-                  }
-                }
-              }
-            }
-            if (length) {
-              if (String(value).length !== length) {
-                this.handleCheckEnd(true, msg.lengthEqual(nameText)(length));
-                return;
-              }
-            }
-          }
-          if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-            if (!validator[type](value)) {
-              this.handleCheckEnd(true, msg.invalid(nameText));
-              return;
-            }
-            if (min || max) {
-              if (min && max) {
-                if (!validator[type](value, min, max)) {
-                  this.handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
-                  return;
-                }
-              } else {
-                if (min) {
-                  if (!validator[type](value, min)) {
-                    this.handleCheckEnd(true, msg.lessThan(nameText)(min));
-                    return;
-                  }
-                }
-                if (max) {
-                  if (!validator[type](value, 0, max)) {
-                    this.handleCheckEnd(true, msg.greaterThan(nameText)(max));
-                    return;
-                  }
-                }
-              }
-            }
-            if (length) {
-              if (String(value).length !== length) {
-                this.handleCheckEnd(true, msg.lengthEqual(nameText)(length));
-                return;
-              }
-            }
-          }
-          if (compare && compare !== '') {
-            if (value !== compare) {
-              this.handleCheckEnd(true, msg.twoInputsNotEqual());
-              return;
-            }
-          }
-        }
-        if (customFunc && typeof customFunc === 'function') {
-          const customFuncResult = customFunc(value);
-          if (customFuncResult !== true) {
-            this.handleCheckEnd(true, customFuncResult);
-            return;
-          }
-        }
-        if (msgOnSuccess) {
-          this.setState({ successMsg: msgOnSuccess });
-        }
-        this.handleCheckEnd(false, msgOnSuccess);
-      } else {
-        console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
+  }, []);
+  const handleOnKeyUp = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      if (onKeyUp) {
+        check();
+        onKeyUp(e);
       }
-    } else {
-      console.error('Please provide "type" in validationOption');
-    }
-  }
-
-  autoFormatNumber(v: number | string) {
-    const DOT = '.';
-    let res = '';
-    let hasDot = false;
-    String(v)
-      .split('')
-      .filter(i => {
-        const charCode = i.toLowerCase().charCodeAt(0);
-        if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
-          if (charCode === 46) {
-            hasDot = true;
-          }
-          res += i;
+    },
+    [internalValue],
+  );
+  const handleOnChange = useCallback(
+    (e: React.ChangeEvent<HTMLElement>) => {
+      if (disabled || $el === null) {
+        return;
+      }
+      let v = $el.current.value;
+      if ((typeof maxLength === 'string' && maxLength !== '') || (typeof maxLength === 'number' && maxLength !== 0)) {
+        if (v.length > Number(maxLength)) {
+          return;
         }
-      });
-    if (res.length && res[0] === DOT) {
-      res = `0${res}`;
-    }
-    return res;
-  }
-
-  handleCheckEnd(err: boolean, message: string) {
+      }
+      const { type } = option;
+      if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
+        v = String(autoFormatNumber(v));
+      }
+      setInternalValue(v);
+      onChange && onChange(v, e);
+      if (err) {
+        setErr(false);
+      } else {
+        setSuccessMsg('');
+      }
+    },
+    [err],
+  );
+  const check = useCallback(
+    () => {
+      const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = option;
+      if (!check) {
+        return;
+      }
+      if (type) {
+        if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) !== -1) {
+          if (!message[locale] || !message[locale][TYPE]) {
+            console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+            return;
+          }
+          const msg = message[locale][TYPE];
+          const nameText = name ? name : '';
+          if (required) {
+            if (validator.empty(internalValue)) {
+              handleCheckEnd(true, msg.empty(nameText));
+              return;
+            }
+          }
+          if (String(internalValue) !== '') {
+            if (reg) {
+              if (validator['reg'](reg, internalValue)) {
+                handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
+                return;
+              }
+            }
+            if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
+              if (min || max) {
+                if (min && max) {
+                  if (String(internalValue).length < min || String(internalValue).length > max) {
+                    handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+                    return;
+                  }
+                } else {
+                  if (min) {
+                    if (String(internalValue).length < min) {
+                      handleCheckEnd(true, msg.lessThan(nameText)(min));
+                      return;
+                    }
+                  }
+                  if (max) {
+                    if (String(internalValue).length > max) {
+                      handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                      return;
+                    }
+                  }
+                }
+              }
+              if (length) {
+                if (String(internalValue).length !== length) {
+                  handleCheckEnd(true, msg.lengthEqual(nameText)(length));
+                  return;
+                }
+              }
+            }
+            if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
+              if (!validator[type](internalValue)) {
+                handleCheckEnd(true, msg.invalid(nameText));
+                return;
+              }
+              if (min || max) {
+                if (min && max) {
+                  if (!validator[type](internalValue, min, max)) {
+                    handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+                    return;
+                  }
+                } else {
+                  if (min) {
+                    if (!validator[type](internalValue, min)) {
+                      handleCheckEnd(true, msg.lessThan(nameText)(min));
+                      return;
+                    }
+                  }
+                  if (max) {
+                    if (!validator[type](internalValue, 0, max)) {
+                      handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                      return;
+                    }
+                  }
+                }
+              }
+              if (length) {
+                if (String(internalValue).length !== length) {
+                  handleCheckEnd(true, msg.lengthEqual(nameText)(length));
+                  return;
+                }
+              }
+            }
+            if (compare && compare !== '') {
+              if (internalValue !== compare) {
+                handleCheckEnd(true, msg.twoInputsNotEqual());
+                return;
+              }
+            }
+          }
+          if (customFunc && typeof customFunc === 'function') {
+            const customFuncResult = customFunc(internalValue);
+            if (customFuncResult !== true) {
+              handleCheckEnd(true, customFuncResult);
+              return;
+            }
+          }
+          if (msgOnSuccess) {
+            setSuccessMsg(msgOnSuccess);
+          }
+          handleCheckEnd(false, msgOnSuccess);
+        } else {
+          console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
+        }
+      } else {
+        console.error('Please provide "type" in validationOption');
+      }
+    },
+    [internalValue],
+  );
+  const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
-    const { validationOption } = this.props as PropsWithDefaults;
-    const { msgOnError } = getDefaultValidationOption(validationOption);
+    const { msgOnError } = option;
     if (err && msgOnError) {
       msg = msgOnError;
     }
-    this.setState({ err, msg });
-    const { validationCallback } = this.props;
+    setErr(err);
+    setMsg(msg);
     validationCallback && validationCallback(err);
+  }, []);
+  useEffect(() => {
+    /* istanbul ignore if because it won't happen */
+    if ($el === null) {
+      return;
+    }
+    if (tabIndex) {
+      $el.current.setAttribute('tabindex', String(tabIndex));
+    }
+  }, []);
+  useEffect(
+    () => {
+      if (validate) {
+        check();
+      }
+    },
+    [validate],
+  );
+  useEffect(
+    () => {
+      setInternalValue(String(value));
+    },
+    [value],
+  );
+  useEffect(
+    () => {
+      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+        check();
+      }
+    },
+    [prevInternalValue, internalValue],
+  );
+  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const inputClass = `${classNameInput} ${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
+  const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
+  let msgHtml;
+  const { showMsg } = option;
+  if (showMsg && err && msg) {
+    msgHtml = <div className={errMsgClass}>{msg}</div>;
   }
-
-  render() {
-    const {
-      tabIndex,
-      id,
-      name,
-      type,
-      value,
-      disabled,
-      maxLength,
-      autoComplete,
-      placeholder,
-      classNameWrapper,
-      classNameContainer,
-      classNameInput,
-      customStyleWrapper,
-      customStyleContainer,
-      customStyleInput,
-      validationOption,
-    } = this.props as PropsWithDefaults;
-
-    const { err, msg, successMsg } = this.state;
-
-    const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss['textbox__wrapper']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const containerClass = `${classNameContainer} ${reactInputsValidationCss['textbox__container']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const inputClass = `${classNameInput} ${reactInputsValidationCss['textbox__input']} ${err && reactInputsValidationCss['error']} ${typeof successMsg !== 'undefined' &&
-      !err &&
-      reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-
-    const errmsgClass = `${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
-    const successMsgClass = `${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
-
-    let msgHtml;
-    const { showMsg } = getDefaultValidationOption(validationOption);
-    if (showMsg && err && msg) {
-      msgHtml = <div className={errmsgClass}>{msg}</div>;
-    }
-    if (showMsg && !err && typeof successMsg !== 'undefined') {
-      msgHtml = <div className={successMsgClass}>{successMsg}</div>;
-    }
-    return (
-      <div className={wrapperClass} style={customStyleWrapper}>
-        <div className={containerClass} style={customStyleContainer}>
-          <input
-            id={id}
-            name={name}
-            type={type}
-            value={value}
-            disabled={disabled}
-            autoComplete={autoComplete}
-            maxLength={Number(maxLength)}
-            onBlur={this.onBlur}
-            onKeyUp={this.onKeyUp}
-            onFocus={this.onFocus}
-            className={inputClass}
-            onChange={this.onChange}
-            style={customStyleInput}
-            placeholder={placeholder}
-            ref={this.input}
-          />
-        </div>
-        {msgHtml}
+  if (showMsg && !err && successMsg !== '') {
+    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+  }
+  return (
+    <div className={wrapperClass} style={customStyleWrapper}>
+      <div className={containerClass} style={customStyleContainer}>
+        <input
+          id={id}
+          name={name}
+          type={type}
+          value={internalValue}
+          disabled={disabled}
+          autoComplete={autoComplete}
+          maxLength={Number(maxLength)}
+          onBlur={handleOnBlur}
+          onKeyUp={handleOnKeyUp}
+          onFocus={handleOnFocus}
+          onClick={handleOnClick}
+          className={inputClass}
+          onChange={handleOnChange}
+          style={customStyleInput}
+          placeholder={placeholder}
+          ref={$input}
+        />
       </div>
-    );
-  }
-}
-
-export default Index;
+      {msgHtml}
+    </div>
+  );
+};
+export default memo(component);

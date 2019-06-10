@@ -8,7 +8,7 @@ import Markdown from 'react-markdown';
 import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
-import STYLES from '../src/css/example.css';
+import CSS from '../src/css/example.css';
 import { Textbox, Textarea, Radiobox, Checkbox, Select } from '../src/js/Inputs/index.ts';
 
 const markdownTextboxEmptyExample = `
@@ -16,7 +16,7 @@ const markdownTextboxEmptyExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  tabIndex="1" // Optional.[String or Number].Default: none.
+  //tabIndex="1" // Optional.[String or Number].Default: none.
   id={'Name'} // Optional.[String].Default: "".  Input ID.
   name="Name" // Optional.[String].Default: "". Input name.
   type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -41,7 +41,7 @@ const markdownTextboxRegexExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  tabIndex="1" // Optional.[String or Number].Default: none.
+  //tabIndex="1" // Optional.[String or Number].Default: none.
   id={'Name'} // Optional.[String].Default: "".  Input ID.
   name="Name" // Optional.[String].Default: "". Input name.
   type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -65,7 +65,7 @@ const markdownTextboxNumberExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  tabIndex="1" // Optional.[String or Number].Default: none.
+  //tabIndex="1" // Optional.[String or Number].Default: none.
   id={'Number'} // Optional.[String].Default: "".  Input ID.
   name="Number" // Optional.[String].Default: "". Input name.
   type="text" // Optional.[String].Default: "text". Input type [text, password, number]. NOTE: provide "text" for better performance since different browsers run differently with "number".
@@ -90,7 +90,7 @@ const markdownRadioboxEmptyExample = `
 import { Radiobox } from 'react-inputs-validation';
 
 <Radiobox
-  tabIndex={2} // Optional.[String or Number].Default: none.
+  //tabIndex={2} // Optional.[String or Number].Default: none.
   id="job" // Optional.[String].Default: "".  Input ID.
   name="job" // Optional.[String].Default: "". Input name.
   value={job} // Optional.[String].Default: "".
@@ -123,7 +123,7 @@ const markdownCheckboxEmptyExample = `
 import { Checkbox } from 'react-inputs-validation';
 
 <Checkbox
-  tabIndex="5" // Optional.[String or Number].Default: none.
+  //tabIndex="5" // Optional.[String or Number].Default: none.
   id={'agreement'} // Optional.[String].Default: "".  Input ID.
   name={'agreement'} // Optional.[String].Default: "". Input name
   value={agreement} // Required.[String].Default: "".
@@ -152,7 +152,7 @@ const markdownSelectEmptyExample = `
 import { Select } from 'react-inputs-validation';
 
 <Select
-  tabIndex="6" // Optional.[String or Number].Default: none.
+  //tabIndex="6" // Optional.[String or Number].Default: none.
   id={'country'} // Optional.[String].Default: "". Input ID.
   name={'country'} // Optional.[String].Default: "". Input name.
   value={country} // Optional.[String].Default: "".
@@ -174,7 +174,7 @@ import { Select } from 'react-inputs-validation';
   //       <div
   //         key={k}
   //         onClick={() => {
-  //           this.handleSelectChange(i.id);
+  //           this.setState({ country: i.id });
   //         }}
   //       >
   //         <span className="icon icon-person" />{i.name}
@@ -197,7 +197,7 @@ const markdownTextareaEmptyExample = `
 import { Textarea } from 'react-inputs-validation';
 
 <Textarea
-  tabIndex="1" // Optional.[String or Number].Default: none.
+  //tabIndex="1" // Optional.[String or Number].Default: none.
   id="description" // Optional.[String].Default: "".  Textarea ID.
   name="description" // Optional.[String].Default: "". Input name.
   value={description} // Optional.[String].Default: "".
@@ -548,31 +548,31 @@ class Index extends Component {
       verticalAlign: 'middle',
     };
 
-    // let countryItem;
-    // COUNTRY_OPTIONS_LIST.filter(i => {
-    //   if (String(i.id) == String(country)) {
-    //     countryItem = i;
-    //   }
-    // });
+    let countryItem;
+    COUNTRY_OPTIONS_LIST.filter(i => {
+      if (String(i.id) == String(country)) {
+        countryItem = i;
+      }
+    });
 
     return (
-      <div style={{ padding: '10px' }}>
+      <div className={CSS['wrapper']}>
         <div style={{ padding: '10px', border: '1px solid #e5e5e5' }}>
           <div>
             <h1>Basic Usage</h1>
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Textbox</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Textbox</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Textbox Empty by onBlur Example:</h1>
                   <Textbox
-                    tabIndex="1" // Optional.[String or Number].Default: none.
+                    // tabIndex="1" // Optional.[String or Number].Default: none.
                     id={'Name'} // Optional.[String].Default: "".  Input ID.
                     name="Name" // Optional.[String].Default: "". Input name.
                     type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -601,11 +601,11 @@ class Index extends Component {
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Textbox Regex by onBlur Example:</h1>
                   <Textbox
-                    tabIndex="1" // Optional.[String or Number].Default: none.
+                    // tabIndex="1" // Optional.[String or Number].Default: none.
                     id={'Name'} // Optional.[String].Default: "".  Input ID.
                     name="Name" // Optional.[String].Default: "". Input name.
                     type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -633,11 +633,11 @@ class Index extends Component {
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Textbox Number by onBlur Example:</h1>
                   <Textbox
-                    tabIndex="1" // Optional.[String or Number].Default: none.
+                    // tabIndex="1" // Optional.[String or Number].Default: none.
                     id={'Number'} // Optional.[String].Default: "".  Input ID.
                     name="Number" // Optional.[String].Default: "". Input name.
                     type="text" // Optional.[String].Default: "text". Input type [text, password, number].
@@ -666,16 +666,16 @@ class Index extends Component {
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Radiobox</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Radiobox</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Radiobox Empty by onBlur Example:</h1>
                   <Radiobox
-                    tabIndex={2} // Optional.[String or Number].Default: none.
+                    // tabIndex={2} // Optional.[String or Number].Default: none.
                     id="job" // Optional.[String].Default: "".  Input ID.
                     name="job" // Optional.[String].Default: "". Input name.
                     value={job} // Optional.[String].Default: "".
@@ -708,16 +708,16 @@ class Index extends Component {
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Checkbox</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Checkbox</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Checkbox Empty by onBlur Example:</h1>
                   <Checkbox
-                    tabIndex="5" // Optional.[String or Number].Default: none.
+                    // tabIndex="5" // Optional.[String or Number].Default: none.
                     id={'agreement'} // Optional.[String].Default: "".  Input ID.
                     name={'agreement'} // Optional.[String].Default: "". Input name
                     checked={isAgreementChecked} // Required.[Bool].Default: false.
@@ -744,16 +744,16 @@ class Index extends Component {
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Select</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Select</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Select Empty by onBlur Example:</h1>
                   <Select
-                    tabIndex="6" // Optional.[String or Number].Default: none.
+                    // tabIndex="6" // Optional.[String or Number].Default: none.
                     id={'country'} // Optional.[String].Default: "". Input ID.
                     name={'country'} // Optional.[String].Default: "". Input name.
                     value={country} // Optional.[String].Default: "".
@@ -770,7 +770,7 @@ class Index extends Component {
                     //       <div
                     //         key={k}
                     //         onClick={() => {
-                    //           this.handleSelectChange(i.id);
+                    //           this.setState({ country: i.id });
                     //         }}
                     //       >
                     //         <span className="icon icon-person" />{i.name}
@@ -795,16 +795,16 @@ class Index extends Component {
           </div>
 
           <div>
-            <div className={STYLES['sub-section-title-wrapper']}>
-              <div className={STYLES['sub-section-title']}>Textarea</div>
+            <div className={CSS['sub-section-title-wrapper']}>
+              <div className={CSS['sub-section-title']}>Textarea</div>
             </div>
 
             <div style={{ overflow: 'auto', padding: '2%' }}>
-              <div className={STYLES['block']}>
+              <div className={CSS['block']}>
                 <div>
                   <h1>Validate Textarea Empty by onBlur Example:</h1>
                   <Textarea
-                    tabIndex="1" // Optional.[String or Number].Default: none.
+                    // tabIndex="1" // Optional.[String or Number].Default: none.
                     id="description" // Optional.[String].Default: "".  Textarea ID.
                     name="description" // Optional.[String].Default: "". Textarea name.
                     value={description} // Optional.[String].Default: "".
@@ -891,6 +891,14 @@ class Index extends Component {
                         // }
                       }}
                     />
+                    {/*<div>
+                      <input
+                        id="textOutsideController"
+                        onChange={() => {
+                          this.setState({ name: document.getElementById('textOutsideController').value });
+                        }}
+                      />
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -932,6 +940,7 @@ class Index extends Component {
                         console.log(e);
                       }} // Optional.[Func].Default: none.
                       // onFocus={(e) => {console.log(e);}} // Optional.[Func].Default: none.
+                      // onKeyUp={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       // onClick={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       validationOption={{
                         name: 'Name', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
@@ -943,6 +952,13 @@ class Index extends Component {
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
+                    {/*<div
+                      onClick={() => {
+                        this.setState({ job: '' });
+                      }}
+                    >
+                      Clear radio value
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -957,7 +973,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Checkbox
-                      tabIndex="5" // Optional.[String or Number].Default: none.
+                      tabIndex="3" // Optional.[String or Number].Default: none.
                       id={'agreement'} // Optional.[String].Default: "".  Input ID.
                       name={'agreement'} // Optional.[String].Default: "". Input name
                       value={agreement} // Required.[String].Default: "".
@@ -994,6 +1010,13 @@ class Index extends Component {
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
+                    {/*<div
+                      onClick={() => {
+                        this.setState({ isAgreementChecked: !isAgreementChecked });
+                      }}
+                    >
+                      toggle checked
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -1007,7 +1030,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Select
-                      tabIndex="6" // Optional.[String or Number].Default: none.
+                      tabIndex="4" // Optional.[String or Number].Default: none.
                       id={'country'} // Optional.[String].Default: "". Input ID.
                       name={'country'} // Optional.[String].Default: "". Input name.
                       value={country} // Optional.[String].Default: "".
@@ -1033,20 +1056,19 @@ class Index extends Component {
                       // onFocus={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       // onClick={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       // selectHtml={<div>{countryItem.name}</div>} // Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
-                      // selectOptionListItemHtml={COUNTRY_OPTIONS_LIST.map(
-                      //   (i, k) => {
-                      //     return (
-                      //       <div
-                      //         key={k}
-                      //         onClick={() => {
-                      //           this.handleSelectChange(i.id);
-                      //         }}
-                      //       >
-                      //         <span className="icon icon-person" />{i.name}
-                      //       </div>
-                      //     );
-                      //   }
-                      // )} // Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
+                      // selectOptionListItemHtml={COUNTRY_OPTIONS_LIST.map((i, k) => {
+                      //   return (
+                      //     <div
+                      //       key={k}
+                      //       onClick={() => {
+                      //         this.setState({ country: i.id });
+                      //       }}
+                      //     >
+                      //       <span className="icon icon-person" />
+                      //       {i.name}
+                      //     </div>
+                      //   );
+                      // })} // Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
                       validationOption={{
                         name: 'country', // Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
                         check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
@@ -1057,6 +1079,13 @@ class Index extends Component {
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
                     />
+                    {/*<div
+                      onClick={() => {
+                        this.setState({ country: '' });
+                      }}
+                    >
+                      Clear select value
+                    </div>*/}
                   </div>
                 </div>
               </div>
@@ -1070,7 +1099,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Textarea
-                      tabIndex="7" // Optional.[String or Number].Default: none.
+                      tabIndex="5" // Optional.[String or Number].Default: none.
                       id="description" // Optional.[String].Default: "".  Textarea ID.
                       name="description" // Optional.[String].Default: "". Textarea name.
                       value={description} // Optional.[String].Default: "".
@@ -1100,6 +1129,7 @@ class Index extends Component {
                         console.log(e);
                       }} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                       // onFocus={(e) => {console.log(e);}} // Optional.[Func].Default: none.
+                      // onKeyUp={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       // onClick={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       validationOption={{
                         name: 'Description', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
@@ -1123,12 +1153,20 @@ class Index extends Component {
                         // }
                       }}
                     />
+                    {/*<div>
+                      <input
+                        id="textareaOutsideController"
+                        onChange={() => {
+                          this.setState({ description: document.getElementById('textareaOutsideController').value });
+                        }}
+                      />
+                    </div>*/}
                   </div>
                 </div>
               </div>
             </div>
             <div style={{ height: '10px' }} />
-            <div className={`${STYLES['my-button']} ${STYLES['my-button__red']} ${STYLES['save-button']}`} onClick={this.validateForm}>
+            <div className={`${CSS['my-button']} ${CSS['my-button__red']} ${CSS['save-button']}`} onClick={this.validateForm}>
               validate!
             </div>
             <input type="submit" style={{ display: 'none' }} />

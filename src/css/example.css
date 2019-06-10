@@ -1,7 +1,12 @@
 @import './icon.css';
+
 body {
   margin: 0;
   font-size: 100%;
+  padding: 10px;
+}
+
+.wrapper {
   padding: 10px;
 }
 
@@ -10,7 +15,7 @@ body {
 }
 
 .radiobox__wrapper.checked label:before {
-  background-color: #000!important;
+  background-color: #000 !important;
 }
 
 :global .icon {
@@ -45,4 +50,14 @@ body {
 .block {
   box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.75);
   padding: 2%;
+}
+
+@media only screen and (max-width: 900px) {
+  body {
+    padding: 0;
+  }
+
+  .wrapper {
+    padding: 0;
+  }
 }

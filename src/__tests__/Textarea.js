@@ -1,56 +1,61 @@
 import React from 'react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { MSG_CLASS_IDENTITIFIER } from '../js/Inputs/const.ts';
 import mockConsole from 'jest-mock-console';
 import Textarea from '../js/Inputs/Textarea.tsx';
 configure({ adapter: new Adapter() });
 
+const INPUT = 'textarea';
+
 describe('Textarea component', () => {
-  it('[check]: Should call handleCheckEnd when empty', () => {
-    let value = '';
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onChange={() => {}}
-        validationOption={{
-          check: true,
-          required: true,
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.handleCheckEnd = jest.fn();
-    instance.check(value);
-    expect(instance.handleCheckEnd).toHaveBeenCalled();
+  it('[Toggling "validate"]: Should show msgHtml(err) when toggling "validate"', () => {
+    const wrapper = mount(<Textarea onBlur={() => {}} validate={false} />);
+    wrapper.setProps({ validate: true });
+    expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
 
-  it("[onBlur]: Should call parent's onBlur", () => {
-    let value = '';
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onBlur={() => {
-          value = 'blured';
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onBlur();
-    expect(value).toEqual('blured');
+  // TODO
+  // it('[Providing tabIndex]: Should tabIndex be exact the same with given prop', () => {
+  //   const wrapper = mount(<Textarea tabIndex={10} onBlur={() => {}} />);
+  //   const $input = wrapper.find(INPUT);
+  //   $input.simulate('focus');
+  //   $input.simulate('blur');
+  //   console.log($input.props())
+  //   console.log(wrapper.find(INPUT).props())
+  //   expect(wrapper.find(INPUT).props()['tabindex']).toEqual(1);
+  // });
+
+  it('[Providing cols]: Should cols be exact the same with given prop', () => {
+    const wrapper = mount(<Textarea cols="10" />);
+    expect(wrapper.find(INPUT).props()['cols']).toEqual(10);
+  });
+
+  it('[Providing rows]: Should rows be exact the same with given prop', () => {
+    const wrapper = mount(<Textarea rows="10" />);
+    expect(wrapper.find(INPUT).props()['rows']).toEqual(10);
+  });
+
+  it('[Providing msgOnError]: Should msg be msgOnError', () => {
+    const msgOnError = 'msgOnError';
+    const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ msgOnError }} />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(msgOnError);
   });
 
   it("[onFocus]: Should call parent's onFocus", () => {
     let value = '';
     const wrapper = mount(
       <Textarea
-        value={value}
         onFocus={() => {
           value = 'focused';
         }}
       />,
     );
-    const instance = wrapper.instance();
-    instance.onFocus();
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
     expect(value).toEqual('focused');
   });
 
@@ -58,188 +63,128 @@ describe('Textarea component', () => {
     let value = '';
     const wrapper = mount(
       <Textarea
-        value={value}
         onKeyUp={() => {
           value = 'keyuped';
         }}
       />,
     );
-    const instance = wrapper.instance();
-    instance.onKeyUp();
+    const $input = wrapper.find(INPUT);
+    $input.simulate('keyup');
     expect(value).toEqual('keyuped');
   });
 
-  it('[handleCheckEnd]: Should call validationCallback', () => {
+  it("[onKeyUp]: Should not call parent's onKeyUp", () => {
     let value = '';
-    const msgOnError = 'foobar';
-    let valid = false;
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onChange={() => {}}
-        validationCallback={() => {
-          valid = true;
-        }}
-        validationOption={{
-          name: 'foobar',
-          check: true,
-          required: true,
-          msgOnError,
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.handleCheckEnd(true, msgOnError);
-    expect(valid).toEqual(true);
+    const wrapper = mount(<Textarea />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('keyup');
+    expect(value).toEqual('');
   });
 
-  it('[handleCheckEnd]: All validationOption', () => {
-    let value = '';
-    let valid = false;
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onChange={() => {}}
-        validationCallback={() => {
-          valid = true;
-        }}
-        validationOption={{
-          locale: 'en-US',
-          name: 'foobar',
-          check: true,
-          showMsg: 'showMsg',
-          required: true,
-          msgOnError: 'msgOnError',
-          msgOnSuccess: 'msgOnSuccess',
-          type: 'string',
-          min: '10',
-          max: '20',
-          length: '10',
-          cols: '10',
-          rows: '10',
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.handleCheckEnd(true, 'msgOnError');
-    expect(valid).toEqual(true);
-  });
-
-  it('[check]: Message should be foobar cannot be empty', () => {
+  it("[onClick]: Should call parent's onClick", () => {
     let value = '';
     const wrapper = mount(
       <Textarea
-        value={value}
-        onBlur={() => {}}
-        onChange={() => {}}
-        validationOption={{
-          name: 'foobar',
-          check: true,
-          required: true,
+        onClick={() => {
+          value = 'clicked';
         }}
       />,
     );
-    const instance = wrapper.instance();
-    instance.onFocus();
-    instance.onBlur();
-    expect(wrapper.state().msg).toEqual('foobar cannot be empty');
+    const $input = wrapper.find(INPUT);
+    $input.simulate('click');
+    expect(value).toEqual('clicked');
   });
 
-  it('[check]: Message should be foobar length must be 5', () => {
-    let value = 'foobar';
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onBlur={() => {}}
-        onChange={() => {}}
-        validationOption={{
-          name: 'foobar',
-          check: true,
-          required: true,
-          type: 'string',
-          length: 5,
-          // min: 0,
-          // max: 0,
-          // msgOnError
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onFocus();
-    instance.onBlur();
-    expect(wrapper.state().msg).toEqual('foobar length must be 5');
+  it("[onClick]: Should not call parent's onClick", () => {
+    let value = '';
+    const wrapper = mount(<Textarea />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('click');
+    expect(value).toEqual('');
   });
 
-  it('[check]: Should be show successMsg when msgOnSuccess is provided', () => {
-    let value = 'foobar';
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onBlur={() => {}}
-        onChange={() => {}}
-        validationOption={{
-          name: 'foobar',
-          check: true,
-          required: true,
-          showMsg: true,
-          msgOnSuccess: 'successMsg',
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onFocus();
-    instance.onBlur();
-    expect(wrapper.state().err).toEqual(false);
-  });
-
-  it('[check]: Successful msg node should be appear', () => {
-    let value = 'foobar';
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onBlur={() => {}}
-        onChange={() => {}}
-        validationOption={{
-          locale: 'en-US',
-          type: 'string',
-          name: '',
-          check: true,
-          showMsg: true,
-          required: true,
-          msgOnError: '',
-          msgOnSuccess: 'successMsg',
-        }}
-      />,
-    );
-    // const instance = wrapper.instance();
-    const $input = wrapper.find('textarea');
+  it("[onBlur]: Should not show msgHtml if it's not provide", () => {
+    const wrapper = mount(<Textarea />);
+    const $input = wrapper.find(INPUT);
     $input.simulate('focus');
-    // instance.input.value = '';
-    // instance.onChange();
     $input.simulate('blur');
-    expect(wrapper.find('.msg.success').length).toEqual(1);
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  it('[successMsg]: Should setState successMsg to msgOnSuccess', () => {
+  it('[successMsg]: Should show successMsg when msgOnSuccess is provided', () => {
+    const msgOnSuccess = 'msgOnSuccess';
+    const value = 'foobar';
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          name: 'foobar',
+          check: true,
+          required: true,
+          showMsg: true,
+          msgOnSuccess,
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(msgOnSuccess);
+  });
+
+  it('[successMsg]: Should show successMsg when msgOnSuccess is provided', () => {
+    const msgOnSuccess = 'msgOnSuccess';
+    const value = 'foobar';
     const wrapper = mount(
       <Textarea
         onBlur={() => {}}
         validationOption={{
-          msgOnSuccess: 'msgOnSuccess',
+          name: 'foobar',
+          check: true,
+          required: true,
+          showMsg: true,
+          msgOnSuccess,
         }}
       />,
     );
-    const instance = wrapper.instance();
-    instance.value = 'foobar';
-    instance.onChange({ target: { value: 'foobar' } });
-    instance.onBlur();
-    expect(wrapper.state().successMsg).toEqual('msgOnSuccess');
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.at(0).instance().value = value;
+    $input.simulate('change');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(msgOnSuccess);
+  });
+
+  it('[successMsg]: Should show successMsg when msgOnSuccess is provided', () => {
+    const value = 'foobar';
+    const wrapper = mount(
+      <Textarea
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          name: 'foobar',
+          check: true,
+          required: true,
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    $input.simulate('focus');
+    $input.at(0).instance().value = value;
+    $input.simulate('change');
+    $input.simulate('blur');
+    expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
   it('[customFunc]: Should setState msg to customFunc.errorMessage', () => {
     const errorMessage = 'Description cannot be other things but milk';
     const wrapper = mount(
       <Textarea
+        value={'foobar'}
         onBlur={() => {}}
         validationOption={{
           customFunc: res => {
@@ -251,17 +196,17 @@ describe('Textarea component', () => {
         }}
       />,
     );
-    const instance = wrapper.instance();
-    instance.value = 'foobar';
-    instance.onChange({ target: { value: 'foobar' } });
-    instance.onBlur();
-    expect(wrapper.state().msg).toEqual(errorMessage);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(errorMessage);
   });
 
   it('[customFunc]: Should setState msg to ""', () => {
     const errorMessage = 'Description cannot be other things but milk';
     const wrapper = mount(
       <Textarea
+        value={'milk'}
         onBlur={() => {}}
         validationOption={{
           customFunc: res => {
@@ -273,234 +218,53 @@ describe('Textarea component', () => {
         }}
       />,
     );
-    const instance = wrapper.instance();
-    instance.value = 'milk';
-    instance.onChange({ target: { value: 'milk' } });
-    instance.onBlur();
-    expect(wrapper.state().msg).toEqual('');
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-    it('[validationOption.length]: Should show error when the length is not valid', () => {
+  it('[validationOption.compare]: Should msgHtml be appeared when it is equal to compared value', () => {
     const wrapper = mount(
       <Textarea
+        value={'abc'}
         onBlur={() => {}}
         validationOption={{
-          length: 5,
+          compare: 'abc',
         }}
       />,
     );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: 'success' } });
-    instance.onBlur();
-    expect(wrapper.state().err).toEqual(true);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  it('[validationOption.length]: Should state.msg to be error message with name', () => {
-    const wrapper = mount(
-      <Textarea
-        onBlur={() => {}}
-        validationOption={{
-          name: 'foobar',
-          length: 5,
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: 'success' } });
-    instance.onBlur();
-    expect(wrapper.state().msg).toEqual('foobar length must be 5');
+  it('[validationOption.check]: Should msgHtml not be appeared when check is false', () => {
+    const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ check: false }} />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  it('[validationOption.length]: Should state.msg to be error message', () => {
-    const wrapper = mount(
-      <Textarea
-        onBlur={() => {}}
-        validationOption={{
-          length: 5,
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: 'success' } });
-    instance.onBlur();
-    expect(wrapper.state().msg).toEqual('length must be 5');
+  it('[validationOption.check]: Should msgHtml not be appeared when check is false', () => {
+    const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ check: true, required: false }} />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  it('[validationOption.length]: Should state.msg not to be error message', () => {
-    const wrapper = mount(
-      <Textarea
-        onBlur={() => {}}
-        validationOption={{
-          length: 5,
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: 'abcde' } });
-    instance.onBlur();
-    expect(wrapper.state().msg).toEqual('');
-  });
-
-  it('[validationOption.min string]: Should show error when the length is less than min length', () => {
-    const wrapper = mount(
-      <Textarea
-        value="abc"
-        onBlur={() => {}}
-        validationOption={{
-          min: 10,
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: '' } });
-    instance.onBlur();
-    expect(wrapper.state().err).toEqual(true);
-  });
-
-  it('[validationOption.max string]: Should show error when the length is greater than max length', () => {
-    const wrapper = mount(
-      <Textarea
-        value="abcde"
-        onBlur={() => {}}
-        validationOption={{
-          max: 3,
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: '' } });
-    instance.onBlur();
-    expect(wrapper.state().err).toEqual(true);
-  });
-
-  it('[validationOption.min and max string]: Should show error when the length is out out range', () => {
-    const wrapper = mount(
-      <Textarea
-        value="12345"
-        onBlur={() => {}}
-        validationOption={{
-          min: 1,
-          max: 3,
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: '' } });
-    instance.onBlur();
-    expect(wrapper.state().err).toEqual(true);
-  });
-
-  it('[validationOption.check]: Should not call handleCheckEnd when is not valid and check is false', () => {
-    const wrapper = mount(<Textarea validationOption={{ check: false }} />);
-    const instance = wrapper.instance();
-    instance.handleCheckEnd = jest.fn();
-    instance.check();
-    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
-  });
-
-  it('[validationOption.type]: Should not call handleCheckEnd', () => {
-    let value = 'foobar';
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onBlur={() => {}}
-        onChange={() => {}}
-        validationOption={{
-          locale: 'en-US',
-          type: 'foobar',
-          name: '',
-          check: true,
-          showMsg: true,
-          required: true,
-          msgOnError: '',
-          msgOnSuccess: 'successMsg',
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.handleCheckEnd = jest.fn();
-    instance.check();
-    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
-  });
-
-  it('[state.err]: Should be true when props.validate toggled', () => {
-    const wrapper = mount(<Textarea validate={false} onBlur={() => {}} />);
-    const instance = wrapper.instance();
-    instance.value = '';
-    wrapper.setProps({ validate: true });
-    expect(wrapper.state().err).toEqual(true);
-  });
-
-  it('[state.err]: Should be false when supplied value', () => {
-    let v = '';
-    const wrapper = mount(
-      <Textarea
-        validate={false}
-        onBlur={() => {}}
-        onChange={res => {
-          v = res;
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.onFocus();
-    instance.onBlur();
-    instance.onFocus();
-    instance.onChange({ target: { value: 'foobar' } });
-    instance.onBlur();
-    expect(v).toEqual('foobar');
-  });
-
-  it('[disabled]: Should not call onFocus when the Textarea is disabled', () => {
+  it('[disabled]: Should msgHtml not be appeared when disabled', () => {
     const wrapper = mount(<Textarea onBlur={() => {}} disabled={true} />);
-    const instance = wrapper.instance();
-    instance.onChange = jest.fn();
-    instance.onFocus();
-    instance.onBlur();
-    expect(instance.onChange).not.toHaveBeenCalled();
+    const $input = wrapper.find(INPUT);
+    $input.simulate('change');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  it('[disabled]: Should state.err not change when the Textarea is disabled', () => {
-    const wrapper = mount(<Textarea onBlur={() => {}} disabled={true} />);
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: '' } });
-    expect(wrapper.state().err).toEqual(false);
-  });
+  // STRING
 
-  it('[onChange]: Should not call autoFormatNumber when this.input === null', () => {
-    const wrapper = mount(<Textarea onBlur={() => {}} />);
-    const instance = wrapper.instance();
-    instance.autoFormatNumber = jest.fn();
-    instance.input = null;
-    instance.onChange({ target: { value: '' } });
-    expect(instance.autoFormatNumber).not.toHaveBeenCalled();
-  });
-
-  it('[onFocus]: Should not check when onFocus is not provided', () => {
-    const wrapper = mount(<Textarea />);
-    const instance = wrapper.instance();
-    instance.check = jest.fn();
-    instance.onFocus();
-    expect(instance.check).not.toHaveBeenCalled();
-  });
-
-  it('[onBlur]: Should not check when onBlur is not provided', () => {
-    const wrapper = mount(<Textarea />);
-    const instance = wrapper.instance();
-    instance.check = jest.fn();
-    instance.onBlur();
-    expect(instance.check).not.toHaveBeenCalled();
-  });
-
-  it('[onChange]: Should not check when onChange is not provided', () => {
-    const wrapper = mount(<Textarea />);
-    const instance = wrapper.instance();
-    instance.check = jest.fn();
-    instance.onChange({ target: { value: '' } });
-    expect(instance.check).not.toHaveBeenCalled();
-  });
-
-  // TODO: find a better way to do this
   it('[String maxLength]: Should not longer than maxLength', () => {
     let value = '';
     const wrapper = mount(
@@ -510,11 +274,12 @@ describe('Textarea component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength={1}
+        maxLength={2}
       />,
     );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: 'foobar' } });
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = 'foobar';
+    $input.simulate('change');
     expect(value).toEqual('');
   });
 
@@ -527,110 +292,285 @@ describe('Textarea component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength="10"
+        maxLength={'10'}
       />,
     );
-    const instance = wrapper.instance();
-    instance.onChange({ target: { value: 'foobar' } });
-    expect(value).toEqual('foobar');
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = 'foo';
+    $input.simulate('change');
+    expect(value).toEqual('foo');
   });
 
-  it('[String onChange setState err]: Should setState err: false', () => {
-    let value = 'foobar';
+  it('[String maxLength]: Should not longer than maxLength', () => {
+    let value = '';
     const wrapper = mount(
       <Textarea
         value={value}
         onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        maxLength={0}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = 'foo';
+    $input.simulate('change');
+    expect(value).toEqual('foo');
+  });
+
+  it('[String reg]: Should msgHtml be appeared', () => {
+    const wrapper = mount(
+      <Textarea
+        value="foobar"
+        onBlur={() => {}}
         onChange={() => {}}
         validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          reg: /^0x[a-fA-F0-9]{40}$/,
           check: true,
           showMsg: true,
           required: true,
+          msgOnError: '',
         }}
       />,
     );
-    const instance = wrapper.instance();
-    instance.value = 'foobar';
-    instance.onChange({ target: { value: '' } });
-    expect(wrapper.state().err).toEqual(false);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
 
-  it('[String invalid locale]: Should not call handleCheckEnd', () => {
-    let value = 'foobar';
+  it('[String reg]: Should not msgHtml be appeared', () => {
     const wrapper = mount(
       <Textarea
-        value={value}
+        value="0x0D36396E5f5EC58F0ff4569ED463CBEF03B0ba52"
         onBlur={() => {}}
         onChange={() => {}}
         validationOption={{
-          locale: 'foobar',
-        }}
-      />,
-    );
-    const instance = wrapper.instance();
-    instance.handleCheckEnd = jest.fn();
-    instance.check();
-    expect(instance.handleCheckEnd).not.toHaveBeenCalled();
-  });
-
-  it('[String reg]: Error msg node should be appear', () => {
-    let value = 'foobar';
-    const wrapper = mount(
-      <Textarea
-        value={value}
-        onBlur={() => {}}
-        onChange={() => {}}
-        validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
           reg: /^0x[a-fA-F0-9]{40}$/,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: '',
         }}
       />,
     );
-    // const instance = wrapper.instance();
-    const $input = wrapper.find('textarea');
+    const $input = wrapper.find(INPUT);
     $input.simulate('focus');
-    // instance.input.value = '';
-    // instance.onChange();
     $input.simulate('blur');
-    expect(wrapper.find('.msg.error').length).toEqual(1);
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  it('[String min]: Error msg node should be appear', () => {
-    let value = 'foobar';
+  it('[String reg]: Should not msgHtml be appeared with regMsg', () => {
+    const regMsg = 'regMsg';
     const wrapper = mount(
       <Textarea
-        value={value}
+        value="abc"
         onBlur={() => {}}
         onChange={() => {}}
         validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          reg: /^0x[a-fA-F0-9]{40}$/,
+          check: true,
+          showMsg: true,
+          regMsg,
+          required: true,
+          msgOnError: '',
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(regMsg);
+  });
+
+  it('[String length]: Should msgHtml be appeared when the length is not valid', () => {
+    const wrapper = mount(
+      <Textarea
+        value={'success'}
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
+  });
+
+  it('[String length]: Should msgHtml be appeared with name when the length is not valid', () => {
+    const wrapper = mount(
+      <Textarea
+        value={'success'}
+        onBlur={() => {}}
+        validationOption={{
+          name: 'foobar',
+          length: 5,
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual('foobar length must be 5');
+  });
+
+  it('[String length]: Should msgHtml be appeared', () => {
+    const wrapper = mount(
+      <Textarea
+        value={'success'}
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual('length must be 5');
+  });
+
+  it('[String length]: Should not msgHtml be appeared', () => {
+    const wrapper = mount(
+      <Textarea
+        value={'foo'}
+        onBlur={() => {}}
+        validationOption={{
+          length: 3,
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[String length]: Should state.msg not to be error message', () => {
+    const wrapper = mount(
+      <Textarea
+        value={'abcde'}
+        onBlur={() => {}}
+        validationOption={{
+          length: 5,
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[String min]: Should msgHtml be appeared', () => {
+    const wrapper = mount(
+      <Textarea
+        value="foobar"
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
           min: 10,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: '',
         }}
       />,
     );
-    const $input = wrapper.find('textarea');
+    const $input = wrapper.find(INPUT);
     $input.simulate('focus');
     $input.simulate('blur');
-    expect(wrapper.find('.msg.error').length).toEqual(1);
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
 
-  it('[String max]: Error msg node should be appear', () => {
-    let value = 'foobar';
+  it('[String min]: Should not msgHtml be appeared', () => {
     const wrapper = mount(
       <Textarea
-        value={value}
+        value="foobar"
         onBlur={() => {}}
         onChange={() => {}}
         validationOption={{
-          max: 1,
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          min: 6,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: '',
         }}
       />,
     );
-    const $input = wrapper.find('textarea');
+    const $input = wrapper.find(INPUT);
     $input.simulate('focus');
     $input.simulate('blur');
-    expect(wrapper.find('.msg.error').length).toEqual(1);
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  it('[validationOption.min and max string]: Should show error when the length is out out range', () => {
+  it('[String max]: Should msgHtml be appeared', () => {
+    const wrapper = mount(
+      <Textarea
+        value="foobar"
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          max: 1,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: '',
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
+  });
+
+  it('[String max]: Should not msgHtml be appeared', () => {
+    const wrapper = mount(
+      <Textarea
+        value="foobar"
+        onBlur={() => {}}
+        onChange={() => {}}
+        validationOption={{
+          locale: 'en-US',
+          type: 'string',
+          name: '',
+          max: 7,
+          check: true,
+          showMsg: true,
+          required: true,
+          msgOnError: '',
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[String min and max]: Should msgHtml be appeared when the length is out out range', () => {
     const wrapper = mount(
       <Textarea
         value="12345"
@@ -641,38 +581,90 @@ describe('Textarea component', () => {
         }}
       />,
     );
-    const $input = wrapper.find('textarea');
+    const $input = wrapper.find(INPUT);
     $input.simulate('focus');
     $input.simulate('blur');
-    expect(wrapper.find('.msg.error').length).toEqual(1);
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
+  });
+
+  it('[String min and max]: Should not msgHtml be appeared when the length is out out range', () => {
+    const wrapper = mount(
+      <Textarea
+        value="12345"
+        onBlur={() => {}}
+        validationOption={{
+          min: 1,
+          max: 10,
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[validationCallback]: Should call validationCallback', () => {
+    let valid = false;
+    const wrapper = mount(
+      <Textarea
+        onBlur={() => {}}
+        validationCallback={res => {
+          valid = res;
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(valid).toEqual(true);
+  });
+
+  it('[All props]: Should pass all props', () => {
+    const wrapper = mount(
+      <Textarea
+        id="id"
+        name="name"
+        tabIndex="1"
+        value=""
+        placeholder=""
+        classNameInput=""
+        classNameWrapper=""
+        classNameContainer=""
+        customStyleInput={{}}
+        customStyleWrapper={{}}
+        customStyleContainer={{}}
+      />,
+    );
+    expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
   });
 
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
     const restoreConsole = mockConsole();
     const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ locale: 'foobar' }} />);
-    const instance = wrapper.instance();
-    instance.onFocus();
-    instance.onBlur();
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
     expect(console.error).toHaveBeenCalled();
     restoreConsole();
   });
 
-  it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
-    const restoreConsole = mockConsole();
-    const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ type: 'foobar' }} />);
-    const instance = wrapper.instance();
-    instance.onFocus();
-    instance.onBlur();
-    expect(console.error).toHaveBeenCalled();
-    restoreConsole();
-  });
-
-  it('[console.error type null: Should console.error Please provide "type" in validationOption', () => {
+  it('[console.error type null]: Should console.error Please provide "type" in validationOption', () => {
     const restoreConsole = mockConsole();
     const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ type: null }} />);
-    const instance = wrapper.instance();
-    instance.onFocus();
-    instance.onBlur();
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    expect(console.error).toHaveBeenCalled();
+    restoreConsole();
+  });
+
+  it('[console.error type array]: Should console.error Please provide "type" in validationOption', () => {
+    const restoreConsole = mockConsole();
+    const wrapper = mount(<Textarea onBlur={() => {}} validationOption={{ type: 'array' }} />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
     expect(console.error).toHaveBeenCalled();
     restoreConsole();
   });

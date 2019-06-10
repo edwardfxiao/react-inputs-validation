@@ -32,6 +32,7 @@ var config = (module.exports = {
       {
         test: /\.(ts|tsx)$/,
         enforce: 'pre',
+        exclude: [PATH.NODE_MODULES_PATH],
         use: [
           {
             loader: 'tslint-loader',

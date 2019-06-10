@@ -4,13 +4,14 @@ input[type='password'],
 input[type='phone'],
 input[type='number'],
 input[type='text'],
+textarea,
 select {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  -webkit-border-radius: 0;
   -webkit-appearance: none;
-  -webkit-border-radius: 0 !important;
   background-color: white;
   background-position: right center;
   background-repeat: no-repeat;
@@ -235,6 +236,7 @@ input[type='radio'] {
 .radiobox__item.success .radiobox__label.checked:before {
   border-color: #2fca6f;
 }
+
 .radiobox__item.error .radiobox__label:before {
   border-color: #ff5a57;
 }

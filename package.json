@@ -33,7 +33,7 @@
     "prepublish": "npm run test:coverage",
     "jslint": "eslint ./src",
     "tslint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "babel": "BABEL_ENV=lib babel ./src/js/Inputs --out-dir ./lib/components --extensions '.ts,.tsx'",
+    "babel": "BABEL_ENV=lib babel ./src/js/Inputs --out-dir ./lib/components --extensions '.js,.tsx'",
     "build": "rm -rf lib && npm run babel && npm run build_prod",
     "webpack_dev": "rm -rf dist && NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack/development.config.js --progress --watch",
     "webpack_prod": "rm -rf dist && NODE_ENV=production ./node_modules/.bin/webpack --config ./webpack/production.config.js --progress -p",

@@ -12,3 +12,8 @@
 /stylelint.config.js
 /tsconfig.json
 /tslint.json
+/*.gif
+/dist
+/*.html
+/.github
+/rev-manifest.json

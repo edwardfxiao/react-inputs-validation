@@ -161,7 +161,6 @@ const component: React.FC<Props> = ({
   const handleOnKeyUp = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
       if (onKeyUp) {
-        check();
         onKeyUp(e);
       }
     },
@@ -291,7 +290,7 @@ const component: React.FC<Props> = ({
           if (customFunc && typeof customFunc === 'function') {
             const customFuncResult = customFunc(internalValue);
             if (customFuncResult !== true) {
-              handleCheckEnd(true, customFuncResult);
+              handleCheckEnd(true, customFuncResult, true);
               return;
             }
           }
@@ -308,10 +307,10 @@ const component: React.FC<Props> = ({
     },
     [internalValue],
   );
-  const handleCheckEnd = useCallback((err: boolean, message: string) => {
+  const handleCheckEnd = useCallback((err: boolean, message: string, fromCustomFunc: boolean = false) => {
     let msg = message;
     const { msgOnError } = option;
-    if (err && msgOnError) {
+    if (err && msgOnError && !fromCustomFunc) {
       msg = msgOnError;
     }
     setErr(err);
@@ -340,14 +339,6 @@ const component: React.FC<Props> = ({
       setInternalValue(String(value));
     },
     [value],
-  );
-  useEffect(
-    () => {
-      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
-        check();
-      }
-    },
-    [prevInternalValue, internalValue],
   );
   const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&

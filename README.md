@@ -81,7 +81,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**onBlur**                        |**Opt**|**Func**|**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**|**none**    |
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
-|onKeyUp                           |  Opt  |  Func  |                                             |  none      |
+|onKeyUp                           |  Opt  |  Func  | By providing ```onKeyUp```, the component will perform the checking every time when user types. |  none      |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -97,7 +97,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#custom-error-message)' section, which provides the extensibility for your own locale.**|**"en-US"** |
 |~~**validationOption.phoneCountry**~~|~~**Opt**~~|~~**Str**~~|~~**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**~~ <br><br>**No longer support after v1.4.0. For phone or email address validation please reffer to '[Phone and email validation example](#phone-email-validation-example)'**|~~**"en-US"**~~|
-|**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
+|**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
 
@@ -144,7 +144,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "" Custom regex.
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "" Custom regex error message.
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
-    // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what when it has error if it is provied.
+    // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
     // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
     //   if (res != 'milk') {
@@ -449,7 +449,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**onBlur**                        |**Opt**|**Func**|**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**|**none**    |
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
-|onKeyUp                           |  Opt  |  Func  |                                             |  none      |
+|onKeyUp                           |  Opt  |  Func  | By providing ```onKeyUp```, the component will perform the checking every time when user types. |  none      |
 |**validationOption**              |**Opt**|**obj** |**validationOption object, see below**|**{}**      |
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
@@ -463,7 +463,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#custom-error-message)' section, which provides the extensibility for your own locale.**|**"en-US"** |
-|**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what when it has error if it is provied.**|**""**      |
+|**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 
 ```js
@@ -510,7 +510,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // length: 2, //Optional.[Number].Default: 0. Validation of exact length of the value.
     // reg: /^\d{18}|\d{15}$/, //Optional.[Bool].Default: "". Custom regex.
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "". Custom regex error message.
-    // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+    // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
     // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
     //   if (res != 'banana') {

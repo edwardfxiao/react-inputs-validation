@@ -881,7 +881,7 @@ class Index extends Component {
                         // reg: /^\d{18}|\d{15}$/, // Optional.[Bool].Default: "" Custom regex.
                         // regMsg: 'failed in reg.test(${value})', // Optional.[String].Default: "" Custom regex error message.
                         // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
-                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "" Show your custom error message no matter what when it has error if it is provied.
+                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "" Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                         // customFunc: res => { // Optional.[Func].Default: none. Custom function. Returns true or err message
                         //   if (res != 'milk') {
@@ -1143,7 +1143,7 @@ class Index extends Component {
                         // length: 2, // Optional.[Number].Default: 0. Validation of exact length of the value.
                         // reg: /^\d{18}|\d{15}$/, // Optional.[Bool].Default: "". Custom regex.
                         // regMsg: 'failed in reg.test(${value})', // Optional.[String].Default: "". Custom regex error message.
-                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
+                        // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                         // customFunc: res => { // Optional.[Func].Default: none. Custom function. Returns true or err message
                         //   if (res != 'banana') {

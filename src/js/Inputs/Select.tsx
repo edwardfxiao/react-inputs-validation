@@ -4,7 +4,6 @@ import message from './message';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, CONTAINER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'select';
-
 /* istanbul ignore next */
 if (!String.prototype.startsWith) {
   String.prototype.startsWith = function(searchString, position) {
@@ -12,7 +11,6 @@ if (!String.prototype.startsWith) {
     return this.indexOf(searchString, p) === p;
   };
 }
-
 interface DefaultValidationOption {
   name?: string;
   check?: boolean;
@@ -22,7 +20,6 @@ interface DefaultValidationOption {
   msgOnError?: string;
   msgOnSuccess?: string;
 }
-
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
@@ -42,7 +39,25 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     msgOnSuccess,
   };
 };
-
+interface DefaultAsyncMsgObj {
+  error?: boolean;
+  message?: string;
+  showOnError?: boolean;
+  showOnSuccess?: boolean;
+}
+const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
+  let { error, message, showOnError, showOnSuccess } = obj;
+  error = typeof error !== 'undefined' ? error : false;
+  message = typeof message !== 'undefined' ? message : '';
+  showOnError = typeof showOnError !== 'undefined' ? showOnError : true;
+  showOnSuccess = typeof showOnSuccess !== 'undefined' ? showOnSuccess : false;
+  return {
+    error,
+    message,
+    showOnError,
+    showOnSuccess,
+  };
+};
 export const isValidValue = (list: OptionListItem[], value: any) => {
   let res = false;
   if (list.length) {
@@ -55,7 +70,6 @@ export const isValidValue = (list: OptionListItem[], value: any) => {
   }
   return res;
 };
-
 export const getItem = (list: OptionListItem[], value: any) => {
   let res = null;
   if (list.length) {
@@ -68,7 +82,6 @@ export const getItem = (list: OptionListItem[], value: any) => {
   }
   return res;
 };
-
 export const getIndex = (list: OptionListItem[], value: string) => {
   let key = -1;
   for (let i = 0; i < list.length; i += 1) {
@@ -79,12 +92,10 @@ export const getIndex = (list: OptionListItem[], value: string) => {
   }
   return key;
 };
-
 interface OptionListItem {
   id: string;
   name: string;
 }
-
 interface Props {
   tabIndex?: string | number | undefined;
   id?: string;
@@ -98,6 +109,7 @@ interface Props {
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   validationOption?: object;
+  asyncMsgObj?: object;
   selectHtml?: React.ReactNode;
   selectOptionListItemHtml?: React.ReactNode;
   classNameWrapper?: string;
@@ -114,16 +126,13 @@ interface Props {
   customStyleOptionListItem?: object;
   validationCallback?: (res: boolean) => void;
 }
-
 interface Node {
   [key: string]: any;
 }
-
 let globalVariableIsFocusing: boolean = false;
 let globalVariableIsCorrected: boolean = false;
 let globalVariableCurrentFocus: any | null = null;
 let globalVariableTypingTimeout: any | null = null;
-
 const component: React.FC<Props> = ({
   tabIndex = null,
   id = '',
@@ -145,6 +154,7 @@ const component: React.FC<Props> = ({
   customStyleOptionListContainer = {},
   customStyleDropdownIcon = {},
   validationOption = {},
+  asyncMsgObj = {},
   selectHtml = null,
   selectOptionListItemHtml = null,
   onChange = () => {},
@@ -163,6 +173,7 @@ const component: React.FC<Props> = ({
   const initKeycodeList: number[] = [];
   const [keycodeList, setKeycodeList] = useState(initKeycodeList);
   const option = getDefaultValidationOption(validationOption);
+  const asyncObj = getDefaultAsyncObj(asyncMsgObj);
   const $wrapper = useRef(null);
   const $itemsWrapper = useRef(null);
   const $elWrapper: { [key: string]: any } | null = $wrapper;
@@ -469,6 +480,21 @@ const component: React.FC<Props> = ({
       }
     },
     [prevInternalValue, internalValue],
+  );
+  useEffect(
+    () => {
+      if (asyncObj) {
+        if (asyncObj.message) {
+          if (asyncObj.showOnError) {
+            handleCheckEnd(asyncObj.error, asyncObj.message);
+          }
+          if (!asyncObj.error && asyncObj.showOnSuccess) {
+            setSuccessMsg(asyncObj.message);
+          }
+        }
+      }
+    },
+    [asyncMsgObj],
   );
   const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&

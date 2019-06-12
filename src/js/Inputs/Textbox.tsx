@@ -61,6 +61,25 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     customFunc,
   };
 };
+interface DefaultAsyncMsgObj {
+  error?: boolean;
+  message?: string;
+  showOnError?: boolean;
+  showOnSuccess?: boolean;
+}
+const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
+  let { error, message, showOnError, showOnSuccess } = obj;
+  error = typeof error !== 'undefined' ? error : false;
+  message = typeof message !== 'undefined' ? message : '';
+  showOnError = typeof showOnError !== 'undefined' ? showOnError : true;
+  showOnSuccess = typeof showOnSuccess !== 'undefined' ? showOnSuccess : false;
+  return {
+    error,
+    message,
+    showOnError,
+    showOnSuccess,
+  };
+};
 interface Props {
   tabIndex?: string | number | null;
   id?: string;
@@ -79,6 +98,7 @@ interface Props {
   customStyleWrapper?: object;
   customStyleContainer?: object;
   validationOption?: object;
+  asyncMsgObj?: object;
   onChange: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
@@ -124,6 +144,7 @@ const component: React.FC<Props> = ({
   customStyleWrapper = {},
   customStyleContainer = {},
   validationOption = {},
+  asyncMsgObj = {},
   onChange = (v: string, e: React.ChangeEvent<HTMLElement>) => {},
   onBlur = null,
   onFocus = null,
@@ -137,6 +158,7 @@ const component: React.FC<Props> = ({
   const [internalValue, setInternalValue] = useState(String(value));
   const prevInternalValue = usePrevious(internalValue);
   const option = getDefaultValidationOption(validationOption);
+  const asyncObj = getDefaultAsyncObj(asyncMsgObj);
   const $input = useRef(null);
   const $el: { [key: string]: any } | null = $input;
   const handleOnBlur = useCallback(
@@ -340,6 +362,21 @@ const component: React.FC<Props> = ({
       setInternalValue(String(value));
     },
     [value],
+  );
+  useEffect(
+    () => {
+      if (asyncObj) {
+        if (asyncObj.message) {
+          if (asyncObj.showOnError) {
+            handleCheckEnd(asyncObj.error, asyncObj.message);
+          }
+          if (!asyncObj.error && asyncObj.showOnSuccess) {
+            setSuccessMsg(asyncObj.message);
+          }
+        }
+      }
+    },
+    [asyncMsgObj],
   );
   const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&

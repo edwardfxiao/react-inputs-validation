@@ -890,6 +890,12 @@ class Index extends Component {
                         //   return true;
                         // }
                       }}
+                      // asyncMsgObj={{
+                      //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
+                      //   message: '', // Optional.[String].Default: "". (Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'
+                      //   showOnError: true, // Optional.[Bool].Default: true. (Server response) Show AJAX error message or not.
+                      //   showOnSuccess: false, // Optional.[Bool].Default: false. (Server response) Show AJAX success message or not.
+                      // }}
                     />
                     {/*<div>
                       <input
@@ -951,6 +957,12 @@ class Index extends Component {
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
+                      // asyncMsgObj={{
+                      //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
+                      //   message: '', // Optional.[String].Default: "". (Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'
+                      //   showOnError: true, // Optional.[Bool].Default: true. (Server response) Show AJAX error message or not.
+                      //   showOnSuccess: false, // Optional.[Bool].Default: false. (Server response) Show AJAX success message or not.
+                      // }}
                     />
                     {/*<div
                       onClick={() => {
@@ -1009,6 +1021,12 @@ class Index extends Component {
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
+                      // asyncMsgObj={{
+                      //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
+                      //   message: '', // Optional.[String].Default: "". (Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'
+                      //   showOnError: true, // Optional.[Bool].Default: true. (Server response) Show AJAX error message or not.
+                      //   showOnSuccess: false, // Optional.[Bool].Default: false. (Server response) Show AJAX success message or not.
+                      // }}
                     />
                     {/*<div
                       onClick={() => {
@@ -1078,6 +1096,12 @@ class Index extends Component {
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                       }}
+                      // asyncMsgObj={{
+                      //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
+                      //   message: '', // Optional.[String].Default: "". (Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'
+                      //   showOnError: true, // Optional.[Bool].Default: true. (Server response) Show AJAX error message or not.
+                      //   showOnSuccess: false, // Optional.[Bool].Default: false. (Server response) Show AJAX success message or not.
+                      // }}
                     />
                     {/*<div
                       onClick={() => {
@@ -1152,6 +1176,12 @@ class Index extends Component {
                         //   return true;
                         // }
                       }}
+                      // asyncMsgObj={{
+                      //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
+                      //   message: '', // Optional.[String].Default: "". (Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'
+                      //   showOnError: true, // Optional.[Bool].Default: true. (Server response) Show AJAX error message or not.
+                      //   showOnSuccess: false, // Optional.[Bool].Default: false. (Server response) Show AJAX success message or not.
+                      // }}
                     />
                     {/*<div>
                       <input

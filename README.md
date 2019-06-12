@@ -26,6 +26,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 * <a href="https://codesandbox.io/s/v3wq0llmo3">Online demo form example playground</a>
 * <a href="https://codesandbox.io/s/pjom8r78x7">Custom control</a>(when ```check: false```)
 * <a href="https://codesandbox.io/s/1r77ozkrk7">Custom function</a>(when providing ```customFunc```)
+* <a href="https://codesandbox.io/s/custom-function-further-control-when-providing-customfunc-yjwch">Custom function further control</a>(when providing ```customFunc```)
 * <a href="https://codesandbox.io/s/q9vqmk4j84">Custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
 * <a href="https://codesandbox.io/s/13qo2rqxjj">Phone and email validation example</a>(handled with ```customFunc```)
 

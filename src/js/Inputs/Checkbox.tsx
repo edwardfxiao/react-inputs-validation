@@ -13,7 +13,6 @@ interface DefaultValidationOption {
   msgOnError?: string;
   msgOnSuccess?: string;
 }
-
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
@@ -33,7 +32,25 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     msgOnSuccess,
   };
 };
-
+interface DefaultAsyncMsgObj {
+  error?: boolean;
+  message?: string;
+  showOnError?: boolean;
+  showOnSuccess?: boolean;
+}
+const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
+  let { error, message, showOnError, showOnSuccess } = obj;
+  error = typeof error !== 'undefined' ? error : false;
+  message = typeof message !== 'undefined' ? message : '';
+  showOnError = typeof showOnError !== 'undefined' ? showOnError : true;
+  showOnSuccess = typeof showOnSuccess !== 'undefined' ? showOnSuccess : false;
+  return {
+    error,
+    message,
+    showOnError,
+    showOnSuccess,
+  };
+};
 interface Props {
   tabIndex?: string | number | null;
   id?: string;
@@ -48,6 +65,7 @@ interface Props {
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   validationOption?: object;
+  asyncMsgObj?: object;
   classNameInput?: string;
   classNameWrapper?: string;
   classNameInputBox?: string;
@@ -58,7 +76,6 @@ interface Props {
   customStyleInputBox?: object;
   validationCallback?: (res: boolean) => void;
 }
-
 const component: React.FC<Props> = ({
   tabIndex = null,
   id = '',
@@ -77,6 +94,7 @@ const component: React.FC<Props> = ({
   customStyleInputBox = {},
   customStyleContainer = {},
   validationOption = {},
+  asyncMsgObj = {},
   onChange = () => {},
   onBlur = null,
   onFocus = null,
@@ -89,6 +107,7 @@ const component: React.FC<Props> = ({
   const [internalChecked, setInternalChecked] = useState(checked);
   const prevInternalChecked = usePrevious(internalChecked);
   const option = getDefaultValidationOption(validationOption);
+  const asyncObj = getDefaultAsyncObj(asyncMsgObj);
   const $input = useRef(null);
   const $el: { [key: string]: any } | null = $input;
   const handleOnBlur = useCallback(
@@ -197,6 +216,21 @@ const component: React.FC<Props> = ({
       }
     },
     [prevInternalChecked, internalChecked],
+  );
+  useEffect(
+    () => {
+      if (asyncObj) {
+        if (asyncObj.message) {
+          if (asyncObj.showOnError) {
+            handleCheckEnd(asyncObj.error, asyncObj.message);
+          }
+          if (!asyncObj.error && asyncObj.showOnSuccess) {
+            setSuccessMsg(asyncObj.message);
+          }
+        }
+      }
+    },
+    [asyncMsgObj],
   );
   const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
     reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;

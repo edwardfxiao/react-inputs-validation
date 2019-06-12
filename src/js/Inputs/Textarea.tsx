@@ -143,6 +143,7 @@ const component: React.FC<Props> = ({
   const handleOnKeyUp = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
       if (onKeyUp) {
+        check();
         onKeyUp(e);
       }
     },

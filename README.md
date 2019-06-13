@@ -29,7 +29,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 * <a href="https://codesandbox.io/s/custom-function-further-control-when-providing-customfunc-yjwch">Custom function further control</a>(when providing ```customFunc```)
 * <a href="https://codesandbox.io/s/q9vqmk4j84">Example of custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
 * <a href="https://codesandbox.io/s/13qo2rqxjj">Example of phone and email validation</a>(handled with ```customFunc```)
-* <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of checking username existence (suggest not using asyncMsgObj) </a>(handled with ```customFunc```)
+* <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of checking username existence (suggest not using asyncMsgObj. And it is for ```<Textbox>``` and ```<Textarea>``` only) </a>(handled with ```customFunc```)
 * <a href="https://codesandbox.io/s/asyncmsgobj-blmce">Example of asyncMsgObj </a>(when providing ```asyncMsgObj```)
 
 # Docs Link
@@ -95,7 +95,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
 |**validationOption.length**       |**Opt**|**Num**|**Validation of exact length of the value.**|**0**       |
 |**validationOption.compare**      |**Opt**|**Str** |**Compare this value to 3 to see if they are equal.**|**""**      |
-|**<a name="customFunc"></a>validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message.**|  **none**      |
+|**<a name="customFunc"></a>validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }.**|  **none**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#custom-error-message)' section, which provides the extensibility for your own locale.**|**"en-US"** |
@@ -153,7 +153,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
+    // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }
     //   if (res != 'milk') {
     //     return 'Description cannot be other things but milk';
     //   }
@@ -500,7 +500,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationOption.min**          |**Opt**|**Num**|**Validation of min length.**|**0**       |
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length.**|**0**       |
 |**validationOption.length**       |**Opt**|**Num**|**Validation of exact length of the value.**|**0**       |
-|**validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message.**|  **none**      |
+|**validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }.**|  **none**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#custom-error-message)' section, which provides the extensibility for your own locale.**|**"en-US"** |
@@ -557,7 +557,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "". Custom regex error message.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
+    // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }
     //   if (res != 'banana') {
     //     return 'Description cannot be other things but banana';
     //   }

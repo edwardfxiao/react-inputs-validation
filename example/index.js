@@ -883,12 +883,12 @@ class Index extends Component {
                         // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "" Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-                        // customFunc: res => { // Optional.[Func].Default: none. Custom function. Returns true or err message
-                        //   if (res != 'milk') {
-                        //     return 'Name cannot be other things but milk';
-                        //   }
-                        //   return true;
-                        // }
+                        customFunc: res => { // Optional.[Func].Default: none. Custom function. Returns true or err message
+                          if (res != 'milk') {
+                            return 'Name cannot be other things but milk';
+                          }
+                          return true;
+                        }
                       }}
                       // asyncMsgObj={{
                       //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -1169,12 +1169,12 @@ class Index extends Component {
                         // regMsg: 'failed in reg.test(${value})', // Optional.[String].Default: "". Custom regex error message.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-                        // customFunc: res => { // Optional.[Func].Default: none. Custom function. Returns true or err message
-                        //   if (res != 'banana') {
-                        //     return 'Description cannot be other things but banana';
-                        //   }
-                        //   return true;
-                        // }
+                        customFunc: res => { // Optional.[Func].Default: none. Custom function. Returns true or err message
+                          if (res != 'banana') {
+                            return 'Description cannot be other things but banana';
+                          }
+                          return true;
+                        }
                       }}
                       // asyncMsgObj={{
                       //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.

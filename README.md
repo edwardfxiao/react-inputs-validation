@@ -23,13 +23,14 @@ import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-vali
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
 # Codesandbox Examples
-* <a href="https://codesandbox.io/s/v3wq0llmo3">Online demo form example playground</a>
-* <a href="https://codesandbox.io/s/pjom8r78x7">Custom control</a>(when ```check: false```)
-* <a href="https://codesandbox.io/s/1r77ozkrk7">Custom function</a>(when providing ```customFunc```)
+* <a href="https://codesandbox.io/s/v3wq0llmo3">Example of online demo form playground</a>
+* <a href="https://codesandbox.io/s/pjom8r78x7">Example of custom control</a>(when ```check: false```)
+* <a href="https://codesandbox.io/s/1r77ozkrk7">Example of custom function</a>(when providing ```customFunc```)
 * <a href="https://codesandbox.io/s/custom-function-further-control-when-providing-customfunc-yjwch">Custom function further control</a>(when providing ```customFunc```)
-* <a href="https://codesandbox.io/s/q9vqmk4j84">Custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
-* <a href="https://codesandbox.io/s/13qo2rqxjj">Phone and email validation example</a>(handled with ```customFunc```)
-* <a href="https://codesandbox.io/s/asyncmsgobj-blmce">asyncMsgObj example</a>(when providing ```asyncMsgObj```)
+* <a href="https://codesandbox.io/s/q9vqmk4j84">Example of custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
+* <a href="https://codesandbox.io/s/13qo2rqxjj">Example of phone and email validation</a>(handled with ```customFunc```)
+* <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of checking username existence (suggest not using asyncMsgObj) </a>(handled with ```customFunc```)
+* <a href="https://codesandbox.io/s/asyncmsgobj-blmce">Example of asyncMsgObj </a>(when providing ```asyncMsgObj```)
 
 # Docs Link
 [Textbox](#Textbox)

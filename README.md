@@ -23,13 +23,14 @@ import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-vali
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
 # Codesandbox Examples
-* <a href="https://codesandbox.io/s/v3wq0llmo3">Online demo form example playground</a>
-* <a href="https://codesandbox.io/s/pjom8r78x7">Custom control</a>(when ```check: false```)
-* <a href="https://codesandbox.io/s/1r77ozkrk7">Custom function</a>(when providing ```customFunc```)
+* <a href="https://codesandbox.io/s/v3wq0llmo3">Example of online demo form playground</a>
+* <a href="https://codesandbox.io/s/pjom8r78x7">Example of custom control</a>(when ```check: false```)
+* <a href="https://codesandbox.io/s/1r77ozkrk7">Example of custom function</a>(when providing ```customFunc```)
 * <a href="https://codesandbox.io/s/custom-function-further-control-when-providing-customfunc-yjwch">Custom function further control</a>(when providing ```customFunc```)
-* <a href="https://codesandbox.io/s/q9vqmk4j84">Custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
-* <a href="https://codesandbox.io/s/13qo2rqxjj">Phone and email validation example</a>(handled with ```customFunc```)
-* <a href="https://codesandbox.io/s/asyncmsgobj-blmce">asyncMsgObj example</a>(when providing ```asyncMsgObj```)
+* <a href="https://codesandbox.io/s/q9vqmk4j84">Example of custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
+* <a href="https://codesandbox.io/s/13qo2rqxjj">Example of phone and email validation</a>(handled with ```customFunc```)
+* <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>(Async checking for ```<Textbox>``` and ```<Textarea>``` only. Handled with ```customFunc```)
+* <a href="https://codesandbox.io/s/asyncmsgobj-blmce">Example of asyncMsgObj </a>(when providing ```asyncMsgObj```)
 
 # Docs Link
 [Textbox](#Textbox)
@@ -44,7 +45,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 [Custom Error Message Guid(can be multiple locales)](#custom-error-message)
 
-[Phone and email validation example](#phone-email-validation-example)(Since the phone and email validation are no longer  handled internally after v1.4.0.)
+[Example of phone and email validation](#phone-email-validation-example)(Since the phone and email validation are no longer  handled internally after v1.4.0.)
 
 # Installation
 ```sh
@@ -94,15 +95,15 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
 |**validationOption.length**       |**Opt**|**Num**|**Validation of exact length of the value.**|**0**       |
 |**validationOption.compare**      |**Opt**|**Str** |**Compare this value to 3 to see if they are equal.**|**""**      |
-|**<a name="customFunc"></a>validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message.**|  **none**      |
+|**<a name="customFunc"></a>validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }.**|  **none**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#custom-error-message)' section, which provides the extensibility for your own locale.**|**"en-US"** |
-|~~**validationOption.phoneCountry**~~|~~**Opt**~~|~~**Str**~~|~~**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**~~ <br><br>**No longer support after v1.4.0. For phone or email address validation please reffer to '[Phone and email validation example](#phone-email-validation-example)'**|~~**"en-US"**~~|
+|~~**validationOption.phoneCountry**~~|~~**Opt**~~|~~**Str**~~|~~**Useful when the validationOption['type'] is phone. Check if the phone number matchs en-US phone number format.**~~ <br><br>**No longer support after v1.4.0. For phone or email address validation please reffer to '[Example of phone and email validation](#phone-email-validation-example)'**|~~**"en-US"**~~|
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 |**asyncMsgObj.error** |**Opt**|**Bool** |**(Server response) Backend validation result.**|**false**      |
-|**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'**|**""**      |
+|**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST' (For Textbox or Textarea, better reffer to <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>**|**""**      |
 |**asyncMsgObj.showOnError** |**Opt**|**Bool** |**(Server response) Show AJAX error message or not.**|**true**      |
 |**asyncMsgObj.showOnSuccess** |**Opt**|**Bool** |**(Server response) Show AJAX success message or not.**|**false**      |
 
@@ -152,7 +153,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
+    // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }
     //   if (res != 'milk') {
     //     return 'Description cannot be other things but milk';
     //   }
@@ -499,14 +500,14 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationOption.min**          |**Opt**|**Num**|**Validation of min length.**|**0**       |
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length.**|**0**       |
 |**validationOption.length**       |**Opt**|**Num**|**Validation of exact length of the value.**|**0**       |
-|**validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message.**|  **none**      |
+|**validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }.**|  **none**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
 |**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#custom-error-message)' section, which provides the extensibility for your own locale.**|**"en-US"** |
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 |**asyncMsgObj.error** |**Opt**|**Bool** |**(Server response) Backend validation result.**|**false**      |
-|**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'**|**""**      |
+|**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST' (For Textbox or Textarea, better reffer to <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>**|**""**      |
 |**asyncMsgObj.showOnError** |**Opt**|**Bool** |**(Server response) Show AJAX error message or not.**|**true**      |
 |**asyncMsgObj.showOnSuccess** |**Opt**|**Bool** |**(Server response) Show AJAX success message or not.**|**false**      |
 
@@ -556,7 +557,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "". Custom regex error message.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message
+    // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }
     //   if (res != 'banana') {
     //     return 'Description cannot be other things but banana';
     //   }
@@ -572,7 +573,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 />
 ```
 
-### <a name="phone-email-validation-example"></a>Phone and email validation example
+### <a name="phone-email-validation-example"></a>Example of phone and email validation
 <a href="https://codesandbox.io/s/13qo2rqxjj">codesandbox example</a>
 ```js
  import validator from 'validator';
@@ -594,7 +595,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
      }
    }}
  />
- 
+
  // Email
  <Textbox
    ...

@@ -247,22 +247,18 @@ const component: React.FC<Props> = ({
           }
           if (customFunc && typeof customFunc === 'function') {
             const customFuncResult = await customFunc(internalValue);
-            if (typeof customFuncResult === 'undefined') {
-              return;
-            } else {
-              if (typeof customFuncResult === 'object') {
-                if (typeof customFuncResult.error === 'boolean' && typeof customFuncResult.message === 'string') {
-                  if (customFuncResult.error === false && customFuncResult.showOnSuccess === true) {
-                    setSuccessMsg(customFuncResult.message);
-                  }
-                  handleCheckEnd(customFuncResult.error, customFuncResult.message, true);
+            if (typeof customFuncResult === 'object') {
+              if (typeof customFuncResult.error === 'boolean' && typeof customFuncResult.message === 'string') {
+                if (customFuncResult.error === false && customFuncResult.showOnSuccess === true) {
+                  setSuccessMsg(customFuncResult.message);
                 }
-                return;
+                handleCheckEnd(customFuncResult.error, customFuncResult.message, true);
               }
-              if (customFuncResult !== true) {
-                handleCheckEnd(true, customFuncResult, true);
-                return;
-              }
+              return;
+            }
+            if (customFuncResult !== true) {
+              handleCheckEnd(true, customFuncResult, true);
+              return;
             }
           }
           if (msgOnSuccess) {

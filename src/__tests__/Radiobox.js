@@ -202,6 +202,43 @@ describe('Radiobox component', () => {
     expect(value).toEqual(OPTION_LIST[1].id);
   });
 
+  it('[asyncObj]: Should show error', () => {
+    const wrapper = mount(<Radiobox onBlur={() => {}} asyncMsgObj={{}} />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    wrapper.setProps({ asyncMsgObj: { error: true, message: 'has error' } });
+    expect(
+      wrapper
+        .update()
+        .find(`.${MSG_CLASS_IDENTITIFIER}`)
+        .text(),
+    ).toEqual('has error');
+  });
+
+  it('[asyncObj]: Should not show error', () => {
+    const wrapper = mount(<Radiobox value={OPTION_LIST[1].id} optionList={OPTION_LIST} onBlur={() => {}} asyncMsgObj={{}} />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    wrapper.setProps({ asyncMsgObj: { error: true, message: 'has error', showOnError: false } });
+    expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[asyncObj]: Should show success', () => {
+    const wrapper = mount(<Radiobox onBlur={() => {}} asyncMsgObj={{}} />);
+    const $wrapper = wrapper.find(WRAPPER);
+    $wrapper.simulate('focus');
+    $wrapper.simulate('blur');
+    wrapper.setProps({ asyncMsgObj: { error: false, message: 'success', showOnSuccess: true } });
+    expect(
+      wrapper
+        .update()
+        .find(`.${MSG_CLASS_IDENTITIFIER}`)
+        .text(),
+    ).toEqual('success');
+  });
+
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
     const restoreConsole = mockConsole();
     const wrapper = mount(<Radiobox optionList={OPTION_LIST} onBlur={() => {}} validationOption={{ locale: 'foobar' }} />);

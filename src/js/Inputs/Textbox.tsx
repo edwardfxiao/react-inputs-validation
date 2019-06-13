@@ -215,7 +215,7 @@ const component: React.FC<Props> = ({
     [err],
   );
   const check = useCallback(
-    () => {
+    async () => {
       const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = option;
       if (!check) {
         return;
@@ -311,7 +311,16 @@ const component: React.FC<Props> = ({
             }
           }
           if (customFunc && typeof customFunc === 'function') {
-            const customFuncResult = customFunc(internalValue);
+            const customFuncResult = await customFunc(internalValue);
+            if (typeof customFuncResult === 'object') {
+              if (typeof customFuncResult.error === 'boolean' && typeof customFuncResult.message === 'string') {
+                if (customFuncResult.error === false && customFuncResult.showOnSuccess === true) {
+                  setSuccessMsg(customFuncResult.message);
+                }
+                handleCheckEnd(customFuncResult.error, customFuncResult.message, true);
+              }
+              return;
+            }
             if (customFuncResult !== true) {
               handleCheckEnd(true, customFuncResult, true);
               return;

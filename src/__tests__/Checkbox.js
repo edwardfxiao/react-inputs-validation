@@ -209,6 +209,44 @@ describe('Checkbox component', () => {
     expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
   });
 
+
+  it('[asyncObj]: Should show error', () => {
+    const wrapper = mount(<Checkbox onBlur={() => {}} asyncMsgObj={{}} />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    wrapper.setProps({ asyncMsgObj: { error: true, message: 'has error' } });
+    expect(
+      wrapper
+        .update()
+        .find(`.${MSG_CLASS_IDENTITIFIER}`)
+        .text(),
+    ).toEqual('has error');
+  });
+
+  it('[asyncObj]: Should not show error', () => {
+    const wrapper = mount(<Checkbox checked={true} onBlur={() => {}} asyncMsgObj={{}} />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    wrapper.setProps({ asyncMsgObj: { error: true, message: 'has error', showOnError: false } });
+    expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
+  });
+
+  it('[asyncObj]: Should show success', () => {
+    const wrapper = mount(<Checkbox onBlur={() => {}} asyncMsgObj={{}} />);
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.simulate('blur');
+    wrapper.setProps({ asyncMsgObj: { error: false, message: 'success', showOnSuccess: true } });
+    expect(
+      wrapper
+        .update()
+        .find(`.${MSG_CLASS_IDENTITIFIER}`)
+        .text(),
+    ).toEqual('success');
+  });
+
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {
     const restoreConsole = mockConsole();
     const wrapper = mount(<Checkbox onBlur={() => {}} validationOption={{ locale: 'foobar' }} />);

@@ -1,6 +1,7 @@
 import 'core-js/es6/map';
 import 'core-js/es6/set';
 import 'raf/polyfill';
+import 'babel-polyfill';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
@@ -882,14 +883,52 @@ class Index extends Component {
                         // regMsg: 'failed in reg.test(${value})', // Optional.[String].Default: "" Custom regex error message.
                         // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "" Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
-                        // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+                        // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
                         // customFunc: res => { // Optional.[Func].Default: none. Custom function. Returns true or err message
                         //   if (res != 'milk') {
                         //     return 'Name cannot be other things but milk';
                         //   }
                         //   return true;
                         // }
+                        // customFunc: async v => {
+                        //   if (v === '') {
+                        //     this.setState({ hasError: true });
+                        //     return 'Name is required.';
+                        //   }
+                        //   if (v.length < 4) {
+                        //     this.setState({ hasError: true });
+                        //     return 'Name needs at least 4 length.';
+                        //   }
+                        //   let usernameRes = null;
+                        //   await fetch('https://jsonplaceholder.typicode.com/todos/1')
+                        //     .then(response => {
+                        //       return response.json();
+                        //     })
+                        //     .then(json => {
+                        //       console.log('parsed json', json);
+                        //       usernameRes = true;
+                        //     })
+                        //     .catch(ex => {
+                        //       console.log('parsing failed', ex);
+                        //     });
+                        //   if (usernameRes === false) {
+                        //     this.setState({ hasError: true });
+                        //     return {
+                        //       error: true,
+                        //       message: 'Username already exist.',
+                        //     };
+                        //   }
+                        //   if (usernameRes === true) {
+                        //     this.setState({ hasError: false });
+                        //     return {
+                        //       error: false,
+                        //       message: 'Username does not already exist.',
+                        //       showOnSuccess: true,
+                        //     };
+                        //   }
+                        // },
                       }}
+                      // asyncMsgObj={this.state.nameAsyncMsgObj}
                       // asyncMsgObj={{
                       //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
                       //   message: '', // Optional.[String].Default: "". (Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'

@@ -29,6 +29,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 * <a href="https://codesandbox.io/s/custom-function-further-control-when-providing-customfunc-yjwch">Custom function further control</a>(when providing ```customFunc```)
 * <a href="https://codesandbox.io/s/q9vqmk4j84">Custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
 * <a href="https://codesandbox.io/s/13qo2rqxjj">Phone and email validation example</a>(handled with ```customFunc```)
+* <a href="https://codesandbox.io/s/asyncmsgobj-blmce">asyncMsgObj example</a>(when providing ```asyncMsgObj```)
 
 # Docs Link
 [Textbox](#Textbox)

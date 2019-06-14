@@ -3,7 +3,6 @@
 
 React form input validation components. Online demo examples.
 # <img src="https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/react-inputs-validation.gif" />
-
 # Online Demo
 <a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>
 

@@ -426,7 +426,6 @@ const component: React.FC<Props> = ({
           id={id}
           name={name}
           type={type}
-          value={internalValue}
           disabled={disabled}
           autoComplete={autoComplete}
           maxLength={Number(maxLength)}

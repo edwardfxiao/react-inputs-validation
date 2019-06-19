@@ -3,11 +3,20 @@
 
 React form input validation components. Online demo examples.
 # <img src="https://raw.githubusercontent.com/edwardfhsiao/react-inputs-validation/master/react-inputs-validation.gif" />
-
 # Online Demo
 <a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>
 
 <a href="https://github.com/edwardfhsiao/react-inputs-validation/blob/gh-pages/example/index.js">Demo source code</a>
+
+# Codesandbox Examples
+* <a href="https://codesandbox.io/s/v3wq0llmo3">Example of online demo form playground</a>
+* <a href="https://codesandbox.io/s/pjom8r78x7">Example of custom control</a>(when ```check: false```)
+* <a href="https://codesandbox.io/s/1r77ozkrk7">Example of custom function</a>(when providing ```customFunc```)
+* <a href="https://codesandbox.io/s/custom-function-further-control-when-providing-customfunc-yjwch">Example of custom function further control</a>(when providing ```customFunc```)
+* <a href="https://codesandbox.io/s/q9vqmk4j84">Example of custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
+* <a href="https://codesandbox.io/s/13qo2rqxjj">Example of phone and email validation</a>(handled with ```customFunc```)
+* <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>(Async checking for ```<Textbox>``` and ```<Textarea>``` only. Handled with ```customFunc```)
+* <a href="https://codesandbox.io/s/asyncmsgobj-blmce">Example of asyncMsgObj </a>(when providing ```asyncMsgObj```)
 
 ###  :tada: For version >= 3.0.0, please update react and react-dom to at least ```16.8.6```, since it is rewrited with hooks.
 ```js
@@ -22,15 +31,6 @@ React form input validation components. Online demo examples.
 import { Textbox, Textarea, Radiobox, Checkbox, Select } from 'react-inputs-validation';
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
-# Codesandbox Examples
-* <a href="https://codesandbox.io/s/v3wq0llmo3">Example of online demo form playground</a>
-* <a href="https://codesandbox.io/s/pjom8r78x7">Example of custom control</a>(when ```check: false```)
-* <a href="https://codesandbox.io/s/1r77ozkrk7">Example of custom function</a>(when providing ```customFunc```)
-* <a href="https://codesandbox.io/s/custom-function-further-control-when-providing-customfunc-yjwch">Custom function further control</a>(when providing ```customFunc```)
-* <a href="https://codesandbox.io/s/q9vqmk4j84">Example of custom locales</a>(when providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```)
-* <a href="https://codesandbox.io/s/13qo2rqxjj">Example of phone and email validation</a>(handled with ```customFunc```)
-* <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>(Async checking for ```<Textbox>``` and ```<Textarea>``` only. Handled with ```customFunc```)
-* <a href="https://codesandbox.io/s/asyncmsgobj-blmce">Example of asyncMsgObj </a>(when providing ```asyncMsgObj```)
 
 # Docs Link
 [Textbox](#Textbox)
@@ -69,7 +69,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
-|autoComplete                      |  Opt  |  Str   |                                             |  "on"      |
+|autoComplete                      |  Opt  |  Str   |  "on" or "off"                                           |  "on"      |
 |maxLength                         |  Opt  |  Str &#124; Num |                                    |  524288    |
 |placeholder                       |  Opt  |  Str   |                                             |  ""        |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
@@ -90,6 +90,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
 |**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number'~~, 'phone'~~].**|**"string"**|
+|**validationOption.numberType**         |**Opt**|**Str** |**Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.**|**"string"**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
 |**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
@@ -142,7 +143,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
-    // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'phone'].
+    // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
+    // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
     // max: 10, //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.

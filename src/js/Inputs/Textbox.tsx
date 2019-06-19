@@ -7,6 +7,7 @@ import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, M
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
+const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
 const DEFAULT_AUTO_COMPLETE = 'on'; //  Default value is on
 interface DefaultValidationOption {
@@ -15,6 +16,7 @@ interface DefaultValidationOption {
   min?: number;
   max?: number;
   type?: string;
+  numberType?: string;
   name?: string;
   check?: boolean;
   showMsg?: boolean;
@@ -27,12 +29,13 @@ interface DefaultValidationOption {
   customFunc?: Function | undefined;
 }
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
-  let { reg, min, max, type, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
+  let { reg, min, max, type, numberType, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
   max = typeof max !== 'undefined' ? max : 0;
   type = typeof type !== 'undefined' ? type : 'string';
+  numberType = typeof numberType !== 'undefined' ? numberType : 'string';
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
   showMsg = typeof showMsg !== 'undefined' ? showMsg : true;
@@ -48,6 +51,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     min,
     max,
     type,
+    numberType,
     name,
     check,
     length,
@@ -106,7 +110,7 @@ interface Props {
   onKeyUp?: (e: React.KeyboardEvent<HTMLElement>) => void;
   validationCallback?: (res: boolean) => void;
 }
-const autoFormatNumber = (v: number | string) => {
+const autoFormatNumber = (v: number | string, numberType: string) => {
   const DOT = '.';
   let res = '';
   let hasDot = false;
@@ -116,13 +120,18 @@ const autoFormatNumber = (v: number | string) => {
       const charCode = i.toLowerCase().charCodeAt(0);
       if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
         if (charCode === 46) {
+          if (numberType === VALIDATE_NUMBER_TYPE_LIST[1]) {
+            return;
+          }
           hasDot = true;
         }
         res += i;
       }
     });
-  if (res.length && res[0] === DOT) {
-    res = `0${res}`;
+  if (numberType === VALIDATE_NUMBER_TYPE_LIST[0]) {
+    if (res.length && res[0] === DOT) {
+      res = `0${res}`;
+    }
   }
   return res;
 };
@@ -204,9 +213,9 @@ const component: React.FC<Props> = ({
           return;
         }
       }
-      const { type } = option;
+      const { type, numberType } = option;
       if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-        v = String(autoFormatNumber(v));
+        v = String(autoFormatNumber(v, VALIDATE_NUMBER_TYPE_LIST.indexOf(numberType) >= 0 ? numberType : VALIDATE_NUMBER_TYPE_LIST[0]));
       }
       setInternalValue(v);
       onChange && onChange(v, e);

@@ -606,7 +606,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.,
      required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
      customFunc: email => {
-       const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+       const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
        if (reg.test(String(email).toLowerCase())) {
          return true;
        } else {

@@ -108,7 +108,7 @@ interface Props {
 
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = '',
+  id = utils.getRandomId(),
   name = '',
   value = '',
   cols = DEFAULT_ROWS,

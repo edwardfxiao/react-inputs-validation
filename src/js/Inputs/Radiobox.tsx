@@ -2,6 +2,7 @@ import * as React from 'react';
 const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, OPTION_LIST_ITEM_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
+import utils from './utils';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'radiobox';
 interface DefaultValidationOption {
@@ -93,7 +94,7 @@ interface Props {
 }
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = '',
+  id = utils.getRandomId(),
   name = '',
   value = '',
   disabled = false,

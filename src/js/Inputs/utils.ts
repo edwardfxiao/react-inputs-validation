@@ -14,8 +14,15 @@ interface Utils {
   [key: string]: Function;
 }
 
+const getRandomId = () => {
+  return Math.random()
+    .toString(36)
+    .slice(-8);
+};
+
 const utils: Utils = {
   camelize,
   toCamelCase,
+  getRandomId,
 };
 export default utils;

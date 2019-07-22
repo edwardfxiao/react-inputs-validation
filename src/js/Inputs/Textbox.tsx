@@ -137,7 +137,7 @@ const autoFormatNumber = (v: number | string, numberType: string) => {
 };
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = '',
+  id = utils.getRandomId(),
   name = '',
   type = 'text',
   value = '',

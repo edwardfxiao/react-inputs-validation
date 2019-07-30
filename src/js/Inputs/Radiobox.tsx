@@ -5,6 +5,7 @@ import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, W
 import utils from './utils';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'radiobox';
+const DEFAULT_ID = utils.getRandomId();
 interface DefaultValidationOption {
   name?: string;
   check?: boolean;
@@ -94,7 +95,7 @@ interface Props {
 }
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = utils.getRandomId(),
+  id = DEFAULT_ID,
   name = '',
   value = '',
   disabled = false,

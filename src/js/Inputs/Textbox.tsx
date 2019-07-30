@@ -6,6 +6,7 @@ import utils from './utils';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
+const DEFAULT_ID = utils.getRandomId();
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
 const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
@@ -137,7 +138,7 @@ const autoFormatNumber = (v: number | string, numberType: string) => {
 };
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = utils.getRandomId(),
+  id = DEFAULT_ID,
   name = '',
   type = 'text',
   value = '',

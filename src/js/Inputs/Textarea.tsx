@@ -6,6 +6,7 @@ import utils from './utils';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textarea';
+const DEFAULT_ID = utils.getRandomId();
 const VALIDATE_OPTION_TYPE_LIST = ['string'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
 const DEFAULT_ROWS = 2; //  Default value is 2
@@ -108,7 +109,7 @@ interface Props {
 
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = utils.getRandomId(),
+  id = DEFAULT_ID,
   name = '',
   value = '',
   cols = DEFAULT_ROWS,

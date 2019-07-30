@@ -5,6 +5,7 @@ import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, W
 import utils from './utils';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'select';
+const DEFAULT_ID = utils.getRandomId();
 /* istanbul ignore next */
 if (!String.prototype.startsWith) {
   String.prototype.startsWith = function(searchString, position) {
@@ -136,7 +137,7 @@ let globalVariableCurrentFocus: any | null = null;
 let globalVariableTypingTimeout: any | null = null;
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = utils.getRandomId(),
+  id = DEFAULT_ID,
   name = '',
   value = '',
   disabled = false,

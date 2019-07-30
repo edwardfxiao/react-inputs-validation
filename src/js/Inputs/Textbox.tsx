@@ -387,6 +387,16 @@ const component: React.FC<Props> = ({
   );
   useEffect(
     () => {
+      /* istanbul ignore if because it won't happen */
+      if ($el === null) {
+        return;
+      }
+      $el.current.removeAttribute('value');
+    },
+    [internalValue],
+  );
+  useEffect(
+    () => {
       if (asyncObj) {
         if (asyncObj.message) {
           if (asyncObj.showOnError) {

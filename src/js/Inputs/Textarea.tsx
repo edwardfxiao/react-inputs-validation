@@ -6,7 +6,6 @@ import utils from './utils';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textarea';
-const DEFAULT_ID = utils.getRandomId();
 const VALIDATE_OPTION_TYPE_LIST = ['string'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
 const DEFAULT_ROWS = 2; //  Default value is 2
@@ -81,7 +80,7 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
 };
 interface Props {
   tabIndex?: string | number | null;
-  id?: string;
+  id?: string | null;
   name?: string;
   type?: string;
   value?: string;
@@ -109,7 +108,7 @@ interface Props {
 
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = DEFAULT_ID,
+  id = null,
   name = '',
   value = '',
   cols = DEFAULT_ROWS,
@@ -294,6 +293,9 @@ const component: React.FC<Props> = ({
     if ($el === null) {
       return;
     }
+    if (id) {
+      $el.current.setAttribute('id', String(id));
+    }
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -350,7 +352,6 @@ const component: React.FC<Props> = ({
     <div className={wrapperClass} style={customStyleWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <textarea
-          id={id}
           name={name}
           value={internalValue}
           disabled={disabled}

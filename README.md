@@ -64,7 +64,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|id                                |  Opt  |  Str   |                                             |  ""        |
+|id                                |  Opt  |  Str   |                                             |  none      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -179,7 +179,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|**id**                            |**Req**|**Str**|**IMPORTANT if you have multiple Radiobox on the page, id is used to distinguish them for the label 'for' use**|**""**      |
+|**id**                            |**Req**|**Str**|**IMPORTANT if you have multiple Radiobox on the page, id is used to distinguish them for the label 'for' use**|**none**|
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
@@ -270,7 +270,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|id                                |  Opt  |  Str   |                                             |  ""        |
+|id                                |  Opt  |  Str   |                                             |  none      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |**checked**                       |**Req**|**Bool**|**Recommend using the value returned from ```onChange``` callback, which is ```isChecked```.**                                            |**false**   |
@@ -362,7 +362,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|id                                |  Opt  |  Str   |                                             |  ""        |
+|id                                |  Opt  |  Str   |                                             |  none      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -471,7 +471,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|id                                |  Opt  |  Str   |                                             |  ""        |
+|id                                |  Opt  |  Str   |                                             |  none      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |

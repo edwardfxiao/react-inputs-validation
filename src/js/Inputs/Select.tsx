@@ -5,7 +5,6 @@ import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, W
 import utils from './utils';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'select';
-const DEFAULT_ID = utils.getRandomId();
 /* istanbul ignore next */
 if (!String.prototype.startsWith) {
   String.prototype.startsWith = function(searchString, position) {
@@ -99,8 +98,8 @@ interface OptionListItem {
   name: string;
 }
 interface Props {
-  tabIndex?: string | number | undefined;
-  id?: string;
+  tabIndex?: string | number | null;
+  id?: string | null;
   name?: string;
   value?: string | number;
   disabled?: boolean;
@@ -137,7 +136,7 @@ let globalVariableCurrentFocus: any | null = null;
 let globalVariableTypingTimeout: any | null = null;
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = DEFAULT_ID,
+  id = null,
   name = '',
   value = '',
   disabled = false,
@@ -253,6 +252,9 @@ const component: React.FC<Props> = ({
     }
     window.addEventListener('mousedown', pageClick);
     window.addEventListener('touchstart', pageClick);
+    if (id) {
+      $elWrapper.current.setAttribute('id', String(id));
+    }
     if (tabIndex) {
       $elWrapper.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -558,7 +560,6 @@ const component: React.FC<Props> = ({
   return (
     <div
       ref={$wrapper}
-      id={reactInputsValidationCss[`${TYPE}__wrapper`]}
       className={wrapperClass}
       style={customStyleWrapper}
       onClick={e => {
@@ -569,7 +570,7 @@ const component: React.FC<Props> = ({
       onBlur={handleOnBlur}
     >
       <div className={containerClass} style={customStyleContainer}>
-        <input id={id} name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} />
+        <input name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} />
         <div className={selectClass} style={customStyleSelect}>
           {selectorHtml}
         </div>

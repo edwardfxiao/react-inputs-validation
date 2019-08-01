@@ -574,7 +574,7 @@ class Index extends Component {
                   <h1>Validate Textbox Empty by onBlur Example:</h1>
                   <Textbox
                     // tabIndex="1" // Optional.[String or Number].Default: none.
-                    id={'Name'} // Optional.[String].Default: "".  Input ID.
+                    // id={'Name'} // Optional.[String].Default: "".  Input ID.
                     name="Name" // Optional.[String].Default: "". Input name.
                     type="text" // Optional.[String].Default: "text". Input type [text, password, number].
                     value={name} // Optional.[String].Default: "".
@@ -607,7 +607,7 @@ class Index extends Component {
                   <h1>Validate Textbox Regex by onBlur Example:</h1>
                   <Textbox
                     // tabIndex="1" // Optional.[String or Number].Default: none.
-                    id={'Name'} // Optional.[String].Default: "".  Input ID.
+                    // id={'Name'} // Optional.[String].Default: "".  Input ID.
                     name="Name" // Optional.[String].Default: "". Input name.
                     type="text" // Optional.[String].Default: "text". Input type [text, password, number].
                     value={nameRg} // Optional.[String].Default: "".

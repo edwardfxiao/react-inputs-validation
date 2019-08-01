@@ -6,7 +6,6 @@ import utils from './utils';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
-const DEFAULT_ID = utils.getRandomId();
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
 const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
@@ -87,7 +86,7 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
 };
 interface Props {
   tabIndex?: string | number | null;
-  id?: string;
+  id?: string | null;
   name?: string;
   type?: string;
   value?: string;
@@ -138,7 +137,7 @@ const autoFormatNumber = (v: number | string, numberType: string) => {
 };
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = DEFAULT_ID,
+  id = null,
   name = '',
   type = 'text',
   value = '',
@@ -368,6 +367,9 @@ const component: React.FC<Props> = ({
     if ($el === null) {
       return;
     }
+    if (id) {
+      $el.current.setAttribute('id', String(id));
+    }
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -431,7 +433,6 @@ const component: React.FC<Props> = ({
     <div className={wrapperClass} style={customStyleWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <input
-          id={id}
           name={name}
           type={type}
           value={internalValue}

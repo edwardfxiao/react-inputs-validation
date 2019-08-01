@@ -2,7 +2,7 @@ import React from 'react';
 import { expect as chaiExpect } from 'chai';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { WRAPPER_CLASS_IDENTITIFIER, OPTION_LIST_ITEM_IDENTITIFIER, MSG_CLASS_IDENTITIFIER } from '../js/Inputs/const.ts';
+import { WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER } from '../js/Inputs/const.ts';
 import mockConsole from 'jest-mock-console';
 import Radiobox, { Option, isValidValue } from '../js/Inputs/Radiobox.tsx';
 configure({ adapter: new Adapter() });

@@ -64,7 +64,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|id                                |  Opt  |  Str   |                                             |  ""        |
+|id                                |  Opt  |  Str   |                                             |  none      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -89,7 +89,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 |**validationOption.name**         |**Opt**|**Str** |**To display in the Error message. i.e Please enter your ${name}.**|**""**      |
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
-|**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number'~~, 'phone'~~].**|**"string"**|
+|**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'~~, 'phone'~~].**|**"string"**|
 |**validationOption.numberType**         |**Opt**|**Str** |**Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.**|**"decimal"**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
 |**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
@@ -143,7 +143,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
-    // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
+    // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
     // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
@@ -179,7 +179,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|**id**                            |**Req**|**Str**|**IMPORTANT if you have multiple Radiobox on the page, id is used to distinguish them for the label 'for' use**|**""**      |
+|**id**                            |**Req**|**Str**|**IMPORTANT if you have multiple Radiobox on the page, id is used to distinguish them for the label 'for' use**|**none**|
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
@@ -270,7 +270,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|id                                |  Opt  |  Str   |                                             |  ""        |
+|id                                |  Opt  |  Str   |                                             |  none      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |**checked**                       |**Req**|**Bool**|**Recommend using the value returned from ```onChange``` callback, which is ```isChecked```.**                                            |**false**   |
@@ -362,7 +362,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|id                                |  Opt  |  Str   |                                             |  ""        |
+|id                                |  Opt  |  Str   |                                             |  none      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -471,7 +471,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |Props                             |       |Type    |Description                                  |Default     |
 |---                               |---    |---     |---                                          |  ---       |
 |tabIndex                          |  Opt  |  Str &#124; Num |                                    |  none      |
-|id                                |  Opt  |  Str   |                                             |  ""        |
+|id                                |  Opt  |  Str   |                                             |  none      |
 |name                              |  Opt  |  Str   |                                             |  ""        |
 |type                              |  Opt  |  Str   |                                             |  "text"    |
 |value                             |  Opt  |  Str   |                                             |  ""        |
@@ -606,7 +606,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
      check: true, //Optional.[Bool].Default: true. To determin if you need to validate.,
      required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
      customFunc: email => {
-       const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+       const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
        if (reg.test(String(email).toLowerCase())) {
          return true;
        } else {

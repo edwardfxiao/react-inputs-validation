@@ -80,7 +80,7 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
 };
 interface Props {
   tabIndex?: string | number | null;
-  id?: string;
+  id?: string | null;
   name?: string;
   type?: string;
   value?: string;
@@ -108,7 +108,7 @@ interface Props {
 
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = '',
+  id = null,
   name = '',
   value = '',
   cols = DEFAULT_ROWS,
@@ -293,6 +293,9 @@ const component: React.FC<Props> = ({
     if ($el === null) {
       return;
     }
+    if (id) {
+      $el.current.setAttribute('id', String(id));
+    }
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -349,7 +352,6 @@ const component: React.FC<Props> = ({
     <div className={wrapperClass} style={customStyleWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <textarea
-          id={id}
           name={name}
           value={internalValue}
           disabled={disabled}

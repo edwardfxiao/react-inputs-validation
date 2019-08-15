@@ -2,6 +2,7 @@ import * as React from 'react';
 const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, OPTION_LIST_ITEM_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
+import utils from './utils';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'radiobox';
 interface DefaultValidationOption {
@@ -68,8 +69,8 @@ interface OptionListItem {
   name: string;
 }
 interface Props {
-  tabIndex?: string | number | undefined;
-  id?: string;
+  tabIndex?: string | number | null;
+  id?: string | null;
   name?: string;
   value?: string | number;
   disabled?: boolean;
@@ -93,7 +94,7 @@ interface Props {
 }
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = '',
+  id = null,
   name = '',
   value = '',
   disabled = false,
@@ -190,6 +191,9 @@ const component: React.FC<Props> = ({
     if ($el === null) {
       return;
     }
+    if (id) {
+      $el.current.setAttribute('id', String(id));
+    }
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -252,9 +256,9 @@ const component: React.FC<Props> = ({
   } ${disabled && reactInputsValidationCss['disabled']}`;
   const labelClass = `${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${reactInputsValidationCss[`${TYPE}__label`]} ${disabled &&
     reactInputsValidationCss['disabled']}`;
-  const optionListItemClass = `${OPTION_LIST_ITEM_IDENTITIFIER} ${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
-    reactInputsValidationCss[`${TYPE}__item`]
-  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const optionListItemClass = `${OPTION_LIST_ITEM_IDENTITIFIER} ${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+    !err &&
+    reactInputsValidationCss['success']} ${reactInputsValidationCss[`${TYPE}__item`]} ${disabled && reactInputsValidationCss['disabled']}`;
   const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
   const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;
@@ -289,7 +293,7 @@ const component: React.FC<Props> = ({
     });
   }
   return (
-    <div ref={$input} id={id} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus}>
+    <div ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus}>
       <div className={containerClass} style={customStyleContainer}>
         {optionHtml}
       </div>

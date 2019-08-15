@@ -6,7 +6,7 @@ import utils from './utils';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
-const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
+const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'alphanumeric', 'alpha'];
 const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
 const DEFAULT_AUTO_COMPLETE = 'on'; //  Default value is on
@@ -86,7 +86,7 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
 };
 interface Props {
   tabIndex?: string | number | null;
-  id?: string;
+  id?: string | null;
   name?: string;
   type?: string;
   value?: string;
@@ -137,7 +137,7 @@ const autoFormatNumber = (v: number | string, numberType: string) => {
 };
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = '',
+  id = null,
   name = '',
   type = 'text',
   value = '',
@@ -216,6 +216,12 @@ const component: React.FC<Props> = ({
       const { type, numberType } = option;
       if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
         v = String(autoFormatNumber(v, VALIDATE_NUMBER_TYPE_LIST.indexOf(numberType) >= 0 ? numberType : VALIDATE_NUMBER_TYPE_LIST[0]));
+      }
+      if (type === VALIDATE_OPTION_TYPE_LIST[2]) {
+        v = utils.getAlphanumeric(v);
+      }
+      if (type === VALIDATE_OPTION_TYPE_LIST[3]) {
+        v = utils.getAlpha(v);
       }
       setInternalValue(v);
       onChange && onChange(v, e);
@@ -367,6 +373,9 @@ const component: React.FC<Props> = ({
     if ($el === null) {
       return;
     }
+    if (id) {
+      $el.current.setAttribute('id', String(id));
+    }
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -385,6 +394,13 @@ const component: React.FC<Props> = ({
     },
     [value],
   );
+  useEffect(() => {
+    /* istanbul ignore if because it won't happen */
+    if ($el === null) {
+      return;
+    }
+    $el.current.removeAttribute('value');
+  });
   useEffect(
     () => {
       if (asyncObj) {
@@ -423,7 +439,6 @@ const component: React.FC<Props> = ({
     <div className={wrapperClass} style={customStyleWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <input
-          id={id}
           name={name}
           type={type}
           disabled={disabled}

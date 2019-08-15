@@ -2,6 +2,7 @@ import * as React from 'react';
 const { useState, useEffect, useCallback, useRef, memo } = React;
 import message from './message';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
+import utils from './utils';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'checkbox';
 interface DefaultValidationOption {
@@ -53,7 +54,7 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
 };
 interface Props {
   tabIndex?: string | number | null;
-  id?: string;
+  id?: string | null;
   name?: string;
   value?: string | boolean;
   checked?: boolean;
@@ -78,7 +79,7 @@ interface Props {
 }
 const component: React.FC<Props> = ({
   tabIndex = null,
-  id = '',
+  id = null,
   name = '',
   value = '',
   checked = false,
@@ -191,6 +192,9 @@ const component: React.FC<Props> = ({
     if ($el === null) {
       return;
     }
+    if (id) {
+      $el.current.setAttribute('id', String(id));
+    }
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -257,7 +261,6 @@ const component: React.FC<Props> = ({
         <div className={boxClass} style={customStyleInputBox}>
           <div className={reactInputsValidationCss['box']} />
           <input
-            id={id}
             name={name}
             type={TYPE}
             className={reactInputsValidationCss[`${TYPE}__input`]}

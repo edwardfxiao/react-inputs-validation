@@ -6,7 +6,7 @@ import utils from './utils';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
-const VALIDATE_OPTION_TYPE_LIST = ['string', 'number'];
+const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'alphanumeric', 'alpha'];
 const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int'];
 const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
 const DEFAULT_AUTO_COMPLETE = 'on'; //  Default value is on
@@ -216,6 +216,12 @@ const component: React.FC<Props> = ({
       const { type, numberType } = option;
       if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
         v = String(autoFormatNumber(v, VALIDATE_NUMBER_TYPE_LIST.indexOf(numberType) >= 0 ? numberType : VALIDATE_NUMBER_TYPE_LIST[0]));
+      }
+      if (type === VALIDATE_OPTION_TYPE_LIST[2]) {
+        v = utils.getAlphanumeric(v);
+      }
+      if (type === VALIDATE_OPTION_TYPE_LIST[3]) {
+        v = utils.getAlpha(v);
       }
       setInternalValue(v);
       onChange && onChange(v, e);

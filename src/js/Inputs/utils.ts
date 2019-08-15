@@ -20,9 +20,51 @@ const getRandomId = () => {
     .slice(-8);
 };
 
+const getAlphanumeric = (v: string) => {
+  let res = '';
+  String(v)
+    .split('')
+    .forEach(i => {
+      const charCode = i.toLowerCase().charCodeAt(0);
+      if ((charCode >= 48 && charCode <= 57) || (charCode >= 97 && charCode <= 122)) {
+        res += i;
+      }
+    });
+  return res;
+};
+
+const getAlpha = (v: string) => {
+  let res = '';
+  String(v)
+    .split('')
+    .forEach(i => {
+      const charCode = i.toLowerCase().charCodeAt(0);
+      if (charCode >= 97 && charCode <= 122) {
+        res += i;
+      }
+    });
+  return res;
+};
+
+const getNumeric = (v: string) => {
+  let res = '';
+  String(v)
+    .split('')
+    .forEach(i => {
+      const charCode = i.toLowerCase().charCodeAt(0);
+      if (charCode >= 48 && charCode <= 57) {
+        res += i;
+      }
+    });
+  return res;
+};
+
 const utils: Utils = {
   camelize,
   toCamelCase,
   getRandomId,
+  getAlphanumeric,
+  getAlpha,
+  getNumeric,
 };
 export default utils;

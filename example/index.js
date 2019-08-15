@@ -78,7 +78,7 @@ import { Textbox } from 'react-inputs-validation';
   }} // Required.[Func].Default: () => {}. Will return the value.
   onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   validationOption={{
-    type: 'number', // Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
+    type: 'number', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
     min: 10, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
     max: 100 // Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
   }}
@@ -652,7 +652,7 @@ class Index extends Component {
                       console.log(e);
                     }} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     validationOption={{
-                      type: 'number', // Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
+                      type: 'number', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
                       min: 10, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
                       max: 100, // Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
                     }}
@@ -873,7 +873,7 @@ class Index extends Component {
                         name: 'Name', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
                         check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
                         required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
-                        // type: 'string', // Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
+                        // type: 'string', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
                         // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.
                         // showMsg: true, // Optional.[Bool].Default: true. To determin display the error message or not.
                         // min: 2, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
@@ -1199,7 +1199,7 @@ class Index extends Component {
                         name: 'Description', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
                         check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
                         required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
-                        type: 'string', // Optional.[String].Default: "string". Validation type, options are ['string', 'number'].
+                        type: 'string', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
                         // showMsg: true, // Optional.[Bool].Default: true. To determin display the error message or not.
                         // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
                         // min: 2, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.

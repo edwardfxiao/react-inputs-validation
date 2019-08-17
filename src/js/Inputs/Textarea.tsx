@@ -316,6 +316,16 @@ const component: React.FC<Props> = ({
   );
   useEffect(
     () => {
+      if (prevInternalValue && prevInternalValue !== internalValue) {
+        if (option.customFunc) {
+          check();
+        }
+      }
+    },
+    [internalValue],
+  );
+  useEffect(
+    () => {
       if (asyncObj) {
         if (asyncObj.message) {
           if (asyncObj.showOnError) {

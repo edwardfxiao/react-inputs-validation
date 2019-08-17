@@ -394,6 +394,16 @@ const component: React.FC<Props> = ({
     },
     [value],
   );
+  useEffect(
+    () => {
+      if (prevInternalValue && prevInternalValue !== internalValue) {
+        if (option.customFunc) {
+          check();
+        }
+      }
+    },
+    [internalValue],
+  );
   useEffect(() => {
     /* istanbul ignore if because it won't happen */
     if ($el === null) {

@@ -290,7 +290,7 @@ const component: React.FC<Props> = ({
               }
             }
             if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-              if (!validator[type](internalValue)) {
+              if (!validator[type](internalValue, null, null)) {
                 handleCheckEnd(true, msg.invalid(nameText));
                 return;
               }

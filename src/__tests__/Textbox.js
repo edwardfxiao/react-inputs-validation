@@ -800,28 +800,6 @@ describe('Textbox component', () => {
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  it('[Number invalid]: Should msgHtml be appeared', () => {
-    const wrapper = mount(
-      <Textbox
-        value="foobar"
-        onBlur={() => {}}
-        validationOption={{
-          locale: 'en-US',
-          type: 'number',
-          name: '',
-          check: true,
-          showMsg: true,
-          required: true,
-          msgOnError: '',
-        }}
-      />,
-    );
-    const $input = wrapper.find(INPUT);
-    $input.simulate('focus');
-    $input.simulate('blur');
-    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
-  });
-
   it('[Number autoFormatNumber]: Should .5 to be 0.5', () => {
     let value = '';
     const wrapper = mount(

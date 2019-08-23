@@ -873,6 +873,7 @@ class Index extends Component {
                         name: 'Name', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
                         check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
                         required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
+                        type: 'number',
                         // type: 'string', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
                         // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.
                         // showMsg: true, // Optional.[Bool].Default: true. To determin display the error message or not.

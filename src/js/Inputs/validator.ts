@@ -1,5 +1,8 @@
 const empty = (v: string) => (v.replace(/\s/g, '').length ? false : true);
-const number = (v: number, min: number = 0, max: number = 999999999999) => {
+const number = (v: number, min: any, max: any) => {
+  if (min === null && max === null){
+    return true
+  }
   if (!isNumeric(v)) {
     return false;
   }

@@ -290,7 +290,7 @@ const component: React.FC<Props> = ({
               }
             }
             if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-              if (!validator[type](internalValue)) {
+              if (!validator[type](internalValue, null, null)) {
                 handleCheckEnd(true, msg.invalid(nameText));
                 return;
               }
@@ -394,13 +394,16 @@ const component: React.FC<Props> = ({
     },
     [value],
   );
-  useEffect(() => {
-    /* istanbul ignore if because it won't happen */
-    if ($el === null) {
-      return;
-    }
-    $el.current.removeAttribute('value');
-  });
+  useEffect(
+    () => {
+      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+        if (option.customFunc) {
+          check();
+        }
+      }
+    },
+    [internalValue],
+  );
   useEffect(
     () => {
       if (asyncObj) {

@@ -356,7 +356,7 @@ const component: React.FC<Props> = ({
         console.error('Please provide "type" in validationOption');
       }
     },
-    [internalValue],
+    [internalValue, option],
   );
   const handleCheckEnd = useCallback((err: boolean, message: string, fromCustomFunc: boolean = false) => {
     let msg = message;

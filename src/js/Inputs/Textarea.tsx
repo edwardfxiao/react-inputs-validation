@@ -316,7 +316,7 @@ const component: React.FC<Props> = ({
   );
   useEffect(
     () => {
-      if (prevInternalValue && prevInternalValue !== internalValue) {
+      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
         if (option.customFunc) {
           check();
         }

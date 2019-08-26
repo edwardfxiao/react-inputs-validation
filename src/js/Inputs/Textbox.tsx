@@ -396,7 +396,7 @@ const component: React.FC<Props> = ({
   );
   useEffect(
     () => {
-      if (prevInternalValue && prevInternalValue !== internalValue) {
+      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
         if (option.customFunc) {
           check();
         }
@@ -404,13 +404,6 @@ const component: React.FC<Props> = ({
     },
     [internalValue],
   );
-  useEffect(() => {
-    /* istanbul ignore if because it won't happen */
-    if ($el === null) {
-      return;
-    }
-    $el.current.removeAttribute('value');
-  });
   useEffect(
     () => {
       if (asyncObj) {

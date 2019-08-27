@@ -317,7 +317,7 @@ const component: React.FC<Props> = ({
   useEffect(
     () => {
       if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
-        if (option.customFunc) {
+        if (option.customFunc && onKeyUp) {
           check();
         }
       }

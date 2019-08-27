@@ -233,7 +233,7 @@ const component: React.FC<Props> = ({
       }
       handleCheckEnd(false, msgOnSuccess);
     },
-    [internalValue],
+    [internalValue, option],
   );
   const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;

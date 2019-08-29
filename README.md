@@ -17,6 +17,7 @@ React form input validation components. Online demo examples.
 * <a href="https://codesandbox.io/s/13qo2rqxjj">Example of phone and email validation</a>(handled with ```customFunc```)
 * <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>(Async checking for ```<Textbox>``` and ```<Textarea>``` only. Handled with ```customFunc```)
 * <a href="https://codesandbox.io/s/asyncmsgobj-blmce">Example of asyncMsgObj </a>(when providing ```asyncMsgObj```)
+* <a href="https://codesandbox.io/s/jvw9nvyzv">Example of AREA CODE select </a>(with [```react-custom-flag-select```](https://github.com/edwardfhsiao/react-custom-flag-select))
 
 ###  :tada: For version >= 3.0.0, please update react and react-dom to at least ```16.8.6```, since it is rewrited with hooks.
 ```js

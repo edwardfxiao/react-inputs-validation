@@ -15,17 +15,6 @@ describe('Textarea component', () => {
     expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
 
-  // TODO
-  // it('[Providing tabIndex]: Should tabIndex be exact the same with given prop', () => {
-  //   const wrapper = mount(<Textarea tabIndex={10} onBlur={() => {}} />);
-  //   const $input = wrapper.find(INPUT);
-  //   $input.simulate('focus');
-  //   $input.simulate('blur');
-  //   console.log($input.props())
-  //   console.log(wrapper.find(INPUT).props())
-  //   expect(wrapper.find(INPUT).props()['tabindex']).toEqual(1);
-  // });
-
   it('[Providing cols]: Should cols be exact the same with given prop', () => {
     const wrapper = mount(<Textarea cols="10" />);
     expect(wrapper.find(INPUT).props()['cols']).toEqual(10);
@@ -180,32 +169,6 @@ describe('Textarea component', () => {
     expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  // it('[customFunc]: Should setState msg to customFunc.errorMessage', () => {
-  //   const errorMessage = 'Description cannot be other things but milk';
-  //   const wrapper = mount(
-  //     <Textarea
-  //       value={'foobar'}
-  //       onBlur={() => {}}
-  //       validationOption={{
-  //         customFunc: res => {
-  //           if (res != 'milk') {
-  //             return errorMessage;
-  //           }
-  //           return true;
-  //         },
-  //       }}
-  //     />,
-  //   );
-  //   const $input = wrapper.find(INPUT);
-  //   $input.simulate('focus');
-  //   $input.simulate('blur');
-  //   jest.useFakeTimers();
-  //   setTimeout(() => {
-  //     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(errorMessage);
-  //   }, 2000);
-  //   jest.runAllTimers();
-  // });
-
   it('[customFunc]: Should setState msg to ""', () => {
     const errorMessage = 'Description cannot be other things but milk';
     const wrapper = mount(
@@ -266,8 +229,6 @@ describe('Textarea component', () => {
     $input.simulate('change');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
-
-  // STRING
 
   it('[String maxLength]: Should not longer than maxLength', () => {
     let value = '';
@@ -623,26 +584,6 @@ describe('Textarea component', () => {
     $input.simulate('blur');
     expect(valid).toEqual(true);
   });
-
-  // TODO
-  // it('[All props]: Should pass all props', () => {
-  //   const wrapper = mount(
-  //     <Textarea
-  //       id="id"
-  //       name="name"
-  //       tabIndex="1"
-  //       value=""
-  //       placeholder=""
-  //       classNameInput=""
-  //       classNameWrapper=""
-  //       classNameContainer=""
-  //       customStyleInput={{}}
-  //       customStyleWrapper={{}}
-  //       customStyleContainer={{}}
-  //     />,
-  //   );
-  //   expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
-  // });
 
   it('[asyncObj]: Should show error', () => {
     const wrapper = mount(<Textarea onBlur={() => {}} asyncMsgObj={{}} />);

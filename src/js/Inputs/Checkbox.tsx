@@ -188,13 +188,15 @@ const component: React.FC<Props> = ({
     validationCallback && validationCallback(err);
   }, []);
   useEffect(() => {
-    /* istanbul ignore if because it won't happen */
+    /* istanbul ignore next because it won't happen */
     if ($el === null) {
       return;
     }
+    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
     if (id) {
       $el.current.setAttribute('id', String(id));
     }
+    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }

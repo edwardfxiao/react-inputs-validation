@@ -362,6 +362,7 @@ const component: React.FC<Props> = ({
   const removeActive = useCallback(() => {
     for (let i = 0; i < $itemsRef.length; i += 1) {
       const $node: Node | null = $itemsRef[i];
+      /* istanbul ignore next because it won't happen */
       if (!$node) {
         break;
       }

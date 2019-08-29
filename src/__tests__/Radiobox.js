@@ -7,7 +7,7 @@ import mockConsole from 'jest-mock-console';
 import Radiobox, { Option, isValidValue } from '../js/Inputs/Radiobox.tsx';
 configure({ adapter: new Adapter() });
 
-// const INPUT = 'input';
+
 const WRAPPER = `.${WRAPPER_CLASS_IDENTITIFIER}`;
 
 const OPTION_LIST = [{ id: 'engineer', name: 'engineer' }, { id: 'teacher', name: 'teacher' }, { id: 'student', name: 'student' }];
@@ -18,16 +18,6 @@ describe('Radiobox component', () => {
     wrapper.setProps({ validate: true });
     expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
-  // TODO
-  // it('[Providing tabIndex]: Should tabIndex be exact the same with given prop', () => {
-  //   const wrapper = mount(<Radiobox tabIndex={10} onBlur={() => {}} />);
-  //   const $input = wrapper.find(INPUT);
-  //   $input.simulate('focus');
-  //   $input.simulate('blur');
-  //   console.log($input.props())
-  //   console.log(wrapper.find(INPUT).props())
-  //   expect(wrapper.find(INPUT).props()['tabindex']).toEqual(1);
-  // });
 
   it('[Providing msgOnError]: Should msg be msgOnError', () => {
     const msgOnError = 'msgOnError';
@@ -144,33 +134,6 @@ describe('Radiobox component', () => {
     $wrapper.simulate('blur');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
-
-  // TODO
-  // it('[All props]: Should pass all props', () => {
-  //   const wrapper = mount(
-  //     <Radiobox
-  //       id="id"
-  //       name="name"
-  //       tabIndex="1"
-  //       classNameWrapper={'classNameWrapper'}
-  //       classNameInput={'classNameInput'}
-  //       classNameContainer={'classNameContainer'}
-  //       classNameOptionListItem={'classNameOptionListItem'}
-  //       optionList={OPTION_LIST}
-  //       customStyleWrapper={{ backgroundColor: '#000' }}
-  //       customStyleContainer={{ backgroundColor: '#000' }}
-  //       customStyleInput={{ backgroundColor: '#000' }}
-  //       customStyleOptionListItem={{ backgroundColor: '#000' }}
-  //     />,
-  //   );
-  //   expect(
-  //     wrapper
-  //       .find(`.${OPTION_LIST_ITEM_IDENTITIFIER}`)
-  //       .at(0)
-  //       .instance().style[0],
-  //   ).toEqual('background-color');
-  //   expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
-  // });
 
   it('[isValidValue]: Should retrun true', () => {
     chaiExpect(isValidValue(OPTION_LIST, OPTION_LIST[0].id)).equal(true);

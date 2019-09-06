@@ -40,7 +40,7 @@ select {
 
 .textbox__wrapper,
 .textbox__wrapper *:focus {
-  outline: 0;
+  /*outline: 0;*/
 }
 
 .textbox__wrapper {
@@ -131,7 +131,7 @@ input[type='text'].textbox__input.disabled {
 
 .textarea__wrapper,
 .textarea__wrapper *:focus {
-  outline: 0;
+  /*outline: 0;*/
 }
 
 .textarea__wrapper {
@@ -144,7 +144,7 @@ input[type='text'].textbox__input.disabled {
 
 textarea.textarea__input {
   resize: none;
-  outline: none;
+  /*outline: none;*/
   display: block;
   margin: 0;
   width: 100%;
@@ -180,7 +180,7 @@ textarea.textarea__input.disabled {
 
 .radiobox__wrapper,
 .radiobox__wrapper *:focus {
-  outline: 0;
+  /*outline: 0;*/
 }
 
 input[type='radio'] {
@@ -245,7 +245,7 @@ input[type='radio'] {
 
 .checkbox__wrapper,
 .checkbox__wrapper *:focus {
-  outline: 0;
+  /*outline: 0;*/
 }
 
 input[type='checkbox'] {
@@ -254,7 +254,7 @@ input[type='checkbox'] {
 }
 
 .checkbox__wrapper {
-  outline: none;
+  /*outline: none;*/
 }
 
 .checkbox__input {
@@ -322,7 +322,7 @@ input[type='checkbox'] {
 
 .select__wrapper,
 .select__wrapper *:focus {
-  outline: 0;
+  /*outline: 0;*/
 }
 
 /*.select__wrapper:focus .select__container{
@@ -332,7 +332,7 @@ input[type='checkbox'] {
 
 .select__wrapper {
   cursor: pointer;
-  outline: none;
+  /*outline: none;*/
   position: relative;
 }
 

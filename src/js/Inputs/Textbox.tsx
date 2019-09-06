@@ -331,6 +331,7 @@ const component: React.FC<Props> = ({
           }
           if (customFunc && typeof customFunc === 'function') {
             const customFuncResult = await customFunc(internalValue);
+            /* istanbul ignore next because of async problem */
             if (typeof customFuncResult === 'object') {
               if (typeof customFuncResult.error === 'boolean' && typeof customFuncResult.message === 'string') {
                 if (customFuncResult.error === false && customFuncResult.showOnSuccess === true) {
@@ -340,6 +341,7 @@ const component: React.FC<Props> = ({
               }
               return;
             }
+            /* istanbul ignore next because of async problem */
             if (customFuncResult !== true) {
               handleCheckEnd(true, customFuncResult, true);
               return;
@@ -373,9 +375,11 @@ const component: React.FC<Props> = ({
     if ($el === null) {
       return;
     }
+    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
     if (id) {
       $el.current.setAttribute('id', String(id));
     }
+    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
     if (tabIndex) {
       $el.current.setAttribute('tabindex', String(tabIndex));
     }
@@ -396,8 +400,9 @@ const component: React.FC<Props> = ({
   );
   useEffect(
     () => {
+      /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
       if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
-        if (option.customFunc) {
+        if (option.customFunc && onKeyUp) {
           check();
         }
       }

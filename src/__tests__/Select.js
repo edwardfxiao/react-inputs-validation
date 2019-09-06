@@ -7,17 +7,13 @@ import mockConsole from 'jest-mock-console';
 import Select, { isValidValue, getIndex, Option } from '../js/Inputs/Select.tsx';
 configure({ adapter: new Adapter() });
 
-// const INPUT = 'input';
+
 const WRAPPER = `.${WRAPPER_CLASS_IDENTITIFIER}`;
-// const CONTAINER = `.${CONTAINER_CLASS_IDENTITIFIER}`;
+
 
 const OPTION_LIST = [{ id: '', name: 'Please select one country' }, { id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }, { id: 'uk', name: 'UK' }, { id: 'fr', name: 'France' }];
 
-// const simulateKeypress = (element, code) => {
-//   // let code = key.charCodeAt(0);
-//   const event = new KeyboardEvent('keydown', { key: code });
-//   element.dispatchEvent(event);
-// };
+
 
 describe('Select component', () => {
   it('[Toggling "validate"]: Should show msgHtml(err) when toggling "validate"', () => {
@@ -25,16 +21,6 @@ describe('Select component', () => {
     wrapper.setProps({ validate: true });
     expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
-  // TODO
-  // it('[Providing tabIndex]: Should tabIndex be exact the same with given prop', () => {
-  //   const wrapper = mount(<Select tabIndex={10} onBlur={() => {}} />);
-  //   const $input = wrapper.find(INPUT);
-  //   $input.simulate('focus');
-  //   $input.simulate('blur');
-  //   console.log($input.props())
-  //   console.log(wrapper.find(INPUT).props())
-  //   expect(wrapper.find(INPUT).props()['tabindex']).toEqual(1);
-  // });
 
   it('[Providing msgOnError]: Should msg be msgOnError', () => {
     const msgOnError = 'msgOnError';
@@ -152,48 +138,6 @@ describe('Select component', () => {
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  // TODO: Because of https://github.com/airbnb/enzyme/issues/441
-  // it('[ArrowDown]: Should called scroll', () => {
-  //   let value = '';
-  //   const wrapper = mount(
-  //     <Select
-  //       optionList={OPTION_LIST}
-  //       onBlur={() => {}}
-  //       onChange={res => {
-  //         value = res;
-  //       }}
-  //     />,
-  //   );
-  //   const $wrapper = wrapper.find(WRAPPER);
-  //   $wrapper.simulate('click');
-  //   // simulateKeypress($wrapper.instance(), 40);
-  //   // $wrapper.simulate('keydown', { key: 40 });
-  //   // $wrapper.simulate('keypress', { key: 40 });
-  //   // $wrapper.simulate('keypress', { key: 13 });
-  //   expect(value).toEqual(OPTION_LIST[2].id);
-  // });
-
-  // TODO: Because of https://github.com/airbnb/enzyme/issues/441
-  // it('[pageClick]: Should call onBlur', () => {
-  //   const validationOption = { check: false };
-  //   const wrapper = mount(
-  //     <div id="outer">
-  //       <div id="clicker">clicker</div>
-  //       <Select optionList={OPTION_LIST} onChange={() => {}} validationOption={validationOption} />
-  //     </div>,
-  //   );
-  //   const $wrapper = wrapper.find(WRAPPER);
-  //   console.log(wrapper.update().find(CONTAINER).instance().className)
-  //   $wrapper.simulate('click');
-  //   // const map = {};
-  //   // window.addEventListener = jest.genMockFn().mockImpl((event, cb) => {
-  //   //   map[event] = cb;
-  //   // });
-  //   // map.mousemove({ pageX: 100, pageY: 100});
-  //   console.log(wrapper.update().find(CONTAINER).instance().className)
-  //   // expect(wrapper.update().find(WRAPPER).className).toEqual(1);
-  // });
-
   it('[onClick]: Should choose item', () => {
     let value = '';
     const wrapper = mount(
@@ -280,32 +224,6 @@ describe('Select component', () => {
     $wrapper.simulate('blur');
     expect(valid).toEqual(true);
   });
-
-  // TODO
-  // it('[All props]: Should pass all props', () => {
-  //   const wrapper = mount(
-  //     <Select
-  //       id="id"
-  //       name="name"
-  //       tabIndex="1"
-  //       value=""
-  //       optionList={OPTION_LIST}
-  //       classNameWrapper="classNameWrapper"
-  //       classNameContainer="classNameContainer"
-  //       classNameSelect="classNameSelect"
-  //       classNameOptionListItem="classNameOptionListItem"
-  //       classNameOptionListContainer="classNameOptionListContainer"
-  //       classNameDropdownIconOptionListItem="classNameDropdownIconOptionListItem"
-  //       customStyleWrapper={{}}
-  //       customStyleContainer={{}}
-  //       customStyleSelect={{}}
-  //       customStyleOptionListItem={{}}
-  //       customStyleOptionListContainer={{}}
-  //       customStyleDropdownIcon={{}}
-  //     />,
-  //   );
-  //   expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
-  // });
 
   it('[asyncObj]: Should show error', () => {
     const wrapper = mount(<Select onBlur={() => {}} asyncMsgObj={{}} />);

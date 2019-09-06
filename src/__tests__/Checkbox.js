@@ -15,16 +15,6 @@ describe('Checkbox component', () => {
     wrapper.setProps({ validate: true });
     expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
-  // TODO
-  // it('[Providing tabIndex]: Should tabIndex be exact the same with given prop', () => {
-  //   const wrapper = mount(<Checkbox tabIndex={10} onBlur={() => {}} />);
-  //   const $input = wrapper.find(INPUT);
-  //   $input.simulate('focus');
-  //   $input.simulate('blur');
-  //   console.log($input.props())
-  //   console.log(wrapper.find(INPUT).props())
-  //   expect(wrapper.find(INPUT).props()['tabindex']).toEqual(1);
-  // });
 
   it('[Providing msgOnError]: Should msg be msgOnError', () => {
     const msgOnError = 'msgOnError';
@@ -186,29 +176,6 @@ describe('Checkbox component', () => {
     $wrapper.simulate('blur');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
-
-  // TODO
-  // it('[All props]: Should pass all props', () => {
-  //   const wrapper = mount(
-  //     <Checkbox
-  //       id="id"
-  //       name="name"
-  //       tabIndex="1"
-  //       value=""
-  //       labelHtml="foo"
-  //       classNameInput="classNameInput"
-  //       classNameWrapper="classNameWrapper"
-  //       classNameInputBox="classNameInputBox"
-  //       classNameContainer="classNameContainer"
-  //       customStyleInput={{}}
-  //       customStyleWrapper={{}}
-  //       customStyleInputBox={{}}
-  //       customStyleContainer={{}}
-  //       validationOption={{}}
-  //     />,
-  //   );
-  //   expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
-  // });
 
   it('[asyncObj]: Should show error', () => {
     const wrapper = mount(<Checkbox onBlur={() => {}} asyncMsgObj={{}} />);

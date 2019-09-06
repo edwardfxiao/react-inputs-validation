@@ -15,17 +15,6 @@ describe('Textbox component', () => {
     expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
   });
 
-  // TODO
-  // it('[Providing tabIndex]: Should tabIndex be exact the same with given prop', () => {
-  //   const wrapper = mount(<Textbox tabIndex={10} onBlur={() => {}} />);
-  //   const $input = wrapper.find(INPUT);
-  //   $input.simulate('focus');
-  //   $input.simulate('blur');
-  //   console.log($input.props())
-  //   console.log(wrapper.find(INPUT).props())
-  //   expect(wrapper.find(INPUT).props()['tabindex']).toEqual(1);
-  // });
-
   it('[Providing autoComplete]: Should autoComplete be exact the same with given prop', () => {
     const wrapper = mount(<Textbox autoComplete="true" />);
     expect(wrapper.find(INPUT).props()['autoComplete']).toEqual('true');
@@ -180,32 +169,6 @@ describe('Textbox component', () => {
     expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  // it('[customFunc]: Should setState msg to customFunc.errorMessage', () => {
-  //   const errorMessage = 'Description cannot be other things but milk';
-  //   const wrapper = mount(
-  //     <Textbox
-  //       value={'foobar'}
-  //       onBlur={() => {}}
-  //       validationOption={{
-  //         customFunc: res => {
-  //           if (res != 'milk') {
-  //             return errorMessage;
-  //           }
-  //           return true;
-  //         },
-  //       }}
-  //     />,
-  //   );
-  //   const $input = wrapper.find(INPUT);
-  //   $input.simulate('focus');
-  //   $input.simulate('blur');
-  //   jest.useFakeTimers();
-  //   setTimeout(() => {
-  //     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(errorMessage);
-  //   }, 1000);
-  //   jest.runAllTimers();
-  // });
-
   it('[customFunc]: Should setState msg to ""', () => {
     const errorMessage = 'Description cannot be other things but milk';
     const wrapper = mount(
@@ -282,8 +245,6 @@ describe('Textbox component', () => {
     $input.simulate('change');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
-
-  // STRING
 
   it('[String maxLength]: Should not longer than maxLength', () => {
     let value = '';
@@ -624,7 +585,60 @@ describe('Textbox component', () => {
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
-  // NUMBER
+  it("[alphanumeric]: Should a@1 to be 'a1'", () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        validationOption={{
+          type: 'alphanumeric',
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = 'a@1';
+    $input.simulate('change');
+    expect(value).toEqual('a1');
+  });
+
+  it("[alpha]: Should .5 to be ''", () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        validationOption={{
+          type: 'alpha',
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = '.5';
+    $input.simulate('change');
+    expect(value).toEqual('');
+  });
+
+  it('[Number]: Should msgHtml be appeared', () => {
+    const wrapper = mount(
+      <Textbox
+        value={''}
+        onBlur={() => {}}
+        validationOption={{
+          type: 'number',
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.simulate('focus');
+    $input.at(0).instance().value = 'foobar';
+    $input.simulate('blur');
+    expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(1);
+  });
 
   it('[Number length]: Should msgHtml be appeared', () => {
     const wrapper = mount(
@@ -800,6 +814,26 @@ describe('Textbox component', () => {
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).length).toEqual(0);
   });
 
+  it('[Number autoFormatNumber]: Should .5 to be 5', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        validationOption={{
+          type: 'number',
+          numberType: 'int',
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = '.5';
+    $input.simulate('change');
+    expect(value).toEqual('5');
+  });
+
   it('[Number autoFormatNumber]: Should .5 to be 0.5', () => {
     let value = '';
     const wrapper = mount(
@@ -872,26 +906,6 @@ describe('Textbox component', () => {
     $input.simulate('blur');
     expect(valid).toEqual(true);
   });
-
-  // TODO
-  // it('[All props]: Should pass all props', () => {
-  //   const wrapper = mount(
-  //     <Textbox
-  //       id="id"
-  //       name="name"
-  //       tabIndex="1"
-  //       value=""
-  //       placeholder=""
-  //       classNameInput=""
-  //       classNameWrapper=""
-  //       classNameContainer=""
-  //       customStyleInput={{}}
-  //       customStyleWrapper={{}}
-  //       customStyleContainer={{}}
-  //     />,
-  //   );
-  //   expect(wrapper.find(`#id`).hostNodes().length).toEqual(1);
-  // });
 
   it('[asyncObj]: Should show error', () => {
     const wrapper = mount(<Textbox onBlur={() => {}} asyncMsgObj={{}} />);

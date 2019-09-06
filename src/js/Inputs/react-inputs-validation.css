@@ -15,7 +15,7 @@ select {
   background-color: white;
   background-position: right center;
   background-repeat: no-repeat;
-  outline: 0;
+  /*outline: 0;*/
 }
 
 input[type='password']:focus,
@@ -23,7 +23,7 @@ input[type='phone']:focus,
 input[type='number']:focus,
 input[type='text']:focus,
 select:focus {
-  outline: 0;
+  /*outline: 0;*/
 }
 
 select {

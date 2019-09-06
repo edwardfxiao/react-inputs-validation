@@ -319,7 +319,14 @@ input[type='checkbox'] {
 }
 
 /*SELECT*/
-
+.select__button {
+  width: 100%;
+  display: inline-block;
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
 .select__wrapper,
 .select__wrapper *:focus {
   /*outline: 0;*/

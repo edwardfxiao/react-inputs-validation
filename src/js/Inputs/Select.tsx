@@ -559,10 +559,9 @@ const component: React.FC<Props> = ({
     </div>
   );
   return (
-    <div
-      ref={$wrapper}
-      className={wrapperClass}
-      style={customStyleWrapper}
+    <button
+      type="button"
+      className={reactInputsValidationCss[`${TYPE}__button`]}
       onClick={e => {
         handleOnClick(e);
         !disabled ? setShow(!show) : ``;
@@ -570,17 +569,19 @@ const component: React.FC<Props> = ({
       onFocus={handleOnFocus}
       onBlur={handleOnBlur}
     >
-      <div className={containerClass} style={customStyleContainer}>
-        <input name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} />
-        <div className={selectClass} style={customStyleSelect}>
-          {selectorHtml}
+      <div ref={$wrapper} className={wrapperClass} style={customStyleWrapper}>
+        <div className={containerClass} style={customStyleContainer}>
+          <input name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} />
+          <div className={selectClass} style={customStyleSelect}>
+            {selectorHtml}
+          </div>
+          <div ref={$itemsWrapper} className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
+            {optionListHtml}
+          </div>
         </div>
-        <div ref={$itemsWrapper} className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
-          {optionListHtml}
-        </div>
+        {msgHtml}
       </div>
-      {msgHtml}
-    </div>
+    </button>
   );
 };
 interface OptionProps {

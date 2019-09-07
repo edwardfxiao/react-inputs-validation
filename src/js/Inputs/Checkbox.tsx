@@ -53,9 +53,8 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
   };
 };
 interface Props {
-  tabIndex?: string | number | null;
-  id?: string | null;
-  name?: string;
+  attributesWrapper?: object;
+  attributesInput?: object;
   value?: string | boolean;
   checked?: boolean;
   disabled?: boolean;
@@ -78,9 +77,8 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 const component: React.FC<Props> = ({
-  tabIndex = null,
-  id = null,
-  name = '',
+  attributesWrapper = {},
+  attributesInput = {},
   value = '',
   checked = false,
   disabled = false,
@@ -187,20 +185,6 @@ const component: React.FC<Props> = ({
     setMsg(msg);
     validationCallback && validationCallback(err);
   }, []);
-  useEffect(() => {
-    /* istanbul ignore next because it won't happen */
-    if ($el === null) {
-      return;
-    }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-    if (id) {
-      $el.current.setAttribute('id', String(id));
-    }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-    if (tabIndex) {
-      $el.current.setAttribute('tabindex', String(tabIndex));
-    }
-  }, []);
   useEffect(
     () => {
       if (validate) {
@@ -238,7 +222,7 @@ const component: React.FC<Props> = ({
     },
     [asyncMsgObj],
   );
-  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
+  const wrapperClass = `${reactInputsValidationCss['button']} ${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
     reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
     reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
@@ -258,24 +242,24 @@ const component: React.FC<Props> = ({
     msgHtml = <div className={successMsgClass}>{successMsg}</div>;
   }
   return (
-    <div ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus}>
+    <button type="button" ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus} {...attributesWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <div className={boxClass} style={customStyleInputBox}>
           <div className={reactInputsValidationCss['box']} />
           <input
-            name={name}
             type={TYPE}
             className={reactInputsValidationCss[`${TYPE}__input`]}
             value={String(value)}
             defaultChecked={internalChecked}
             disabled={disabled}
             onChange={handleOnChange}
+            {...attributesInput}
           />
         </div>
         <label className={labelClass}>{labelHtml}</label>
       </div>
       {msgHtml}
-    </div>
+    </button>
   );
 };
 export default memo(component);

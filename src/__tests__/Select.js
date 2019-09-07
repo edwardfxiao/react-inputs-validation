@@ -7,13 +7,9 @@ import mockConsole from 'jest-mock-console';
 import Select, { isValidValue, getIndex, Option } from '../js/Inputs/Select.tsx';
 configure({ adapter: new Adapter() });
 
-
 const WRAPPER = `.${WRAPPER_CLASS_IDENTITIFIER}`;
 
-
 const OPTION_LIST = [{ id: '', name: 'Please select one country' }, { id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }, { id: 'uk', name: 'UK' }, { id: 'fr', name: 'France' }];
-
-
 
 describe('Select component', () => {
   it('[Toggling "validate"]: Should show msgHtml(err) when toggling "validate"', () => {
@@ -52,20 +48,6 @@ describe('Select component', () => {
     $wrapper.simulate('click');
     $wrapper.simulate('blur');
     expect(wrapper.find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual(msgOnSuccess);
-  });
-
-  it('[selectOptionListItemHtml]: Should render selectOptionListItemHtml', () => {
-    const selectOptionListItemHtml = OPTION_LIST.map((i, k) => {
-      return (
-        <div className="foo" key={k}>
-          {i.name}
-        </div>
-      );
-    });
-    const wrapper = mount(<Select optionList={OPTION_LIST} onChange={() => {}} selectOptionListItemHtml={selectOptionListItemHtml} />);
-    const $wrapper = wrapper.find(WRAPPER);
-    $wrapper.simulate('click');
-    expect(wrapper.find('.foo').length).toEqual(OPTION_LIST.length);
   });
 
   it('[Change props value]: Should check immediately when new props value is not equal to internal value', () => {
@@ -109,6 +91,7 @@ describe('Select component', () => {
         onClick={() => {
           value = 'clicked';
         }}
+        optionList={OPTION_LIST}
       />,
     );
     const $wrapper = wrapper.find(WRAPPER);
@@ -171,7 +154,7 @@ describe('Select component', () => {
     $wrapper.simulate('click');
     const $el = wrapper.find(`#react-inputs-validation__select_option-${OPTION_LIST[2].id}`).hostNodes();
     $el.simulate('mouseover');
-    expect($el.instance().className).toEqual('select__options-item-show-cursor  select__options-item false false false select__hover-active');
+    expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false select__hover-active');
   });
 
   it('[onMouseMove]: Should option item remove active class', () => {
@@ -182,7 +165,7 @@ describe('Select component', () => {
     const $el = wrapper.find(`#react-inputs-validation__select_option-${OPTION_LIST[2].id}`).hostNodes();
     $el.simulate('mouseover');
     $el.simulate('mousemove');
-    expect($el.instance().className).toEqual('select__options-item-show-cursor  select__options-item false false false select__hover-active');
+    expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false select__hover-active');
   });
 
   it('[onMouseMove]: Should option item remove active class', () => {
@@ -193,19 +176,13 @@ describe('Select component', () => {
     const $el = wrapper.find(`#react-inputs-validation__select_option-${OPTION_LIST[2].id}`).hostNodes();
     $el.simulate('mouseover');
     $el.simulate('mouseout');
-    expect($el.instance().className).toEqual('select__options-item-show-cursor  select__options-item false false false ');
+    expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false ');
   });
 
   it('[<Option/>]: Should not render <Option/>', () => {
     const id = `react-inputs-validation__select_option-${OPTION_LIST[0].id}`;
     const wrapper = mount(<Option />);
     expect(wrapper.find(`#${id}`).hostNodes().length).toEqual(0);
-  });
-
-  it('[<Option/>]: Should not render <Option/>', () => {
-    const id = 'selectHtml';
-    const wrapper = mount(<Select optionList={OPTION_LIST} selectHtml={<div id={id}>selectHtml</div>} />);
-    expect(wrapper.find(`#${id}`).hostNodes().length).toEqual(1);
   });
 
   it('[validationCallback]: Should call validationCallback', () => {

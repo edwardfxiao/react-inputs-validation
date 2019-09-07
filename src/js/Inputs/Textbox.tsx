@@ -8,8 +8,6 @@ import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'alphanumeric', 'alpha'];
 const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int'];
-const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
-const DEFAULT_AUTO_COMPLETE = 'on'; //  Default value is on
 interface DefaultValidationOption {
   locale?: string;
   reg?: string;
@@ -84,17 +82,15 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
     showOnSuccess,
   };
 };
+interface AttributesInputObj {
+  maxLength?: number;
+}
 interface Props {
-  tabIndex?: string | number | null;
-  id?: string | null;
-  name?: string;
-  type?: string;
+  attributesWrapper?: object;
+  attributesInput?: AttributesInputObj;
   value?: string;
   disabled?: boolean;
   validate?: boolean;
-  autoComplete?: string;
-  maxLength?: string | number;
-  placeholder?: string;
   classNameInput?: string;
   classNameWrapper?: string;
   classNameContainer?: string;
@@ -136,16 +132,11 @@ const autoFormatNumber = (v: number | string, numberType: string) => {
   return res;
 };
 const component: React.FC<Props> = ({
-  tabIndex = null,
-  id = null,
-  name = '',
-  type = 'text',
+  attributesWrapper = {},
+  attributesInput = {},
   value = '',
   disabled = false,
   validate = false,
-  autoComplete = DEFAULT_AUTO_COMPLETE,
-  maxLength = DEFAULT_MAX_LENGTH,
-  placeholder = '',
   classNameInput = '',
   classNameWrapper = '',
   classNameContainer = '',
@@ -208,9 +199,11 @@ const component: React.FC<Props> = ({
         return;
       }
       let v = $el.current.value;
-      if ((typeof maxLength === 'string' && maxLength !== '') || (typeof maxLength === 'number' && maxLength !== 0)) {
-        if (v.length > Number(maxLength)) {
-          return;
+      if (typeof attributesInput.maxLength !== 'undefined') {
+        if ((typeof attributesInput.maxLength === 'string' && attributesInput.maxLength !== '') || (typeof attributesInput.maxLength === 'number' && attributesInput.maxLength !== 0)) {
+          if (v.length > Number(attributesInput.maxLength)) {
+            return;
+          }
         }
       }
       const { type, numberType } = option;
@@ -370,20 +363,6 @@ const component: React.FC<Props> = ({
     setMsg(msg);
     validationCallback && validationCallback(err);
   }, []);
-  useEffect(() => {
-    /* istanbul ignore if because it won't happen */
-    if ($el === null) {
-      return;
-    }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-    if (id) {
-      $el.current.setAttribute('id', String(id));
-    }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-    if (tabIndex) {
-      $el.current.setAttribute('tabindex', String(tabIndex));
-    }
-  }, []);
   useEffect(
     () => {
       if (validate) {
@@ -444,14 +423,12 @@ const component: React.FC<Props> = ({
     msgHtml = <div className={successMsgClass}>{successMsg}</div>;
   }
   return (
-    <div className={wrapperClass} style={customStyleWrapper}>
+    <div className={wrapperClass} style={customStyleWrapper} {...attributesWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <input
-          name={name}
-          type={type}
+          type="text"
+          value={internalValue}
           disabled={disabled}
-          autoComplete={autoComplete}
-          maxLength={Number(maxLength)}
           onBlur={handleOnBlur}
           onKeyUp={handleOnKeyUp}
           onFocus={handleOnFocus}
@@ -459,8 +436,8 @@ const component: React.FC<Props> = ({
           className={inputClass}
           onChange={handleOnChange}
           style={customStyleInput}
-          placeholder={placeholder}
           ref={$input}
+          {...attributesInput}
         />
       </div>
       {msgHtml}

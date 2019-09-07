@@ -7,9 +7,6 @@ import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, M
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textarea';
 const VALIDATE_OPTION_TYPE_LIST = ['string'];
-const DEFAULT_MAX_LENGTH = 524288; //  Default value is 524288
-const DEFAULT_ROWS = 2; //  Default value is 2
-const DEFAULT_COLS = 2; //  Default value is 20
 interface DefaultValidationOption {
   locale?: string;
   reg?: string;
@@ -78,18 +75,15 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
     showOnSuccess,
   };
 };
+interface AttributesInputObj {
+  maxLength?: number;
+}
 interface Props {
-  tabIndex?: string | number | null;
-  id?: string | null;
-  name?: string;
-  type?: string;
+  attributesWrapper?: object;
+  attributesInput?: AttributesInputObj;
   value?: string;
   disabled?: boolean;
   validate?: boolean;
-  maxLength?: string | number;
-  cols?: string | number;
-  rows?: string | number;
-  placeholder?: string;
   classNameInput?: string;
   classNameWrapper?: string;
   classNameContainer?: string;
@@ -107,16 +101,11 @@ interface Props {
 }
 
 const component: React.FC<Props> = ({
-  tabIndex = null,
-  id = null,
-  name = '',
+  attributesWrapper = {},
+  attributesInput = {},
   value = '',
-  cols = DEFAULT_ROWS,
-  rows = DEFAULT_COLS,
   disabled = false,
   validate = false,
-  maxLength = DEFAULT_MAX_LENGTH,
-  placeholder = '',
   classNameInput = '',
   classNameWrapper = '',
   classNameContainer = '',
@@ -179,9 +168,11 @@ const component: React.FC<Props> = ({
         return;
       }
       const v = $el.current.value;
-      if ((typeof maxLength === 'string' && maxLength !== '') || (typeof maxLength === 'number' && maxLength !== 0)) {
-        if (v.length > Number(maxLength)) {
-          return;
+      if (typeof attributesInput.maxLength !== 'undefined') {
+        if ((typeof attributesInput.maxLength === 'string' && attributesInput.maxLength !== '') || (typeof attributesInput.maxLength === 'number' && attributesInput.maxLength !== 0)) {
+          if (v.length > Number(attributesInput.maxLength)) {
+            return;
+          }
         }
       }
       setInternalValue(v);
@@ -290,20 +281,6 @@ const component: React.FC<Props> = ({
     setMsg(msg);
     validationCallback && validationCallback(err);
   }, []);
-  useEffect(() => {
-    /* istanbul ignore if because it won't happen */
-    if ($el === null) {
-      return;
-    }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-    if (id) {
-      $el.current.setAttribute('id', String(id));
-    }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-    if (tabIndex) {
-      $el.current.setAttribute('tabindex', String(tabIndex));
-    }
-  }, []);
   useEffect(
     () => {
       if (validate) {
@@ -364,24 +341,20 @@ const component: React.FC<Props> = ({
     msgHtml = <div className={successMsgClass}>{successMsg}</div>;
   }
   return (
-    <div className={wrapperClass} style={customStyleWrapper}>
+    <div className={wrapperClass} style={customStyleWrapper} {...attributesWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <textarea
-          name={name}
           value={internalValue}
           disabled={disabled}
           onBlur={handleOnBlur}
-          maxLength={Number(maxLength)}
           onKeyUp={handleOnKeyUp}
           onFocus={handleOnFocus}
           onClick={handleOnClick}
           className={inputClass}
           onChange={handleOnChange}
           style={customStyleInput}
-          placeholder={placeholder}
-          cols={Number(cols)}
-          rows={Number(rows)}
           ref={$input}
+          {...attributesInput}
         />
       </div>
       {msgHtml}

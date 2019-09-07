@@ -154,7 +154,7 @@ describe('Select component', () => {
     $wrapper.simulate('click');
     const $el = wrapper.find(`#react-inputs-validation__select_option-${OPTION_LIST[2].id}`).hostNodes();
     $el.simulate('mouseover');
-    expect($el.instance().className).toEqual('select__button select__options-item-show-cursor  select__options-item false false false select__hover-active');
+    expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false select__hover-active');
   });
 
   it('[onMouseMove]: Should option item remove active class', () => {
@@ -165,7 +165,7 @@ describe('Select component', () => {
     const $el = wrapper.find(`#react-inputs-validation__select_option-${OPTION_LIST[2].id}`).hostNodes();
     $el.simulate('mouseover');
     $el.simulate('mousemove');
-    expect($el.instance().className).toEqual('select__button select__options-item-show-cursor  select__options-item false false false select__hover-active');
+    expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false select__hover-active');
   });
 
   it('[onMouseMove]: Should option item remove active class', () => {
@@ -176,7 +176,7 @@ describe('Select component', () => {
     const $el = wrapper.find(`#react-inputs-validation__select_option-${OPTION_LIST[2].id}`).hostNodes();
     $el.simulate('mouseover');
     $el.simulate('mouseout');
-    expect($el.instance().className).toEqual('select__button select__options-item-show-cursor  select__options-item false false false ');
+    expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false ');
   });
 
   it('[<Option/>]: Should not render <Option/>', () => {

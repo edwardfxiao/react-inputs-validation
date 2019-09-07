@@ -318,8 +318,7 @@ input[type='checkbox'] {
   transform: rotate(-45deg);
 }
 
-/*SELECT*/
-.select__button {
+.button {
   width: 100%;
   display: inline-block;
   text-align: left;
@@ -327,6 +326,8 @@ input[type='checkbox'] {
   background: none;
   border: none;
 }
+
+/*SELECT*/
 .select__wrapper,
 .select__wrapper *:focus {
   /*outline: 0;*/

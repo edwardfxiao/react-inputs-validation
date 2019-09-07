@@ -222,7 +222,7 @@ const component: React.FC<Props> = ({
     },
     [asyncMsgObj],
   );
-  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
+  const wrapperClass = `${reactInputsValidationCss['button']} ${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
     reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
     reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
@@ -242,7 +242,7 @@ const component: React.FC<Props> = ({
     msgHtml = <div className={successMsgClass}>{successMsg}</div>;
   }
   return (
-    <div ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus} {...attributesWrapper}>
+    <button type="button" ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus} {...attributesWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <div className={boxClass} style={customStyleInputBox}>
           <div className={reactInputsValidationCss['box']} />
@@ -259,7 +259,7 @@ const component: React.FC<Props> = ({
         <label className={labelClass}>{labelHtml}</label>
       </div>
       {msgHtml}
-    </div>
+    </button>
   );
 };
 export default memo(component);

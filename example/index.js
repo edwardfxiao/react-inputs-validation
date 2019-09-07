@@ -17,12 +17,13 @@ const markdownTextboxEmptyExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  //tabIndex="1" // Optional.[String or Number].Default: none.
-  id={'Name'} // Optional.[String].Default: "".  Input ID.
-  name="Name" // Optional.[String].Default: "". Input name.
-  type="text" // Optional.[String].Default: "text". Input type [text, password, number].
+  attributesInput={{ // Optional.
+    id: 'Name',
+    name: 'Name',
+    type: 'text',
+    placeholder: 'Place your name here ^-^',
+  }}
   value={name} // Optional.[String].Default: "".
-  placeholder="Place your name here ^-^" // Optional.[String].Default: "".
   onChange={(name, e) => {
     this.setState({ name });
     console.log(e);
@@ -42,10 +43,12 @@ const markdownTextboxRegexExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  //tabIndex="1" // Optional.[String or Number].Default: none.
-  id={'Name'} // Optional.[String].Default: "".  Input ID.
-  name="Name" // Optional.[String].Default: "". Input name.
-  type="text" // Optional.[String].Default: "text". Input type [text, password, number].
+  attributesInput={{ // Optional.
+    id: 'Name',
+    name: 'Name',
+    type: 'text',
+    placeholder: 'Place your name here ^-^',
+  }}
   value={nameRg} // Optional.[String].Default: "".
   placeholder="Place your name here ^-^" // Optional.[String].Default: "".
   onChange={(name, e) => {
@@ -66,12 +69,13 @@ const markdownTextboxNumberExample = `
 import { Textbox } from 'react-inputs-validation';
 
 <Textbox
-  //tabIndex="1" // Optional.[String or Number].Default: none.
-  id={'Number'} // Optional.[String].Default: "".  Input ID.
-  name="Number" // Optional.[String].Default: "". Input name.
-  type="text" // Optional.[String].Default: "text". Input type [text, password, number]. NOTE: provide "text" for better performance since different browsers run differently with "number".
+  attributesInput={{ // Optional.
+    id: 'Number',
+    name: 'Number',
+    type: 'text', // Input type [text, password, number]. NOTE: provide "text" for better performance since different browsers run differently with "number".
+    placeholder: 'Place your number here ^-^',
+  }}
   value={number} // Optional.[String].Default: "".
-  placeholder="Place your number here ^-^" // Optional.[String].Default: "".
   onChange={(number, e) => {
     this.setState({ number });
     console.log(e);
@@ -91,9 +95,10 @@ const markdownRadioboxEmptyExample = `
 import { Radiobox } from 'react-inputs-validation';
 
 <Radiobox
-  //tabIndex={2} // Optional.[String or Number].Default: none.
-  id="job" // Optional.[String].Default: "".  Input ID.
-  name="job" // Optional.[String].Default: "". Input name.
+  attributesInput={{ // Optional.
+    id: 'job',
+    name: 'job',
+  }}
   value={job} // Optional.[String].Default: "".
   optionList={[
     { id: 'engineer', name: 'engineer' },
@@ -124,9 +129,10 @@ const markdownCheckboxEmptyExample = `
 import { Checkbox } from 'react-inputs-validation';
 
 <Checkbox
-  //tabIndex="5" // Optional.[String or Number].Default: none.
-  id={'agreement'} // Optional.[String].Default: "".  Input ID.
-  name={'agreement'} // Optional.[String].Default: "". Input name
+  attributesInput={{ // Optional.
+    id: 'agreement',
+    name: 'agreement',
+  }}
   value={agreement} // Required.[String].Default: "".
   onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
   checked={isAgreementChecked} // Required.[Bool].Default: false.
@@ -153,9 +159,10 @@ const markdownSelectEmptyExample = `
 import { Select } from 'react-inputs-validation';
 
 <Select
-  //tabIndex="6" // Optional.[String or Number].Default: none.
-  id={'country'} // Optional.[String].Default: "". Input ID.
-  name={'country'} // Optional.[String].Default: "". Input name.
+  attributesInput={{ // Optional.
+    id: 'country',
+    name: 'country',
+  }}
   value={country} // Optional.[String].Default: "".
   optionList={[
     { id: '', name: 'Please Select a country' },
@@ -168,21 +175,6 @@ import { Select } from 'react-inputs-validation';
     console.log(e);
   }} // Optional.[Func].Default: () => {}. Will return the value.
   onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-  // selectHtml={<div>{countryItem.name}</div>} // Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
-  // selectOptionListItemHtml={COUNTRY_OPTIONS_LIST.map(
-  //   (i, k) => {
-  //     return (
-  //       <div
-  //         key={k}
-  //         onClick={() => {
-  //           this.setState({ country: i.id });
-  //         }}
-  //       >
-  //         <span className="icon icon-person" />{i.name}
-  //       </div>
-  //     );
-  //   }
-  // )} // Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
   customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto', fontSize: '14px' }} // Optional.[Object].Default: {}.
   validationOption={{
     name: 'country', // Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
@@ -198,11 +190,13 @@ const markdownTextareaEmptyExample = `
 import { Textarea } from 'react-inputs-validation';
 
 <Textarea
-  //tabIndex="1" // Optional.[String or Number].Default: none.
-  id="description" // Optional.[String].Default: "".  Textarea ID.
-  name="description" // Optional.[String].Default: "". Input name.
+  attributesInput={{ // Optional.
+    id: 'description',
+    name: 'description',
+    type: 'text',
+    placeholder: 'Place your description here ^-^',
+  }}
   value={description} // Optional.[String].Default: "".
-  placeholder="Place your description here ^-^" // Optional.[String].Default: "".
   onChange={(description, e) => {
     this.setState({ description });
     console.log(e);
@@ -573,13 +567,14 @@ class Index extends Component {
                 <div>
                   <h1>Validate Textbox Empty by onBlur Example:</h1>
                   <Textbox
-                    // tabIndex="1" // Optional.[String or Number].Default: none.
-                    // id={'Name'} // Optional.[String].Default: "".  Input ID.
-                    name="Name" // Optional.[String].Default: "". Input name.
-                    type="text" // Optional.[String].Default: "text". Input type [text, password, number].
+                    attributesInput={{
+                      // Optional.
+                      id: 'Name',
+                      name: 'Name',
+                      type: 'text',
+                      placeholder: 'Place your name here ^-^',
+                    }}
                     value={name} // Optional.[String].Default: "".
-                    disabled={false} // Optional.[Bool].Default: false.
-                    placeholder="Place your name here ^-^" // Optional.[String].Default: "".
                     onChange={(name, e) => {
                       this.setState({ name });
                       console.log(e);
@@ -588,8 +583,8 @@ class Index extends Component {
                       console.log(e);
                     }} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     validationOption={{
-                      name: 'Name', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
-                      check: true, // Optional.[Bool].Default: true. To determin if you need to validate.,
+                      name: 'Name', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your {name}.
+                      check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
                       required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
                     }}
                   />
@@ -606,14 +601,16 @@ class Index extends Component {
                 <div>
                   <h1>Validate Textbox Regex by onBlur Example:</h1>
                   <Textbox
-                    // tabIndex="1" // Optional.[String or Number].Default: none.
-                    // id={'Name'} // Optional.[String].Default: "".  Input ID.
-                    name="Name" // Optional.[String].Default: "". Input name.
-                    type="text" // Optional.[String].Default: "text". Input type [text, password, number].
+                    attributesInput={{
+                      // Optional.
+                      id: 'Name',
+                      name: 'Name',
+                      type: 'text',
+                      placeholder: 'Place your name here ^-^',
+                    }}
                     value={nameRg} // Optional.[String].Default: "".
-                    disabled={false} // Optional.[Bool].Default: false.
                     placeholder="Place your name here ^-^" // Optional.[String].Default: "".
-                    onChange={(nameRg, e) => {
+                    onChange={(name, e) => {
                       this.setState({ nameRg });
                       console.log(e);
                     }} // Required.[Func].Default: () => {}. Will return the value.
@@ -622,7 +619,7 @@ class Index extends Component {
                     }} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     validationOption={{
                       reg: /^\d{5}$/, // Optional.[Bool].Default: "" Custom regex.
-                      regMsg: 'failed in reg.test(${value})', // Optional.[String].Default: "" Custom regex error message.
+                      regMsg: 'failed in reg.test(value)', // Optional.[String].Default: "" Custom regex error message.
                     }}
                   />
                   <br />
@@ -638,19 +635,19 @@ class Index extends Component {
                 <div>
                   <h1>Validate Textbox Number by onBlur Example:</h1>
                   <Textbox
-                    // tabIndex="1" // Optional.[String or Number].Default: none.
-                    id={'Number'} // Optional.[String].Default: "".  Input ID.
-                    name="Number" // Optional.[String].Default: "". Input name.
-                    type="text" // Optional.[String].Default: "text". Input type [text, password, number].
+                    attributesInput={{
+                      // Optional.
+                      id: 'Number',
+                      name: 'Number',
+                      type: 'text', // Input type [text, password, number]. NOTE: provide "text" for better performance since different browsers run differently with "number".
+                      placeholder: 'Place your number here ^-^',
+                    }}
                     value={number} // Optional.[String].Default: "".
-                    placeholder="Place your number here ^-^" // Optional.[String].Default: "".
                     onChange={(number, e) => {
                       this.setState({ number });
                       console.log(e);
                     }} // Required.[Func].Default: () => {}. Will return the value.
-                    onBlur={e => {
-                      console.log(e);
-                    }} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     validationOption={{
                       type: 'number', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
                       min: 10, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
@@ -676,9 +673,11 @@ class Index extends Component {
                 <div>
                   <h1>Validate Radiobox Empty by onBlur Example:</h1>
                   <Radiobox
-                    // tabIndex={2} // Optional.[String or Number].Default: none.
-                    id="job" // Optional.[String].Default: "".  Input ID.
-                    name="job" // Optional.[String].Default: "". Input name.
+                    attributesInput={{
+                      // Optional.
+                      id: 'job',
+                      name: 'job',
+                    }}
                     value={job} // Optional.[String].Default: "".
                     optionList={[{ id: 'engineer', name: 'engineer' }, { id: 'teacher', name: 'teacher' }, { id: 'student', name: 'student' }]}
                     customStyleContainer={{
@@ -718,12 +717,14 @@ class Index extends Component {
                 <div>
                   <h1>Validate Checkbox Empty by onBlur Example:</h1>
                   <Checkbox
-                    // tabIndex="5" // Optional.[String or Number].Default: none.
-                    id={'agreement'} // Optional.[String].Default: "".  Input ID.
-                    name={'agreement'} // Optional.[String].Default: "". Input name
-                    checked={isAgreementChecked} // Required.[Bool].Default: false.
+                    attributesInput={{
+                      // Optional.
+                      id: 'agreement',
+                      name: 'agreement',
+                    }}
                     value={agreement} // Required.[String].Default: "".
                     onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
+                    checked={isAgreementChecked} // Required.[Bool].Default: false.
                     onChange={(isAgreementChecked, e) => {
                       this.setState({ isAgreementChecked });
                       console.log(e);
@@ -754,32 +755,19 @@ class Index extends Component {
                 <div>
                   <h1>Validate Select Empty by onBlur Example:</h1>
                   <Select
-                    // tabIndex="6" // Optional.[String or Number].Default: none.
-                    id={'country'} // Optional.[String].Default: "". Input ID.
-                    name={'country'} // Optional.[String].Default: "". Input name.
+                    attributesInput={{
+                      // Optional.
+                      id: 'country',
+                      name: 'country',
+                    }}
                     value={country} // Optional.[String].Default: "".
-                    optionList={COUNTRY_OPTIONS_LIST} // Required.[Array of Object(s)].Default: [].
+                    optionList={[{ id: '', name: 'Please Select a country' }, { id: 'US', name: 'United States' }, { id: 'CN', name: 'China' }, { id: 'JP', name: 'Japan' }]} // Required.[Array of Object(s)].Default: [].
                     onChange={(country, e) => {
                       this.setState({ country });
                       console.log(e);
                     }} // Optional.[Func].Default: () => {}. Will return the value.
                     onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
-                    // selectHtml={<div>{countryItem.name}</div>} // Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
-                    // selectOptionListItemHtml={COUNTRY_OPTIONS_LIST.map(
-                    //   (i, k) => {
-                    //     return (
-                    //       <div
-                    //         key={k}
-                    //         onClick={() => {
-                    //           this.setState({ country: i.id });
-                    //         }}
-                    //       >
-                    //         <span className="icon icon-person" />{i.name}
-                    //       </div>
-                    //     );
-                    //   }
-                    // )} // Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
-                    customStyleOptionListContainer={{ maxHeight: '380px', overflow: 'auto', fontSize: '14px' }} // Optional.[Object].Default: {}.
+                    customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto', fontSize: '14px' }} // Optional.[Object].Default: {}.
                     validationOption={{
                       name: 'country', // Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
                       check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
@@ -805,11 +793,14 @@ class Index extends Component {
                 <div>
                   <h1>Validate Textarea Empty by onBlur Example:</h1>
                   <Textarea
-                    // tabIndex="1" // Optional.[String or Number].Default: none.
-                    id="description" // Optional.[String].Default: "".  Textarea ID.
-                    name="description" // Optional.[String].Default: "". Textarea name.
+                    attributesInput={{
+                      // Optional.
+                      id: 'description',
+                      name: 'description',
+                      type: 'text',
+                      placeholder: 'Place your description here ^-^',
+                    }}
                     value={description} // Optional.[String].Default: "".
-                    placeholder="Place your description here ^-^" // Optional.[String].Default: "".
                     onChange={(description, e) => {
                       this.setState({ description });
                       console.log(e);
@@ -818,7 +809,7 @@ class Index extends Component {
                       console.log(e);
                     }} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                     validationOption={{
-                      name: 'Description', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+                      name: 'Description', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your {name}.
                       check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
                       required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
                     }}

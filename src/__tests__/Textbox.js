@@ -16,12 +16,12 @@ describe('Textbox component', () => {
   });
 
   it('[Providing autoComplete]: Should autoComplete be exact the same with given prop', () => {
-    const wrapper = mount(<Textbox autoComplete="true" />);
+    const wrapper = mount(<Textbox attributesInput={{ autoComplete: 'true' }} />);
     expect(wrapper.find(INPUT).props()['autoComplete']).toEqual('true');
   });
 
   it('[Providing type]: Should type be exact the same with given prop', () => {
-    const wrapper = mount(<Textbox type="password" />);
+    const wrapper = mount(<Textbox attributesInput={{ type: 'password' }} />);
     expect(wrapper.find(INPUT).props()['type']).toEqual('password');
   });
 
@@ -255,7 +255,7 @@ describe('Textbox component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength={2}
+        attributesInput={{ maxLength: '2' }}
       />,
     );
     const $input = wrapper.find(INPUT);
@@ -264,7 +264,7 @@ describe('Textbox component', () => {
     expect(value).toEqual('');
   });
 
-  it('[String maxLength]: Should not longer than maxLength', () => {
+  it('[Number maxLength]: Should not longer than maxLength', () => {
     let value = '';
     const wrapper = mount(
       <Textbox
@@ -273,7 +273,25 @@ describe('Textbox component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength={'10'}
+        attributesInput={{ maxLength: 2 }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = 'foobar';
+    $input.simulate('change');
+    expect(value).toEqual('');
+  });
+
+  it('[Number maxLength]: Should not longer than maxLength', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        value={value}
+        onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        attributesInput={{ maxLength: 10 }}
       />,
     );
     const $input = wrapper.find(INPUT);
@@ -282,7 +300,7 @@ describe('Textbox component', () => {
     expect(value).toEqual('foo');
   });
 
-  it('[String maxLength]: Should not longer than maxLength', () => {
+  it('[Number maxLength]: Should not longer than maxLength', () => {
     let value = '';
     const wrapper = mount(
       <Textbox
@@ -291,7 +309,7 @@ describe('Textbox component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength={0}
+        attributesInput={{ maxLength: 0 }}
       />,
     );
     const $input = wrapper.find(INPUT);

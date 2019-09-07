@@ -243,7 +243,7 @@ const component: React.FC<Props> = ({
   } ${disabled && reactInputsValidationCss['disabled']}`;
   const labelClass = `${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${reactInputsValidationCss[`${TYPE}__label`]} ${disabled &&
     reactInputsValidationCss['disabled']}`;
-  const optionListItemClass = `${OPTION_LIST_ITEM_IDENTITIFIER} ${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
+  const optionListItemClass = `${reactInputsValidationCss['button']} ${OPTION_LIST_ITEM_IDENTITIFIER} ${classNameOptionListItem} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${reactInputsValidationCss[`${TYPE}__item`]} ${disabled && reactInputsValidationCss['disabled']}`;
   const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
@@ -275,7 +275,7 @@ const component: React.FC<Props> = ({
           customStyleInput={customStyleInput}
           labelClass={labelClass}
           onChange={handleOnChange}
-          attributesInput={attributesInputs[k]}
+          attributesInput={attributesInputs[k] ? attributesInputs[k] : {}}
         />
       );
     });
@@ -327,7 +327,7 @@ export const Option: React.FC<OptionProps> = memo(
       onChange(item.id, e);
     }, []);
     return (
-      <div className={optionListItemClass} style={customStyleOptionListItem}>
+      <button type="button" className={optionListItemClass} style={customStyleOptionListItem} onClick={handleOnChange}>
         <input
           id={id}
           name={name}
@@ -343,7 +343,7 @@ export const Option: React.FC<OptionProps> = memo(
         <label htmlFor={attributesInput.id ? attributesInput.id : id} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>
           {item.name}
         </label>
-      </div>
+      </button>
     );
   },
 );

@@ -514,7 +514,7 @@ const component: React.FC<Props> = ({
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss[`${TYPE}__options-container`]} ${err && reactInputsValidationCss['error']} ${show &&
     reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const selectOptionListItemClass = `${reactInputsValidationCss[`${TYPE}__button`]} ${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
+  const selectOptionListItemClass = `${reactInputsValidationCss[`button`]} ${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
     reactInputsValidationCss[`${TYPE}__options-item`]
   } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss[`${TYPE}__dropdown-icon`]}`;
@@ -557,7 +557,7 @@ const component: React.FC<Props> = ({
     <button
       ref={$button}
       type="button"
-      className={reactInputsValidationCss[`${TYPE}__button`]}
+      className={reactInputsValidationCss[`button`]}
       onClick={e => {
         handleOnClick(e);
         !disabled ? setShow(!show) : ``;

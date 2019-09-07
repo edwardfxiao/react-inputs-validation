@@ -16,12 +16,12 @@ describe('Textarea component', () => {
   });
 
   it('[Providing cols]: Should cols be exact the same with given prop', () => {
-    const wrapper = mount(<Textarea cols="10" />);
+    const wrapper = mount(<Textarea attributesInput={{ cols: 10 }} />);
     expect(wrapper.find(INPUT).props()['cols']).toEqual(10);
   });
 
   it('[Providing rows]: Should rows be exact the same with given prop', () => {
-    const wrapper = mount(<Textarea rows="10" />);
+    const wrapper = mount(<Textarea attributesInput={{ rows: 10 }} />);
     expect(wrapper.find(INPUT).props()['rows']).toEqual(10);
   });
 
@@ -239,7 +239,7 @@ describe('Textarea component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength={2}
+        attributesInput={{ maxLength: '2' }}
       />,
     );
     const $input = wrapper.find(INPUT);
@@ -248,7 +248,7 @@ describe('Textarea component', () => {
     expect(value).toEqual('');
   });
 
-  it('[String maxLength]: Should not longer than maxLength', () => {
+  it('[Number maxLength]: Should not longer than maxLength', () => {
     let value = '';
     const wrapper = mount(
       <Textarea
@@ -257,7 +257,25 @@ describe('Textarea component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength={'10'}
+        attributesInput={{ maxLength: 2 }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = 'foobar';
+    $input.simulate('change');
+    expect(value).toEqual('');
+  });
+
+  it('[Number maxLength]: Should not longer than maxLength', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textarea
+        value={value}
+        onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        attributesInput={{ maxLength: 10 }}
       />,
     );
     const $input = wrapper.find(INPUT);
@@ -266,7 +284,7 @@ describe('Textarea component', () => {
     expect(value).toEqual('foo');
   });
 
-  it('[String maxLength]: Should not longer than maxLength', () => {
+  it('[Number maxLength]: Should not longer than maxLength', () => {
     let value = '';
     const wrapper = mount(
       <Textarea
@@ -275,7 +293,7 @@ describe('Textarea component', () => {
         onChange={res => {
           value = res;
         }}
-        maxLength={0}
+        attributesInput={{ maxLength: 0 }}
       />,
     );
     const $input = wrapper.find(INPUT);

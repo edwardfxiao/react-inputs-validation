@@ -845,13 +845,16 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Textbox
-                      tabIndex="1" // Optional.[String or Number].Default: none.
-                      id={'Name'} // Optional.[String].Default: "".  Input ID.
-                      name="Name" // Optional.[String].Default: "". Input name.
-                      type="text" // Optional.[String].Default: "text". Input type [text, password, number].
+                      attributesWrapper={{}}
+                      attributesInput={{
+                        id: 'Name',
+                        name: 'Name',
+                        maxLength: 10,
+                        type: 'text',
+                        placeholder: 'Place your name here ^-^',
+                      }}
                       value={name} // Optional.[String].Default: "".
                       disabled={false} // Optional.[Bool].Default: false.
-                      placeholder="Place your name here ^-^" // Optional.[String].Default: "".
                       validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
                       validationCallback={res => this.setState({ hasNameError: res, validate: false })} // Optional.[Func].Default: none. Return the validation result.
                       classNameInput="" // Optional.[String].Default: "".
@@ -960,9 +963,8 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px', display: 'flex' })}>
                     <Radiobox
-                      tabIndex={2} // Optional.[String or Number].Default: none.
-                      id="job" // Optional.[String].Default: "".  Input ID.
-                      name="job" // Optional.[String].Default: "". Input name.
+                      attributesWrapper={{}}
+                      attributesInputs={[{ id: 'job-0', name: 'job-0' }, { id: 'job-1', name: 'job-1' }, { id: 'job-2', name: 'job-2' }]}
                       disabled={false} // Optional.[Bool].Default: false.
                       value={job} // Optional.[String].Default: "".
                       validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
@@ -1026,7 +1028,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Checkbox
-                      tabIndex="3" // Optional.[String or Number].Default: none.
+                      // tabIndex="3" // Optional.[String or Number].Default: none.
                       id={'agreement'} // Optional.[String].Default: "".  Input ID.
                       name={'agreement'} // Optional.[String].Default: "". Input name
                       value={agreement} // Required.[String].Default: "".
@@ -1089,9 +1091,7 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Select
-                      tabIndex="4" // Optional.[String or Number].Default: none.
-                      id={'country'} // Optional.[String].Default: "". Input ID.
-                      name={'country'} // Optional.[String].Default: "". Input name.
+                      attributes={{ id: 'country', name: 'country', tabIndex: '4' }}
                       value={country} // Optional.[String].Default: "".
                       disabled={false} // Optional.[Bool].Default: false.
                       validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
@@ -1114,20 +1114,6 @@ class Index extends Component {
                       onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
                       // onFocus={(e) => {console.log(e);}} // Optional.[Func].Default: none.
                       // onClick={(e) => {console.log(e);}} // Optional.[Func].Default: none.
-                      // selectHtml={<div>{countryItem.name}</div>} // Optional.[Html].Default: none. The custom html that will display when user choose. Use it if you think the default html is ugly.
-                      // selectOptionListItemHtml={COUNTRY_OPTIONS_LIST.map((i, k) => {
-                      //   return (
-                      //     <div
-                      //       key={k}
-                      //       onClick={() => {
-                      //         this.setState({ country: i.id });
-                      //       }}
-                      //     >
-                      //       <span className="icon icon-person" />
-                      //       {i.name}
-                      //     </div>
-                      //   );
-                      // })} // Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
                       validationOption={{
                         name: 'country', // Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
                         check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
@@ -1164,15 +1150,17 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Textarea
-                      tabIndex="5" // Optional.[String or Number].Default: none.
-                      id="description" // Optional.[String].Default: "".  Textarea ID.
-                      name="description" // Optional.[String].Default: "". Textarea name.
+                      attributesWrapper={{}}
+                      attributesInput={{
+                        id: 'description',
+                        name: 'description',
+                        placeholder: 'Place your description here ^-^',
+                        // maxLength: '10',
+                        // cols: '10',
+                        // rows: '10',
+                      }}
                       value={description} // Optional.[String].Default: "".
                       disabled={false} // Optional.[Bool].Default: false.
-                      // maxLength="10" // Optional.[String | Number].Default: 524288.
-                      // cols="10" // Optional.[String | Number].Default: 2.
-                      // rows="10" // Optional.[String | Number].Default: 2.
-                      placeholder="Place your description here ^-^" // Optional.[String].Default: "".
                       validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
                       validationCallback={res =>
                         this.setState({

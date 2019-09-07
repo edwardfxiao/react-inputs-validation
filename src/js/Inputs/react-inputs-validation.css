@@ -48,7 +48,7 @@ select {
 }
 
 .textbox__container {
-  position: relative;
+  /*position: relative;*/
 }
 
 input[type='password'].textbox__input,
@@ -139,7 +139,7 @@ input[type='text'].textbox__input.disabled {
 }
 
 .textarea__container {
-  position: relative;
+  /*position: relative;*/
 }
 
 textarea.textarea__input {
@@ -357,8 +357,12 @@ input[type='checkbox'] {
 
 .select__container {
   padding: 2%;
-  position: relative;
+  /*position: relative;*/
   border: 1px solid #d3d3d3;
+}
+
+.select__container .select__button {
+  outline: none;
 }
 
 .select__container.error {

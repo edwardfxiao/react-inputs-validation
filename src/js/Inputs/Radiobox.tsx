@@ -68,10 +68,10 @@ interface OptionListItem {
   id: string;
   name: string;
 }
+interface AttributesInput {}
 interface Props {
-  tabIndex?: string | number | null;
-  id?: string | null;
-  name?: string;
+  attributesWrapper: object;
+  attributesInputs: AttributesInput[];
   value?: string | number;
   disabled?: boolean;
   validate?: boolean;
@@ -93,9 +93,8 @@ interface Props {
   validationCallback?: (res: boolean) => void;
 }
 const component: React.FC<Props> = ({
-  tabIndex = null,
-  id = null,
-  name = '',
+  attributesWrapper = {},
+  attributesInputs = [],
   value = '',
   disabled = false,
   validate = false,
@@ -185,20 +184,6 @@ const component: React.FC<Props> = ({
     setErr(err);
     setMsg(msg);
     validationCallback && validationCallback(err);
-  }, []);
-  useEffect(() => {
-    /* istanbul ignore if because it won't happen */
-    if ($el === null) {
-      return;
-    }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-    if (id) {
-      $el.current.setAttribute('id', String(id));
-    }
-    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-    if (tabIndex) {
-      $el.current.setAttribute('tabindex', String(tabIndex));
-    }
   }, []);
   useEffect(
     () => {
@@ -290,12 +275,13 @@ const component: React.FC<Props> = ({
           customStyleInput={customStyleInput}
           labelClass={labelClass}
           onChange={handleOnChange}
+          attributesInput={attributesInputs[k]}
         />
       );
     });
   }
   return (
-    <div ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus}>
+    <div ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus} {...attributesWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         {optionHtml}
       </div>
@@ -303,6 +289,9 @@ const component: React.FC<Props> = ({
     </div>
   );
 };
+interface AttributesInput {
+  id?: string;
+}
 interface OptionProps {
   checked?: boolean;
   id?: string;
@@ -315,6 +304,7 @@ interface OptionProps {
   item?: OptionListItem;
   customStyleOptionListItem?: object;
   customStyleInput?: object;
+  attributesInput: AttributesInput;
   onChange?: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
 }
 export const Option: React.FC<OptionProps> = memo(
@@ -330,6 +320,7 @@ export const Option: React.FC<OptionProps> = memo(
     item = { id: '', name: '' },
     customStyleOptionListItem = {},
     customStyleInput = {},
+    attributesInput = {},
     onChange = () => {},
   }) => {
     const handleOnChange = useCallback(e => {
@@ -347,8 +338,9 @@ export const Option: React.FC<OptionProps> = memo(
           className={checked ? `${reactInputsValidationCss['checked']} ${inputClass}` : `${inputClass}`}
           onChange={handleOnChange}
           style={customStyleInput}
+          {...attributesInput}
         />
-        <label htmlFor={id} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>
+        <label htmlFor={attributesInput.id ? attributesInput.id : id} className={checked ? `${reactInputsValidationCss['checked']} ${labelClass}` : `${labelClass}`}>
           {item.name}
         </label>
       </div>

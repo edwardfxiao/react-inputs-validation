@@ -98,9 +98,8 @@ interface OptionListItem {
   name: string;
 }
 interface Props {
-  tabIndex?: string | number | null;
-  id?: string | null;
-  name?: string;
+  attributesWrapper?: object;
+  attributesInput?: object;
   value?: string | number;
   disabled?: boolean;
   validate?: boolean;
@@ -111,8 +110,6 @@ interface Props {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   validationOption?: object;
   asyncMsgObj?: object;
-  selectHtml?: React.ReactNode;
-  selectOptionListItemHtml?: React.ReactNode;
   classNameWrapper?: string;
   classNameContainer?: string;
   classNameSelect?: string;
@@ -135,9 +132,8 @@ let globalVariableIsCorrected: boolean = false;
 let globalVariableCurrentFocus: any | null = null;
 let globalVariableTypingTimeout: any | null = null;
 const component: React.FC<Props> = ({
-  tabIndex = null,
-  id = null,
-  name = '',
+  attributesWrapper = {},
+  attributesInput = {},
   value = '',
   disabled = false,
   validate = false,
@@ -156,8 +152,6 @@ const component: React.FC<Props> = ({
   customStyleDropdownIcon = {},
   validationOption = {},
   asyncMsgObj = {},
-  selectHtml = null,
-  selectOptionListItemHtml = null,
   onChange = () => {},
   onBlur = null,
   onFocus = null,
@@ -175,8 +169,10 @@ const component: React.FC<Props> = ({
   const [keycodeList, setKeycodeList] = useState(initKeycodeList);
   const option = getDefaultValidationOption(validationOption);
   const asyncObj = getDefaultAsyncObj(asyncMsgObj);
+  const $button = useRef(null);
   const $wrapper = useRef(null);
   const $itemsWrapper = useRef(null);
+  const $elButton: { [key: string]: any } | null = $button;
   const $elWrapper: { [key: string]: any } | null = $wrapper;
   const $elItemsWrapper: { [key: string]: any } | null = $itemsWrapper;
   const $itemsRef: { [key: string]: any } = [];
@@ -252,12 +248,6 @@ const component: React.FC<Props> = ({
     }
     window.addEventListener('mousedown', pageClick);
     window.addEventListener('touchstart', pageClick);
-    if (id) {
-      $elWrapper.current.setAttribute('id', String(id));
-    }
-    if (tabIndex) {
-      $elWrapper.current.setAttribute('tabindex', String(tabIndex));
-    }
     return () => {
       window.removeEventListener('mousedown', pageClick);
       window.removeEventListener('touchstart', pageClick);
@@ -374,7 +364,7 @@ const component: React.FC<Props> = ({
 
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const onKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLElement>) => {
+    (e: any) => {
       setIsTyping(true);
       if (e.preventDefault) {
         e.preventDefault();
@@ -446,10 +436,10 @@ const component: React.FC<Props> = ({
   useEffect(
     () => {
       if (show && $elWrapper) {
-        $elWrapper.current.addEventListener('keydown', onKeyDown);
+        document.addEventListener('keydown', onKeyDown);
       }
       return () => {
-        $elWrapper.current.removeEventListener('keydown', onKeyDown);
+        document.removeEventListener('keydown', onKeyDown);
       };
     },
     [show, value, keycodeList],
@@ -501,6 +491,17 @@ const component: React.FC<Props> = ({
     },
     [asyncMsgObj],
   );
+  useEffect(
+    () => {
+      if (show) {
+        globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(optionList, String(value)) : globalVariableCurrentFocus;
+        $itemsRef[globalVariableCurrentFocus].current.focus();
+      } else {
+        $elButton.current.focus();
+      }
+    },
+    [show],
+  );
   const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
@@ -513,7 +514,7 @@ const component: React.FC<Props> = ({
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss[`${TYPE}__options-container`]} ${err && reactInputsValidationCss['error']} ${show &&
     reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const selectOptionListItemClass = `${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
+  const selectOptionListItemClass = `${reactInputsValidationCss[`${TYPE}__button`]} ${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
     reactInputsValidationCss[`${TYPE}__options-item`]
   } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss[`${TYPE}__dropdown-icon`]}`;
@@ -530,29 +531,23 @@ const component: React.FC<Props> = ({
   let optionListHtml;
   const item = getItem(optionList, String(value));
   if (optionList.length) {
-    if (selectOptionListItemHtml) {
-      optionListHtml = selectOptionListItemHtml;
-    } else {
-      optionListHtml = optionList.map((i, k) => (
-        <Option
-          key={k}
-          index={k}
-          id={`react-inputs-validation__select_option-${i.id}`}
-          refItem={$itemsRef[k]}
-          className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
-          item={i}
-          customStyleOptionListItem={customStyleOptionListItem}
-          onClick={handleOnItemClick}
-          onMouseOver={handleOnItemMouseOver}
-          onMouseMove={handleOnItemMouseMove}
-          onMouseOut={handleOnItemMouseOut}
-        />
-      ));
-    }
+    optionListHtml = optionList.map((i, k) => (
+      <Option
+        key={k}
+        index={k}
+        id={`react-inputs-validation__select_option-${i.id}`}
+        refItem={$itemsRef[k]}
+        className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
+        item={i}
+        customStyleOptionListItem={customStyleOptionListItem}
+        onClick={handleOnItemClick}
+        onMouseOver={handleOnItemMouseOver}
+        onMouseMove={handleOnItemMouseMove}
+        onMouseOut={handleOnItemMouseOut}
+      />
+    ));
   }
-  const selectorHtml = selectHtml ? (
-    selectHtml
-  ) : (
+  const selectorHtml = (
     <div className={reactInputsValidationCss[`${TYPE}__dropdown`]}>
       <div className={`${reactInputsValidationCss[`${TYPE}__dropdown-name`]} ${reactInputsValidationCss['ellipsis']}`}>{item ? item.name : ''}</div>
       <div className={dropdownIconClass} />
@@ -560,6 +555,7 @@ const component: React.FC<Props> = ({
   );
   return (
     <button
+      ref={$button}
       type="button"
       className={reactInputsValidationCss[`${TYPE}__button`]}
       onClick={e => {
@@ -568,10 +564,11 @@ const component: React.FC<Props> = ({
       }}
       onFocus={handleOnFocus}
       onBlur={handleOnBlur}
+      {...attributesWrapper}
     >
       <div ref={$wrapper} className={wrapperClass} style={customStyleWrapper}>
         <div className={containerClass} style={customStyleContainer}>
-          <input name={name} type="hidden" value={value} className={inputClass} onChange={() => {}} />
+          <input type="hidden" value={value} className={inputClass} onChange={() => {}} {...attributesInput} />
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
@@ -587,7 +584,7 @@ const component: React.FC<Props> = ({
 interface OptionProps {
   index?: number;
   id?: string;
-  refItem?: React.RefObject<HTMLDivElement>;
+  refItem?: React.RefObject<HTMLAnchorElement>;
   className?: string;
   item?: OptionListItem;
   customStyleOptionListItem?: object;
@@ -622,7 +619,7 @@ export const Option: React.FC<OptionProps> = memo(
       onMouseOut();
     }, []);
     return (
-      <div
+      <a
         id={id}
         ref={refItem}
         onMouseOver={handleOnMouseOver}
@@ -633,7 +630,7 @@ export const Option: React.FC<OptionProps> = memo(
         onClick={handleOnClick}
       >
         {item.name}
-      </div>
+      </a>
     );
   },
 );

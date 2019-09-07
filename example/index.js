@@ -1019,9 +1019,11 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Checkbox
-                      // tabIndex="3" // Optional.[String or Number].Default: none.
-                      id={'agreement'} // Optional.[String].Default: "".  Input ID.
-                      name={'agreement'} // Optional.[String].Default: "". Input name
+                      attributesWrapper={{}}
+                      attributesInput={{
+                        id: 'agreement',
+                        name: 'agreement',
+                      }}
                       value={agreement} // Required.[String].Default: "".
                       checked={isAgreementChecked} // Required.[Bool].Default: false.
                       disabled={false} // Optional.[Bool].Default: false.
@@ -1082,7 +1084,11 @@ class Index extends Component {
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
                     <Select
-                      attributes={{ id: 'country', name: 'country', tabIndex: '4' }}
+                      attributesWrapper={{}}
+                      attributesInput={{
+                        id: 'country',
+                        name: 'country',
+                      }}
                       value={country} // Optional.[String].Default: "".
                       disabled={false} // Optional.[Bool].Default: false.
                       validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.

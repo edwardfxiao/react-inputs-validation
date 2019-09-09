@@ -168,7 +168,7 @@ const component: React.FC<Props> = ({
         onBlur(e);
       }
     },
-    [internalValue],
+    [internalValue, option],
   );
   const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
@@ -191,7 +191,7 @@ const component: React.FC<Props> = ({
         onKeyUp(e);
       }
     },
-    [internalValue],
+    [internalValue, option],
   );
   const handleOnChange = useCallback(
     (e: React.ChangeEvent<HTMLElement>) => {

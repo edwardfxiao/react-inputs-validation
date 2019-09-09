@@ -116,7 +116,7 @@ const component: React.FC<Props> = ({
         onBlur(e);
       }
     },
-    [internalChecked],
+    [internalChecked, option],
   );
   const handleOnFocus = useCallback(
     (e: React.FocusEvent<HTMLElement>) => {

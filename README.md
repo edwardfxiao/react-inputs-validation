@@ -28,6 +28,14 @@ import { Textbox, Radiobox, Checkbox, Select, Textarea } from 'react-inputs-vali
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
 
+### Make sure you have ```react@16.8.6``` installed.
+```js
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+```
+
 # <a name="live-examples"></a>Live examples
 
 ## <a name="codesandbox-examples"></a>Codesandbox Examples
@@ -45,14 +53,6 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 <a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>
 
 <a href="https://github.com/edwardfhsiao/react-inputs-validation/blob/gh-pages/example/index.js">Demo source code</a>
-
-### Make sure you have ```react@16.8.6``` installed.
-```js
-  "peerDependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
-  }
-```
 
 # <a name="documentation"></a>Documentation
 

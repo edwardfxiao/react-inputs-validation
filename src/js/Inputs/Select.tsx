@@ -629,7 +629,7 @@ export const Option: React.FC<OptionProps> = memo(
         style={customStyleOptionListItem}
         onClick={handleOnClick}
       >
-        {item.name}
+        <span>{item.name}</span>
       </a>
     );
   },

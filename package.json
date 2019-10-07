@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "React form input validation components",
   "main": "index.js",
   "repository": {
@@ -25,6 +25,7 @@
   "bugs": {
     "url": "https://github.com/edwardfhsiao/react-inputs-validation/issues"
   },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/@edwardfhsiao" },
   "homepage": "https://edwardfhsiao.github.io/react-inputs-validation",
   "scripts": {
     "test": "NODE_ENV=test jest",

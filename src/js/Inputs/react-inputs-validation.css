@@ -381,8 +381,12 @@ input[type='checkbox'] {
 .select__options-item {
   background: #fff;
   transition: background 0.4s, color 0.2s;
-  padding: 10px;
   cursor: none;
+  padding: 10px 0;
+}
+
+.select__options-item span {
+  padding: 0 10px;
 }
 
 .select__options-item-show-cursor {

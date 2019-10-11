@@ -7,7 +7,7 @@ import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, M
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'alphanumeric', 'alpha'];
-const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int'];
+const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int', 'price'];
 interface DefaultValidationOption {
   locale?: string;
   reg?: string;
@@ -111,24 +111,28 @@ interface Props {
 }
 const autoFormatNumber = (v: number | string, numberType: string, mantissa: number) => {
   const DOT = '.';
+  const ZERO = '0';
   let res = '';
   let hasDot = false;
-  String(v)
-    .split('')
-    .filter(i => {
-      const charCode = i.toLowerCase().charCodeAt(0);
-      if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
-        if (charCode === 46) {
-          if (numberType === VALIDATE_NUMBER_TYPE_LIST[1]) {
-            return;
-          }
-          hasDot = true;
+  const splitStr = String(v).split('');
+  const startedWithZero = splitStr[0] === '0';
+  if (numberType === VALIDATE_NUMBER_TYPE_LIST[2] && splitStr[0] === ZERO && splitStr[1] === ZERO) {
+    splitStr.shift();
+  }
+  splitStr.forEach(i => {
+    const charCode = i.toLowerCase().charCodeAt(0);
+    if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
+      if (charCode === 46) {
+        if (numberType === VALIDATE_NUMBER_TYPE_LIST[1]) {
+          return;
         }
-        res += i;
+        hasDot = true;
       }
-    });
+      res += i;
+    }
+  });
   if (hasDot && mantissa >= 0) {
-    const resArr = res.split('.');
+    const resArr = res.split(DOT);
     if (mantissa === 0) {
       res = resArr[0];
     } else {
@@ -136,11 +140,19 @@ const autoFormatNumber = (v: number | string, numberType: string, mantissa: numb
       res = resArr.join('.');
     }
   }
-  if (numberType === VALIDATE_NUMBER_TYPE_LIST[0]) {
+  if (numberType === VALIDATE_NUMBER_TYPE_LIST[0] || numberType === VALIDATE_NUMBER_TYPE_LIST[2]) {
     if (res.length && res[0] === DOT) {
       res = `0${res}`;
     }
   }
+  // if (numberType === VALIDATE_NUMBER_TYPE_LIST[2]) {
+  //   if (startedWithZero) {
+  //     if (hasDot) {
+  //       const resArr = res.split(DOT);
+  //       res = `${Number(resArr[0])}${DOT}${resArr[1]}`;
+  //     }
+  //   }
+  // }
   return res;
 };
 const component: React.FC<Props> = ({

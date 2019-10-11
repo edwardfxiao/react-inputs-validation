@@ -871,7 +871,7 @@ class Index extends Component {
                         required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
                         type: 'number',
                         // type: 'string', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
-                        // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.
+                        // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int', 'price']. Handy when the validation type is number.
                         // mantissa: 2, // Optional.[Number].Default: -1. Number precision.
                         // showMsg: true, // Optional.[Bool].Default: true. To determin display the error message or not.
                         // min: 2, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.

@@ -85,6 +85,7 @@ import { Textbox } from 'react-inputs-validation';
     type: 'number', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
     min: 10, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
     max: 100 // Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
+    // mantissa: 2, // Optional.[Number].Default: -1. Number precision.
   }}
 />
 \`\`\`
@@ -652,6 +653,7 @@ class Index extends Component {
                       type: 'number', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
                       min: 10, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
                       max: 100, // Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
+                      // mantissa: 2, // Optional.[Number].Default: -1. Number precision.
                     }}
                   />
                   <br />
@@ -870,6 +872,7 @@ class Index extends Component {
                         type: 'number',
                         // type: 'string', // Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
                         // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.
+                        // mantissa: 2, // Optional.[Number].Default: -1. Number precision.
                         // showMsg: true, // Optional.[Bool].Default: true. To determin display the error message or not.
                         // min: 2, // Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
                         // max: 10, // Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.

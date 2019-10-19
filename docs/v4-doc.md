@@ -338,7 +338,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleOptionListContainer    |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
 |**onBlur**                       |**Opt**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req**|**Func**|                                             |**(val, e) => {}**|
+|**onChange**                      |**Req**|**Func**|                                             |**(res, e) => {}**|
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
 |**validationOption**              |**Opt**|**obj** |                                             |**{}**      |
@@ -377,8 +377,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   customStyleContainer={{}} //Optional.[Object].Default: {}.
   customStyleOptionListContainer={{}} //Optional.[Object].Default: {}.
   customStyleOptionListItem={{}} //Optional.[Object].Default: {}.
-  onChange={(movie, e) => {
-    this.setState({ movie });
+  onChange={(res, e) => {
+    this.setState({ movie: res.id });
     console.log(e);
   }} //Optional.[Func].Default: () => {}. Will return the value.
   onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.

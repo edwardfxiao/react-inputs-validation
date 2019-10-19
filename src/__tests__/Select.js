@@ -128,7 +128,7 @@ describe('Select component', () => {
         value={value}
         optionList={OPTION_LIST}
         onChange={res => {
-          value = res;
+          value = res.id;
         }}
       />,
     );

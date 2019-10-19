@@ -104,7 +104,7 @@ interface Props {
   disabled?: boolean;
   validate?: boolean;
   optionList: OptionListItem[];
-  onChange: (res: string, e: React.MouseEvent<HTMLElement>) => void;
+  onChange: (res: object, e: React.MouseEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement> | Event) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -195,11 +195,11 @@ const component: React.FC<Props> = ({
       onClick(e);
     }
   }, []);
-  const handleOnChange = useCallback((v: string, e: React.MouseEvent<HTMLElement>) => {
+  const handleOnChange = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
     if (disabled || $elWrapper === null) {
       return;
     }
-    onChange && onChange(String(v), e);
+    onChange && onChange(item, e);
   }, []);
   const check = useCallback(() => {
     const { name, check, locale, required, msgOnSuccess } = option;
@@ -311,8 +311,8 @@ const component: React.FC<Props> = ({
       }
     }
   }, []);
-  const handleOnItemClick = useCallback((v: string, e: React.MouseEvent<HTMLElement>) => {
-    handleOnChange(v, e);
+  const handleOnItemClick = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
+    handleOnChange(item, e);
   }, []);
   const handleOnItemMouseOver = useCallback((index: number) => {
     globalVariableCurrentFocus = index;
@@ -548,7 +548,7 @@ interface OptionProps {
   className?: string;
   item?: OptionListItem;
   customStyleOptionListItem?: object;
-  onClick?: (res: string, e: React.MouseEvent<HTMLElement>) => void;
+  onClick?: (res: object, e: React.MouseEvent<HTMLElement>) => void;
   onMouseOver?: (res: number) => void;
   onMouseMove?: () => void;
   onMouseOut?: () => void;
@@ -556,7 +556,7 @@ interface OptionProps {
 export const Option: React.FC<OptionProps> = memo(
   ({ index = -1, id = '', className = '', item = { id: '', name: '' }, customStyleOptionListItem = {}, onClick = () => {}, onMouseOver = () => {}, onMouseMove = () => {}, onMouseOut = () => {} }) => {
     const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
-      onClick(item.id, e);
+      onClick(item, e);
     }, []);
     const handleOnMouseOver = useCallback(() => {
       onMouseOver(index);

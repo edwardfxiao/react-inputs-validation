@@ -171,8 +171,8 @@ import { Select } from 'react-inputs-validation';
     { id: 'CN', name: 'China' },
     { id: 'JP', name: 'Japan' }
   ]} // Required.[Array of Object(s)].Default: [].
-  onChange={(country, e) => {
-    this.setState({ country });
+  onChange={(res, e) => {
+    this.setState({ country: res.id });
     console.log(e);
   }} // Optional.[Func].Default: () => {}. Will return the value.
   onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
@@ -764,8 +764,8 @@ class Index extends Component {
                     }}
                     value={country} // Optional.[String].Default: "".
                     optionList={[{ id: '', name: 'Please Select a country' }, { id: 'US', name: 'United States' }, { id: 'CN', name: 'China' }, { id: 'JP', name: 'Japan' }]} // Required.[Array of Object(s)].Default: [].
-                    onChange={(country, e) => {
-                      this.setState({ country });
+                    onChange={(res, e) => {
+                      this.setState({ country: res.id });
                       console.log(e);
                     }} // Optional.[Func].Default: () => {}. Will return the value.
                     onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
@@ -833,7 +833,8 @@ class Index extends Component {
               <div style={rowContainerStyle}>
                 <div style={rowStyle}>
                   <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
-                    <span className="icon icon-person" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
+                    <span className="icon icon-person" style={{ ...labelContentStyle, fontSize: '20px' }} />
+                    &nbsp;
                     <span style={labelContentStyle}>Name</span>
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
@@ -952,7 +953,8 @@ class Index extends Component {
                 <div style={rowStyle}>
                   <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
                     {/*<div style={(labelStyle, { flex: '3 3 0px' })}>*/}
-                    <span className="icon icon-info" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
+                    <span className="icon icon-info" style={{ ...labelContentStyle, fontSize: '20px' }} />
+                    &nbsp;
                     <span style={labelContentStyle}>job</span>
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px', display: 'flex' })}>
@@ -1017,7 +1019,8 @@ class Index extends Component {
                 <div style={rowStyle}>
                   <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
                     {/*<div style={(labelStyle, { flex: '3 3 0px' })}>*/}
-                    <span className="icon icon-assignment-late" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
+                    <span className="icon icon-assignment-late" style={{ ...labelContentStyle, fontSize: '20px' }} />
+                    &nbsp;
                     <span style={labelContentStyle}>agreement</span>
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
@@ -1082,7 +1085,8 @@ class Index extends Component {
               <div style={rowContainerStyle}>
                 <div style={rowStyle}>
                   <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
-                    <span className="icon icon-bookmark" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
+                    <span className="icon icon-bookmark" style={{ ...labelContentStyle, fontSize: '20px' }} />
+                    &nbsp;
                     <span style={labelContentStyle}>country</span>
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>
@@ -1107,8 +1111,8 @@ class Index extends Component {
                       customStyleContainer={{}} // Optional.[Object].Default: {}.
                       customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto', fontSize: '14px' }} // Optional.[Object].Default: {}.
                       customStyleOptionListItem={{}} // Optional.[Object].Default: {}.
-                      onChange={(country, e) => {
-                        this.setState({ country });
+                      onChange={(res, e) => {
+                        this.setState({ country: res.id });
                         console.log(e);
                       }} // Optional.[Func].Default: () => {}. Will return the value.
                       onBlur={() => {}} // Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
@@ -1145,7 +1149,8 @@ class Index extends Component {
               <div style={rowContainerStyle}>
                 <div style={rowStyle}>
                   <div style={prefixAll({ ...labelStyle, flex: '3 3 0px', marginTop: '3px' })}>
-                    <span className="icon icon-insert-drive-file" style={{ ...labelContentStyle, fontSize: '20px' }} />&nbsp;
+                    <span className="icon icon-insert-drive-file" style={{ ...labelContentStyle, fontSize: '20px' }} />
+                    &nbsp;
                     <span style={labelContentStyle}>description</span>
                   </div>
                   <div style={prefixAll({ flex: '6 6 0px' })}>

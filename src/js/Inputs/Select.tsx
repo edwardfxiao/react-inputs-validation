@@ -176,9 +176,6 @@ const component: React.FC<Props> = ({
   const $elWrapper: { [key: string]: any } | null = $wrapper;
   const $elItemsWrapper: { [key: string]: any } | null = $itemsWrapper;
   const $itemsRef: { [key: string]: any } = [];
-  for (let i = 0; i < optionList.length; i += 1) {
-    $itemsRef.push(useRef(null));
-  }
   const handleOnBlur = useCallback(
     (e: React.FocusEvent<HTMLElement> | Event) => {
       if (onBlur) {
@@ -276,43 +273,42 @@ const component: React.FC<Props> = ({
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const scroll = useCallback((direction: undefined | string = undefined) => {
-    if ($elItemsWrapper === null) {
-      return;
-    }
-    const containerHeight = $elItemsWrapper.current.offsetHeight;
-    const containerScrollTop = $elItemsWrapper.current.scrollTop;
-    if (!globalVariableCurrentFocus || !$itemsRef[globalVariableCurrentFocus]) {
-      return;
-    }
-    const $elOptionItem: Node | null = $itemsRef[globalVariableCurrentFocus];
-    if ($elOptionItem === null) {
-      return;
-    }
-    const itemHeight = $elOptionItem.current.offsetHeight;
-    if (direction) {
-      if (direction === 'down') {
-        const bound = containerScrollTop + containerHeight;
-        const heightItems = globalVariableCurrentFocus * itemHeight;
-        const heightContainer = bound - itemHeight;
-        if (heightItems >= heightContainer) {
-          const offset = Math.abs(heightItems - heightContainer - itemHeight);
-          if (offset >= 0 && !globalVariableIsCorrected) {
-            $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight - offset;
-            globalVariableIsCorrected = true;
-          } else {
-            $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight;
+    if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
+      const $children = $itemsWrapper.current.children;
+      if ($elItemsWrapper === null) {
+        return;
+      }
+      const containerHeight = $elItemsWrapper.current.offsetHeight;
+      const containerScrollTop = $elItemsWrapper.current.scrollTop;
+      if (!globalVariableCurrentFocus || !$children[globalVariableCurrentFocus]) {
+        return;
+      }
+      const itemHeight = $children[globalVariableCurrentFocus].offsetHeight;
+      if (direction) {
+        if (direction === 'down') {
+          const bound = containerScrollTop + containerHeight;
+          const heightItems = globalVariableCurrentFocus * itemHeight;
+          const heightContainer = bound - itemHeight;
+          if (heightItems >= heightContainer) {
+            const offset = Math.abs(heightItems - heightContainer - itemHeight);
+            if (offset >= 0 && !globalVariableIsCorrected) {
+              $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight - offset;
+              globalVariableIsCorrected = true;
+            } else {
+              $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight;
+            }
           }
         }
-      }
-      if (direction === 'up') {
-        globalVariableIsCorrected = false;
-        if (globalVariableCurrentFocus * itemHeight <= containerScrollTop) {
-          $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
+        if (direction === 'up') {
+          globalVariableIsCorrected = false;
+          if (globalVariableCurrentFocus * itemHeight <= containerScrollTop) {
+            $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
+          }
         }
+      } else {
+        globalVariableIsCorrected = false;
+        $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
       }
-    } else {
-      globalVariableIsCorrected = false;
-      $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
     }
   }, []);
   const handleOnItemClick = useCallback((v: string, e: React.MouseEvent<HTMLElement>) => {
@@ -329,31 +325,23 @@ const component: React.FC<Props> = ({
     removeActive();
   }, []);
   const addActive = useCallback(() => {
-    if (!$itemsRef) return;
-    removeActive();
-    if (globalVariableCurrentFocus === null) return;
-    if (globalVariableCurrentFocus >= $itemsRef.length) globalVariableCurrentFocus = 0;
-    if (globalVariableCurrentFocus < 0) globalVariableCurrentFocus = $itemsRef.length - 1;
-    const $node: Node | null = $itemsRef[globalVariableCurrentFocus];
-    /* istanbul ignore next because it won't happen */
-    if (!$node) {
-      return;
+    if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
+      const $children = $itemsWrapper.current.children;
+      removeActive();
+      if (globalVariableCurrentFocus === null) return;
+      if (globalVariableCurrentFocus >= $children.length) globalVariableCurrentFocus = 0;
+      if (globalVariableCurrentFocus < 0) globalVariableCurrentFocus = $children.length - 1;
+      $children[globalVariableCurrentFocus].className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
     }
-    $itemsRef[globalVariableCurrentFocus].current.className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
   }, []);
   const removeActive = useCallback(() => {
-    for (let i = 0; i < $itemsRef.length; i += 1) {
-      const $node: Node | null = $itemsRef[i];
-      /* istanbul ignore next because it won't happen */
-      if (!$node) {
-        break;
-      }
-      if ($node && $node.current) {
-        $node.current.className = $node.current.className.replace(reactInputsValidationCss[`${TYPE}__hover-active`], '');
+    if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
+      const $children = $itemsWrapper.current.children;
+      for (let i = 0; i < $children.length; i += 1) {
+        $children[i].className = $children[i].className.replace(reactInputsValidationCss[`${TYPE}__hover-active`], '');
       }
     }
   }, []);
-
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const onKeyDown = useCallback(
     (e: any) => {
@@ -394,10 +382,13 @@ const component: React.FC<Props> = ({
           addActive();
         } else if (keyCode === keyCodeEnter) {
           if (globalVariableCurrentFocus > -1) {
-            if ($itemsRef[globalVariableCurrentFocus]) {
-              $itemsRef[globalVariableCurrentFocus].current.click();
-            } else {
-              return;
+            if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
+              const $children = $itemsWrapper.current.children;
+              if ($children[globalVariableCurrentFocus]) {
+                $children[globalVariableCurrentFocus].click();
+              } else {
+                return;
+              }
             }
           }
         }
@@ -468,7 +459,7 @@ const component: React.FC<Props> = ({
   useEffect(() => {
     if (show) {
       globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(optionList, String(value)) : globalVariableCurrentFocus;
-      $itemsRef[globalVariableCurrentFocus].current.focus();
+      $itemsRef[globalVariableCurrentFocus] && $itemsRef[globalVariableCurrentFocus].current.focus();
     } else {
       $elButton.current.focus();
     }
@@ -507,7 +498,6 @@ const component: React.FC<Props> = ({
         key={k}
         index={k}
         id={`react-inputs-validation__select_option-${i.id}`}
-        refItem={$itemsRef[k]}
         className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
         item={i}
         customStyleOptionListItem={customStyleOptionListItem}
@@ -555,7 +545,6 @@ const component: React.FC<Props> = ({
 interface OptionProps {
   index?: number;
   id?: string;
-  refItem?: React.RefObject<HTMLAnchorElement>;
   className?: string;
   item?: OptionListItem;
   customStyleOptionListItem?: object;
@@ -565,18 +554,7 @@ interface OptionProps {
   onMouseOut?: () => void;
 }
 export const Option: React.FC<OptionProps> = memo(
-  ({
-    index = -1,
-    refItem = null,
-    id = '',
-    className = '',
-    item = { id: '', name: '' },
-    customStyleOptionListItem = {},
-    onClick = () => {},
-    onMouseOver = () => {},
-    onMouseMove = () => {},
-    onMouseOut = () => {},
-  }) => {
+  ({ index = -1, id = '', className = '', item = { id: '', name: '' }, customStyleOptionListItem = {}, onClick = () => {}, onMouseOver = () => {}, onMouseMove = () => {}, onMouseOut = () => {} }) => {
     const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
       onClick(item.id, e);
     }, []);
@@ -590,16 +568,7 @@ export const Option: React.FC<OptionProps> = memo(
       onMouseOut();
     }, []);
     return (
-      <a
-        id={id}
-        ref={refItem}
-        onMouseOver={handleOnMouseOver}
-        onMouseMove={handleOnMouseMove}
-        onMouseOut={handleOnMouseOut}
-        className={className}
-        style={customStyleOptionListItem}
-        onClick={handleOnClick}
-      >
+      <a id={id} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
         <span>{item.name}</span>
       </a>
     );

@@ -176,10 +176,8 @@ const component: React.FC<Props> = ({
   const $elWrapper: { [key: string]: any } | null = $wrapper;
   const $elItemsWrapper: { [key: string]: any } | null = $itemsWrapper;
   const $itemsRef: { [key: string]: any } = [];
-  if (optionList.length) {
-    for (let i = 0; i < optionList.length; i += 1) {
-      $itemsRef.push(useRef(null));
-    }
+  for (let i = 0; i < optionList.length; i += 1) {
+    $itemsRef.push(useRef(null));
   }
   const handleOnBlur = useCallback(
     (e: React.FocusEvent<HTMLElement> | Event) => {
@@ -206,31 +204,28 @@ const component: React.FC<Props> = ({
     }
     onChange && onChange(String(v), e);
   }, []);
-  const check = useCallback(
-    () => {
-      const { name, check, locale, required, msgOnSuccess } = option;
-      if (!check) {
+  const check = useCallback(() => {
+    const { name, check, locale, required, msgOnSuccess } = option;
+    if (!check) {
+      return;
+    }
+    if (!message[locale] || !message[locale][TYPE]) {
+      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+      return;
+    }
+    if (required) {
+      const msg = message[locale][TYPE];
+      const nameText = name ? name : '';
+      if (!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined') {
+        handleCheckEnd(true, msg.empty(nameText));
         return;
       }
-      if (!message[locale] || !message[locale][TYPE]) {
-        console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
-        return;
-      }
-      if (required) {
-        const msg = message[locale][TYPE];
-        const nameText = name ? name : '';
-        if (!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined') {
-          handleCheckEnd(true, msg.empty(nameText));
-          return;
-        }
-      }
-      if (msgOnSuccess) {
-        setSuccessMsg(msgOnSuccess);
-      }
-      handleCheckEnd(false, msgOnSuccess);
-    },
-    [internalValue, option],
-  );
+    }
+    if (msgOnSuccess) {
+      setSuccessMsg(msgOnSuccess);
+    }
+    handleCheckEnd(false, msgOnSuccess);
+  }, [internalValue, option]);
   const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
     const { msgOnError } = option;
@@ -266,13 +261,10 @@ const component: React.FC<Props> = ({
     setShow(false);
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-  const resetCurrentFocus = useCallback(
-    () => {
-      globalVariableCurrentFocus = getIndex(optionList, internalValue);
-      scroll();
-    },
-    [internalValue],
-  );
+  const resetCurrentFocus = useCallback(() => {
+    globalVariableCurrentFocus = getIndex(optionList, internalValue);
+    scroll();
+  }, [internalValue]);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const setTimeoutTyping = useCallback(() => {
     if (globalVariableTypingTimeout) {
@@ -433,75 +425,54 @@ const component: React.FC<Props> = ({
     },
     [show, value, keycodeList],
   );
-  useEffect(
-    () => {
-      if (show && $elWrapper) {
-        document.addEventListener('keydown', onKeyDown);
-      }
-      return () => {
-        document.removeEventListener('keydown', onKeyDown);
-      };
-    },
-    [show, value, keycodeList],
-  );
-  useEffect(
-    () => {
-      if (validate) {
-        check();
-      }
-    },
-    [validate],
-  );
-  useEffect(
-    () => {
-      if (!(!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined')) {
-        setErr(false);
-      } else {
-        setSuccessMsg('');
-      }
-    },
-    [internalValue],
-  );
-  useEffect(
-    () => {
-      setInternalValue(String(value));
-    },
-    [value],
-  );
-  useEffect(
-    () => {
-      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
-        check();
-      }
-    },
-    [prevInternalValue, internalValue],
-  );
-  useEffect(
-    () => {
-      if (asyncObj) {
-        if (asyncObj.message) {
-          if (asyncObj.showOnError) {
-            handleCheckEnd(asyncObj.error, asyncObj.message);
-          }
-          if (!asyncObj.error && asyncObj.showOnSuccess) {
-            setSuccessMsg(asyncObj.message);
-          }
+  useEffect(() => {
+    if (show && $elWrapper) {
+      document.addEventListener('keydown', onKeyDown);
+    }
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [show, value, keycodeList]);
+  useEffect(() => {
+    if (validate) {
+      check();
+    }
+  }, [validate]);
+  useEffect(() => {
+    if (!(!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined')) {
+      setErr(false);
+    } else {
+      setSuccessMsg('');
+    }
+  }, [internalValue]);
+  useEffect(() => {
+    setInternalValue(String(value));
+  }, [value]);
+  useEffect(() => {
+    if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+      check();
+    }
+  }, [prevInternalValue, internalValue]);
+  useEffect(() => {
+    if (asyncObj) {
+      if (asyncObj.message) {
+        if (asyncObj.showOnError) {
+          handleCheckEnd(asyncObj.error, asyncObj.message);
+        }
+        if (!asyncObj.error && asyncObj.showOnSuccess) {
+          setSuccessMsg(asyncObj.message);
         }
       }
-    },
-    [asyncMsgObj],
-  );
-  useEffect(
-    () => {
-      if (show) {
-        globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(optionList, String(value)) : globalVariableCurrentFocus;
-        $itemsRef[globalVariableCurrentFocus].current.focus();
-      } else {
-        $elButton.current.focus();
-      }
-    },
-    [show],
-  );
+    }
+  }, [asyncMsgObj]);
+  useEffect(() => {
+    if (show) {
+      globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(optionList, String(value)) : globalVariableCurrentFocus;
+      $itemsRef[globalVariableCurrentFocus].current.focus();
+    } else {
+      $elButton.current.focus();
+    }
+  }, [show]);
   const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;

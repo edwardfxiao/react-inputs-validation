@@ -163,6 +163,7 @@ const component: React.FC<Props> = ({
   const [successMsg, setSuccessMsg] = useState('');
   const [internalValue, setInternalValue] = useState(String(value));
   const prevInternalValue = usePrevious(internalValue);
+  const prevOptionList = usePrevious(optionList);
   const [show, setShow] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const initKeycodeList: number[] = [];
@@ -440,6 +441,11 @@ const component: React.FC<Props> = ({
     setInternalValue(String(value));
   }, [value]);
   useEffect(() => {
+    if (prevOptionList && prevOptionList !== optionList) {
+      setInternalValue(String(optionList[0].id));
+    }
+  }, [optionList]);
+  useEffect(() => {
     if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
       check();
     }
@@ -557,7 +563,7 @@ export const Option: React.FC<OptionProps> = memo(
   ({ index = -1, id = '', className = '', item = { id: '', name: '' }, customStyleOptionListItem = {}, onClick = () => {}, onMouseOver = () => {}, onMouseMove = () => {}, onMouseOut = () => {} }) => {
     const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
       onClick(item, e);
-    }, []);
+    }, [item]);
     const handleOnMouseOver = useCallback(() => {
       onMouseOver(index);
     }, []);

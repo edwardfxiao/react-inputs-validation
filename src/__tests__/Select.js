@@ -203,7 +203,7 @@ describe('Select component', () => {
   });
 
   it('[asyncObj]: Should show error', () => {
-    const wrapper = mount(<Select onBlur={() => {}} asyncMsgObj={{}} />);
+    const wrapper = mount(<Select onBlur={() => {}} optionList={OPTION_LIST} asyncMsgObj={{}} />);
     const $wrapper = wrapper.find(WRAPPER);
     $wrapper.simulate('focus');
     $wrapper.simulate('blur');
@@ -226,7 +226,7 @@ describe('Select component', () => {
   });
 
   it('[asyncObj]: Should show success', () => {
-    const wrapper = mount(<Select onBlur={() => {}} asyncMsgObj={{}} />);
+    const wrapper = mount(<Select onBlur={() => {}} optionList={OPTION_LIST} asyncMsgObj={{}} />);
     const $wrapper = wrapper.find(WRAPPER);
     $wrapper.simulate('focus');
     $wrapper.simulate('blur');

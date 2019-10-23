@@ -248,7 +248,7 @@ const component: React.FC<Props> = ({
         setSuccessMsg('');
       }
     },
-    [err],
+    [err, attributesInput, option],
   );
   const check = useCallback(
     async () => {

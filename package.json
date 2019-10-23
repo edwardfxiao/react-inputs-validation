@@ -1,6 +1,6 @@
 {
     "name": "react-inputs-validation",
-    "version": "4.1.7",
+    "version": "4.1.8",
     "description": "React form input validation components",
     "main": "index.js",
     "repository": {

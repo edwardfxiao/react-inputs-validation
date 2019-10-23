@@ -325,7 +325,7 @@ export const Option: React.FC<OptionProps> = memo(
   }) => {
     const handleOnChange = useCallback(e => {
       onChange(item.id, e);
-    }, []);
+    }, [item]);
     return (
       <button type="button" className={optionListItemClass} style={customStyleOptionListItem} onClick={handleOnChange}>
         <input

@@ -1,6 +1,6 @@
 {
     "name": "react-inputs-validation",
-    "version": "4.1.6",
+    "version": "4.1.7",
     "description": "React form input validation components",
     "main": "index.js",
     "repository": {
@@ -29,7 +29,7 @@
         "build_prod": "npm run webpack_prod",
         "build_umd": "./node_modules/.bin/webpack --config ./webpack/umd.config.js",
         "build_umd_min": "./node_modules/.bin/webpack --config ./webpack/umd.config.js --env build",
-        "server_dev": "node_modules/.bin/webpack-dev-server --config ./webpack/development.config.js",
+        "dev": "node_modules/.bin/webpack-dev-server --config ./webpack/development.config.js",
         "server_prod": "node_modules/.bin/webpack-dev-server --config ./webpack/production.config.js",
         "clean": "rimraf dist lib",
         "compile_webpack": "npm run clean && npm run build_umd && npm run build_umd_min",

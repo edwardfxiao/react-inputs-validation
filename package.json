@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "4.1.9",
+  "version": "4.2.0",
   "description": "React form input validation components",
   "main": "index.js",
   "repository": {
@@ -29,7 +29,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "test:coverage": "npm run tslint && npm run jslint && npm test -- --coverage",
-    "test_single": "node_modules/.bin/jest Checkbox.js --coverage",
+    "test_single": "node_modules/.bin/jest Select.js --coverage",
     "prepublish": "npm run test:coverage",
     "jslint": "eslint ./src",
     "tslint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
@@ -46,7 +46,7 @@
     "server_prod": "node_modules/.bin/webpack-dev-server --config ./webpack/production.config.js",
     "clean": "rimraf dist lib",
     "compile_webpack": "npm run clean && npm run build_umd_global && npm run build_umd_global_min && npm run build_umd_local",
-    "compile": "npm run clean && npm run compile_webpack"
+    "compile": "npm run clean && npm run compile_webpack && rm ./lib/components/*.css"
   },
   "peerDependencies": {
     "react": "^16.8.6",

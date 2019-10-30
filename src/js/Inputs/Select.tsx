@@ -535,7 +535,7 @@ const component: React.FC<Props> = ({
     >
       <div ref={$wrapper} className={wrapperClass} style={customStyleWrapper}>
         <div className={containerClass} style={customStyleContainer}>
-          <input type="hidden" value={value} className={inputClass} onChange={() => {}} {...attributesInput} />
+          <input type="hidden" value={internalValue} className={inputClass} onChange={() => {}} {...attributesInput} />
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
@@ -561,9 +561,12 @@ interface OptionProps {
 }
 export const Option: React.FC<OptionProps> = memo(
   ({ index = -1, id = '', className = '', item = { id: '', name: '' }, customStyleOptionListItem = {}, onClick = () => {}, onMouseOver = () => {}, onMouseMove = () => {}, onMouseOut = () => {} }) => {
-    const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
-      onClick(item, e);
-    }, [item]);
+    const handleOnClick = useCallback(
+      (e: React.MouseEvent<HTMLElement>) => {
+        onClick(item, e);
+      },
+      [item],
+    );
     const handleOnMouseOver = useCallback(() => {
       onMouseOver(index);
     }, []);

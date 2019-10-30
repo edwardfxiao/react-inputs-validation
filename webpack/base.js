@@ -92,6 +92,34 @@ var config = (module.exports = {
       },
       {
         test: /\.css$/,
+        include: [PATH.ROOT_PATH + 'lib'],
+        // exclude: [PATH.ROOT_PATH],
+        enforce: 'pre',
+        enforce: 'post',
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: loader => [
+                require('postcss-import')({
+                  root: loader.resourcePath,
+                }),
+                require('autoprefixer')(),
+                require('cssnano')(),
+              ],
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
         include: [PATH.SOURCE_PATH],
         exclude: [PATH.NODE_MODULES_PATH],
         enforce: 'pre',

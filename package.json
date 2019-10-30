@@ -39,13 +39,14 @@
     "webpack_prod": "rm -rf dist && NODE_ENV=production ./node_modules/.bin/webpack --config ./webpack/production.config.js --progress -p",
     "build_dev": "npm run webpack_dev",
     "build_prod": "npm run webpack_prod",
-    "build_umd": "./node_modules/.bin/webpack --config ./webpack/umd.config.js",
-    "build_umd_min": "./node_modules/.bin/webpack --config ./webpack/umd.config.js --env build",
+    "build_umd_local": "./node_modules/.bin/webpack --config ./webpack/umd.local.config.js",
+    "build_umd_global": "./node_modules/.bin/webpack --config ./webpack/umd.global.config.js",
+    "build_umd_global_min": "./node_modules/.bin/webpack --config ./webpack/umd.global.config.js --env build",
     "dev": "node_modules/.bin/webpack-dev-server --config ./webpack/development.config.js",
     "server_prod": "node_modules/.bin/webpack-dev-server --config ./webpack/production.config.js",
     "clean": "rimraf dist lib",
-    "compile_webpack": "npm run clean && npm run build_umd && npm run build_umd_min",
-    "compile": "npm run clean && npm run compile_webpack && npm run babel"
+    "compile_webpack": "npm run clean && npm run build_umd_global && npm run build_umd_global_min && npm run build_umd_local",
+    "compile": "npm run clean && npm run compile_webpack"
   },
   "peerDependencies": {
     "react": "^16.8.6",

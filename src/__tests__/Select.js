@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import { expect as chaiExpect } from 'chai';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -241,7 +241,7 @@ describe('Select component', () => {
 
   const LIST1 = [{ id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }];
   const LIST2 = [{ id: 'uk', name: 'UK' }, { id: 'fr', name: 'France' }];
-  const MyComponent = memo(() => {
+  const MyComponent = () => {
     const stateOptionList = useState(LIST1);
     const stateCurId = useState(LIST1[0].id);
     return (
@@ -265,7 +265,7 @@ describe('Select component', () => {
         <div id="stateCurId">{stateCurId[0]}</div>
       </div>
     );
-  });
+  };
 
   it('[update optionList]: Should change ', () => {
     const wrapper = mount(<MyComponent />);

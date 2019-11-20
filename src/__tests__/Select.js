@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { render, fireEvent } from '@testing-library/react';
 import { expect as chaiExpect } from 'chai';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -9,7 +10,52 @@ configure({ adapter: new Adapter() });
 
 const WRAPPER = `.${WRAPPER_CLASS_IDENTITIFIER}`;
 
-const OPTION_LIST = [{ id: '', name: 'Please select one country' }, { id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }, { id: 'uk', name: 'UK' }, { id: 'fr', name: 'France' }];
+const OPTION_LIST = [
+  { id: '', name: 'Please select one country' },
+  { id: 'us', name: 'US' },
+  { id: 'ca', name: 'CA' },
+  { id: 'uk', name: 'UK' },
+  { id: 'fr', name: 'France' },
+];
+
+describe('Select component keydown', () => {
+  it('keydown', () => {
+    // sequence matters for some reason
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    let value = '';
+    const { container } = render(
+      <Select
+        value={''}
+        onBlur={() => {}}
+        optionList={OPTION_LIST}
+        onChange={item => {
+          value = item.id;
+        }}
+        attributesWrapper={{ id: 'wrapper' }}
+        attributesInput={{ id: 'input' }}
+      />,
+      div,
+    );
+    const $wrapper = document.querySelector(WRAPPER);
+    fireEvent.click($wrapper);
+    const arrowDown = new KeyboardEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowDown',
+      keyCode: 40,
+      which: 40,
+    });
+    const enter = new KeyboardEvent('keydown', {
+      bubbles: true,
+      key: 'Enter',
+      keyCode: 13,
+      which: 13,
+    });
+    fireEvent(container, arrowDown);
+    fireEvent(container, enter);
+    expect(value).toEqual(OPTION_LIST[1].id);
+  });
+});
 
 describe('Select component', () => {
   it('[Toggling "validate"]: Should show msgHtml(err) when toggling "validate"', () => {
@@ -239,8 +285,14 @@ describe('Select component', () => {
     ).toEqual('success');
   });
 
-  const LIST1 = [{ id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }];
-  const LIST2 = [{ id: 'uk', name: 'UK' }, { id: 'fr', name: 'France' }];
+  const LIST1 = [
+    { id: 'us', name: 'US' },
+    { id: 'ca', name: 'CA' },
+  ];
+  const LIST2 = [
+    { id: 'uk', name: 'UK' },
+    { id: 'fr', name: 'France' },
+  ];
   const MyComponent = () => {
     const stateOptionList = useState(LIST1);
     const stateCurId = useState(LIST1[0].id);

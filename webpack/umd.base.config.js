@@ -112,6 +112,7 @@ var config = (module.exports = {
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',
+    globalObject: 'this',
   },
   externals: {
     react: 'react',

@@ -197,7 +197,7 @@ const component: React.FC<Props> = ({
     }
   }, []);
   const handleOnChange = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
-    if (disabled || $elWrapper === null) {
+    if (disabled) {
       return;
     }
     onChange && onChange(item, e);
@@ -236,20 +236,19 @@ const component: React.FC<Props> = ({
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   useEffect(() => {
-    if ($elWrapper === null) {
-      return;
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousedown', pageClick);
+      window.addEventListener('touchstart', pageClick);
+      return () => {
+        window.removeEventListener('mousedown', pageClick);
+        window.removeEventListener('touchstart', pageClick);
+        $elWrapper.current.removeEventListener('keydown', onKeyDown);
+      };
     }
-    window.addEventListener('mousedown', pageClick);
-    window.addEventListener('touchstart', pageClick);
-    return () => {
-      window.removeEventListener('mousedown', pageClick);
-      window.removeEventListener('touchstart', pageClick);
-      $elWrapper.current.removeEventListener('keydown', onKeyDown);
-    };
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const pageClick = useCallback((e: Event) => {
-    if ($elWrapper === null || $elWrapper.current.contains(e.target)) {
+    if ($elWrapper.current.contains(e.target)) {
       return;
     }
     if (globalVariableIsFocusing) {
@@ -276,9 +275,6 @@ const component: React.FC<Props> = ({
   const scroll = useCallback((direction: undefined | string = undefined) => {
     if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
       const $children = $itemsWrapper.current.children;
-      if ($elItemsWrapper === null) {
-        return;
-      }
       const containerHeight = $elItemsWrapper.current.offsetHeight;
       const containerScrollTop = $elItemsWrapper.current.scrollTop;
       if (!globalVariableCurrentFocus || !$children[globalVariableCurrentFocus]) {

@@ -393,6 +393,39 @@ input[type='checkbox'] {
   cursor: pointer;
 }
 
+.select__searchInputWrapper {
+  padding: 10px;
+  position: relative;
+  display: flex;
+}
+
+.select__searchInputSearchIcon {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+}
+
+.select__searchInputRemoveIcon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.select__searchInput {
+  padding: 0 30px;
+  border-radius: 2px;
+  font-size: 14px;
+  line-height: 40px;
+  height: 40px;
+  width: 100%;
+  border: 1px solid #dfe2e7;
+  color: #7f8fa4;
+  display: block;
+}
+
 .select__no-mouse {
   cursor: none;
 }

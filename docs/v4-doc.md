@@ -324,6 +324,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |attributesInput                         |  Opt  |  Obj | Modify input general attributes. <br/> **{<br/>id: 'mySelectId',<br/>...<br/>}**                                    | {}      |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
+|showSearch                        |  Opt  |  Bool  |Show a search box in order to find option quickly. | false |
+|keyword                           |  Opt  |  Str   |Show a keyword for search box.               |  ''        |
 |**validate**                      |**Opt**|**Bool**|                                             |**false**   |
 |**validationCallback**           |**Opt**|**Func**|                                             |**none**    |
 |**optionList**                    |**Req**|**Array**|**[{id: '1', name: 'Twin Peaks']**              |**[]**          |
@@ -363,7 +365,9 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   attributesInput={{ id: 'country', name: 'country'}} //Optional.
   value={movie} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  showSearch={false} // Optional.[Bool].Default: false. Show a search box in order to find option quickly.
+  keyword={''} // Optional.[String].Default: ''. Show a keyword for search box.
+   //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
     this.setState({ hasMovieError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
   optionList={MOVIE_OPTIONS_LIST} //Required.[Array of Object(s)].Default: [].

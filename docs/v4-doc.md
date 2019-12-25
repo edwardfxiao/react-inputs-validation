@@ -49,7 +49,8 @@
 |**validationOption.check**        |**Opt**|**Bool**|**To determin if you need to validate.**|**true**    |
 |**validationOption.required**     |**Opt**|**Bool**|**To determin if it is a required field.**|**true**    |
 |**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'~~, 'phone'~~].**|**"string"**|
-|**validationOption.numberType**         |**Opt**|**Str** |**Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.**|**"decimal"**|
+|**validationOption.numberType**         |**Opt**|**Str** |**Validation number type, options are ['decimal', 'int', 'price']. Handy when the validation type is number.**|**"decimal"**|
+|**validationOption.mantissa**         |**Opt**|**Num** |**Validation number precision. Handy when the validation type is number.**|**-1**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
 |**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
@@ -105,7 +106,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
-    // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.
+    // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int', 'price']. Handy when the validation type is number.
+    // mantissa: 2, // Optional.[Number].Default: -1. Number precision.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
     // max: 10, //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
@@ -322,6 +324,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |attributesInput                         |  Opt  |  Obj | Modify input general attributes. <br/> **{<br/>id: 'mySelectId',<br/>...<br/>}**                                    | {}      |
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
+|showSearch                        |  Opt  |  Bool  |Show a search box in order to find option quickly. | false |
+|keyword                           |  Opt  |  Str   |Show a keyword for search box.               |  ''        |
 |**validate**                      |**Opt**|**Bool**|                                             |**false**   |
 |**validationCallback**           |**Opt**|**Func**|                                             |**none**    |
 |**optionList**                    |**Req**|**Array**|**[{id: '1', name: 'Twin Peaks']**              |**[]**          |
@@ -336,7 +340,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |customStyleOptionListContainer    |  Opt  |  Obj   |                                             |  {}        |
 |customStyleOptionListItem         |  Opt  |  Obj   |                                             |  {}        |
 |**onBlur**                       |**Opt**|**Func**                  |**In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.**                                                                                                            |**none**     |
-|**onChange**                      |**Req**|**Func**|                                             |**(val, e) => {}**|
+|**onChange**                      |**Req**|**Func**|                                             |**(res, e) => {}**|
 |onFocus                           |  Opt  |  Func  |                                             |  none      |
 |onClick                           |  Opt  |  Func  |                                             |  none      |
 |**validationOption**              |**Opt**|**obj** |                                             |**{}**      |
@@ -361,7 +365,9 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   attributesInput={{ id: 'country', name: 'country'}} //Optional.
   value={movie} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
-  validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+  showSearch={false} // Optional.[Bool].Default: false. Show a search box in order to find option quickly.
+  keyword={''} // Optional.[String].Default: ''. Show a keyword for search box.
+   //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>
     this.setState({ hasMovieError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.
   optionList={MOVIE_OPTIONS_LIST} //Required.[Array of Object(s)].Default: [].
@@ -375,8 +381,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   customStyleContainer={{}} //Optional.[Object].Default: {}.
   customStyleOptionListContainer={{}} //Optional.[Object].Default: {}.
   customStyleOptionListItem={{}} //Optional.[Object].Default: {}.
-  onChange={(movie, e) => {
-    this.setState({ movie });
+  onChange={(res, e) => {
+    this.setState({ movie: res.id });
     console.log(e);
   }} //Optional.[Func].Default: () => {}. Will return the value.
   onBlur={() => {}} //Optional.[Func].Default: none. In order to validate the value on blur, you MUST provide a function, even if it is an empty function. Missing this, the validation on blur will not work.
@@ -762,7 +768,7 @@ Then in the component...
 
 ```js
 <Textbox
-  tabIndex="1" //Optional.[String or Number].Default: none.
+  attributesInput={{tabIndex: "1"}}
   ...
   validationOption={{
     ...

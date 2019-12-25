@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "4.0.2",
+  "version": "4.3.0",
   "description": "React form input validation components",
   "main": "index.js",
   "repository": {
@@ -29,7 +29,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "test:coverage": "npm run tslint && npm run jslint && npm test -- --coverage",
-    "test_single": "node_modules/.bin/jest Checkbox.js --coverage",
+    "test_single": "node_modules/.bin/jest Select.js --coverage",
     "prepublish": "npm run test:coverage",
     "jslint": "eslint ./src",
     "tslint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
@@ -39,13 +39,14 @@
     "webpack_prod": "rm -rf dist && NODE_ENV=production ./node_modules/.bin/webpack --config ./webpack/production.config.js --progress -p",
     "build_dev": "npm run webpack_dev",
     "build_prod": "npm run webpack_prod",
-    "build_umd": "./node_modules/.bin/webpack --config ./webpack/umd.config.js",
-    "build_umd_min": "./node_modules/.bin/webpack --config ./webpack/umd.config.js --env build",
-    "server_dev": "node_modules/.bin/webpack-dev-server --config ./webpack/development.config.js",
+    "build_umd_local": "./node_modules/.bin/webpack --config ./webpack/umd.local.config.js",
+    "build_umd_global": "./node_modules/.bin/webpack --config ./webpack/umd.global.config.js",
+    "build_umd_global_min": "./node_modules/.bin/webpack --config ./webpack/umd.global.config.js --env build",
+    "dev": "node_modules/.bin/webpack-dev-server --config ./webpack/development.config.js",
     "server_prod": "node_modules/.bin/webpack-dev-server --config ./webpack/production.config.js",
     "clean": "rimraf dist lib",
-    "compile_webpack": "npm run clean && npm run build_umd && npm run build_umd_min",
-    "compile": "npm run clean && npm run compile_webpack && npm run babel"
+    "compile_webpack": "npm run clean && npm run build_umd_global && npm run build_umd_global_min && npm run build_umd_local",
+    "compile": "npm run clean && npm run compile_webpack && rm ./lib/components/*.css"
   },
   "peerDependencies": {
     "react": "^16.8.6",
@@ -59,6 +60,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
+    "@testing-library/react": "^9.3.2",
     "@types/jest": "^23.3.5",
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",

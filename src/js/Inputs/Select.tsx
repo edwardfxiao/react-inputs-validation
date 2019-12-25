@@ -1,10 +1,15 @@
 import * as React from 'react';
-const { useState, useEffect, useCallback, useRef, memo } = React;
+const { useState, useEffect, useCallback, useRef, useMemo, memo } = React;
 import message from './message';
 import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, WRAPPER_CLASS_IDENTITIFIER, CONTAINER_CLASS_IDENTITIFIER, MSG_CLASS_IDENTITIFIER, usePrevious } from './const';
 import utils from './utils';
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'select';
+const keyCodeEsc = 27;
+const keyCodeDown = 40;
+const keyCodeUp = 38;
+const keyCodeEnter = 13;
+const selectKeyList = [keyCodeEsc, keyCodeDown, keyCodeUp, keyCodeEnter];
 /* istanbul ignore next */
 if (!String.prototype.startsWith) {
   String.prototype.startsWith = function(searchString, position) {
@@ -103,8 +108,10 @@ interface Props {
   value?: string | number;
   disabled?: boolean;
   validate?: boolean;
+  showSearch?: boolean;
+  keyword?: string;
   optionList: OptionListItem[];
-  onChange: (res: string, e: React.MouseEvent<HTMLElement>) => void;
+  onChange: (res: object, e: React.MouseEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement> | Event) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -137,6 +144,8 @@ const component: React.FC<Props> = ({
   value = '',
   disabled = false,
   validate = false,
+  showSearch = false,
+  keyword = '',
   optionList = [],
   classNameWrapper = '',
   classNameContainer = '',
@@ -162,7 +171,10 @@ const component: React.FC<Props> = ({
   const [msg, setMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [internalValue, setInternalValue] = useState(String(value));
+  const stateKeyword = useState(keyword);
+  const prevKeyword = usePrevious(stateKeyword[0]);
   const prevInternalValue = usePrevious(internalValue);
+  const prevOptionList = usePrevious(optionList);
   const [show, setShow] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const initKeycodeList: number[] = [];
@@ -172,15 +184,43 @@ const component: React.FC<Props> = ({
   const $button = useRef(null);
   const $wrapper = useRef(null);
   const $itemsWrapper = useRef(null);
+  const $searchInputWrapper = useRef(null);
+  const $searchInput = useRef(null);
   const $elButton: { [key: string]: any } | null = $button;
   const $elWrapper: { [key: string]: any } | null = $wrapper;
   const $elItemsWrapper: { [key: string]: any } | null = $itemsWrapper;
   const $itemsRef: { [key: string]: any } = [];
-  if (optionList.length) {
-    for (let i = 0; i < optionList.length; i += 1) {
-      $itemsRef.push(useRef(null));
+  const filteredOptionList = useMemo(() => {
+    let res = optionList;
+    if (res.length) {
+      if (stateKeyword[0]) {
+        res = optionList.filter(i => i.name.toLowerCase().includes(stateKeyword[0].toLowerCase()));
+      }
     }
-  }
+    return res;
+  }, [stateKeyword[0], optionList]);
+  const handleOnSearch = useCallback((e: any) => {
+    stateKeyword[1](e.target.value);
+  }, []);
+  const handleOnSearchKeyDown = useCallback(
+    (e: any) => {
+      const { keyCode } = e;
+      const direction = getDirection(keyCode);
+      if (selectKeyList.indexOf(keyCode) !== -1) {
+        e.preventDefault();
+        handleOnKeyDown(keyCode);
+      }
+      scroll(direction);
+    },
+    [filteredOptionList],
+  );
+  useEffect(() => {
+    if (show && showSearch) {
+      globalVariableCurrentFocus = 0;
+      scroll('up');
+      addActive();
+    }
+  }, [stateKeyword[0]]);
   const handleOnBlur = useCallback(
     (e: React.FocusEvent<HTMLElement> | Event) => {
       if (onBlur) {
@@ -200,37 +240,34 @@ const component: React.FC<Props> = ({
       onClick(e);
     }
   }, []);
-  const handleOnChange = useCallback((v: string, e: React.MouseEvent<HTMLElement>) => {
-    if (disabled || $elWrapper === null) {
+  const handleOnChange = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
+    if (disabled) {
       return;
     }
-    onChange && onChange(String(v), e);
+    onChange && onChange(item, e);
   }, []);
-  const check = useCallback(
-    () => {
-      const { name, check, locale, required, msgOnSuccess } = option;
-      if (!check) {
+  const check = useCallback(() => {
+    const { name, check, locale, required, msgOnSuccess } = option;
+    if (!check) {
+      return;
+    }
+    if (!message[locale] || !message[locale][TYPE]) {
+      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+      return;
+    }
+    if (required) {
+      const msg = message[locale][TYPE];
+      const nameText = name ? name : '';
+      if (!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined') {
+        handleCheckEnd(true, msg.empty(nameText));
         return;
       }
-      if (!message[locale] || !message[locale][TYPE]) {
-        console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
-        return;
-      }
-      if (required) {
-        const msg = message[locale][TYPE];
-        const nameText = name ? name : '';
-        if (!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined') {
-          handleCheckEnd(true, msg.empty(nameText));
-          return;
-        }
-      }
-      if (msgOnSuccess) {
-        setSuccessMsg(msgOnSuccess);
-      }
-      handleCheckEnd(false, msgOnSuccess);
-    },
-    [internalValue, option],
-  );
+    }
+    if (msgOnSuccess) {
+      setSuccessMsg(msgOnSuccess);
+    }
+    handleCheckEnd(false, msgOnSuccess);
+  }, [internalValue, option]);
   const handleCheckEnd = useCallback((err: boolean, message: string) => {
     let msg = message;
     const { msgOnError } = option;
@@ -243,20 +280,19 @@ const component: React.FC<Props> = ({
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   useEffect(() => {
-    if ($elWrapper === null) {
-      return;
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousedown', pageClick);
+      window.addEventListener('touchstart', pageClick);
+      return () => {
+        window.removeEventListener('mousedown', pageClick);
+        window.removeEventListener('touchstart', pageClick);
+        $elWrapper.current.removeEventListener('keydown', onKeyDown);
+      };
     }
-    window.addEventListener('mousedown', pageClick);
-    window.addEventListener('touchstart', pageClick);
-    return () => {
-      window.removeEventListener('mousedown', pageClick);
-      window.removeEventListener('touchstart', pageClick);
-      $elWrapper.current.removeEventListener('keydown', onKeyDown);
-    };
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const pageClick = useCallback((e: Event) => {
-    if ($elWrapper === null || $elWrapper.current.contains(e.target)) {
+    if ($elWrapper.current.contains(e.target)) {
       return;
     }
     if (globalVariableIsFocusing) {
@@ -266,13 +302,10 @@ const component: React.FC<Props> = ({
     setShow(false);
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-  const resetCurrentFocus = useCallback(
-    () => {
-      globalVariableCurrentFocus = getIndex(optionList, internalValue);
-      scroll();
-    },
-    [internalValue],
-  );
+  const resetCurrentFocus = useCallback(() => {
+    globalVariableCurrentFocus = getIndex(filteredOptionList, internalValue);
+    scroll();
+  }, [internalValue]);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const setTimeoutTyping = useCallback(() => {
     if (globalVariableTypingTimeout) {
@@ -284,47 +317,44 @@ const component: React.FC<Props> = ({
   }, []);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const scroll = useCallback((direction: undefined | string = undefined) => {
-    if ($elItemsWrapper === null) {
-      return;
-    }
-    const containerHeight = $elItemsWrapper.current.offsetHeight;
-    const containerScrollTop = $elItemsWrapper.current.scrollTop;
-    if (!globalVariableCurrentFocus || !$itemsRef[globalVariableCurrentFocus]) {
-      return;
-    }
-    const $elOptionItem: Node | null = $itemsRef[globalVariableCurrentFocus];
-    if ($elOptionItem === null) {
-      return;
-    }
-    const itemHeight = $elOptionItem.current.offsetHeight;
-    if (direction) {
-      if (direction === 'down') {
-        const bound = containerScrollTop + containerHeight;
-        const heightItems = globalVariableCurrentFocus * itemHeight;
-        const heightContainer = bound - itemHeight;
-        if (heightItems >= heightContainer) {
-          const offset = Math.abs(heightItems - heightContainer - itemHeight);
-          if (offset >= 0 && !globalVariableIsCorrected) {
-            $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight - offset;
-            globalVariableIsCorrected = true;
-          } else {
-            $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight;
+    if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
+      const $children = $itemsWrapper.current.children;
+      const containerHeight = $elItemsWrapper.current.offsetHeight;
+      const containerScrollTop = $elItemsWrapper.current.scrollTop;
+      if (!$children[globalVariableCurrentFocus]) {
+        return;
+      }
+      const itemHeight = $children[globalVariableCurrentFocus].offsetHeight;
+      if (direction) {
+        if (direction === 'down') {
+          const bound = containerScrollTop + containerHeight;
+          const heightItems = globalVariableCurrentFocus * itemHeight;
+          const heightContainer = bound - itemHeight;
+          if (heightItems >= heightContainer) {
+            const offset = Math.abs(heightItems - heightContainer - itemHeight);
+            if (offset >= 0 && !globalVariableIsCorrected) {
+              $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight - offset;
+              globalVariableIsCorrected = true;
+            } else {
+              $elItemsWrapper.current.scrollTop = containerScrollTop + itemHeight;
+            }
           }
         }
-      }
-      if (direction === 'up') {
-        globalVariableIsCorrected = false;
-        if (globalVariableCurrentFocus * itemHeight <= containerScrollTop) {
-          $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
+        if (direction === 'up') {
+          globalVariableIsCorrected = false;
+          if (globalVariableCurrentFocus * itemHeight <= containerScrollTop) {
+            $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
+          }
         }
+      } else {
+        globalVariableIsCorrected = false;
+        $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
       }
-    } else {
-      globalVariableIsCorrected = false;
-      $elItemsWrapper.current.scrollTop = globalVariableCurrentFocus * itemHeight;
     }
   }, []);
-  const handleOnItemClick = useCallback((v: string, e: React.MouseEvent<HTMLElement>) => {
-    handleOnChange(v, e);
+  const handleOnItemClick = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
+    handleOnChange(item, e);
+    stateKeyword[1]('');
   }, []);
   const handleOnItemMouseOver = useCallback((index: number) => {
     globalVariableCurrentFocus = index;
@@ -337,34 +367,73 @@ const component: React.FC<Props> = ({
     removeActive();
   }, []);
   const addActive = useCallback(() => {
-    if (!$itemsRef) return;
-    removeActive();
-    if (globalVariableCurrentFocus === null) return;
-    if (globalVariableCurrentFocus >= $itemsRef.length) globalVariableCurrentFocus = 0;
-    if (globalVariableCurrentFocus < 0) globalVariableCurrentFocus = $itemsRef.length - 1;
-    const $node: Node | null = $itemsRef[globalVariableCurrentFocus];
-    /* istanbul ignore next because it won't happen */
-    if (!$node) {
-      return;
+    if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
+      const $children = $itemsWrapper.current.children;
+      removeActive();
+      if (globalVariableCurrentFocus === null) return;
+      if (globalVariableCurrentFocus >= $children.length) globalVariableCurrentFocus = 0;
+      if (globalVariableCurrentFocus < 0) globalVariableCurrentFocus = $children.length - 1;
+      if ($children[globalVariableCurrentFocus]) $children[globalVariableCurrentFocus].className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
     }
-    $itemsRef[globalVariableCurrentFocus].current.className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
   }, []);
   const removeActive = useCallback(() => {
-    for (let i = 0; i < $itemsRef.length; i += 1) {
-      const $node: Node | null = $itemsRef[i];
-      /* istanbul ignore next because it won't happen */
-      if (!$node) {
-        break;
-      }
-      if ($node && $node.current) {
-        $node.current.className = $node.current.className.replace(reactInputsValidationCss[`${TYPE}__hover-active`], '');
+    if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
+      const $children = $itemsWrapper.current.children;
+      for (let i = 0; i < $children.length; i += 1) {
+        $children[i].className = $children[i].className.replace(reactInputsValidationCss[`${TYPE}__hover-active`], '');
       }
     }
   }, []);
-
+  const getDirection = useCallback(keyCode => {
+    switch (keyCode) {
+      case keyCodeUp:
+        return 'up';
+      case keyCodeDown:
+        return 'down';
+      default:
+        return undefined;
+    }
+  }, []);
+  const handleOnKeyDown = useCallback(
+    keyCode => {
+      if (keyCode === keyCodeEsc) {
+        setShow(false);
+        resetCurrentFocus();
+        return;
+      }
+      if (keyCode === keyCodeDown) {
+        globalVariableCurrentFocus += 1;
+        if (globalVariableCurrentFocus > filteredOptionList.length - 1) {
+          globalVariableCurrentFocus = filteredOptionList.length - 1;
+        }
+        addActive();
+      } else if (keyCode === keyCodeUp) {
+        globalVariableCurrentFocus -= 1;
+        if (globalVariableCurrentFocus < 0) {
+          globalVariableCurrentFocus = 0;
+        }
+        addActive();
+      } else if (keyCode === keyCodeEnter) {
+        if (globalVariableCurrentFocus > -1) {
+          if ($itemsWrapper && $itemsWrapper.current && $itemsWrapper.current.children) {
+            const $children = $itemsWrapper.current.children;
+            if ($children[globalVariableCurrentFocus]) {
+              $children[globalVariableCurrentFocus].click();
+            } else {
+              return;
+            }
+          }
+        }
+      }
+    },
+    [filteredOptionList],
+  );
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   const onKeyDown = useCallback(
     (e: any) => {
+      if (showSearch) {
+        return;
+      }
       setIsTyping(true);
       if (e.preventDefault) {
         e.preventDefault();
@@ -372,49 +441,17 @@ const component: React.FC<Props> = ({
       if (!show) {
         return;
       }
-      globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(optionList, String(value)) : globalVariableCurrentFocus;
-      let direction = undefined;
+      globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(filteredOptionList, String(value)) : globalVariableCurrentFocus;
       const { keyCode } = e;
-      const keyCodeEsc = 27;
-      const keyCodeDown = 40;
-      const keyCodeUp = 38;
-      const keyCodeEnter = 13;
-      const selectKeyList = [keyCodeEsc, keyCodeDown, keyCodeUp, keyCodeEnter];
+      const direction = getDirection(keyCode);
       if (selectKeyList.indexOf(keyCode) !== -1) {
-        if (keyCode === keyCodeEsc) {
-          setShow(false);
-          resetCurrentFocus();
-          return;
-        }
-        if (keyCode === keyCodeDown) {
-          direction = 'down';
-          globalVariableCurrentFocus += 1;
-          if (globalVariableCurrentFocus > optionList.length - 1) {
-            globalVariableCurrentFocus = optionList.length - 1;
-          }
-          addActive();
-        } else if (keyCode === keyCodeUp) {
-          direction = 'up';
-          globalVariableCurrentFocus -= 1;
-          if (globalVariableCurrentFocus < 0) {
-            globalVariableCurrentFocus = 0;
-          }
-          addActive();
-        } else if (keyCode === keyCodeEnter) {
-          if (globalVariableCurrentFocus > -1) {
-            if ($itemsRef[globalVariableCurrentFocus]) {
-              $itemsRef[globalVariableCurrentFocus].current.click();
-            } else {
-              return;
-            }
-          }
-        }
+        handleOnKeyDown(keyCode);
       } else {
         setTimeoutTyping();
         const newkeyCodeList = [...keycodeList, keyCode];
         const str = String.fromCharCode(...newkeyCodeList).toLowerCase();
         let index = -1;
-        optionList.filter((i, k) => {
+        filteredOptionList.forEach((i, k) => {
           const { name } = i;
           if (name.toLowerCase().startsWith(str)) {
             if (index === -1) {
@@ -433,75 +470,63 @@ const component: React.FC<Props> = ({
     },
     [show, value, keycodeList],
   );
-  useEffect(
-    () => {
-      if (show && $elWrapper) {
-        document.addEventListener('keydown', onKeyDown);
-      }
-      return () => {
-        document.removeEventListener('keydown', onKeyDown);
-      };
-    },
-    [show, value, keycodeList],
-  );
-  useEffect(
-    () => {
-      if (validate) {
-        check();
-      }
-    },
-    [validate],
-  );
-  useEffect(
-    () => {
-      if (!(!isValidValue(optionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined')) {
-        setErr(false);
-      } else {
-        setSuccessMsg('');
-      }
-    },
-    [internalValue],
-  );
-  useEffect(
-    () => {
-      setInternalValue(String(value));
-    },
-    [value],
-  );
-  useEffect(
-    () => {
-      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
-        check();
-      }
-    },
-    [prevInternalValue, internalValue],
-  );
-  useEffect(
-    () => {
-      if (asyncObj) {
-        if (asyncObj.message) {
-          if (asyncObj.showOnError) {
-            handleCheckEnd(asyncObj.error, asyncObj.message);
-          }
-          if (!asyncObj.error && asyncObj.showOnSuccess) {
-            setSuccessMsg(asyncObj.message);
-          }
+  useEffect(() => {
+    if (show && $elWrapper) {
+      document.addEventListener('keydown', onKeyDown);
+    }
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [show, value, keycodeList]);
+  useEffect(() => {
+    if (validate) {
+      check();
+    }
+  }, [validate]);
+  useEffect(() => {
+    if (!(!isValidValue(filteredOptionList, internalValue) || internalValue === '' || internalValue === 'null' || internalValue === 'undefined')) {
+      setErr(false);
+    } else {
+      setSuccessMsg('');
+    }
+  }, [internalValue]);
+  useEffect(() => {
+    setInternalValue(String(value));
+  }, [value]);
+  useEffect(() => {
+    if (prevOptionList && prevOptionList !== optionList) {
+      setInternalValue(String(optionList[0].id));
+    }
+  }, [optionList]);
+  useEffect(() => {
+    if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+      check();
+    }
+  }, [prevInternalValue, internalValue]);
+  useEffect(() => {
+    if (asyncObj) {
+      if (asyncObj.message) {
+        if (asyncObj.showOnError) {
+          handleCheckEnd(asyncObj.error, asyncObj.message);
+        }
+        if (!asyncObj.error && asyncObj.showOnSuccess) {
+          setSuccessMsg(asyncObj.message);
         }
       }
-    },
-    [asyncMsgObj],
-  );
-  useEffect(
-    () => {
-      if (show) {
-        globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(optionList, String(value)) : globalVariableCurrentFocus;
-        $itemsRef[globalVariableCurrentFocus].current.focus();
-      } else {
-        $elButton.current.focus();
+    }
+  }, [asyncMsgObj]);
+  useEffect(() => {
+    if (show) {
+      if (showSearch) {
+        $searchInput.current.focus();
       }
-    },
-    [show],
-  );
+      globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(filteredOptionList, String(value)) : globalVariableCurrentFocus;
+      $itemsRef[globalVariableCurrentFocus] && $itemsRef[globalVariableCurrentFocus].current.focus();
+    } else {
+      $elButton.current.focus();
+    }
+    resetCurrentFocus()
+  }, [show]);
   const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
@@ -530,13 +555,12 @@ const component: React.FC<Props> = ({
   }
   let optionListHtml;
   const item = getItem(optionList, String(value));
-  if (optionList.length) {
-    optionListHtml = optionList.map((i, k) => (
+  if (filteredOptionList.length) {
+    optionListHtml = filteredOptionList.map((i, k) => (
       <Option
         key={k}
         index={k}
         id={`react-inputs-validation__select_option-${i.id}`}
-        refItem={$itemsRef[k]}
         className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
         item={i}
         customStyleOptionListItem={customStyleOptionListItem}
@@ -546,6 +570,20 @@ const component: React.FC<Props> = ({
         onMouseOut={handleOnItemMouseOut}
       />
     ));
+  } else {
+    if (showSearch) {
+      optionListHtml = (
+        <div style={{ background: '#fff', textAlign: 'center', padding: '20px' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path
+              fill="#cdcdcd"
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"
+            />
+          </svg>
+        </div>
+      );
+    }
   }
   const selectorHtml = (
     <div className={reactInputsValidationCss[`${TYPE}__dropdown`]}>
@@ -560,7 +598,15 @@ const component: React.FC<Props> = ({
       className={reactInputsValidationCss[`button`]}
       onClick={e => {
         handleOnClick(e);
-        !disabled ? setShow(!show) : ``;
+        if (!disabled) {
+          if ($searchInputWrapper.current) {
+            if ($searchInputWrapper.current.contains(e.target)) {
+              setShow(true);
+              return;
+            }
+          }
+          setShow(!show);
+        }
       }}
       onFocus={handleOnFocus}
       onBlur={handleOnBlur}
@@ -568,12 +614,47 @@ const component: React.FC<Props> = ({
     >
       <div ref={$wrapper} className={wrapperClass} style={customStyleWrapper}>
         <div className={containerClass} style={customStyleContainer}>
-          <input type="hidden" value={value} className={inputClass} onChange={() => {}} {...attributesInput} />
+          <input type="hidden" value={internalValue} className={inputClass} onChange={() => {}} {...attributesInput} />
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
-          <div ref={$itemsWrapper} className={selectOptionListContainerClass} style={customStyleOptionListContainer}>
-            {optionListHtml}
+          <div className={selectOptionListContainerClass}>
+            {showSearch && (
+              <div ref={$searchInputWrapper}>
+                <div className={reactInputsValidationCss[`${TYPE}__searchInputWrapper`]}>
+                  <svg className={reactInputsValidationCss[`${TYPE}__searchInputSearchIcon`]} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                    <path
+                      fill="#cdcdcd"
+                      d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                    />
+                    <path d="M0 0h24v24H0z" fill="none" />
+                  </svg>
+                  <input className={reactInputsValidationCss[`${TYPE}__searchInput`]} ref={$searchInput} value={stateKeyword[0]} onChange={handleOnSearch} onKeyDown={handleOnSearchKeyDown} />
+                  {stateKeyword[0] && (
+                    <svg
+                      className={reactInputsValidationCss[`${TYPE}__searchInputRemoveIcon`]}
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      onClick={() => {
+                        stateKeyword[1]('');
+                        $searchInput.current.focus();
+                      }}
+                    >
+                      <path
+                        fill="#cdcdcd"
+                        d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
+                      />
+                      <path d="M0 0h24v24H0z" fill="none" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+            )}
+            <div ref={$itemsWrapper} style={customStyleOptionListContainer}>
+              {optionListHtml}
+            </div>
           </div>
         </div>
         {msgHtml}
@@ -584,31 +665,22 @@ const component: React.FC<Props> = ({
 interface OptionProps {
   index?: number;
   id?: string;
-  refItem?: React.RefObject<HTMLAnchorElement>;
   className?: string;
   item?: OptionListItem;
   customStyleOptionListItem?: object;
-  onClick?: (res: string, e: React.MouseEvent<HTMLElement>) => void;
+  onClick?: (res: object, e: React.MouseEvent<HTMLElement>) => void;
   onMouseOver?: (res: number) => void;
   onMouseMove?: () => void;
   onMouseOut?: () => void;
 }
 export const Option: React.FC<OptionProps> = memo(
-  ({
-    index = -1,
-    refItem = null,
-    id = '',
-    className = '',
-    item = { id: '', name: '' },
-    customStyleOptionListItem = {},
-    onClick = () => {},
-    onMouseOver = () => {},
-    onMouseMove = () => {},
-    onMouseOut = () => {},
-  }) => {
-    const handleOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
-      onClick(item.id, e);
-    }, []);
+  ({ index = -1, id = '', className = '', item = { id: '', name: '' }, customStyleOptionListItem = {}, onClick = () => {}, onMouseOver = () => {}, onMouseMove = () => {}, onMouseOut = () => {} }) => {
+    const handleOnClick = useCallback(
+      (e: React.MouseEvent<HTMLElement>) => {
+        onClick(item, e);
+      },
+      [item],
+    );
     const handleOnMouseOver = useCallback(() => {
       onMouseOver(index);
     }, []);
@@ -619,17 +691,8 @@ export const Option: React.FC<OptionProps> = memo(
       onMouseOut();
     }, []);
     return (
-      <a
-        id={id}
-        ref={refItem}
-        onMouseOver={handleOnMouseOver}
-        onMouseMove={handleOnMouseMove}
-        onMouseOut={handleOnMouseOut}
-        className={className}
-        style={customStyleOptionListItem}
-        onClick={handleOnClick}
-      >
-        {item.name}
+      <a id={id} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
+        <span>{item.name}</span>
       </a>
     );
   },

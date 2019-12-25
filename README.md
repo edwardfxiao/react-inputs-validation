@@ -56,9 +56,9 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 # <a name="documentation"></a>Documentation
 
-### <a name="1.x-2.x-3.x-documentation"></a>[1.x, 2.x, 3.x](https://github.com/edwardfhsiao/react-inputs-validation/blob/master/v1-v2-v3-doc.md)
+### <a name="1.x-2.x-3.x-documentation"></a>[1.x, 2.x, 3.x](https://github.com/edwardfhsiao/react-inputs-validation/blob/master/docs/v1-v2-v3-doc.md)
 
-## <a name="4.x-documentation"></a>[4.x](https://github.com/edwardfhsiao/react-inputs-validation/blob/master/v4-doc.md)
+## <a name="4.x-documentation"></a>[4.x](https://github.com/edwardfhsiao/react-inputs-validation/blob/master/docs/v4-doc.md)
 
 # <a name="browser-support"></a>Browser support
 Tested on IE9+ and Chrome and Safari(10.0.3)

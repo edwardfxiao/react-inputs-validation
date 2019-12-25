@@ -265,7 +265,6 @@ const component: React.FC<Props> = ({
           key={k}
           checked={checked}
           id={`react-inputs-validation__radiobox_option-${i.id}`}
-          name={name}
           item={i}
           inputClass={inputClass}
           value={internalValue}
@@ -295,7 +294,6 @@ interface AttributesInput {
 interface OptionProps {
   checked?: boolean;
   id?: string;
-  name?: string;
   optionListItemClass?: string;
   labelClass?: string;
   inputClass?: string;
@@ -311,7 +309,6 @@ export const Option: React.FC<OptionProps> = memo(
   ({
     checked = false,
     id = '',
-    name = '',
     optionListItemClass = '',
     labelClass = '',
     inputClass = '',
@@ -325,12 +322,11 @@ export const Option: React.FC<OptionProps> = memo(
   }) => {
     const handleOnChange = useCallback(e => {
       onChange(item.id, e);
-    }, []);
+    }, [item]);
     return (
       <button type="button" className={optionListItemClass} style={customStyleOptionListItem} onClick={handleOnChange}>
         <input
           id={id}
-          name={name}
           type="radio"
           value={value}
           checked={checked}

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { render, fireEvent } from '@testing-library/react';
 import { expect as chaiExpect } from 'chai';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -9,7 +10,52 @@ configure({ adapter: new Adapter() });
 
 const WRAPPER = `.${WRAPPER_CLASS_IDENTITIFIER}`;
 
-const OPTION_LIST = [{ id: '', name: 'Please select one country' }, { id: 'us', name: 'US' }, { id: 'ca', name: 'CA' }, { id: 'uk', name: 'UK' }, { id: 'fr', name: 'France' }];
+const OPTION_LIST = [
+  { id: '', name: 'Please select one country' },
+  { id: 'us', name: 'US' },
+  { id: 'ca', name: 'CA' },
+  { id: 'uk', name: 'UK' },
+  { id: 'fr', name: 'France' },
+];
+
+describe('Select component keydown', () => {
+  it('keydown', () => {
+    // sequence matters for some reason
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    let value = '';
+    const { container } = render(
+      <Select
+        value={''}
+        onBlur={() => {}}
+        optionList={OPTION_LIST}
+        onChange={item => {
+          value = item.id;
+        }}
+        attributesWrapper={{ id: 'wrapper' }}
+        attributesInput={{ id: 'input' }}
+      />,
+      div,
+    );
+    const $wrapper = document.querySelector(WRAPPER);
+    fireEvent.click($wrapper);
+    const arrowDown = new KeyboardEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowDown',
+      keyCode: 40,
+      which: 40,
+    });
+    const enter = new KeyboardEvent('keydown', {
+      bubbles: true,
+      key: 'Enter',
+      keyCode: 13,
+      which: 13,
+    });
+    fireEvent(container, arrowDown);
+    fireEvent(container, enter);
+    expect(value).toEqual(OPTION_LIST[1].id);
+  });
+});
 
 describe('Select component', () => {
   it('[Toggling "validate"]: Should show msgHtml(err) when toggling "validate"', () => {
@@ -128,7 +174,7 @@ describe('Select component', () => {
         value={value}
         optionList={OPTION_LIST}
         onChange={res => {
-          value = res;
+          value = res.id;
         }}
       />,
     );
@@ -203,7 +249,7 @@ describe('Select component', () => {
   });
 
   it('[asyncObj]: Should show error', () => {
-    const wrapper = mount(<Select onBlur={() => {}} asyncMsgObj={{}} />);
+    const wrapper = mount(<Select onBlur={() => {}} optionList={OPTION_LIST} asyncMsgObj={{}} />);
     const $wrapper = wrapper.find(WRAPPER);
     $wrapper.simulate('focus');
     $wrapper.simulate('blur');
@@ -226,7 +272,7 @@ describe('Select component', () => {
   });
 
   it('[asyncObj]: Should show success', () => {
-    const wrapper = mount(<Select onBlur={() => {}} asyncMsgObj={{}} />);
+    const wrapper = mount(<Select onBlur={() => {}} optionList={OPTION_LIST} asyncMsgObj={{}} />);
     const $wrapper = wrapper.find(WRAPPER);
     $wrapper.simulate('focus');
     $wrapper.simulate('blur');
@@ -237,6 +283,47 @@ describe('Select component', () => {
         .find(`.${MSG_CLASS_IDENTITIFIER}`)
         .text(),
     ).toEqual('success');
+  });
+
+  const LIST1 = [
+    { id: 'us', name: 'US' },
+    { id: 'ca', name: 'CA' },
+  ];
+  const LIST2 = [
+    { id: 'uk', name: 'UK' },
+    { id: 'fr', name: 'France' },
+  ];
+  const MyComponent = () => {
+    const stateOptionList = useState(LIST1);
+    const stateCurId = useState(LIST1[0].id);
+    return (
+      <div>
+        <Select
+          value={stateCurId[0]}
+          onBlur={() => {}}
+          optionList={stateOptionList[0]}
+          onChange={res => {
+            stateCurId[1](res.id);
+          }}
+        />
+        <div
+          id="changeList"
+          onClick={() => {
+            stateOptionList[1](LIST2);
+          }}
+        >
+          change list
+        </div>
+        <div id="stateCurId">{stateCurId[0]}</div>
+      </div>
+    );
+  };
+
+  it('[update optionList]: Should change ', () => {
+    const wrapper = mount(<MyComponent />);
+    const $input = wrapper.find('input');
+    wrapper.find('#changeList').simulate('click');
+    expect($input.at(0).instance().value).toEqual(LIST2[0].id);
   });
 
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {

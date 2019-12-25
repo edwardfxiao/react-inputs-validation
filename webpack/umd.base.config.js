@@ -20,7 +20,6 @@ if (env === 'build') {
 var config = (module.exports = {
   mode: 'production',
   context: PATH.ROOT_PATH,
-  entry: PATH.ROOT_PATH + 'src/js/Inputs/index.umd.ts',
   module: {
     rules: [
       {
@@ -113,6 +112,11 @@ var config = (module.exports = {
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',
+    globalObject: 'this',
+  },
+  externals: {
+    react: 'react',
+    'react-dom': 'react-dom',
   },
   plugins,
 });

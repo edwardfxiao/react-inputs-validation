@@ -7,7 +7,7 @@ import { REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE, DEFAULT_LOCALE, M
 import reactInputsValidationCss from './react-inputs-validation.css';
 const TYPE = 'textbox';
 const VALIDATE_OPTION_TYPE_LIST = ['string', 'number', 'alphanumeric', 'alpha'];
-const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int'];
+const VALIDATE_NUMBER_TYPE_LIST = ['decimal', 'int', 'price'];
 interface DefaultValidationOption {
   locale?: string;
   reg?: string;
@@ -15,6 +15,7 @@ interface DefaultValidationOption {
   max?: number;
   type?: string;
   numberType?: string;
+  mantissa?: number;
   name?: string;
   check?: boolean;
   showMsg?: boolean;
@@ -27,13 +28,14 @@ interface DefaultValidationOption {
   customFunc?: Function | undefined;
 }
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
-  let { reg, min, max, type, numberType, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
+  let { reg, min, max, type, numberType, mantissa, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
   max = typeof max !== 'undefined' ? max : 0;
   type = typeof type !== 'undefined' ? type : 'string';
   numberType = typeof numberType !== 'undefined' ? numberType : 'string';
+  mantissa = typeof mantissa !== 'undefined' ? mantissa : -1;
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
   showMsg = typeof showMsg !== 'undefined' ? showMsg : true;
@@ -50,6 +52,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     max,
     type,
     numberType,
+    mantissa,
     name,
     check,
     length,
@@ -106,29 +109,50 @@ interface Props {
   onKeyUp?: (e: React.KeyboardEvent<HTMLElement>) => void;
   validationCallback?: (res: boolean) => void;
 }
-const autoFormatNumber = (v: number | string, numberType: string) => {
+const autoFormatNumber = (v: number | string, numberType: string, mantissa: number) => {
   const DOT = '.';
+  const ZERO = '0';
   let res = '';
   let hasDot = false;
-  String(v)
-    .split('')
-    .filter(i => {
-      const charCode = i.toLowerCase().charCodeAt(0);
-      if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
-        if (charCode === 46) {
-          if (numberType === VALIDATE_NUMBER_TYPE_LIST[1]) {
-            return;
-          }
-          hasDot = true;
+  const splitStr = String(v).split('');
+  const startedWithZero = splitStr[0] === '0';
+  if (numberType === VALIDATE_NUMBER_TYPE_LIST[2] && splitStr[0] === ZERO && splitStr[1] === ZERO) {
+    splitStr.shift();
+  }
+  splitStr.forEach(i => {
+    const charCode = i.toLowerCase().charCodeAt(0);
+    if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
+      if (charCode === 46) {
+        if (numberType === VALIDATE_NUMBER_TYPE_LIST[1]) {
+          return;
         }
-        res += i;
+        hasDot = true;
       }
-    });
-  if (numberType === VALIDATE_NUMBER_TYPE_LIST[0]) {
+      res += i;
+    }
+  });
+  if (hasDot && mantissa >= 0) {
+    const resArr = res.split(DOT);
+    if (mantissa === 0) {
+      res = resArr[0];
+    } else {
+      resArr[1] = resArr[1].slice(0, mantissa);
+      res = resArr.join('.');
+    }
+  }
+  if (numberType === VALIDATE_NUMBER_TYPE_LIST[0] || numberType === VALIDATE_NUMBER_TYPE_LIST[2]) {
     if (res.length && res[0] === DOT) {
       res = `0${res}`;
     }
   }
+  // if (numberType === VALIDATE_NUMBER_TYPE_LIST[2]) {
+  //   if (startedWithZero) {
+  //     if (hasDot) {
+  //       const resArr = res.split(DOT);
+  //       res = `${Number(resArr[0])}${DOT}${resArr[1]}`;
+  //     }
+  //   }
+  // }
   return res;
 };
 const component: React.FC<Props> = ({
@@ -206,9 +230,9 @@ const component: React.FC<Props> = ({
           }
         }
       }
-      const { type, numberType } = option;
+      const { type, numberType, mantissa } = option;
       if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-        v = String(autoFormatNumber(v, VALIDATE_NUMBER_TYPE_LIST.indexOf(numberType) >= 0 ? numberType : VALIDATE_NUMBER_TYPE_LIST[0]));
+        v = String(autoFormatNumber(v, VALIDATE_NUMBER_TYPE_LIST.indexOf(numberType) >= 0 ? numberType : VALIDATE_NUMBER_TYPE_LIST[0], mantissa));
       }
       if (type === VALIDATE_OPTION_TYPE_LIST[2]) {
         v = utils.getAlphanumeric(v);
@@ -224,7 +248,7 @@ const component: React.FC<Props> = ({
         setSuccessMsg('');
       }
     },
-    [err],
+    [err, attributesInput, option],
   );
   const check = useCallback(
     async () => {

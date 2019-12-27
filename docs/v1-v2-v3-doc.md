@@ -141,9 +141,9 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // onKeyUp={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   validationOption={{
-    name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
-    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
-    required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+    // name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+    // check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    // required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
     // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int']. Handy when the validation type is number.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
@@ -245,9 +245,9 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   // onFocus={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   validationOption={{
-    name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
-    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
-    required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+    // name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+    // check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    // required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
@@ -338,9 +338,9 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     </div>
   } //Required.[Html].Default: none.
   validationOption={{
-    name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
-    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
-    required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+    // name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
+    // check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    // required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look of 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
@@ -447,9 +447,9 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   //   }
   // )} //Optional.[Html].Default: none. The custom select options item html that will display in dropdown list. Use it if you think the default html is ugly.
   validationOption={{
-    name: 'movie', //Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
-    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
-    required: true //Optional.[Bool].Default: true. To determin if it is a required field.
+    // name: 'movie', //Optional.[String].Default: "". To display in the Error message. i.e Please select a ${name}.
+    // check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    // required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
@@ -547,10 +547,10 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // onKeyUp={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   validationOption={{
-    name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
-    check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
-    required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
-    type: 'string' //Optional.[String].Default: "string". Validation type, options are ['string'].
+    // name: 'Description', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+    // check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
+    // required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
+    // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string'].
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // min: 2, //Optional.[Number].Default: 0. Validation of min length.

@@ -141,7 +141,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   // onClick={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   // onKeyUp={(e) => {console.log(e)}} //Optional.[Func].Default: none.
   validationOption={{
-    name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+    name: 'Name', //Optional.[String].Default: "". To display in the Error message. i.e `Please enter your ${name}`.
     check: true, //Optional.[Bool].Default: true. To determin if you need to validate.
     required: true, //Optional.[Bool].Default: true. To determin if it is a required field.
     // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].

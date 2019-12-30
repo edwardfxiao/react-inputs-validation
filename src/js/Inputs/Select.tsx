@@ -176,6 +176,7 @@ const component: React.FC<Props> = ({
   const prevInternalValue = usePrevious(internalValue);
   const prevOptionList = usePrevious(optionList);
   const [show, setShow] = useState(false);
+  const prevShow = usePrevious(show);
   const [isTyping, setIsTyping] = useState(false);
   const initKeycodeList: number[] = [];
   const [keycodeList, setKeycodeList] = useState(initKeycodeList);
@@ -209,6 +210,10 @@ const component: React.FC<Props> = ({
       if (selectKeyList.indexOf(keyCode) !== -1) {
         e.preventDefault();
         handleOnKeyDown(keyCode);
+      } else if (keyCode === 32) {
+        // space
+        stateKeyword[1](`${stateKeyword[0]} `);
+        e.preventDefault();
       }
       scroll(direction);
     },
@@ -326,6 +331,10 @@ const component: React.FC<Props> = ({
       }
       const itemHeight = $children[globalVariableCurrentFocus].offsetHeight;
       if (direction) {
+        if (direction === 'loop') {
+          $elItemsWrapper.current.scrollTop = $children.length * itemHeight;
+          return;
+        }
         if (direction === 'down') {
           const bound = containerScrollTop + containerHeight;
           const heightItems = globalVariableCurrentFocus * itemHeight;
@@ -404,13 +413,15 @@ const component: React.FC<Props> = ({
       if (keyCode === keyCodeDown) {
         globalVariableCurrentFocus += 1;
         if (globalVariableCurrentFocus > filteredOptionList.length - 1) {
-          globalVariableCurrentFocus = filteredOptionList.length - 1;
+          globalVariableCurrentFocus = 0;
+          scroll('up');
         }
         addActive();
       } else if (keyCode === keyCodeUp) {
         globalVariableCurrentFocus -= 1;
         if (globalVariableCurrentFocus < 0) {
-          globalVariableCurrentFocus = 0;
+          globalVariableCurrentFocus = filteredOptionList.length - 1;
+          scroll('loop');
         }
         addActive();
       } else if (keyCode === keyCodeEnter) {
@@ -522,10 +533,11 @@ const component: React.FC<Props> = ({
       }
       globalVariableCurrentFocus = globalVariableCurrentFocus === null ? getIndex(filteredOptionList, String(value)) : globalVariableCurrentFocus;
       $itemsRef[globalVariableCurrentFocus] && $itemsRef[globalVariableCurrentFocus].current.focus();
-    } else {
+    }
+    if (prevShow === true && show === false) {
       $elButton.current.focus();
     }
-    resetCurrentFocus()
+    resetCurrentFocus();
   }, [show]);
   const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&

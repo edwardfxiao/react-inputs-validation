@@ -325,6 +325,7 @@ input[type='checkbox'] {
   cursor: pointer;
   background: none;
   border: none;
+  overflow: visible;
 }
 
 /*SELECT*/
@@ -416,9 +417,9 @@ input[type='checkbox'] {
 
 .select__searchInput {
   padding: 0 30px;
+  box-sizing: border-box;
   border-radius: 2px;
   font-size: 14px;
-  line-height: 40px;
   height: 40px;
   width: 100%;
   border: 1px solid #dfe2e7;

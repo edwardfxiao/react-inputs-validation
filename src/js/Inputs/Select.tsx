@@ -505,7 +505,7 @@ const component: React.FC<Props> = ({
     setInternalValue(String(value));
   }, [value]);
   useEffect(() => {
-    if (prevOptionList && prevOptionList !== optionList) {
+    if (prevOptionList && prevOptionList && !utils.arraysEqual(prevOptionList, optionList)) {
       setInternalValue(String(optionList[0].id));
     }
   }, [optionList]);

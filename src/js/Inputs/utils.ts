@@ -59,6 +59,14 @@ const getNumeric = (v: string) => {
   return res;
 };
 
+const arraysEqual = (arr1: any, arr2: any) => {
+  if (arr1.length !== arr2.length) return false;
+  for (let i = arr1.length; (i -= 1); ) {
+    if (JSON.stringify(arr1[i]) !== JSON.stringify(arr2[i])) return false;
+  }
+  return true;
+};
+
 const utils: Utils = {
   camelize,
   toCamelCase,
@@ -66,5 +74,6 @@ const utils: Utils = {
   getAlphanumeric,
   getAlpha,
   getNumeric,
+  arraysEqual,
 };
 export default utils;

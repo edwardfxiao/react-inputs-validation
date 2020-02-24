@@ -615,8 +615,6 @@ const [amount, setAmount] = useState('')
 ### <a name="custom-error-message"></a>Q: Do you support multile custom locales? 
 **A**: Yes, and it could be multiple locales. By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can overwrite the error message.
 
-**IMPORTANT NOTE: YOU WILL NEED TO PLACE window.REACT_INPUTS_VALIDATION BEFORE YOUR JS SCRIPT**
-
 <a href="https://codesandbox.io/s/q9vqmk4j84">codesandbox example</a>(located in index.html)
 
 example(fully customized):

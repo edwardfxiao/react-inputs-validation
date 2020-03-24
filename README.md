@@ -50,13 +50,13 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.4.0/react-inputs-validation.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
  <script type="text/babel">
-  class Greeting extends React.Component {
+  class App extends React.Component {
     ...
     render() {
       return <Textbox value={value} onBlur={()=>{}} .../>;
     }
   }
-  ReactDOM.render(<Greeting />, document.getElementById('root'));
+  ReactDOM.render(<App />, document.getElementById('root'));
  </script>
 </body>
 

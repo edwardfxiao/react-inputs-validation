@@ -20,6 +20,7 @@ React form input validation components. Online demo examples.
 
 ### <a name="usage"></a>Usage
 
+#### By NPM
 ```sh
 npm install react-inputs-validation --save
 ```
@@ -28,12 +29,38 @@ import { Textbox, Radiobox, Checkbox, Select, Textarea } from 'react-inputs-vali
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
 
-### Make sure you have ```react@16.8.6``` installed.
+### Make sure you have at least ```react@16.8.6``` installed.
 ```js
   "peerDependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   }
+```
+
+#### By CDN
+```html
+<head>
+  ...
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.4.0/react-inputs-validation.min.css"/>
+</head>
+<body>
+ <div id="root"></div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.production.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.4.0/react-inputs-validation.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+ <script type="text/babel">
+  class Greeting extends React.Component {
+    ...
+    render() {
+      return <Textbox value={value} onBlur={()=>{}} .../>;
+    }
+  }
+  ReactDOM.render(<Greeting />, document.getElementById('root'));
+ </script>
+</body>
+
+
 ```
 
 # <a name="live-examples"></a>Live examples

@@ -40,8 +40,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 #### By CDN (starting from v4.4.1)
 ```html
 <head>
-  ...
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.4.1/react-inputs-validation.min.css"/>
+ ...
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.4.1/react-inputs-validation.min.css"/>
 </head>
 <body>
  <div id="root"></div>

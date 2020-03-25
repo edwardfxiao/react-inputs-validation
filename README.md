@@ -29,7 +29,7 @@ import { Textbox, Radiobox, Checkbox, Select, Textarea } from 'react-inputs-vali
 import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```
 
-### Make sure you have at least ```react@16.8.6``` installed.
+##### Make sure you have at least ```react@16.8.6``` installed.
 ```js
   "peerDependencies": {
     "react": "^16.8.6",
@@ -37,7 +37,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   }
 ```
 
-#### By CDN (make sure using >= v4.4.1)
+#### By CDN (starting from v4.4.1)
 ```html
 <head>
   ...

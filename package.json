@@ -1,7 +1,7 @@
 {
   "name": "react-inputs-validation",
   "version": "4.4.1",
-  "description": "React components for form input validation ",
+  "description": "A react component for form inputs validation.",
   "main": "index.js",
   "repository": {
     "type": "git",

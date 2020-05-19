@@ -282,7 +282,7 @@ const component: React.FC<Props> = ({
     setErr(err);
     setMsg(msg);
     validationCallback && validationCallback(err);
-  }, []);
+  }, [option.msgOnError]);
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   useEffect(() => {
     if (typeof window !== 'undefined') {

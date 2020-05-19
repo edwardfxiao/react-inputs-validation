@@ -386,7 +386,7 @@ const component: React.FC<Props> = ({
     setErr(err);
     setMsg(msg);
     validationCallback && validationCallback(err);
-  }, []);
+  }, [option.msgOnError]);
   useEffect(
     () => {
       if (validate) {

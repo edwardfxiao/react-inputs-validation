@@ -497,13 +497,13 @@ input[type='checkbox'] {
   display: inline-block\9;
 }
 
-.select__dropdown-icon:before {
+.select__dropdown-icon.showArrow:before {
   content: '';
-  position: absolute;
+/*  position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%);*/
   border-style: solid;
-  display: block;
+  display: inline-block;
   width: 0;
   border-width: 8px 8px 0;
   border-color: #e3e3e3 transparent;

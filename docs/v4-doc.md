@@ -325,6 +325,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |value                             |  Opt  |  Str   |                                             |  ""        |
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |showSearch                        |  Opt  |  Bool  |Show a search box in order to find option quickly. | false |
+|showArrow                         |  Opt  |  Bool  |Show the arrow.                              | true |
 |keyword                           |  Opt  |  Str   |Show a keyword for search box.               |  ''        |
 |**validate**                      |**Opt**|**Bool**|                                             |**false**   |
 |**validationCallback**           |**Opt**|**Func**|                                             |**none**    |
@@ -366,6 +367,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   value={movie} //Optional.[String].Default: "".
   disabled={false} //Optional.[Bool].Default: false.
   showSearch={false} // Optional.[Bool].Default: false. Show a search box in order to find option quickly.
+  showArrow={true} // Optional.[Bool].Default: true.
   keyword={''} // Optional.[String].Default: ''. Show a keyword for search box.
    //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res =>

@@ -109,6 +109,7 @@ interface Props {
   disabled?: boolean;
   validate?: boolean;
   showSearch?: boolean;
+  showArrow?: boolean;
   keyword?: string;
   optionList: OptionListItem[];
   onChange: (res: object, e: React.MouseEvent<HTMLElement>) => void;
@@ -145,6 +146,7 @@ const component: React.FC<Props> = ({
   disabled = false,
   validate = false,
   showSearch = false,
+  showArrow = true,
   keyword = '',
   optionList = [],
   classNameWrapper = '',
@@ -273,16 +275,19 @@ const component: React.FC<Props> = ({
     }
     handleCheckEnd(false, msgOnSuccess);
   }, [internalValue, option]);
-  const handleCheckEnd = useCallback((err: boolean, message: string) => {
-    let msg = message;
-    const { msgOnError } = option;
-    if (err && msgOnError) {
-      msg = msgOnError;
-    }
-    setErr(err);
-    setMsg(msg);
-    validationCallback && validationCallback(err);
-  }, [option.msgOnError]);
+  const handleCheckEnd = useCallback(
+    (err: boolean, message: string) => {
+      let msg = message;
+      const { msgOnError } = option;
+      if (err && msgOnError) {
+        msg = msgOnError;
+      }
+      setErr(err);
+      setMsg(msg);
+      validationCallback && validationCallback(err);
+    },
+    [option.msgOnError],
+  );
   /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -554,7 +559,7 @@ const component: React.FC<Props> = ({
   const selectOptionListItemClass = `${reactInputsValidationCss[`button`]} ${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
     reactInputsValidationCss[`${TYPE}__options-item`]
   } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss[`${TYPE}__dropdown-icon`]}`;
+  const dropdownIconClass = `${classNameDropdownIconOptionListItem} ${reactInputsValidationCss[`${TYPE}__dropdown-icon`]} ${showArrow && reactInputsValidationCss['showArrow']}`;
   const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
   const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;

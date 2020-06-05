@@ -43,6 +43,11 @@ select {
   /*outline: 0;*/
 }
 
+.textbox__wrapper.disabled,
+.textbox__wrapper.disabled div {
+  cursor: not-allowed;
+}
+
 .textbox__wrapper {
   height: auto;
 }
@@ -134,6 +139,11 @@ input[type='text'].textbox__input.disabled {
   /*outline: 0;*/
 }
 
+.textarea__wrapper.disabled,
+.textarea__wrapper.disabled div {
+  cursor: not-allowed;
+}
+
 .textarea__wrapper {
   height: auto;
 }
@@ -181,6 +191,12 @@ textarea.textarea__input.disabled {
 .radiobox__wrapper,
 .radiobox__wrapper *:focus {
   /*outline: 0;*/
+}
+
+.radiobox__wrapper.disabled,
+.radiobox__wrapper.disabled label,
+.radiobox__wrapper.disabled div {
+  cursor: not-allowed;
 }
 
 input[type='radio'] {
@@ -255,6 +271,11 @@ input[type='checkbox'] {
 
 .checkbox__wrapper {
   /*outline: none;*/
+}
+
+.checkbox__wrapper.disabled,
+.checkbox__wrapper.disabled div {
+  cursor: not-allowed;
 }
 
 .checkbox__input {
@@ -338,6 +359,11 @@ input[type='checkbox'] {
   outline-color: #cecece;
   outline-style: solid;
 }*/
+
+.select__wrapper.disabled,
+.select__wrapper.disabled div {
+  cursor: not-allowed;
+}
 
 .select__wrapper {
   cursor: pointer;
@@ -499,7 +525,7 @@ input[type='checkbox'] {
 
 .select__dropdown-icon.showArrow:before {
   content: '';
-/*  position: absolute;
+  /*  position: absolute;
   top: 50%;
   transform: translateY(-50%);*/
   border-style: solid;

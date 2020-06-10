@@ -15,7 +15,7 @@
 
   - [What if my variables got cached due to the react memoization? ](#memoization)
 
-  - [Do you support multile custom locales? ](#custom-error-message)
+  - [Do you support multiple custom locales? ](#custom-error-message)
 
 <br/>
 <br/>

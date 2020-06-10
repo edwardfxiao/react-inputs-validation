@@ -15,7 +15,7 @@
 
   - [What if my variables got cached due to the react memoization? ](#memoization)
 
-  - [Do you support multiple custom locales? ](#custom-error-message)
+  - [Do you support custom locales? ](#custom-error-message)
 
 <br/>
 <br/>
@@ -614,7 +614,7 @@ const [amount, setAmount] = useState('')
 <br/>
 
 
-### <a name="custom-error-message"></a>Q: Do you support multile custom locales? 
+### <a name="custom-error-message"></a>Q: Do you support custom locales? 
 **A**: Yes, and it could be multiple locales. By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can overwrite the error message.
 
 <a href="https://codesandbox.io/s/q9vqmk4j84">codesandbox example</a>(located in index.html)

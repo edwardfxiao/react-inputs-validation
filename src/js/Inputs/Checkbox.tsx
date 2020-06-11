@@ -133,7 +133,7 @@ const component: React.FC<Props> = ({
         onClick(e);
       }
     },
-    [err, internalChecked],
+    [err, internalChecked, disabled],
   );
   const handleOnChange = useCallback(
     (e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => {
@@ -148,7 +148,7 @@ const component: React.FC<Props> = ({
         setSuccessMsg('');
       }
     },
-    [err, internalChecked],
+    [err, internalChecked, disabled],
   );
   const check = useCallback(
     () => {

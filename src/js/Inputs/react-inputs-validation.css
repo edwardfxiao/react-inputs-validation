@@ -257,6 +257,10 @@ input[type='radio'] {
   border-color: #ff5a57;
 }
 
+.radiobox__item.disabled.error .radiobox__label:before {
+  border-color: #ccc;
+}
+
 /*CHECKBOX*/
 
 .checkbox__wrapper,
@@ -314,6 +318,10 @@ input[type='checkbox'] {
 
 .checkbox__box.error {
   border-color: #ff5a57;
+}
+
+.checkbox__box.disabled.error {
+  border-color: #ccc;
 }
 
 .checkbox__box.success {
@@ -386,7 +394,7 @@ input[type='checkbox'] {
 .select__container {
   padding: 2%;
   /*position: relative;*/
-  border: 1px solid #d3d3d3;
+  border: 1px solid #e5e5e5;
 }
 
 .select__container .select__button {
@@ -395,6 +403,10 @@ input[type='checkbox'] {
 
 .select__container.error {
   border-color: #ff5a57;
+}
+
+.select__container.disabled.error {
+  border-color: #ccc;
 }
 
 .select__container.success {

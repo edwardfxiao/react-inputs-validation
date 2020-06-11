@@ -126,12 +126,12 @@ const component: React.FC<Props> = ({
   const $el: { [key: string]: any } | null = $input;
   const handleOnBlur = useCallback(
     (e: React.FocusEvent<HTMLElement>) => {
-      if (onBlur) {
+      if (onBlur && !disabled) {
         check();
         onBlur(e);
       }
     },
-    [internalValue, option],
+    [internalValue, option, disabled],
   );
   const handleOnFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (onFocus) {
@@ -149,7 +149,7 @@ const component: React.FC<Props> = ({
     }
     setInternalValue(val);
     onChange && onChange(val, e);
-  }, []);
+  }, [disabled]);
   const check = useCallback(
     () => {
       const { name, check, locale, required, msgOnSuccess } = option;
@@ -322,7 +322,7 @@ export const Option: React.FC<OptionProps> = memo(
   }) => {
     const handleOnChange = useCallback(e => {
       onChange(item.id, e);
-    }, [item]);
+    }, [item, disabled]);
     return (
       <button type="button" className={optionListItemClass} style={customStyleOptionListItem} onClick={handleOnChange}>
         <input

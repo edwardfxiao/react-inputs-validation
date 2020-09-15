@@ -92,6 +92,7 @@ interface Props {
   attributesWrapper?: object;
   attributesInput?: AttributesInputObj;
   value?: string;
+  label?: string;
   disabled?: boolean;
   validate?: boolean;
   classNameInput?: string;
@@ -159,6 +160,7 @@ const component: React.FC<Props> = ({
   attributesWrapper = {},
   attributesInput = {},
   value = '',
+  label = '',
   disabled = false,
   validate = false,
   classNameInput = '',
@@ -463,6 +465,7 @@ const component: React.FC<Props> = ({
           ref={$input}
           {...attributesInput}
         />
+        {label && <label>{label}</label>}
       </div>
       {msgHtml}
     </div>

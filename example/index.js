@@ -848,6 +848,7 @@ class Index extends Component {
                         placeholder: 'Place your name here ^-^',
                       }}
                       value={name} // Optional.[String].Default: "".
+                      label="" // Optional.[String].Default: "". The content of label
                       disabled={false} // Optional.[Bool].Default: false.
                       validate={validate} // Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at onece, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
                       validationCallback={res => this.setState({ hasNameError: res, validate: false })} // Optional.[Func].Default: none. Return the validation result.

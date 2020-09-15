@@ -86,6 +86,7 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
   };
 };
 interface AttributesInputObj {
+  id?: string;
   maxLength?: number;
 }
 interface Props {
@@ -448,6 +449,7 @@ const component: React.FC<Props> = ({
   if (showMsg && !err && successMsg !== '') {
     msgHtml = <div className={successMsgClass}>{successMsg}</div>;
   }
+  console.log(attributesInput.id)
   return (
     <div className={wrapperClass} style={customStyleWrapper} {...attributesWrapper}>
       <div className={containerClass} style={customStyleContainer}>
@@ -465,7 +467,7 @@ const component: React.FC<Props> = ({
           ref={$input}
           {...attributesInput}
         />
-        {label && <label>{label}</label>}
+        {label && attributesInput.id && <label htmlFor={attributesInput.id}>{label}</label>}
       </div>
       {msgHtml}
     </div>

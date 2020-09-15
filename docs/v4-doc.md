@@ -30,7 +30,7 @@
 |attributesWrapper                          |  Opt  |  Obj | Modify wrapper general attributes.<br/> **{<br/>id: 'myTextInputWrapperId'<br/>...<br/>}**                                   | {}      |
 |attributesInput                         |  Opt  |  Obj | Modify input general attributes. <br/> **{<br/>id: 'myTextInputId',<br/>maxLength: 524288,<br/>name: 'myTextInputName',<br/>type: 'password',<br/>autoComplete: 'On',<br/>placeholder: 'my placeholder text',<br/>...<br/>}**                                    | {}      |
 |value                             |  Opt  |  Str   |                                             |  ""        |
-|label                             |  Opt  |  Str   |                                             |  ""        | The content of label
+|label                             |  Opt  |  Str   |                                             |  ""        | The content of label. NOTE: must provide attributesInput.id
 |disabled                          |  Opt  |  Bool  |                                             |  false     |
 |**validate**                      |**Opt**|**Bool**|**If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.**|**false**   |
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
@@ -83,7 +83,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     placeholder: 'Place your name here ^-^',
   }}
   value={name} //Optional.[String].Default: "".
-  label="" // Optional.[String].Default: "". The content of label
+  label="" // Optional.[String].Default: "". The content of label. NOTE: must provide attributesInput.id
   disabled={false} //Optional.[Bool].Default: false.
   validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
   validationCallback={res => this.setState({ hasNameError: res, validate: false })} //Optional.[Func].Default: none. Return the validation result.

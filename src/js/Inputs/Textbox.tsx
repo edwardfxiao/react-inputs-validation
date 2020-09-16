@@ -449,7 +449,6 @@ const component: React.FC<Props> = ({
   if (showMsg && !err && successMsg !== '') {
     msgHtml = <div className={successMsgClass}>{successMsg}</div>;
   }
-  console.log(attributesInput.id)
   return (
     <div className={wrapperClass} style={customStyleWrapper} {...attributesWrapper}>
       <div className={containerClass} style={customStyleContainer}>

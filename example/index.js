@@ -587,9 +587,6 @@ class Index extends Component {
                       name: 'Name', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your {name}.
                       check: true, // Optional.[Bool].Default: true. To determin if you need to validate.
                       required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
-                      customFunc: (v) =>{
-                        return ''
-                      }
                     }}
                   />
                   <br />

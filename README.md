@@ -75,6 +75,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 * <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>(Async checking for ```<Textbox>``` and ```<Textarea>``` only. Handled with ```customFunc```)
 * <a href="https://codesandbox.io/s/asyncmsgobj-blmce">Example of asyncMsgObj </a>(when providing ```asyncMsgObj```)
 * <a href="https://codesandbox.io/s/jvw9nvyzv">Example of AREA CODE select </a>(with [```react-custom-flag-select```](https://github.com/edwardfhsiao/react-custom-flag-select))
+* <a href="https://codesandbox.io/s/transform-label-example-w61dp">Example of label animation </a>
 
 ## <a name="basic-usage-examples"></a>Basic Usage Examples
 <a href="https://edwardfhsiao.github.io/react-inputs-validation/">Online demo example</a>

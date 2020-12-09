@@ -95,7 +95,7 @@ interface Props {
   customStyleWrapper?: React.CSSProperties;
   customStyleContainer?: React.CSSProperties;
   validationOption?: DefaultValidationOption;
-  asyncMsgObj?: object;
+  asyncMsgObj?: DefaultAsyncMsgObj;
   onChange: (res: string, e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;

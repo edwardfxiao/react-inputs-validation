@@ -91,9 +91,9 @@ interface Props {
   classNameInput?: string;
   classNameWrapper?: string;
   classNameContainer?: string;
-  customStyleInput?: object;
-  customStyleWrapper?: object;
-  customStyleContainer?: object;
+  customStyleInput?: React.CSSProperties;
+  customStyleWrapper?: React.CSSProperties;
+  customStyleContainer?: React.CSSProperties;
   validationOption?: DefaultValidationOption;
   asyncMsgObj?: object;
   onChange: (res: string, e: React.ChangeEvent<HTMLTextAreaElement>) => void;

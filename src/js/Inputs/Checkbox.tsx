@@ -53,27 +53,33 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
   };
 };
 interface Props {
-  attributesWrapper?: object;
-  attributesInput?: object;
+  attributesWrapper?: React.HTMLAttributes<HTMLDivElement>;
+  attributesInput?: {
+    id?: string;
+    name?: string;
+  };
   value?: string | boolean;
   checked?: boolean;
   disabled?: boolean;
   labelHtml?: React.ReactNode;
   validate?: boolean;
-  onChange: (res: boolean, e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => void;
+  onChange: (
+    res: boolean,
+    e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>
+  ) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-  validationOption?: object;
-  asyncMsgObj?: object;
+  validationOption?: DefaultValidationOption;
+  asyncMsgObj?: DefaultAsyncMsgObj;
   classNameInput?: string;
   classNameWrapper?: string;
   classNameInputBox?: string;
   classNameContainer?: string;
-  customStyleInput?: object;
-  customStyleWrapper?: object;
-  customStyleContainer?: object;
-  customStyleInputBox?: object;
+  customStyleInput?: React.CSSProperties;
+  customStyleWrapper?: React.CSSProperties;
+  customStyleContainer?: React.CSSProperties;
+  customStyleInputBox?: React.CSSProperties;
   validationCallback?: (res: boolean) => void;
 }
 const component: React.FC<Props> = ({

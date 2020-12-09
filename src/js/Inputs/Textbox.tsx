@@ -87,16 +87,14 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
 };
 interface AttributesInputObj {
   id?: string;
+  name?: string;
+  type?: string;
+  placeholder?: string;
   maxLength?: number;
 }
 interface Props {
-  attributesInput?: {
-    id?: string;
-    name?: string;
-    type?: string;
-    placeholder?: string;
-    maxLength?: number;
-  };
+  attributesWrapper?: React.HTMLAttributes<HTMLDivElement>;
+  attributesInput?: AttributesInputObj;
   value?: string;
   label?: string;
   disabled?: boolean;

@@ -87,10 +87,13 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
 };
 interface AttributesInputObj {
   id?: string;
+  name?: string;
+  type?: string;
+  placeholder?: string;
   maxLength?: number;
 }
 interface Props {
-  attributesWrapper?: object;
+  attributesWrapper?: React.HTMLAttributes<HTMLDivElement>;
   attributesInput?: AttributesInputObj;
   value?: string;
   label?: string;
@@ -99,12 +102,17 @@ interface Props {
   classNameInput?: string;
   classNameWrapper?: string;
   classNameContainer?: string;
-  customStyleInput?: object;
-  customStyleWrapper?: object;
-  customStyleContainer?: object;
-  validationOption?: object;
-  asyncMsgObj?: object;
-  onChange: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
+  customStyleInput?: React.CSSProperties;
+  customStyleWrapper?: React.CSSProperties;
+  customStyleContainer?: React.CSSProperties;
+  validationOption?: DefaultValidationOption;
+  asyncMsgObj?: {
+    error?: boolean;
+    message?: string;
+    showOnError?: boolean;
+    showOnSuccess?: boolean;
+  };
+  onChange?: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;

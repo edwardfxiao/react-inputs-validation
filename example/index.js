@@ -1235,7 +1235,7 @@ class Index extends Component {
             </div>
             <div style={{ height: '10px' }} />
             <div className={`${CSS['my-button']} ${CSS['my-button__red']} ${CSS['save-button']}`} onClick={this.validateForm}>
-              validate!
+              validate
             </div>
             <input type="submit" style={{ display: 'none' }} />
           </form>

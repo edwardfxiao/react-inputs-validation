@@ -1,3 +1,7 @@
+# Contributing to react-inputs-validation
+
+ First off, thanks for taking the time to contribute! Here are a little dev FAQ below.
+ 
 ### Q: How to development? 
 **A**: ```npm run dev```
 

@@ -1,7 +1,25 @@
 import * as React from 'react';
+interface DefaultValidationOption {
+    name?: string;
+    check?: boolean;
+    showMsg?: boolean;
+    required?: boolean;
+    locale?: string;
+    msgOnError?: string;
+    msgOnSuccess?: string;
+}
+interface DefaultAsyncMsgObj {
+    error?: boolean;
+    message?: string;
+    showOnError?: boolean;
+    showOnSuccess?: boolean;
+}
 interface Props {
-    attributesWrapper?: object;
-    attributesInput?: object;
+    attributesWrapper?: React.HTMLAttributes<HTMLButtonElement>;
+    attributesInput?: {
+        id?: string;
+        name?: string;
+    };
     value?: string | boolean;
     checked?: boolean;
     disabled?: boolean;
@@ -11,16 +29,16 @@ interface Props {
     onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
     onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-    validationOption?: object;
-    asyncMsgObj?: object;
+    validationOption?: DefaultValidationOption;
+    asyncMsgObj?: DefaultAsyncMsgObj;
     classNameInput?: string;
     classNameWrapper?: string;
     classNameInputBox?: string;
     classNameContainer?: string;
-    customStyleInput?: object;
-    customStyleWrapper?: object;
-    customStyleContainer?: object;
-    customStyleInputBox?: object;
+    customStyleInput?: React.CSSProperties;
+    customStyleWrapper?: React.CSSProperties;
+    customStyleContainer?: React.CSSProperties;
+    customStyleInputBox?: React.CSSProperties;
     validationCallback?: (res: boolean) => void;
 }
 declare const _default: React.NamedExoticComponent<Props>;

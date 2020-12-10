@@ -89,7 +89,7 @@ interface AttributesInput {
 }
 interface Props {
   attributesWrapper: React.HTMLAttributes<HTMLDivElement>;
-  attributesInputs: AttributesInput;
+  attributesInputs: AttributesInput[];
   value?: string | number;
   disabled?: boolean;
   validate?: boolean;

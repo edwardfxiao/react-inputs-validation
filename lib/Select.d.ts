@@ -1,4 +1,13 @@
 import * as React from 'react';
+interface DefaultValidationOption {
+    name?: string;
+    check?: boolean;
+    showMsg?: boolean;
+    required?: boolean;
+    locale?: string;
+    msgOnError?: string;
+    msgOnSuccess?: string;
+}
 export declare const isValidValue: (list: OptionListItem[], value: any) => boolean;
 export declare const getItem: (list: OptionListItem[], value: any) => OptionListItem;
 export declare const getIndex: (list: OptionListItem[], value: string) => number;
@@ -7,8 +16,14 @@ interface OptionListItem {
     name: string;
 }
 interface Props {
-    attributesWrapper?: object;
-    attributesInput?: object;
+    attributesWrapper?: React.HTMLAttributes<HTMLButtonElement>;
+    attributesInput?: {
+        id?: string;
+        name?: string;
+        type?: string;
+        placeholder?: string;
+        maxLength?: number;
+    };
     value?: string | number;
     disabled?: boolean;
     validate?: boolean;
@@ -20,20 +35,25 @@ interface Props {
     onBlur?: (e: React.FocusEvent<HTMLElement> | Event) => void;
     onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-    validationOption?: object;
-    asyncMsgObj?: object;
+    validationOption?: DefaultValidationOption;
+    asyncMsgObj?: {
+        error?: boolean;
+        message?: string;
+        showOnError?: boolean;
+        showOnSuccess?: boolean;
+    };
     classNameWrapper?: string;
     classNameContainer?: string;
     classNameSelect?: string;
     classNameOptionListContainer?: string;
     classNameDropdownIconOptionListItem?: string;
     classNameOptionListItem?: string;
-    customStyleWrapper?: object;
-    customStyleContainer?: object;
-    customStyleSelect?: object;
-    customStyleOptionListContainer?: object;
-    customStyleDropdownIcon?: object;
-    customStyleOptionListItem?: object;
+    customStyleWrapper?: React.CSSProperties;
+    customStyleContainer?: React.CSSProperties;
+    customStyleSelect?: React.CSSProperties;
+    customStyleOptionListContainer?: React.CSSProperties;
+    customStyleDropdownIcon?: React.CSSProperties;
+    customStyleOptionListItem?: React.CSSProperties;
     validationCallback?: (res: boolean) => void;
 }
 interface OptionProps {
@@ -41,7 +61,7 @@ interface OptionProps {
     id?: string;
     className?: string;
     item?: OptionListItem;
-    customStyleOptionListItem?: object;
+    customStyleOptionListItem?: React.CSSProperties;
     onClick?: (res: object, e: React.MouseEvent<HTMLElement>) => void;
     onMouseOver?: (res: number) => void;
     onMouseMove?: () => void;

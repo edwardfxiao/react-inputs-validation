@@ -53,7 +53,7 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
   };
 };
 interface Props {
-  attributesWrapper?: React.HTMLAttributes<HTMLDivElement>;
+  attributesWrapper?: React.HTMLAttributes<HTMLButtonElement>;
   attributesInput?: {
     id?: string;
     name?: string;

@@ -1,13 +1,30 @@
-import * as React from 'react';
+import * as React from "react";
+interface DefaultValidationOption {
+    name?: string;
+    check?: boolean;
+    showMsg?: boolean;
+    required?: boolean;
+    locale?: string;
+    msgOnError?: string;
+    msgOnSuccess?: string;
+}
+interface DefaultAsyncMsgObj {
+    error?: boolean;
+    message?: string;
+    showOnError?: boolean;
+    showOnSuccess?: boolean;
+}
 export declare const isValidValue: (list: OptionListItem[], value: any) => boolean;
 interface OptionListItem {
     id: string;
     name: string;
 }
 interface AttributesInput {
+    id?: string;
+    name?: string;
 }
 interface Props {
-    attributesWrapper: object;
+    attributesWrapper: React.HTMLAttributes<HTMLDivElement>;
     attributesInputs: AttributesInput[];
     value?: string | number;
     disabled?: boolean;
@@ -17,20 +34,17 @@ interface Props {
     onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
     onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-    validationOption?: object;
-    asyncMsgObj?: object;
+    validationOption?: DefaultValidationOption;
+    asyncMsgObj?: DefaultAsyncMsgObj;
     classNameWrapper?: string;
     classNameInput?: string;
     classNameContainer?: string;
     classNameOptionListItem?: string;
-    customStyleWrapper?: object;
-    customStyleContainer?: object;
-    customStyleInput?: object;
-    customStyleOptionListItem?: object;
+    customStyleWrapper?: React.CSSProperties;
+    customStyleContainer?: React.CSSProperties;
+    customStyleInput?: React.CSSProperties;
+    customStyleOptionListItem?: React.CSSProperties;
     validationCallback?: (res: boolean) => void;
-}
-interface AttributesInput {
-    id?: string;
 }
 interface OptionProps {
     checked?: boolean;

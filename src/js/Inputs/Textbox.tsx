@@ -86,23 +86,33 @@ const getDefaultAsyncObj = (obj: DefaultAsyncMsgObj) => {
   };
 };
 interface AttributesInputObj {
+  id?: string;
+  name?: string;
+  type?: string;
+  placeholder?: string;
   maxLength?: number;
 }
 interface Props {
-  attributesWrapper?: object;
+  attributesWrapper?: React.HTMLAttributes<HTMLDivElement>;
   attributesInput?: AttributesInputObj;
   value?: string;
+  label?: string;
   disabled?: boolean;
   validate?: boolean;
   classNameInput?: string;
   classNameWrapper?: string;
   classNameContainer?: string;
-  customStyleInput?: object;
-  customStyleWrapper?: object;
-  customStyleContainer?: object;
-  validationOption?: object;
-  asyncMsgObj?: object;
-  onChange: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
+  customStyleInput?: React.CSSProperties;
+  customStyleWrapper?: React.CSSProperties;
+  customStyleContainer?: React.CSSProperties;
+  validationOption?: DefaultValidationOption;
+  asyncMsgObj?: {
+    error?: boolean;
+    message?: string;
+    showOnError?: boolean;
+    showOnSuccess?: boolean;
+  };
+  onChange?: (res: string, e: React.ChangeEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -159,6 +169,7 @@ const component: React.FC<Props> = ({
   attributesWrapper = {},
   attributesInput = {},
   value = '',
+  label = '',
   disabled = false,
   validate = false,
   classNameInput = '',
@@ -250,183 +261,174 @@ const component: React.FC<Props> = ({
     },
     [err, attributesInput, option],
   );
-  const check = useCallback(
-    async () => {
-      const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = option;
-      if (!check) {
-        return;
-      }
-      if (type) {
-        if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) !== -1) {
-          if (!message[locale] || !message[locale][TYPE]) {
-            console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+  const check = useCallback(async () => {
+    const { reg, min, max, type, name, check, length, regMsg, locale, compare, required, msgOnSuccess, customFunc } = option;
+    if (!check) {
+      return;
+    }
+    if (type) {
+      if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) !== -1) {
+        if (!message[locale] || !message[locale][TYPE]) {
+          console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+          return;
+        }
+        const msg = message[locale][TYPE];
+        const nameText = name ? name : '';
+        if (required) {
+          if (validator.empty(internalValue)) {
+            handleCheckEnd(true, msg.empty(nameText));
             return;
           }
-          const msg = message[locale][TYPE];
-          const nameText = name ? name : '';
-          if (required) {
-            if (validator.empty(internalValue)) {
-              handleCheckEnd(true, msg.empty(nameText));
-              return;
-            }
-          }
-          if (String(internalValue) !== '') {
-            if (reg) {
-              if (validator['reg'](reg, internalValue)) {
-                handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
-                return;
-              }
-            }
-            if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
-              if (min || max) {
-                if (min && max) {
-                  if (String(internalValue).length < min || String(internalValue).length > max) {
-                    handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
-                    return;
-                  }
-                } else {
-                  if (min) {
-                    if (String(internalValue).length < min) {
-                      handleCheckEnd(true, msg.lessThan(nameText)(min));
-                      return;
-                    }
-                  }
-                  if (max) {
-                    if (String(internalValue).length > max) {
-                      handleCheckEnd(true, msg.greaterThan(nameText)(max));
-                      return;
-                    }
-                  }
-                }
-              }
-              if (length) {
-                if (String(internalValue).length !== length) {
-                  handleCheckEnd(true, msg.lengthEqual(nameText)(length));
-                  return;
-                }
-              }
-            }
-            if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-              if (!validator[type](internalValue, null, null)) {
-                handleCheckEnd(true, msg.invalid(nameText));
-                return;
-              }
-              if (min || max) {
-                if (min && max) {
-                  if (!validator[type](internalValue, min, max)) {
-                    handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
-                    return;
-                  }
-                } else {
-                  if (min) {
-                    if (!validator[type](internalValue, min)) {
-                      handleCheckEnd(true, msg.lessThan(nameText)(min));
-                      return;
-                    }
-                  }
-                  if (max) {
-                    if (!validator[type](internalValue, 0, max)) {
-                      handleCheckEnd(true, msg.greaterThan(nameText)(max));
-                      return;
-                    }
-                  }
-                }
-              }
-              if (length) {
-                if (String(internalValue).length !== length) {
-                  handleCheckEnd(true, msg.lengthEqual(nameText)(length));
-                  return;
-                }
-              }
-            }
-            if (compare && compare !== '') {
-              if (internalValue !== compare) {
-                handleCheckEnd(true, msg.twoInputsNotEqual());
-                return;
-              }
-            }
-          }
-          if (customFunc && typeof customFunc === 'function') {
-            const customFuncResult = await customFunc(internalValue);
-            /* istanbul ignore next because of async problem */
-            if (typeof customFuncResult === 'object') {
-              if (typeof customFuncResult.error === 'boolean' && typeof customFuncResult.message === 'string') {
-                if (customFuncResult.error === false && customFuncResult.showOnSuccess === true) {
-                  setSuccessMsg(customFuncResult.message);
-                }
-                handleCheckEnd(customFuncResult.error, customFuncResult.message, true);
-              }
-              return;
-            }
-            /* istanbul ignore next because of async problem */
-            if (customFuncResult !== true) {
-              handleCheckEnd(true, customFuncResult, true);
-              return;
-            }
-          }
-          if (msgOnSuccess) {
-            setSuccessMsg(msgOnSuccess);
-          }
-          handleCheckEnd(false, msgOnSuccess);
-        } else {
-          console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
         }
+        if (String(internalValue) !== '') {
+          if (reg) {
+            if (validator['reg'](reg, internalValue)) {
+              handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
+              return;
+            }
+          }
+          if (type === VALIDATE_OPTION_TYPE_LIST[0]) {
+            if (min || max) {
+              if (min && max) {
+                if (String(internalValue).length < min || String(internalValue).length > max) {
+                  handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+                  return;
+                }
+              } else {
+                if (min) {
+                  if (String(internalValue).length < min) {
+                    handleCheckEnd(true, msg.lessThan(nameText)(min));
+                    return;
+                  }
+                }
+                if (max) {
+                  if (String(internalValue).length > max) {
+                    handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                    return;
+                  }
+                }
+              }
+            }
+            if (length) {
+              if (String(internalValue).length !== length) {
+                handleCheckEnd(true, msg.lengthEqual(nameText)(length));
+                return;
+              }
+            }
+          }
+          if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
+            if (!validator[type](internalValue, null, null)) {
+              handleCheckEnd(true, msg.invalid(nameText));
+              return;
+            }
+            if (min || max) {
+              if (min && max) {
+                if (!validator[type](internalValue, min, max)) {
+                  handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+                  return;
+                }
+              } else {
+                if (min) {
+                  if (!validator[type](internalValue, min)) {
+                    handleCheckEnd(true, msg.lessThan(nameText)(min));
+                    return;
+                  }
+                }
+                if (max) {
+                  if (!validator[type](internalValue, 0, max)) {
+                    handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                    return;
+                  }
+                }
+              }
+            }
+            if (length) {
+              if (String(internalValue).length !== length) {
+                handleCheckEnd(true, msg.lengthEqual(nameText)(length));
+                return;
+              }
+            }
+          }
+          if (compare && compare !== '') {
+            if (internalValue !== compare) {
+              handleCheckEnd(true, msg.twoInputsNotEqual());
+              return;
+            }
+          }
+        }
+        if (customFunc && typeof customFunc === 'function') {
+          const customFuncResult = await customFunc(internalValue);
+          if (!($input && $input.current)) {
+            return;
+          }
+          /* istanbul ignore next because of async problem */
+          if (typeof customFuncResult === 'object') {
+            if (typeof customFuncResult.error === 'boolean' && typeof customFuncResult.message === 'string') {
+              if (customFuncResult.error === false && customFuncResult.showOnSuccess === true) {
+                setSuccessMsg(customFuncResult.message);
+              }
+              handleCheckEnd(customFuncResult.error, customFuncResult.message, true);
+            }
+            return;
+          }
+          /* istanbul ignore next because of async problem */
+          if (customFuncResult !== true) {
+            handleCheckEnd(true, customFuncResult, true);
+            return;
+          }
+        }
+        if (msgOnSuccess) {
+          setSuccessMsg(msgOnSuccess);
+        }
+        handleCheckEnd(false, msgOnSuccess);
       } else {
-        console.error('Please provide "type" in validationOption');
+        console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
       }
-    },
-    [internalValue, option],
-  );
-  const handleCheckEnd = useCallback((err: boolean, message: string, fromCustomFunc: boolean = false) => {
-    let msg = message;
-    const { msgOnError } = option;
-    if (err && msgOnError && !fromCustomFunc) {
-      msg = msgOnError;
+    } else {
+      console.error('Please provide "type" in validationOption');
     }
-    setErr(err);
-    setMsg(msg);
-    validationCallback && validationCallback(err);
-  }, []);
-  useEffect(
-    () => {
-      if (validate) {
+  }, [internalValue, option]);
+  const handleCheckEnd = useCallback(
+    (err: boolean, message: string, fromCustomFunc: boolean = false) => {
+      let msg = message;
+      const { msgOnError } = option;
+      if (err && msgOnError && !fromCustomFunc) {
+        msg = msgOnError;
+      }
+      setErr(err);
+      setMsg(msg);
+      validationCallback && validationCallback(err);
+    },
+    [option.msgOnError],
+  );
+  useEffect(() => {
+    if (validate) {
+      check();
+    }
+  }, [validate]);
+  useEffect(() => {
+    setInternalValue(String(value));
+  }, [value]);
+  useEffect(() => {
+    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
+    if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+      if (option.customFunc && onKeyUp) {
         check();
       }
-    },
-    [validate],
-  );
-  useEffect(
-    () => {
-      setInternalValue(String(value));
-    },
-    [value],
-  );
-  useEffect(
-    () => {
-      /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
-        if (option.customFunc && onKeyUp) {
-          check();
+    }
+  }, [internalValue]);
+  useEffect(() => {
+    if (asyncObj) {
+      if (asyncObj.message) {
+        if (asyncObj.showOnError) {
+          handleCheckEnd(asyncObj.error, asyncObj.message);
+        }
+        if (!asyncObj.error && asyncObj.showOnSuccess) {
+          setSuccessMsg(asyncObj.message);
         }
       }
-    },
-    [internalValue],
-  );
-  useEffect(
-    () => {
-      if (asyncObj) {
-        if (asyncObj.message) {
-          if (asyncObj.showOnError) {
-            handleCheckEnd(asyncObj.error, asyncObj.message);
-          }
-          if (!asyncObj.error && asyncObj.showOnSuccess) {
-            setSuccessMsg(asyncObj.message);
-          }
-        }
-      }
-    },
-    [asyncMsgObj],
-  );
+    }
+  }, [asyncMsgObj]);
   const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
     !err &&
     reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
@@ -463,6 +465,7 @@ const component: React.FC<Props> = ({
           ref={$input}
           {...attributesInput}
         />
+        {label && attributesInput.id && <label htmlFor={attributesInput.id}>{label}</label>}
       </div>
       {msgHtml}
     </div>

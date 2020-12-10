@@ -2,7 +2,6 @@ const base = require('./base.js');
 const objectAssign = require('object-assign');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
 const PATH = require('./build_path');
 const config = objectAssign(base, {
   mode: 'development',

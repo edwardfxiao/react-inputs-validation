@@ -1,5 +1,4 @@
 const env = require('yargs').argv.env; // use --env with webpack 2
-const webpack = require('webpack');
 const path = require('path');
 const PATH = require('./build_path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -17,7 +16,7 @@ if (env === 'build') {
   outputFile = libraryName + '.js';
 }
 
-var config = (module.exports = {
+module.exports = {
   mode: 'production',
   context: PATH.ROOT_PATH,
   module: {
@@ -57,7 +56,6 @@ var config = (module.exports = {
         test: /\.jsx?$/,
         include: [PATH.ROOT_PATH],
         exclude: [PATH.NODE_MODULES_PATH],
-        enforce: 'pre',
         enforce: 'post',
         loader: 'eslint-loader',
         options: {
@@ -68,13 +66,10 @@ var config = (module.exports = {
         test: /\.jsx?$/,
         include: [PATH.ROOT_PATH],
         exclude: [PATH.NODE_MODULES_PATH],
-        enforce: 'pre',
-        enforce: 'post',
         loader: 'babel-loader',
       },
       {
         test: /\.css$/,
-        enforce: 'pre',
         enforce: 'post',
         use: [
           MiniCssExtractPlugin.loader,
@@ -114,9 +109,5 @@ var config = (module.exports = {
     libraryTarget: 'umd',
     globalObject: 'this',
   },
-  externals: {
-    react: 'react',
-    'react-dom': 'react-dom',
-  },
   plugins,
-});
+};

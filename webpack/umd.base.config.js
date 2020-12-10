@@ -8,7 +8,7 @@ let libraryName = 'react-inputs-validation';
 let plugins = [],
   outputFile;
 
-if (env === 'build') {
+if (env === 'minify') {
   plugins.push(new MiniCssExtractPlugin({ filename: libraryName + '.min.css' }));
   outputFile = libraryName + '.min.js';
 } else {

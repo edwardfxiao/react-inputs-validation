@@ -2,7 +2,7 @@
 **A**: ```npm run dev```
 
 ### Q: How to compile the ultimate files? 
-**A**: ```npm run compile```
+**A**: ```npm run compile```, and the files will be locating in ```/lib``` folder.
 
 
 ### Q: What is the difference between ```umd_local```, ```umd_global``` and ```umd_global_min``` in the script of ```package.json```?
@@ -11,7 +11,7 @@ while ```umd_global``` gives ```window.Textbox = Textbox``` if ```window``` exis
 
 Lastly ```umd_global_min``` minifies the assets and generates ```react-inputs-validation.min.js``` and ```react-inputs-validation.min.css```
 
-They ruled by ```umd.local.config.js``` and ```umd.global.config.js```, which located in ```/src/webpack/```
+They ruled by ```umd.local.config.js``` and ```umd.global.config.js```, which located in ```/src/webpack/``` folder.
 
 ### Q: What does ```build_gh_page``` do?
 **A**: Just for building the gh page

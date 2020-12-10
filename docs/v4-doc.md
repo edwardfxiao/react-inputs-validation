@@ -1,4 +1,4 @@
- - [Components](#components)
+- [Components](#components)
   - [Textbox](#Textbox)
 
   - [Radiobox](#Radiobox)
@@ -520,7 +520,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   //   showOnError: true, // Optional.[Bool].Default: true. (Server response) Show AJAX error message or not.
   //   showOnSuccess: false, // Optional.[Bool].Default: false. (Server response) Show AJAX success message or not.
   // }}
-/>;
+/>
 
 ```
 

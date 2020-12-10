@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "RokasAniss",
+      "name": "Rokas Anisas",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/33621394?v=4",
+      "profile": "http://rokasanisas.com",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "react-inputs-validation",
+  "projectOwner": "edwardfhsiao",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

@@ -6,12 +6,16 @@
   "commit": false,
   "contributors": [
     {
-      "login": "RokasAniss",
-      "name": "Rokas Anisas",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/33621394?v=4",
-      "profile": "http://rokasanisas.com",
+      "login": "edwardfhsiao",
+      "name": "Edward Xiao",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/11728228?v=4",
+      "profile": "",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "infra",
+        "test",
+        "review"
       ]
     },
     {
@@ -19,6 +23,14 @@
       "name": "Frank Bonnet",
       "avatar_url": "https://avatars1.githubusercontent.com/u/31480614?v=4",
       "profile": "http://www.dcorp.it",
+      "contributions": [
+        "code"
+      ]
+    },{
+      "login": "RokasAniss",
+      "name": "Rokas Anisas",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/33621394?v=4",
+      "profile": "http://rokasanisas.com",
       "contributions": [
         "code"
       ]

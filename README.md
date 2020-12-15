@@ -17,6 +17,7 @@ A react component for form inputs validation. Online demo examples.
     - [4.x](#4.x-documentation)
 - [Browser support](#browser-support)
 - [Donation](#donation)
+- [Contributors](#contributors)
   
   
 # <a name="how-to-use"></a>How to use
@@ -97,6 +98,7 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 # <a name="donation"></a>Donation
 <a href="https://www.paypal.me/XIAOMENGXIAO/0.99" target="_blank" alt="PayPal Donate">Thanks for donating me a donut!&nbsp;&nbsp;⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</a>
 
+<a name="contributors"></a>
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

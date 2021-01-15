@@ -12,7 +12,7 @@ const keyCodeEnter = 13;
 const selectKeyList = [keyCodeEsc, keyCodeDown, keyCodeUp, keyCodeEnter];
 /* istanbul ignore next */
 if (!String.prototype.startsWith) {
-  String.prototype.startsWith = function(searchString, position) {
+  String.prototype.startsWith = function (searchString, position) {
     const p = position || 0;
     return this.indexOf(searchString, p) === p;
   };
@@ -307,7 +307,7 @@ const component: React.FC<Props> = ({
       return () => {
         window.removeEventListener('mousedown', pageClick);
         window.removeEventListener('touchstart', pageClick);
-        $elWrapper.current.removeEventListener('keydown', onKeyDown);
+        $elWrapper.current && $elWrapper.current.removeEventListener('keydown', onKeyDown);
       };
     }
   }, []);
@@ -555,18 +555,21 @@ const component: React.FC<Props> = ({
     }
     resetCurrentFocus();
   }, [show]);
-  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
-    !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const containerClass = `${CONTAINER_CLASS_IDENTITIFIER} ${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${show &&
-    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const inputClass = `${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled &&
-    reactInputsValidationCss['disabled']}`;
-  const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
-    !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss[`${TYPE}__options-container`]} ${err && reactInputsValidationCss['error']} ${show &&
-    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${
+    successMsg !== '' && !err && reactInputsValidationCss['success']
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${CONTAINER_CLASS_IDENTITIFIER} ${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${
+    show && reactInputsValidationCss['show']
+  } ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const inputClass = `${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    disabled && reactInputsValidationCss['disabled']
+  }`;
+  const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    disabled && reactInputsValidationCss['disabled']
+  }`;
+  const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss[`${TYPE}__options-container`]} ${err && reactInputsValidationCss['error']} ${
+    show && reactInputsValidationCss['show']
+  } ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const selectOptionListItemClass = `${reactInputsValidationCss[`button`]} ${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
     reactInputsValidationCss[`${TYPE}__options-item`]
   } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;

@@ -121,7 +121,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
+    // shouldRenderMsgAsHtml: false, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
     // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }
     //   if (res != 'milk') {
     //     return 'Description cannot be other things but milk';
@@ -217,7 +217,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
+    // shouldRenderMsgAsHtml: false, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
   }}
   // asyncMsgObj={{
   //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -310,7 +310,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look of 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
+    // shouldRenderMsgAsHtml: false, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
   }}
   // asyncMsgObj={{
   //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -407,7 +407,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
+    // shouldRenderMsgAsHtml: false, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
   }}
   // asyncMsgObj={{
   //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -516,7 +516,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "". Custom regex error message.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
-    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
+    // shouldRenderMsgAsHtml: false, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
     // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }
     //   if (res != 'banana') {
     //     return 'Description cannot be other things but banana';

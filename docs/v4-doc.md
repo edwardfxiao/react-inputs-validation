@@ -67,6 +67,7 @@
 |**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST' (For Textbox or Textarea, better reffer to <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>**|**""**      |
 |**asyncMsgObj.showOnError** |**Opt**|**Bool** |**(Server response) Show AJAX error message or not.**|**true**      |
 |**asyncMsgObj.showOnSuccess** |**Opt**|**Bool** |**(Server response) Show AJAX success message or not.**|**false**      |
+|**asyncMsgObj.shouldRenderMsgAsHtml** |**Opt**|**Bool** |**Should render your message by dangerouslySetInnerHTML.**|**false**      |
 
 
 ```js
@@ -120,6 +121,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "" Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
     // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }
     //   if (res != 'milk') {
     //     return 'Description cannot be other things but milk';
@@ -174,6 +176,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'**|**""**      |
 |**asyncMsgObj.showOnError** |**Opt**|**Bool** |**(Server response) Show AJAX error message or not.**|**true**      |
 |**asyncMsgObj.showOnSuccess** |**Opt**|**Bool** |**(Server response) Show AJAX success message or not.**|**false**      |
+|**asyncMsgObj.shouldRenderMsgAsHtml** |**Opt**|**Bool** |**Should render your message by dangerouslySetInnerHTML.**|**false**      |
 
 ```js
 import { Radiobox } from 'react-inputs-validation';
@@ -214,6 +217,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
   }}
   // asyncMsgObj={{
   //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -262,6 +266,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'**|**""**      |
 |**asyncMsgObj.showOnError** |**Opt**|**Bool** |**(Server response) Show AJAX error message or not.**|**true**      |
 |**asyncMsgObj.showOnSuccess** |**Opt**|**Bool** |**(Server response) Show AJAX success message or not.**|**false**      |
+|**asyncMsgObj.shouldRenderMsgAsHtml** |**Opt**|**Bool** |**Should render your message by dangerouslySetInnerHTML.**|**false**      |
 
 ```js
 import { Checkbox } from 'react-inputs-validation';
@@ -305,6 +310,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look of 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
   }}
   // asyncMsgObj={{
   //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -358,6 +364,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST'**|**""**      |
 |**asyncMsgObj.showOnError** |**Opt**|**Bool** |**(Server response) Show AJAX error message or not.**|**true**      |
 |**asyncMsgObj.showOnSuccess** |**Opt**|**Bool** |**(Server response) Show AJAX success message or not.**|**false**      |
+|**asyncMsgObj.shouldRenderMsgAsHtml** |**Opt**|**Bool** |**Should render your message by dangerouslySetInnerHTML.**|**false**      |
 
 ```js
 import { Select } from 'react-inputs-validation';
@@ -400,6 +407,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // locale: 'en-US', //Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at 'window.REACT_INPUTS_VALIDATION' section, which provides the extensibility for your own locale.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
   }}
   // asyncMsgObj={{
   //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -453,6 +461,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**asyncMsgObj.message** |**Opt**|**Str** |**(Server response) Your AJAX message. For instance, provide it when backend returns 'USERNAME ALREADY EXIST' (For Textbox or Textarea, better reffer to <a href="https://codesandbox.io/s/async-checking-via-customfunc-emqgw">Example of async checking username existence </a>**|**""**      |
 |**asyncMsgObj.showOnError** |**Opt**|**Bool** |**(Server response) Show AJAX error message or not.**|**true**      |
 |**asyncMsgObj.showOnSuccess** |**Opt**|**Bool** |**(Server response) Show AJAX success message or not.**|**false**      |
+|**asyncMsgObj.shouldRenderMsgAsHtml** |**Opt**|**Bool** |**Should render your message by dangerouslySetInnerHTML.**|**false**      |
 
 ```js
 import { Textarea } from 'react-inputs-validation';
@@ -507,6 +516,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // regMsg: 'failed in reg.test(${value})', //Optional.[String].Default: "". Custom regex error message.
     // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", //Optional.[String].Default: "". Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.
     // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border.", //Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+    // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
     // customFunc: res => { //Optional.[Func].Default: none. Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }
     //   if (res != 'banana') {
     //     return 'Description cannot be other things but banana';
@@ -526,7 +536,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 # <a name="common-issues"></a>Common questions
 
-### <a name="phone-email-validation-example"></a>Q: What's the recommended way to validate a phone or email? 
+### <a name="phone-email-validation-example"></a>Q: What's the recommended way to validate a phone or email?
 
 **A**: Check the example of phone and email validation
 <a href="https://codesandbox.io/s/13qo2rqxjj">codesandbox example</a>
@@ -571,7 +581,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
  />
 ```
 
-### <a name="memoization"></a>Q: What if my variables got cached due to the react memoization? 
+### <a name="memoization"></a>Q: What if my variables got cached due to the react memoization?
 **A**: You can always pass the value you wish to update into ```validationOption```.
 for the below example, just put ```balance``` inside ```validationOption``` and it will not be cached.
 
@@ -616,7 +626,7 @@ const [amount, setAmount] = useState('')
 <br/>
 
 
-### <a name="custom-error-message"></a>Q: Do you support custom locales? 
+### <a name="custom-error-message"></a>Q: Do you support custom locales?
 **A**: Yes, and it could be multiple locales. By providing ```window.REACT_INPUTS_VALIDATION['customErrorMessage']```, you can overwrite the error message.
 
 <a href="https://codesandbox.io/s/q9vqmk4j84">codesandbox example</a>(located in index.html)
@@ -779,5 +789,5 @@ Then in the component...
   }}
  />
 ```
- 
+
 **For more extensibility or customization please reffer to '[validationOption.customFunc](#customFunc)'**

@@ -7,6 +7,7 @@ interface DefaultValidationOption {
     locale?: string;
     msgOnError?: string;
     msgOnSuccess?: string;
+    shouldRenderMsgAsHtml?: boolean;
 }
 interface DefaultAsyncMsgObj {
     error?: boolean;

@@ -14,6 +14,7 @@ interface DefaultValidationOption {
     msgOnError?: string;
     msgOnSuccess?: string;
     customFunc?: Function | undefined;
+    shouldRenderMsgAsHtml?: boolean;
 }
 interface DefaultAsyncMsgObj {
     error?: boolean;

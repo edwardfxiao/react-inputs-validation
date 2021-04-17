@@ -928,6 +928,8 @@ class Index extends Component {
                         //     };
                         //   }
                         // },
+                        // msgOnError: '<a href="google.com">google</a>',
+                        // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
                       }}
                       // asyncMsgObj={this.state.nameAsyncMsgObj}
                       // asyncMsgObj={{
@@ -996,6 +998,8 @@ class Index extends Component {
                         // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+                        // msgOnError: '<a href="google.com">google</a>',
+                        // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
                       }}
                       // asyncMsgObj={{
                       //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -1063,6 +1067,8 @@ class Index extends Component {
                         // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+                        // msgOnError: '<a href="google.com">google</a>',
+                        // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
                       }}
                       // asyncMsgObj={{
                       //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -1130,6 +1136,8 @@ class Index extends Component {
                         // locale: 'en-US', // Optional.[String].Default: "en-US". For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'.
                         // msgOnError: "Your custom error message if you provide the validationOption['msgOnError']", // Optional.[String].Default: "". Show your custom error message no matter what when it has error if it is provied.
                         // msgOnSuccess: "Your custom success message if you provide the validationOption['msgOnSuccess']. Otherwise, it will not show, not even green border." // Optional.[String].Default: "". Show your custom success message no matter what when it has error if it is provied.
+                        // msgOnError: '<a href="google.com">google</a>',
+                        // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
                       }}
                       // asyncMsgObj={{
                       //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.
@@ -1213,6 +1221,8 @@ class Index extends Component {
                         //   }
                         //   return true;
                         // }
+                        // msgOnError: '<a href="google.com">google</a>',
+                        // shouldRenderMsgAsHtml: true, // Optional.[Bool].Default: false. Should render your message by dangerouslySetInnerHTML.
                       }}
                       // asyncMsgObj={{
                       //   error: false, // Optional.[Bool].Default: false. (Server response) Backend validation result.

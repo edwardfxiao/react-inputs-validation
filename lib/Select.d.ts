@@ -7,6 +7,7 @@ interface DefaultValidationOption {
     locale?: string;
     msgOnError?: string;
     msgOnSuccess?: string;
+    shouldRenderMsgAsHtml?: boolean;
 }
 export declare const isValidValue: (list: OptionListItem[], value: any) => boolean;
 export declare const getItem: (list: OptionListItem[], value: any) => OptionListItem;

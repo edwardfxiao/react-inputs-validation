@@ -135,6 +135,7 @@ interface Props {
   classNameWrapper?: string;
   classNameContainer?: string;
   classNameSelect?: string;
+  classNameOptionListWrapper?: string;
   classNameOptionListContainer?: string;
   classNameDropdownIconOptionListItem?: string;
   classNameOptionListItem?: string;
@@ -167,6 +168,7 @@ const component: React.FC<Props> = ({
   classNameContainer = '',
   classNameSelect = '',
   classNameOptionListItem = '',
+  classNameOptionListWrapper = '',
   classNameOptionListContainer = '',
   classNameDropdownIconOptionListItem = '',
   customStyleWrapper = {},
@@ -570,7 +572,7 @@ const component: React.FC<Props> = ({
   const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
     disabled && reactInputsValidationCss['disabled']
   }`;
-  const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss[`${TYPE}__options-container`]} ${err && reactInputsValidationCss['error']} ${
+  const selectOptionListWrapperClass = `${classNameOptionListWrapper} ${reactInputsValidationCss[`${TYPE}__options-wrapper`]} ${err && reactInputsValidationCss['error']} ${
     show && reactInputsValidationCss['show']
   } ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const selectOptionListItemClass = `${reactInputsValidationCss[`button`]} ${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
@@ -652,7 +654,7 @@ const component: React.FC<Props> = ({
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
-          <div className={selectOptionListContainerClass}>
+          <div className={selectOptionListWrapperClass}>
             {showSearch && (
               <div ref={$searchInputWrapper}>
                 <div className={reactInputsValidationCss[`${TYPE}__searchInputWrapper`]}>
@@ -686,7 +688,7 @@ const component: React.FC<Props> = ({
                 </div>
               </div>
             )}
-            <div ref={$itemsWrapper} style={customStyleOptionListContainer}>
+            <div ref={$itemsWrapper} className={classNameOptionListContainer} style={customStyleOptionListContainer}>
               {optionListHtml}
             </div>
           </div>

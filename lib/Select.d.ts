@@ -46,6 +46,7 @@ interface Props {
     classNameWrapper?: string;
     classNameContainer?: string;
     classNameSelect?: string;
+    classNameOptionListWrapper?: string;
     classNameOptionListContainer?: string;
     classNameDropdownIconOptionListItem?: string;
     classNameOptionListItem?: string;

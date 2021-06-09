@@ -341,6 +341,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |classNameSelect                   |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
+|classNameOptionListWrapper        |  Opt  |  Str   |                                             |  ""        |
 |classNameOptionListContainer      |  Opt  |  Str   |                                             |  ""        |
 |classNameOptionListItem           |  Opt  |  Str   |                                             |  ""        |
 |customStyleSelect                 |  Opt  |  Obj   |                                             |  {}        |
@@ -385,6 +386,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
   classNameSelect="" //Optional.[String].Default: "".
   classNameWrapper="" //Optional.[String].Default: "".
   classNameContainer="" //Optional.[String].Default: "".
+  classNameOptionListWrapper="" //Optional.[String].Default: "".
   classNameOptionListContainer="" //Optional.[String].Default: "".
   classNameOptionListItem="" //Optional.[String].Default: "".
   customStyleSelect={{}} //Optional.[Object].Default: {}.

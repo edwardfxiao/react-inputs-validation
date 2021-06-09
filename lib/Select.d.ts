@@ -15,6 +15,7 @@ export declare const getIndex: (list: OptionListItem[], value: string) => number
 interface OptionListItem {
     id: string;
     name: string;
+    icon?: string;
 }
 interface Props {
     attributesWrapper?: React.HTMLAttributes<HTMLButtonElement>;

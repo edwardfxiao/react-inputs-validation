@@ -104,6 +104,7 @@ export const getIndex = (list: OptionListItem[], value: string) => {
 interface OptionListItem {
   id: string;
   name: string;
+  icon?: string;
 }
 interface Props {
   attributesWrapper?: React.HTMLAttributes<HTMLButtonElement>;
@@ -728,7 +729,8 @@ export const Option: React.FC<OptionProps> = memo(
     }, []);
     return (
       <a id={id} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
-        <span>{item.name}</span>
+        {item.icon && <img src={item.icon} className={reactInputsValidationCss[`${TYPE}__optionItem_icon`]} />}
+        {<span className={reactInputsValidationCss[`${TYPE}__optionItem_name`]}>{item.name}</span>}
       </a>
     );
   },

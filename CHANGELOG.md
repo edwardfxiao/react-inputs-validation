@@ -1,3 +1,7 @@
+# 4.8.1
+
+- Adding ```icon``` into ```<Select/>```'s ```optionList``` ```[{id: '1', name: 'Twin Peaks']``` => ```[{id: '1', name: 'Twin Peaks', icon: 'optional']```
+
 # 4.8.0
 
 - Replace ```classNameOptionListContainer``` with ```classNameOptionListWrapper``` and provide new ```classNameOptionListContainer``` & change className ```'options-container'``` to ```'options-wrapper'``` in ```<Select/>```

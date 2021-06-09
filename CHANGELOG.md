@@ -1,6 +1,14 @@
+# 4.8.3
+
+- Minor fix for ```<Select/>```
+
+# 4.8.2
+
+- Minor fix for ```<Select/>```
+
 # 4.8.1
 
-- Adding ```icon``` into ```<Select/>```'s ```optionList``` ```[{id: '1', name: 'Twin Peaks']``` => ```[{id: '1', name: 'Twin Peaks', icon: 'optional']```
+- Add ```icon``` into ```<Select/>```'s ```optionList``` ```[{id: '1', name: 'Twin Peaks']``` => ```[{id: '1', name: 'Twin Peaks', icon: 'optional']```
 
 # 4.8.0
 

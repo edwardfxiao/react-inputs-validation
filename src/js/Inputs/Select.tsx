@@ -624,7 +624,16 @@ const component: React.FC<Props> = ({
   }
   const selectorHtml = (
     <div className={reactInputsValidationCss[`${TYPE}__dropdown`]}>
-      <div className={`${reactInputsValidationCss[`${TYPE}__dropdown-name`]} ${reactInputsValidationCss['ellipsis']}`}>{item ? item.name : ''}</div>
+      <div className={`${reactInputsValidationCss[`${TYPE}__dropdown-name`]} ${reactInputsValidationCss['ellipsis']}`}>
+        {item ? (
+          <span>
+            {item.icon && <img src={item.icon} className={reactInputsValidationCss[`${TYPE}__optionItem_current_display_icon`]} />}
+            <span className={reactInputsValidationCss[`${TYPE}__optionItem_current_display_name`]}>{item.name}</span>
+          </span>
+        ) : (
+          ''
+        )}
+      </div>
       <div className={dropdownIconClass} />
     </div>
   );
@@ -711,7 +720,17 @@ interface OptionProps {
   onMouseOut?: () => void;
 }
 export const Option: React.FC<OptionProps> = memo(
-  ({ index = -1, id = '', className = '', item = { id: '', name: '' }, customStyleOptionListItem = {}, onClick = () => {}, onMouseOver = () => {}, onMouseMove = () => {}, onMouseOut = () => {} }) => {
+  ({
+    index = -1,
+    id = '',
+    className = '',
+    item = { id: '', name: '', icon: '' },
+    customStyleOptionListItem = {},
+    onClick = () => {},
+    onMouseOver = () => {},
+    onMouseMove = () => {},
+    onMouseOut = () => {},
+  }) => {
     const handleOnClick = useCallback(
       (e: React.MouseEvent<HTMLElement>) => {
         onClick(item, e);

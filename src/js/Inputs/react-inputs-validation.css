@@ -521,6 +521,14 @@ input[type='checkbox'] {
   vertical-align: middle;
 }
 
+.select__optionItem_current_display_icon {
+  vertical-align: middle;
+}
+
+.select__optionItem_current_display_name {
+  vertical-align: middle;
+}
+
 .select__options-wrapper.show {
   display: block;
 }

@@ -20,6 +20,7 @@ interface DefaultValidationOption {
   locale?: string;
   msgOnError?: string;
   msgOnSuccess?: string;
+  shouldRenderMsgAsHtml?: boolean;
 }
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   let {
@@ -30,6 +31,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     locale,
     msgOnError,
     msgOnSuccess,
+    shouldRenderMsgAsHtml,
   } = obj;
   locale = typeof locale !== "undefined" ? locale : DEFAULT_LOCALE;
   name = typeof name !== "undefined" ? name : "";
@@ -38,6 +40,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   required = typeof required !== "undefined" ? required : true;
   msgOnSuccess = typeof msgOnSuccess !== "undefined" ? msgOnSuccess : "";
   msgOnError = typeof msgOnError !== "undefined" ? msgOnError : "";
+  shouldRenderMsgAsHtml = typeof shouldRenderMsgAsHtml !== 'undefined' ? shouldRenderMsgAsHtml : false;
   return {
     name,
     check,
@@ -46,6 +49,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     locale,
     msgOnError,
     msgOnSuccess,
+    shouldRenderMsgAsHtml,
   };
 };
 interface DefaultAsyncMsgObj {
@@ -275,12 +279,12 @@ const component: React.FC<Props> = ({
     reactInputsValidationCss["msg"]
   } ${!err && reactInputsValidationCss["success"]}`;
   let msgHtml;
-  const { showMsg } = option;
+  const { showMsg, shouldRenderMsgAsHtml } = option;
   if (showMsg && err && msg) {
-    msgHtml = <div className={errMsgClass}>{msg}</div>;
+    msgHtml = shouldRenderMsgAsHtml ? <div className={errMsgClass} dangerouslySetInnerHTML={{ __html: msg }} /> : <div className={errMsgClass}>{msg}</div>;
   }
-  if (showMsg && !err && successMsg !== "") {
-    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+  if (showMsg && !err && successMsg !== '') {
+    msgHtml = shouldRenderMsgAsHtml ? <div className={successMsgClass} dangerouslySetInnerHTML={{ __html: successMsg }} /> : <div className={successMsgClass}>{successMsg}</div>;
   }
   let optionHtml;
   if (optionList.length) {

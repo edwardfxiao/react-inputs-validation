@@ -7,6 +7,7 @@ interface DefaultValidationOption {
     locale?: string;
     msgOnError?: string;
     msgOnSuccess?: string;
+    shouldRenderMsgAsHtml?: boolean;
 }
 export declare const isValidValue: (list: OptionListItem[], value: any) => boolean;
 export declare const getItem: (list: OptionListItem[], value: any) => OptionListItem;
@@ -14,6 +15,7 @@ export declare const getIndex: (list: OptionListItem[], value: string) => number
 interface OptionListItem {
     id: string;
     name: string;
+    icon?: string;
 }
 interface Props {
     attributesWrapper?: React.HTMLAttributes<HTMLButtonElement>;
@@ -45,6 +47,7 @@ interface Props {
     classNameWrapper?: string;
     classNameContainer?: string;
     classNameSelect?: string;
+    classNameOptionListWrapper?: string;
     classNameOptionListContainer?: string;
     classNameDropdownIconOptionListItem?: string;
     classNameOptionListItem?: string;

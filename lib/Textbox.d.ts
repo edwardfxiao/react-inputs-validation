@@ -17,6 +17,7 @@ interface DefaultValidationOption {
     msgOnError?: string;
     msgOnSuccess?: string;
     customFunc?: Function | undefined;
+    shouldRenderMsgAsHtml?: boolean;
 }
 interface AttributesInputObj {
     id?: string;

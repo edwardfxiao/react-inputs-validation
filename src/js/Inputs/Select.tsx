@@ -12,7 +12,7 @@ const keyCodeEnter = 13;
 const selectKeyList = [keyCodeEsc, keyCodeDown, keyCodeUp, keyCodeEnter];
 /* istanbul ignore next */
 if (!String.prototype.startsWith) {
-  String.prototype.startsWith = function(searchString, position) {
+  String.prototype.startsWith = function (searchString, position) {
     const p = position || 0;
     return this.indexOf(searchString, p) === p;
   };
@@ -25,9 +25,10 @@ interface DefaultValidationOption {
   locale?: string;
   msgOnError?: string;
   msgOnSuccess?: string;
+  shouldRenderMsgAsHtml?: boolean;
 }
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
-  let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
+  let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess, shouldRenderMsgAsHtml } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
@@ -35,6 +36,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   required = typeof required !== 'undefined' ? required : true;
   msgOnSuccess = typeof msgOnSuccess !== 'undefined' ? msgOnSuccess : '';
   msgOnError = typeof msgOnError !== 'undefined' ? msgOnError : '';
+  shouldRenderMsgAsHtml = typeof shouldRenderMsgAsHtml !== 'undefined' ? shouldRenderMsgAsHtml : false;
   return {
     name,
     check,
@@ -43,6 +45,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     locale,
     msgOnError,
     msgOnSuccess,
+    shouldRenderMsgAsHtml,
   };
 };
 interface DefaultAsyncMsgObj {
@@ -101,6 +104,7 @@ export const getIndex = (list: OptionListItem[], value: string) => {
 interface OptionListItem {
   id: string;
   name: string;
+  icon?: string;
 }
 interface Props {
   attributesWrapper?: React.HTMLAttributes<HTMLButtonElement>;
@@ -132,6 +136,7 @@ interface Props {
   classNameWrapper?: string;
   classNameContainer?: string;
   classNameSelect?: string;
+  classNameOptionListWrapper?: string;
   classNameOptionListContainer?: string;
   classNameDropdownIconOptionListItem?: string;
   classNameOptionListItem?: string;
@@ -164,6 +169,7 @@ const component: React.FC<Props> = ({
   classNameContainer = '',
   classNameSelect = '',
   classNameOptionListItem = '',
+  classNameOptionListWrapper = '',
   classNameOptionListContainer = '',
   classNameDropdownIconOptionListItem = '',
   customStyleWrapper = {},
@@ -307,7 +313,7 @@ const component: React.FC<Props> = ({
       return () => {
         window.removeEventListener('mousedown', pageClick);
         window.removeEventListener('touchstart', pageClick);
-        $elWrapper.current.removeEventListener('keydown', onKeyDown);
+        $elWrapper.current && $elWrapper.current.removeEventListener('keydown', onKeyDown);
       };
     }
   }, []);
@@ -555,18 +561,21 @@ const component: React.FC<Props> = ({
     }
     resetCurrentFocus();
   }, [show]);
-  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
-    !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const containerClass = `${CONTAINER_CLASS_IDENTITIFIER} ${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${show &&
-    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const inputClass = `${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled &&
-    reactInputsValidationCss['disabled']}`;
-  const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
-    !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const selectOptionListContainerClass = `${classNameOptionListContainer} ${reactInputsValidationCss[`${TYPE}__options-container`]} ${err && reactInputsValidationCss['error']} ${show &&
-    reactInputsValidationCss['show']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const wrapperClass = `${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${
+    successMsg !== '' && !err && reactInputsValidationCss['success']
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${CONTAINER_CLASS_IDENTITIFIER} ${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${
+    show && reactInputsValidationCss['show']
+  } ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const inputClass = `${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    disabled && reactInputsValidationCss['disabled']
+  }`;
+  const selectClass = `${classNameSelect} ${reactInputsValidationCss['ellipsis']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    disabled && reactInputsValidationCss['disabled']
+  }`;
+  const selectOptionListWrapperClass = `${classNameOptionListWrapper} ${reactInputsValidationCss[`${TYPE}__options-wrapper`]} ${err && reactInputsValidationCss['error']} ${
+    show && reactInputsValidationCss['show']
+  } ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
   const selectOptionListItemClass = `${reactInputsValidationCss[`button`]} ${!isTyping && reactInputsValidationCss[`${TYPE}__options-item-show-cursor`]} ${classNameOptionListItem} ${
     reactInputsValidationCss[`${TYPE}__options-item`]
   } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
@@ -574,12 +583,12 @@ const component: React.FC<Props> = ({
   const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
   const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;
-  const { showMsg } = option;
+  const { showMsg, shouldRenderMsgAsHtml } = option;
   if (showMsg && err && msg) {
-    msgHtml = <div className={errMsgClass}>{msg}</div>;
+    msgHtml = shouldRenderMsgAsHtml ? <div className={errMsgClass} dangerouslySetInnerHTML={{ __html: msg }} /> : <div className={errMsgClass}>{msg}</div>;
   }
   if (showMsg && !err && successMsg !== '') {
-    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+    msgHtml = shouldRenderMsgAsHtml ? <div className={successMsgClass} dangerouslySetInnerHTML={{ __html: successMsg }} /> : <div className={successMsgClass}>{successMsg}</div>;
   }
   let optionListHtml;
   const item = getItem(optionList, String(value));
@@ -615,7 +624,16 @@ const component: React.FC<Props> = ({
   }
   const selectorHtml = (
     <div className={reactInputsValidationCss[`${TYPE}__dropdown`]}>
-      <div className={`${reactInputsValidationCss[`${TYPE}__dropdown-name`]} ${reactInputsValidationCss['ellipsis']}`}>{item ? item.name : ''}</div>
+      <div className={`${reactInputsValidationCss[`${TYPE}__dropdown-name`]} ${reactInputsValidationCss['ellipsis']}`}>
+        {item ? (
+          <span>
+            {item.icon && <img src={item.icon} className={reactInputsValidationCss[`${TYPE}__optionItem_current_display_icon`]} />}
+            <span className={reactInputsValidationCss[`${TYPE}__optionItem_current_display_name`]}>{item.name}</span>
+          </span>
+        ) : (
+          ''
+        )}
+      </div>
       <div className={dropdownIconClass} />
     </div>
   );
@@ -646,7 +664,7 @@ const component: React.FC<Props> = ({
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
-          <div className={selectOptionListContainerClass}>
+          <div className={selectOptionListWrapperClass}>
             {showSearch && (
               <div ref={$searchInputWrapper}>
                 <div className={reactInputsValidationCss[`${TYPE}__searchInputWrapper`]}>
@@ -680,7 +698,7 @@ const component: React.FC<Props> = ({
                 </div>
               </div>
             )}
-            <div ref={$itemsWrapper} style={customStyleOptionListContainer}>
+            <div ref={$itemsWrapper} className={classNameOptionListContainer} style={customStyleOptionListContainer}>
               {optionListHtml}
             </div>
           </div>
@@ -702,7 +720,17 @@ interface OptionProps {
   onMouseOut?: () => void;
 }
 export const Option: React.FC<OptionProps> = memo(
-  ({ index = -1, id = '', className = '', item = { id: '', name: '' }, customStyleOptionListItem = {}, onClick = () => {}, onMouseOver = () => {}, onMouseMove = () => {}, onMouseOut = () => {} }) => {
+  ({
+    index = -1,
+    id = '',
+    className = '',
+    item = { id: '', name: '', icon: '' },
+    customStyleOptionListItem = {},
+    onClick = () => {},
+    onMouseOver = () => {},
+    onMouseMove = () => {},
+    onMouseOut = () => {},
+  }) => {
     const handleOnClick = useCallback(
       (e: React.MouseEvent<HTMLElement>) => {
         onClick(item, e);
@@ -720,7 +748,8 @@ export const Option: React.FC<OptionProps> = memo(
     }, []);
     return (
       <a id={id} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
-        <span>{item.name}</span>
+        {item.icon && <img src={item.icon} className={reactInputsValidationCss[`${TYPE}__optionItem_icon`]} />}
+        {<span className={reactInputsValidationCss[`${TYPE}__optionItem_name`]}>{item.name}</span>}
       </a>
     );
   },

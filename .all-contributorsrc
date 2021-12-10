@@ -1,0 +1,45 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "edwardfxiao",
+      "name": "Edward Xiao",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/11728228?v=4",
+      "profile": "https://github.com/edwardfxiao",
+      "contributions": [
+        "code",
+        "doc",
+        "infra",
+        "test",
+        "review"
+      ]
+    },
+    {
+      "login": "DecentralizedIT",
+      "name": "Frank Bonnet",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31480614?v=4",
+      "profile": "http://www.dcorp.it",
+      "contributions": [
+        "code"
+      ]
+    },{
+      "login": "RokasAniss",
+      "name": "Rokas Anisas",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/33621394?v=4",
+      "profile": "http://rokasanisas.com",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "react-inputs-validation",
+  "projectOwner": "edwardfxiao",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

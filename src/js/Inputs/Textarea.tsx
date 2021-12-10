@@ -22,9 +22,10 @@ interface DefaultValidationOption {
   msgOnError?: string;
   msgOnSuccess?: string;
   customFunc?: Function | undefined;
+  shouldRenderMsgAsHtml?: boolean;
 }
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
-  let { reg, min, max, type, name, check, length, regMsg, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc } = obj;
+  let { reg, min, max, type, name, check, length, regMsg, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc, shouldRenderMsgAsHtml } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
@@ -39,6 +40,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   msgOnError = typeof msgOnError !== 'undefined' ? msgOnError : '';
   msgOnSuccess = typeof msgOnSuccess !== 'undefined' ? msgOnSuccess : '';
   customFunc = typeof customFunc !== 'undefined' ? customFunc : undefined;
+  shouldRenderMsgAsHtml = typeof shouldRenderMsgAsHtml !== 'undefined' ? shouldRenderMsgAsHtml : false;
   return {
     reg,
     min,
@@ -54,6 +56,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     msgOnError,
     msgOnSuccess,
     customFunc,
+    shouldRenderMsgAsHtml,
   };
 };
 interface DefaultAsyncMsgObj {
@@ -189,160 +192,148 @@ const component: React.FC<Props> = ({
     },
     [err],
   );
-  const check = useCallback(
-    async () => {
-      const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess, customFunc } = option;
-      if (!check) {
-        return;
-      }
-      if (type) {
-        if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) !== -1) {
-          if (!message[locale] || !message[locale][TYPE]) {
-            console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+  const check = useCallback(async () => {
+    const { reg, min, max, type, name, check, length, regMsg, locale, required, msgOnSuccess, customFunc } = option;
+    if (!check) {
+      return;
+    }
+    if (type) {
+      if (VALIDATE_OPTION_TYPE_LIST.indexOf(type) !== -1) {
+        if (!message[locale] || !message[locale][TYPE]) {
+          console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+          return;
+        }
+        const msg = message[locale][TYPE];
+        const nameText = name ? name : '';
+        if (required) {
+          if (validator.empty(internalValue)) {
+            handleCheckEnd(true, msg.empty(nameText));
             return;
           }
-          const msg = message[locale][TYPE];
-          const nameText = name ? name : '';
-          if (required) {
-            if (validator.empty(internalValue)) {
-              handleCheckEnd(true, msg.empty(nameText));
+        }
+        if (String(internalValue) !== '') {
+          if (reg) {
+            if (validator['reg'](reg, internalValue)) {
+              handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
               return;
             }
           }
-          if (String(internalValue) !== '') {
-            if (reg) {
-              if (validator['reg'](reg, internalValue)) {
-                handleCheckEnd(true, regMsg !== '' ? regMsg : msg.invalid(nameText));
+          if (min || max) {
+            if (min && max) {
+              if (String(internalValue).length < min || String(internalValue).length > max) {
+                handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
                 return;
               }
-            }
-            if (min || max) {
-              if (min && max) {
-                if (String(internalValue).length < min || String(internalValue).length > max) {
-                  handleCheckEnd(true, msg.inBetween(nameText)(min)(max));
+            } else {
+              if (min) {
+                if (String(internalValue).length < min) {
+                  handleCheckEnd(true, msg.lessThan(nameText)(min));
                   return;
                 }
-              } else {
-                if (min) {
-                  if (String(internalValue).length < min) {
-                    handleCheckEnd(true, msg.lessThan(nameText)(min));
-                    return;
-                  }
-                }
-                if (max) {
-                  if (String(internalValue).length > max) {
-                    handleCheckEnd(true, msg.greaterThan(nameText)(max));
-                    return;
-                  }
-                }
               }
-            }
-            if (length) {
-              if (String(internalValue).length !== length) {
-                handleCheckEnd(true, msg.lengthEqual(nameText)(length));
-                return;
+              if (max) {
+                if (String(internalValue).length > max) {
+                  handleCheckEnd(true, msg.greaterThan(nameText)(max));
+                  return;
+                }
               }
             }
           }
-          if (customFunc && typeof customFunc === 'function') {
-            const customFuncResult = await customFunc(internalValue);
-            /* istanbul ignore next because of async problem */
-            if (typeof customFuncResult === 'object') {
-              if (typeof customFuncResult.error === 'boolean' && typeof customFuncResult.message === 'string') {
-                if (customFuncResult.error === false && customFuncResult.showOnSuccess === true) {
-                  setSuccessMsg(customFuncResult.message);
-                }
-                handleCheckEnd(customFuncResult.error, customFuncResult.message, true);
-              }
-              return;
-            }
-            /* istanbul ignore next because of async problem */
-            if (customFuncResult !== true) {
-              handleCheckEnd(true, customFuncResult, true);
+          if (length) {
+            if (String(internalValue).length !== length) {
+              handleCheckEnd(true, msg.lengthEqual(nameText)(length));
               return;
             }
           }
-          if (msgOnSuccess) {
-            setSuccessMsg(msgOnSuccess);
-          }
-          handleCheckEnd(false, msgOnSuccess);
-        } else {
-          console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
         }
+        if (customFunc && typeof customFunc === 'function') {
+          const customFuncResult = await customFunc(internalValue);
+          /* istanbul ignore next because of async problem */
+          if (typeof customFuncResult === 'object') {
+            if (typeof customFuncResult.error === 'boolean' && typeof customFuncResult.message === 'string') {
+              if (customFuncResult.error === false && customFuncResult.showOnSuccess === true) {
+                setSuccessMsg(customFuncResult.message);
+              }
+              handleCheckEnd(customFuncResult.error, customFuncResult.message, true);
+            }
+            return;
+          }
+          /* istanbul ignore next because of async problem */
+          if (customFuncResult !== true) {
+            handleCheckEnd(true, customFuncResult, true);
+            return;
+          }
+        }
+        if (msgOnSuccess) {
+          setSuccessMsg(msgOnSuccess);
+        }
+        handleCheckEnd(false, msgOnSuccess);
       } else {
-        console.error('Please provide "type" in validationOption');
+        console.error(`The valid ${utils.toCamelCase(TYPE)(true)} "type" options in validationOption are [${VALIDATE_OPTION_TYPE_LIST.map(i => i)}]`);
       }
-    },
-    [internalValue, option],
-  );
-  const handleCheckEnd = useCallback((err: boolean, message: string, fromCustomFunc: boolean = false) => {
-    let msg = message;
-    const { msgOnError } = option;
-    if (err && msgOnError && !fromCustomFunc) {
-      msg = msgOnError;
+    } else {
+      console.error('Please provide "type" in validationOption');
     }
-    setErr(err);
-    setMsg(msg);
-    validationCallback && validationCallback(err);
-  }, [option.msgOnError]);
-  useEffect(
-    () => {
-      if (validate) {
+  }, [internalValue, option]);
+  const handleCheckEnd = useCallback(
+    (err: boolean, message: string, fromCustomFunc: boolean = false) => {
+      let msg = message;
+      const { msgOnError } = option;
+      if (err && msgOnError && !fromCustomFunc) {
+        msg = msgOnError;
+      }
+      setErr(err);
+      setMsg(msg);
+      validationCallback && validationCallback(err);
+    },
+    [option.msgOnError],
+  );
+  useEffect(() => {
+    if (validate) {
+      check();
+    }
+  }, [validate]);
+  useEffect(() => {
+    setInternalValue(String(value));
+  }, [value]);
+  useEffect(() => {
+    /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
+    if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
+      if (option.customFunc && onKeyUp) {
         check();
       }
-    },
-    [validate],
-  );
-  useEffect(
-    () => {
-      setInternalValue(String(value));
-    },
-    [value],
-  );
-  useEffect(
-    () => {
-      /* istanbul ignore next because of https://github.com/airbnb/enzyme/issues/441 && https://github.com/airbnb/enzyme/blob/master/docs/future.md */
-      if (typeof prevInternalValue !== 'undefined' && prevInternalValue !== internalValue) {
-        if (option.customFunc && onKeyUp) {
-          check();
+    }
+  }, [internalValue]);
+  useEffect(() => {
+    if (asyncObj) {
+      if (asyncObj.message) {
+        if (asyncObj.showOnError) {
+          handleCheckEnd(asyncObj.error, asyncObj.message);
+        }
+        if (!asyncObj.error && asyncObj.showOnSuccess) {
+          setSuccessMsg(asyncObj.message);
         }
       }
-    },
-    [internalValue],
-  );
-  useEffect(
-    () => {
-      if (asyncObj) {
-        if (asyncObj.message) {
-          if (asyncObj.showOnError) {
-            handleCheckEnd(asyncObj.error, asyncObj.message);
-          }
-          if (!asyncObj.error && asyncObj.showOnSuccess) {
-            setSuccessMsg(asyncObj.message);
-          }
-        }
-      }
-    },
-    [asyncMsgObj],
-  );
-  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
-    !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
-    !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const inputClass = `${classNameInput} ${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
-    !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+    }
+  }, [asyncMsgObj]);
+  const wrapperClass = `${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${err && reactInputsValidationCss['error']} ${
+    successMsg !== '' && !err && reactInputsValidationCss['success']
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${err && reactInputsValidationCss['error']} ${
+    successMsg !== '' && !err && reactInputsValidationCss['success']
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const inputClass = `${classNameInput} ${reactInputsValidationCss[`${TYPE}__input`]} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    disabled && reactInputsValidationCss['disabled']
+  }`;
   const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
   const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;
-  const { showMsg } = option;
+  const { showMsg, shouldRenderMsgAsHtml } = option;
   if (showMsg && err && msg) {
-    msgHtml = <div className={errMsgClass}>{msg}</div>;
+    msgHtml = shouldRenderMsgAsHtml ? <div className={errMsgClass} dangerouslySetInnerHTML={{ __html: msg }} /> : <div className={errMsgClass}>{msg}</div>;
   }
   if (showMsg && !err && successMsg !== '') {
-    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+    msgHtml = shouldRenderMsgAsHtml ? <div className={successMsgClass} dangerouslySetInnerHTML={{ __html: successMsg }} /> : <div className={successMsgClass}>{successMsg}</div>;
   }
   return (
     <div className={wrapperClass} style={customStyleWrapper} {...attributesWrapper}>

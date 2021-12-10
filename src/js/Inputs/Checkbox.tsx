@@ -13,9 +13,10 @@ interface DefaultValidationOption {
   locale?: string;
   msgOnError?: string;
   msgOnSuccess?: string;
+  shouldRenderMsgAsHtml?: boolean;
 }
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
-  let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess } = obj;
+  let { name, check, required, showMsg, locale, msgOnError, msgOnSuccess, shouldRenderMsgAsHtml } = obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
@@ -23,6 +24,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   required = typeof required !== 'undefined' ? required : true;
   msgOnSuccess = typeof msgOnSuccess !== 'undefined' ? msgOnSuccess : '';
   msgOnError = typeof msgOnError !== 'undefined' ? msgOnError : '';
+  shouldRenderMsgAsHtml = typeof shouldRenderMsgAsHtml !== 'undefined' ? shouldRenderMsgAsHtml : false;
   return {
     name,
     check,
@@ -31,6 +33,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     locale,
     msgOnError,
     msgOnSuccess,
+    shouldRenderMsgAsHtml,
   };
 };
 interface DefaultAsyncMsgObj {
@@ -63,10 +66,7 @@ interface Props {
   disabled?: boolean;
   labelHtml?: React.ReactNode;
   validate?: boolean;
-  onChange: (
-    res: boolean,
-    e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>
-  ) => void;
+  onChange: (res: boolean, e: React.ChangeEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -156,96 +156,87 @@ const component: React.FC<Props> = ({
     },
     [err, internalChecked, disabled],
   );
-  const check = useCallback(
-    () => {
-      const { name, check, locale, required, msgOnSuccess } = option;
-      if (!check) {
-        return;
-      }
-      if (!message[locale] || !message[locale][TYPE]) {
-        console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
-        return;
-      }
-      if (required) {
-        const msg = message[locale][TYPE];
-        const nameText = name ? name : '';
-        if (!internalChecked) {
-          handleCheckEnd(true, msg.unchecked(nameText));
-          return;
-        }
-      }
-      if (msgOnSuccess) {
-        setSuccessMsg(msgOnSuccess);
-      }
-      handleCheckEnd(false, msgOnSuccess);
-    },
-    [internalChecked, option],
-  );
-  const handleCheckEnd = useCallback((err: boolean, message: string) => {
-    let msg = message;
-    const { msgOnError } = option;
-    if (err && msgOnError) {
-      msg = msgOnError;
+  const check = useCallback(() => {
+    const { name, check, locale, required, msgOnSuccess } = option;
+    if (!check) {
+      return;
     }
-    setErr(err);
-    setMsg(msg);
-    validationCallback && validationCallback(err);
-  }, [option.msgOnError]);
-  useEffect(
-    () => {
-      if (validate) {
-        check();
+    if (!message[locale] || !message[locale][TYPE]) {
+      console.error(REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE);
+      return;
+    }
+    if (required) {
+      const msg = message[locale][TYPE];
+      const nameText = name ? name : '';
+      if (!internalChecked) {
+        handleCheckEnd(true, msg.unchecked(nameText));
+        return;
       }
-    },
-    [validate, internalChecked],
-  );
-  useEffect(
-    () => {
-      setInternalChecked(checked);
-    },
-    [checked],
-  );
-  useEffect(
-    () => {
-      if (typeof prevInternalChecked !== 'undefined' && prevInternalChecked !== internalChecked) {
-        check();
+    }
+    if (msgOnSuccess) {
+      setSuccessMsg(msgOnSuccess);
+    }
+    handleCheckEnd(false, msgOnSuccess);
+  }, [internalChecked, option]);
+  const handleCheckEnd = useCallback(
+    (err: boolean, message: string) => {
+      let msg = message;
+      const { msgOnError } = option;
+      if (err && msgOnError) {
+        msg = msgOnError;
       }
+      setErr(err);
+      setMsg(msg);
+      validationCallback && validationCallback(err);
     },
-    [prevInternalChecked, internalChecked],
+    [option.msgOnError],
   );
-  useEffect(
-    () => {
-      if (asyncObj) {
-        if (asyncObj.message) {
-          if (asyncObj.showOnError) {
-            handleCheckEnd(asyncObj.error, asyncObj.message);
-          }
-          if (!asyncObj.error && asyncObj.showOnSuccess) {
-            setSuccessMsg(asyncObj.message);
-          }
+  useEffect(() => {
+    if (validate) {
+      check();
+    }
+  }, [validate, internalChecked]);
+  useEffect(() => {
+    setInternalChecked(checked);
+  }, [checked]);
+  useEffect(() => {
+    if (typeof prevInternalChecked !== 'undefined' && prevInternalChecked !== internalChecked) {
+      check();
+    }
+  }, [prevInternalChecked, internalChecked]);
+  useEffect(() => {
+    if (asyncObj) {
+      if (asyncObj.message) {
+        if (asyncObj.showOnError) {
+          handleCheckEnd(asyncObj.error, asyncObj.message);
+        }
+        if (!asyncObj.error && asyncObj.showOnSuccess) {
+          setSuccessMsg(asyncObj.message);
         }
       }
-    },
-    [asyncMsgObj],
-  );
-  const wrapperClass = `${reactInputsValidationCss['button']} ${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
-    reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${internalChecked && reactInputsValidationCss['checked']} ${err &&
-    reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const boxClass = `${classNameInputBox} ${reactInputsValidationCss[`${TYPE}__box`]} ${err && reactInputsValidationCss['error']} ${internalChecked &&
-    reactInputsValidationCss['checked']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
-  const labelClass = `${internalChecked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' &&
-    !err &&
-    reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+    }
+  }, [asyncMsgObj]);
+  const wrapperClass = `${reactInputsValidationCss['button']} ${WRAPPER_CLASS_IDENTITIFIER} ${classNameWrapper} ${reactInputsValidationCss[`${TYPE}__wrapper`]} ${
+    internalChecked && reactInputsValidationCss['checked']
+  } ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const containerClass = `${classNameContainer} ${reactInputsValidationCss[`${TYPE}__container`]} ${internalChecked && reactInputsValidationCss['checked']} ${
+    err && reactInputsValidationCss['error']
+  } ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${disabled && reactInputsValidationCss['disabled']}`;
+  const boxClass = `${classNameInputBox} ${reactInputsValidationCss[`${TYPE}__box`]} ${err && reactInputsValidationCss['error']} ${internalChecked && reactInputsValidationCss['checked']} ${
+    successMsg !== '' && !err && reactInputsValidationCss['success']
+  } ${disabled && reactInputsValidationCss['disabled']}`;
+  const labelClass = `${internalChecked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
+    disabled && reactInputsValidationCss['disabled']
+  }`;
   const errMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${err && reactInputsValidationCss['error']}`;
   const successMsgClass = `${MSG_CLASS_IDENTITIFIER} ${reactInputsValidationCss['msg']} ${!err && reactInputsValidationCss['success']}`;
   let msgHtml;
-  const { showMsg } = option;
+  const { showMsg, shouldRenderMsgAsHtml } = option;
   if (showMsg && err && msg) {
-    msgHtml = <div className={errMsgClass}>{msg}</div>;
+    msgHtml = shouldRenderMsgAsHtml ? <div className={errMsgClass} dangerouslySetInnerHTML={{ __html: msg }} /> : <div className={errMsgClass}>{msg}</div>;
   }
   if (showMsg && !err && successMsg !== '') {
-    msgHtml = <div className={successMsgClass}>{successMsg}</div>;
+    msgHtml = shouldRenderMsgAsHtml ? <div className={successMsgClass} dangerouslySetInnerHTML={{ __html: successMsg }} /> : <div className={successMsgClass}>{successMsg}</div>;
   }
   return (
     <button type="button" ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus} {...attributesWrapper}>

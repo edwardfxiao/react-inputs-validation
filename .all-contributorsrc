@@ -6,10 +6,10 @@
   "commit": false,
   "contributors": [
     {
-      "login": "edwardfhsiao",
+      "login": "edwardfxiao",
       "name": "Edward Xiao",
       "avatar_url": "https://avatars3.githubusercontent.com/u/11728228?v=4",
-      "profile": "https://github.com/edwardfhsiao",
+      "profile": "https://github.com/edwardfxiao",
       "contributions": [
         "code",
         "doc",
@@ -38,7 +38,7 @@
   ],
   "contributorsPerLine": 7,
   "projectName": "react-inputs-validation",
-  "projectOwner": "edwardfhsiao",
+  "projectOwner": "edwardfxiao",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true

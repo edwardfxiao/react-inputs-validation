@@ -6,7 +6,7 @@
   "types": "./lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edwardfhsiao/react-inputs-validation.git"
+    "url": "git+https://github.com/edwardfxiao/react-inputs-validation.git"
   },
   "keywords": [
     "react",
@@ -24,9 +24,9 @@
   "author": "Edward Xiao",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/edwardfhsiao/react-inputs-validation/issues"
+    "url": "https://github.com/edwardfxiao/react-inputs-validation/issues"
   },
-  "homepage": "https://edwardfhsiao.github.io/react-inputs-validation",
+  "homepage": "https://edwardfxiao.github.io/react-inputs-validation",
   "scripts": {
     "test": "NODE_ENV=test jest",
     "test:coverage": "npm run tslint && npm run jslint && npm test -- --coverage",

@@ -1,3 +1,7 @@
+# 4.8.7
+
+- Update readme
+
 # 4.8.6
 
 - Update peerDependencies

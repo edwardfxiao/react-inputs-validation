@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "4.8.5",
+  "version": "4.8.6",
   "description": "A react component for form inputs validation.",
   "main": "index.js",
   "types": "./lib/index.d.ts",
@@ -43,8 +43,8 @@
     "compile": "rimraf dist lib && npm run umd_global && npm run umd_global_min && npm run umd_local && rm ./lib/components/*.css"
   },
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": ">= 16.8.6",
+    "react-dom": ">= 16.8.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

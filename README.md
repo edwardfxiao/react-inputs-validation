@@ -36,8 +36,8 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ##### Make sure you have at least ```react@16.8.6``` installed.
 ```js
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": ">= 16.8.6",
+    "react-dom": ">= 16.8.6"
   }
 ```
 

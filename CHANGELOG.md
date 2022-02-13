@@ -1,3 +1,7 @@
+# 4.8.8
+
+- Remove lib folder for github
+
 # 4.8.7
 
 - Update readme

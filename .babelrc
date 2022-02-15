@@ -1,29 +1,18 @@
 {
   "presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
-  "env":
-  {
-    "development":
-    {
-      comments: false,
+  "env": {
+    "development": {
+      "comments": false
     },
-    "production":
-    {
-      comments: false,
+    "production": {
+      "comments": false
     },
-    "lib":
-    {
-      "plugins": [
-        "css-modules-transform",
-        "@babel/proposal-class-properties",
-        "@babel/proposal-object-rest-spread"
-      ],
-      comments: false,
+    "lib": {
+      "plugins": ["css-modules-transform", "@babel/proposal-class-properties", "@babel/proposal-object-rest-spread"],
+      "comments": false
     },
-    "test":
-    {
-      "plugins": [
-        "babel-plugin-rewire"
-      ]
+    "test": {
+      "plugins": ["babel-plugin-rewire"]
     }
   }
 }

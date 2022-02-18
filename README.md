@@ -54,13 +54,11 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.4.1/react-inputs-validation.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
  <script type="text/babel">
-  class App extends React.Component {
-    ...
-    render() {
-      return <Textbox value={value} onBlur={()=>{}} .../>;
-    }
-  }
-  ReactDOM.render(<App />, document.getElementById('root'));
+    const App = React.memo(() => {
+      const [value, setValue] = React.useState('');
+      return (<Textbox value={value} onBlur={()=>{}} .../>)
+    });
+    ReactDOM.render(<App />, document.getElementById('root'));
  </script>
 </body>
 

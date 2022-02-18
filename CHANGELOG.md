@@ -1,3 +1,7 @@
+# 4.8.9
+
+- Fix 'undefined' classname for ```__container```
+
 # 4.8.8
 
 - Remove lib folder for github

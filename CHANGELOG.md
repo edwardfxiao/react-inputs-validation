@@ -1,3 +1,7 @@
+# 4.9.1
+
+- Remove classname hash
+
 # 4.9.0
 
 - Update readme

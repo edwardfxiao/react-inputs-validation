@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "4.8.4",
+  "version": "4.9.1",
   "description": "A react component for form inputs validation.",
   "main": "index.js",
   "types": "./lib/index.d.ts",
@@ -43,8 +43,8 @@
     "compile": "rimraf dist lib && npm run umd_global && npm run umd_global_min && npm run umd_local && rm ./lib/components/*.css"
   },
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": ">= 16.8.6",
+    "react-dom": ">= 16.8.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -56,6 +56,7 @@
     "@babel/preset-typescript": "^7.1.0",
     "@testing-library/react": "^9.3.2",
     "@types/jest": "^23.3.5",
+    "@types/prismjs": "^1.26.0",
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
     "awesome-typescript-loader": "^5.2.1",

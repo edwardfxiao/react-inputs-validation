@@ -6,8 +6,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   context: PATH.ROOT_PATH,
   entry: {
-    index: PATH.ROOT_PATH + 'example/index.js',
-    // index: PATH.ROOT_PATH + 'example/index.tsx'
+    // index: PATH.ROOT_PATH + 'example/index.js',
+    index: PATH.ROOT_PATH + 'example/index.tsx'
   },
   module: {
     rules: [
@@ -126,7 +126,7 @@ module.exports = {
             options: {
               modules: true,
               importLoaders: 1,
-              localIdentName: '[name]__[local]___[hash:base64:5]',
+              localIdentName: '[name]__[local]',
             },
           },
           {

@@ -122,7 +122,7 @@ interface Props {
   showArrow?: boolean;
   keyword?: string;
   optionList: OptionListItem[];
-  onChange: (res: object, e: React.MouseEvent<HTMLElement>) => void;
+  onChange: (res: { [key: string]: any }, e: React.MouseEvent<HTMLElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLElement> | Event) => void;
   onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;

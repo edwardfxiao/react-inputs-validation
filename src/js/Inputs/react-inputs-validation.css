@@ -54,6 +54,7 @@ select {
 
 .textbox__container {
   /*position: relative;*/
+  opacity: 1;
 }
 
 input[type='password'].textbox__input,

@@ -1,3 +1,31 @@
+# 4.9.1
+
+- Remove classname hash
+
+# 4.9.0
+
+- Update readme
+
+# 4.8.9
+
+- Fix 'undefined' classname for ```__container```
+
+# 4.8.8
+
+- Remove lib folder for github
+
+# 4.8.7
+
+- Update readme
+
+# 4.8.6
+
+- Update peerDependencies
+
+# 4.8.5
+
+- Update readme
+
 # 4.8.4
 
 - Update readme

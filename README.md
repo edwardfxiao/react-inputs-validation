@@ -45,13 +45,13 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 ```html
 <head>
  ...
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.4.1/react-inputs-validation.min.css"/>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.9.1/react-inputs-validation.min.css"/>
 </head>
 <body>
  <div id="root"></div>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.production.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.4.1/react-inputs-validation.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-inputs-validation/4.9.1/react-inputs-validation.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
  <script type="text/babel">
     const App = React.memo(() => {

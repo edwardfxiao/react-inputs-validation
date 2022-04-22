@@ -1,3 +1,7 @@
+# 4.9.2
+
+- Update readme and for cdnjs updating
+
 # 4.9.1
 
 - Remove classname hash

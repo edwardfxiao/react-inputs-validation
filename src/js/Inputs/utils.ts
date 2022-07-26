@@ -5,19 +5,19 @@ const camelize = (str: string) => {
   });
 };
 
-const toCamelCase = (str: string) => (capitalLize: boolean = false) => {
-  const res = camelize(str);
-  return capitalLize ? res.substr(0, 1).toUpperCase() + res.substr(1, res.length) : res;
-};
+const toCamelCase =
+  (str: string) =>
+  (capitalLize: boolean = false) => {
+    const res = camelize(str);
+    return capitalLize ? res.substr(0, 1).toUpperCase() + res.substr(1, res.length) : res;
+  };
 
 interface Utils {
   [key: string]: Function;
 }
 
 const getRandomId = () => {
-  return Math.random()
-    .toString(36)
-    .slice(-8);
+  return Math.random().toString(36).slice(-8);
 };
 
 const getAlphanumeric = (v: string) => {
@@ -67,6 +67,12 @@ const arraysEqual = (arr1: any, arr2: any) => {
   return true;
 };
 
+const replaceSeparator = (value: string, replacee: string, replacer: string) => {
+  const expression = `\\${replacee}`;
+  const removeSeparatorRegEx = new RegExp(expression, 'g');
+  return value.replace(removeSeparatorRegEx, replacer);
+};
+
 const utils: Utils = {
   camelize,
   toCamelCase,
@@ -75,5 +81,6 @@ const utils: Utils = {
   getAlpha,
   getNumeric,
   arraysEqual,
+  replaceSeparator,
 };
 export default utils;

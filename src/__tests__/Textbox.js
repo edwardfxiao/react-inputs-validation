@@ -890,6 +890,26 @@ describe('Textbox component', () => {
     expect(value).toEqual('0.5');
   });
 
+  it('[Number autoFormatNumber]: Should 0.5 to be 0,5', () => {
+    let value = '';
+    const wrapper = mount(
+      <Textbox
+        onBlur={() => {}}
+        onChange={res => {
+          value = res;
+        }}
+        validationOption={{
+          type: 'number',
+          decimalSeparator: ',',
+        }}
+      />,
+    );
+    const $input = wrapper.find(INPUT);
+    $input.at(0).instance().value = '0.5';
+    $input.simulate('change');
+    expect(value).toEqual('0,5');
+  });
+
   it('[Number autoFormatNumber]: Should a to be ""', () => {
     let value = '';
     const wrapper = mount(
@@ -931,12 +951,7 @@ describe('Textbox component', () => {
     $input.simulate('focus');
     $input.simulate('blur');
     wrapper.setProps({ asyncMsgObj: { error: true, message: 'has error' } });
-    expect(
-      wrapper
-        .update()
-        .find(`.${MSG_CLASS_IDENTITIFIER}`)
-        .text(),
-    ).toEqual('has error');
+    expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual('has error');
   });
 
   it('[asyncObj]: Should not show error', () => {
@@ -954,12 +969,7 @@ describe('Textbox component', () => {
     $input.simulate('focus');
     $input.simulate('blur');
     wrapper.setProps({ asyncMsgObj: { error: false, message: 'success', showOnSuccess: true } });
-    expect(
-      wrapper
-        .update()
-        .find(`.${MSG_CLASS_IDENTITIFIER}`)
-        .text(),
-    ).toEqual('success');
+    expect(wrapper.update().find(`.${MSG_CLASS_IDENTITIFIER}`).text()).toEqual('success');
   });
 
   it('[console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE]: Should console.error REACT_INPUTS_VALIDATION_CUSTOM_ERROR_MESSAGE_EXAMPLE', () => {

@@ -26,4 +26,7 @@ describe('utils', () => {
   it('[getAlpha("a1")]: Should return 1', () => {
     expect(utils.getAlpha('a1')).equal('a');
   });
+  it('[replaceSeparator("0.1", ".", ",")]: Should return 1', () => {
+    expect(utils.replaceSeparator('0.1', '.', ',')).equal('0,1');
+  });
 });

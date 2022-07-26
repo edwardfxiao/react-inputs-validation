@@ -1,6 +1,10 @@
-# 4.9.3
+# 4.9.4
 
 - Add `decimalSeparator` to `<Textbox>` ```validationOption```. e.g. `decimalSeparator: ','` `'0.5' => '0,5'`
+
+# 4.9.3
+
+- Add `decimalSeparator` to `<Textbox>` ```validationOption```. e.g. `decimalSeparator: ','` `'0.5' => '0,5'`(forgot to compile)
 
 # 4.9.2
 

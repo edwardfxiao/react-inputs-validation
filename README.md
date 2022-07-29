@@ -15,7 +15,7 @@ A react component for form inputs validation. Online demo examples.
 - [Documentation](#documentation)
     - [1.x, 2.x, 3.x](/docs/v1-v2-v3-doc.md)
     - [4.x](/docs/v4-doc.md)
-    - <a href="[/docs/v4-doc.md](https://github.com/edwardfxiao/react-inputs-validation/blob/master/docs/v4-doc.md)#custom-error-message" target="_blank">About intl locales support</a>
+    - <a href="https://github.com/edwardfxiao/react-inputs-validation/blob/master/docs/v4-doc.md#custom-error-message" target="_blank">About intl locales support</a>
 - [Browser support](#browser-support)
 - [Donation](#donation)
 - [Contributors](#contributors)

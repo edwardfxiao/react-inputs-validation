@@ -91,7 +91,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 
 ## <a name="4.x-documentation"></a>[4.x](https://github.com/edwardfxiao/react-inputs-validation/blob/master/docs/v4-doc.md)
 
-## <a name="About intl locales support"></a>[About intl locales support](https://github.com/edwardfxiao/react-inputs-validation/blob/master/docs/v4-doc.md#custom-error-message)
+<h2><a id="About intl locales support" class="anchor" href="https://github.com/edwardfxiao/react-inputs-validation/blob/master/docs/v4-doc.md#custom-error-message">About intl locales support</a></h1>
 
 # <a name="browser-support"></a>Browser support
 Tested on IE9+ and Chrome and Safari(10.0.3)

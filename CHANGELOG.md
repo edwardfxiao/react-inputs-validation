@@ -1,3 +1,7 @@
+# 4.9.5
+
+- Remove `zh-CN` as an option to `validationOption.locale` in order to reduce size
+
 # 4.9.4
 
 - Add `decimalSeparator` to `<Textbox>` ```validationOption```. e.g. `decimalSeparator: ','` `'0.5' => '0,5'`

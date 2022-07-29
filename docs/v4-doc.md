@@ -637,9 +637,9 @@ const [amount, setAmount] = useState('')
 
 example(fully customized):
 
+**es6**  ([full es5 example](/docs/locales-example-es5.md), [full es6 example](/docs/locales-example-es6.md))
 ```html
 <script type="text/javascript">
-  //es6
   window.REACT_INPUTS_VALIDATION = {
     customErrorMessage: {
       "my-own-locale": {...},//structure must follow below
@@ -680,106 +680,6 @@ example(fully customized):
 <script type="text/javascript" src="/js/index.js"></script></body>
 ```
 
-```html
-<script type="text/javascript">
-  //es5
-  window.REACT_INPUTS_VALIDATION = {
-    customErrorMessage: {
-      "my-own-locale": {...},//structure must follow below
-      "en-US": {
-        textbox: {
-          empty: function empty(name) {
-            return name + " cannot be empty(custom message)";
-          },
-          invalid: function invalid(name) {
-            return name + " invalid format(custom message)";
-          },
-          invalidFormat: function invalidFormat(name) {
-            return name + " is not a number(custom message)";
-          },
-          inBetween: function inBetween(name) {
-            return function (min) {
-              return function (max) {
-                return name + " must be " + min + "-" + max + "(custom message)";
-              };
-            };
-          },
-          lessThan: function lessThan(name) {
-            return function (min) {
-              return name + " cannot less than " + min + "(custom message)";
-            };
-          },
-          greaterThan: function greaterThan(name) {
-            return function (max) {
-              return name + " cannot greater than " + max + "(custom message)";
-            };
-          },
-          lengthEqual: function lengthEqual(name) {
-            return function (length) {
-              return name + " length must be " + length + "(custom message)";
-            };
-          },
-          twoInputsNotEqual: function twoInputsNotEqual() {
-            return "two inputs are not equal(custom message)";
-          }
-        },
-        radiobox: {
-          empty: function empty(name) {
-            return "Please choose one " + name + "(custom message)";
-          }
-        },
-        checkbox: {
-          unchecked: function unchecked(name) {
-            return name + " must be checked(custom message)";
-          }
-        },
-        select: {
-          empty: function empty(name) {
-            return "Please select a " + name + "(custom message)";
-          }
-        },
-        textarea: {
-          empty: function empty(name) {
-            return name + " cannot be empty(custom message)";
-          },
-          invalid: function invalid(name) {
-            return name + " invalid format(custom message)";
-          },
-          invalidFormat: function invalidFormat(name) {
-            return name + " is not a number(custom message)";
-          },
-          inBetween: function inBetween(name) {
-            return function (min) {
-              return function (max) {
-                return name + " must be " + min + "-" + max + "(custom message)";
-              };
-            };
-          },
-          lessThan: function lessThan(name) {
-            return function (min) {
-              return name + " cannot less than " + min + "(custom message)";
-            };
-          },
-          greaterThan: function greaterThan(name) {
-            return function (max) {
-              return name + " cannot greater than " + max + "(custom message)";
-            };
-          },
-          lengthEqual: function lengthEqual(name) {
-            return function (length) {
-              return name + " length must be " + length + "(custom message)";
-            };
-          },
-          twoInputsNotEqual: function twoInputsNotEqual() {
-            return "two inputs are not equal(custom message)";
-          }
-        }
-      }
-    }
-  };
-</script>
-<script type="text/javascript" src="/js/index.js"></script></body>
-```
 Then in the component...
 
 ```js

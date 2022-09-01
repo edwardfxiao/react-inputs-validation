@@ -404,7 +404,9 @@ const component: React.FC<Props> = ({
       if (globalVariableCurrentFocus === null) return;
       if (globalVariableCurrentFocus >= $children.length) globalVariableCurrentFocus = 0;
       if (globalVariableCurrentFocus < 0) globalVariableCurrentFocus = $children.length - 1;
-      if ($children[globalVariableCurrentFocus]) $children[globalVariableCurrentFocus].className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
+      setTimeout(() => {
+        if ($children[globalVariableCurrentFocus]) $children[globalVariableCurrentFocus].className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
+      }, 0);
     }
   }, []);
   const removeActive = useCallback(() => {

@@ -1,3 +1,7 @@
+# 4.9.6
+
+- Fix potential bug for `<Select/>`
+
 # 4.9.5
 
 - Remove `zh-CN` as an option to `validationOption.locale` in order to reduce size

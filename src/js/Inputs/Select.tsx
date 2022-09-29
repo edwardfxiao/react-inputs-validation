@@ -269,7 +269,7 @@ const component: React.FC<Props> = ({
       return;
     }
     onChange && onChange(item, e);
-  }, []);
+  }, [disabled]);
   const check = useCallback(() => {
     const { name, check, locale, required, msgOnSuccess } = option;
     if (!check) {
@@ -386,7 +386,7 @@ const component: React.FC<Props> = ({
   const handleOnItemClick = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
     handleOnChange(item, e);
     stateKeyword[1]('');
-  }, []);
+  }, [disabled]);
   const handleOnItemMouseOver = useCallback((index: number) => {
     globalVariableCurrentFocus = index;
     addActive();

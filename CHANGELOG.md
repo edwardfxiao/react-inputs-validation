@@ -1,3 +1,7 @@
+# 4.9.7
+
+- fix bug of cached disabled in `<Select/>` handleOnItemClick
+
 # 4.9.6
 
 - Fix potential bug for `<Select/>`

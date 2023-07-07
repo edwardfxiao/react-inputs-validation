@@ -1,3 +1,8 @@
+# 4.9.8
+
+- `classNameInputBoxItem` for `<Checkbox/>`
+- `title` and `ellipsis` for `<Select/>` option item
+
 # 4.9.7
 
 - fix bug of cached disabled in `<Select/>` handleOnItemClick

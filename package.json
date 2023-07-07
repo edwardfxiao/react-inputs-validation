@@ -1,6 +1,6 @@
 {
   "name": "react-inputs-validation",
-  "version": "4.9.7",
+  "version": "4.9.8",
   "description": "A react component for form inputs validation.",
   "main": "index.js",
   "types": "./lib/index.d.ts",

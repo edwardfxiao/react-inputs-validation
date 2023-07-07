@@ -75,6 +75,7 @@ interface Props {
   classNameInput?: string;
   classNameWrapper?: string;
   classNameInputBox?: string;
+  classNameInputBoxItem?: string;
   classNameContainer?: string;
   customStyleInput?: React.CSSProperties;
   customStyleWrapper?: React.CSSProperties;
@@ -93,6 +94,7 @@ const component: React.FC<Props> = ({
   classNameInput = '',
   classNameWrapper = '',
   classNameInputBox = '',
+  classNameInputBoxItem = '',
   classNameContainer = '',
   customStyleInput = {},
   customStyleWrapper = {},
@@ -225,6 +227,7 @@ const component: React.FC<Props> = ({
   const boxClass = `${classNameInputBox} ${reactInputsValidationCss[`${TYPE}__box`]} ${err && reactInputsValidationCss['error']} ${internalChecked && reactInputsValidationCss['checked']} ${
     successMsg !== '' && !err && reactInputsValidationCss['success']
   } ${disabled && reactInputsValidationCss['disabled']}`;
+  const boxItemClass = `${classNameInputBoxItem} ${reactInputsValidationCss['box']}`;
   const labelClass = `${internalChecked && reactInputsValidationCss['checked']} ${err && reactInputsValidationCss['error']} ${successMsg !== '' && !err && reactInputsValidationCss['success']} ${
     disabled && reactInputsValidationCss['disabled']
   }`;
@@ -242,7 +245,7 @@ const component: React.FC<Props> = ({
     <button type="button" ref={$input} className={wrapperClass} style={customStyleWrapper} onClick={handleOnClick} onBlur={handleOnBlur} onFocus={handleOnFocus} {...attributesWrapper}>
       <div className={containerClass} style={customStyleContainer}>
         <div className={boxClass} style={customStyleInputBox}>
-          <div className={reactInputsValidationCss['box']} />
+          <div className={boxItemClass} />
           <input
             type={TYPE}
             className={reactInputsValidationCss[`${TYPE}__input`]}

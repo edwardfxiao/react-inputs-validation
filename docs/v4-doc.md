@@ -247,6 +247,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameInputBox                 |  Opt  |  Str   |                                             |  ""        |
+|classNameInputBoxItem             |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
 |customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
 |customStyleInputBox               |  Opt  |  Obj   |                                             |  {}        |
@@ -288,6 +289,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     })} //Optional.[Func].Default: none. Return the validation result.
   classNameWrapper="" //Optional.[String].Default: "".
   classNameInputBox="" //Optional.[String].Default: "".
+  classNameInputBoxItem="" //Optional.[String].Default: "".
   classNameContainer="" //Optional.[String].Default: "".
   customStyleWrapper={{}} //Optional.[Object].Default: {}.
   customStyleInputBox={{}} //Optional.[Object].Default: {}.

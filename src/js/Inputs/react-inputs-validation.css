@@ -423,6 +423,10 @@ input[type='checkbox'] {
   transition: background 0.4s, color 0.2s;
   cursor: none;
   padding: 10px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .select__options-item span {

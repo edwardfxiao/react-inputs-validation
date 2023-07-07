@@ -749,7 +749,7 @@ export const Option: React.FC<OptionProps> = memo(
       onMouseOut();
     }, []);
     return (
-      <a id={id} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
+      <a id={id} title={item.name} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
         {item.icon && <img src={item.icon} className={reactInputsValidationCss[`${TYPE}__optionItem_icon`]} />}
         {<span className={reactInputsValidationCss[`${TYPE}__optionItem_name`]}>{item.name}</span>}
       </a>

@@ -52,6 +52,7 @@
 |**validationOption.type**         |**Opt**|**Str** |**Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'~~, 'phone'~~].**|**"string"**|
 |**validationOption.numberType**         |**Opt**|**Str** |**Validation number type, options are ['decimal', 'int', 'price']. Handy when the validation type is number.**|**"decimal"**|
 |**validationOption.mantissa**         |**Opt**|**Num** |**Validation number precision. Handy when the validation type is number.**|**-1**|
+|**validationOption.decimalSeparator**         |**Opt**|**Num** |**Decimal Separator. Handy when the target audiance is 'pt-BR', which uses "0,1" instead of "0.1".**|**.**|
 |**validationOption.showMsg**      |**Opt**|**Bool**|**To determin display the error message or not.**|**true**    |
 |**validationOption.min**          |**Opt**|**Num**|**Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.**|**0**       |
 |**validationOption.max**          |**Opt**|**Num**|**Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.**|**0**       |
@@ -60,7 +61,7 @@
 |**<a name="customFunc"></a>validationOption.customFunc**       |**Opt**|**Func**|**Custom function. Returns true or err message or { error: true, message: 'message', showOnSuccess: true }.**|  **none**      |
 |**validationOption.reg**          |**Opt**|**Bool**|**Custom regex.**|**""**      |
 |**validationOption.regMsg**       |**Opt**|**Str** |**Custom regex error message.**|**""**      |
-|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are ['zh-CN', 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#custom-error-message)' section, which provides the extensibility for your own locale.**|**"en-US"** |
+|**validationOption.locale**       |**Opt**|**Str** |**For error message display. Current options are [~~'zh-CN',~~ 'en-US']; Default is 'en-US'. If your are looking for more options, you can take a look at '[window.REACT_INPUTS_VALIDATION](#custom-error-message)' section, which provides the extensibility for your own locale.**|**"en-US"** |
 |**validationOption.msgOnError**   |**Opt**|**Str** |**Show your custom error message no matter what(except the message from customFunc) when it has error if it is provied.**|**""**      |
 |**validationOption.msgOnSuccess** |**Opt**|**Str** |**Show your custom success message no matter what when it has error if it is provied.**|**""**      |
 |**validationOption.shouldRenderMsgAsHtml** |**Opt**|**Bool** |**Should render your message by dangerouslySetInnerHTML.**|**false**      |
@@ -111,6 +112,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     // type: 'string', //Optional.[String].Default: "string". Validation type, options are ['string', 'number', 'alphanumeric', 'alpha'].
     // numberType: 'decimal', // Optional.[String].Default: "decimal". Validation number type, options are ['decimal', 'int', 'price']. Handy when the validation type is number.
     // mantissa: 2, // Optional.[Number].Default: -1. Number precision.
+    // decimalSeparator: '.', // Optional.[String].Default: ".". Decimal Separator. Handy when the target audiance is 'pt-BR', which uses "0,1" instead of "0.1".
     // showMsg: true, //Optional.[Bool].Default: true. To determin display the error message or not.
     // min: 2, //Optional.[Number].Default: 0. Validation of min length when validationOption['type'] is string, min amount when validationOption['type'] is number.
     // max: 10, //Optional.[Number].Default: 0. Validation of max length when validationOption['type'] is string, max amount when validationOption['type'] is number.
@@ -245,6 +247,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |**validationCallback**           |**Opt**|**Func**|**Return the validation result.**|**none**    |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameInputBox                 |  Opt  |  Str   |                                             |  ""        |
+|classNameInputBoxItem             |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |
 |customStyleWrapper                |  Opt  |  Obj   |                                             |  {}        |
 |customStyleInputBox               |  Opt  |  Obj   |                                             |  {}        |
@@ -286,6 +289,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
     })} //Optional.[Func].Default: none. Return the validation result.
   classNameWrapper="" //Optional.[String].Default: "".
   classNameInputBox="" //Optional.[String].Default: "".
+  classNameInputBoxItem="" //Optional.[String].Default: "".
   classNameContainer="" //Optional.[String].Default: "".
   customStyleWrapper={{}} //Optional.[Object].Default: {}.
   customStyleInputBox={{}} //Optional.[Object].Default: {}.
@@ -635,9 +639,9 @@ const [amount, setAmount] = useState('')
 
 example(fully customized):
 
+**es6**  ([full es5 example](/docs/locales-example-es5.md), [full es6 example](/docs/locales-example-es6.md))
 ```html
 <script type="text/javascript">
-  //es6
   window.REACT_INPUTS_VALIDATION = {
     customErrorMessage: {
       "my-own-locale": {...},//structure must follow below
@@ -678,106 +682,6 @@ example(fully customized):
 <script type="text/javascript" src="/js/index.js"></script></body>
 ```
 
-```html
-<script type="text/javascript">
-  //es5
-  window.REACT_INPUTS_VALIDATION = {
-    customErrorMessage: {
-      "my-own-locale": {...},//structure must follow below
-      "en-US": {
-        textbox: {
-          empty: function empty(name) {
-            return name + " cannot be empty(custom message)";
-          },
-          invalid: function invalid(name) {
-            return name + " invalid format(custom message)";
-          },
-          invalidFormat: function invalidFormat(name) {
-            return name + " is not a number(custom message)";
-          },
-          inBetween: function inBetween(name) {
-            return function (min) {
-              return function (max) {
-                return name + " must be " + min + "-" + max + "(custom message)";
-              };
-            };
-          },
-          lessThan: function lessThan(name) {
-            return function (min) {
-              return name + " cannot less than " + min + "(custom message)";
-            };
-          },
-          greaterThan: function greaterThan(name) {
-            return function (max) {
-              return name + " cannot greater than " + max + "(custom message)";
-            };
-          },
-          lengthEqual: function lengthEqual(name) {
-            return function (length) {
-              return name + " length must be " + length + "(custom message)";
-            };
-          },
-          twoInputsNotEqual: function twoInputsNotEqual() {
-            return "two inputs are not equal(custom message)";
-          }
-        },
-        radiobox: {
-          empty: function empty(name) {
-            return "Please choose one " + name + "(custom message)";
-          }
-        },
-        checkbox: {
-          unchecked: function unchecked(name) {
-            return name + " must be checked(custom message)";
-          }
-        },
-        select: {
-          empty: function empty(name) {
-            return "Please select a " + name + "(custom message)";
-          }
-        },
-        textarea: {
-          empty: function empty(name) {
-            return name + " cannot be empty(custom message)";
-          },
-          invalid: function invalid(name) {
-            return name + " invalid format(custom message)";
-          },
-          invalidFormat: function invalidFormat(name) {
-            return name + " is not a number(custom message)";
-          },
-          inBetween: function inBetween(name) {
-            return function (min) {
-              return function (max) {
-                return name + " must be " + min + "-" + max + "(custom message)";
-              };
-            };
-          },
-          lessThan: function lessThan(name) {
-            return function (min) {
-              return name + " cannot less than " + min + "(custom message)";
-            };
-          },
-          greaterThan: function greaterThan(name) {
-            return function (max) {
-              return name + " cannot greater than " + max + "(custom message)";
-            };
-          },
-          lengthEqual: function lengthEqual(name) {
-            return function (length) {
-              return name + " length must be " + length + "(custom message)";
-            };
-          },
-          twoInputsNotEqual: function twoInputsNotEqual() {
-            return "two inputs are not equal(custom message)";
-          }
-        }
-      }
-    }
-  };
-</script>
-<script type="text/javascript" src="/js/index.js"></script></body>
-```
 Then in the component...
 
 ```js

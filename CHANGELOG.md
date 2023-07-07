@@ -1,3 +1,32 @@
+# 4.9.8
+
+- `classNameInputBoxItem` for `<Checkbox/>`
+- `title` and `ellipsis` for `<Select/>` option item
+
+# 4.9.7
+
+- fix bug of cached disabled in `<Select/>` handleOnItemClick
+
+# 4.9.6
+
+- Fix potential bug for `<Select/>`
+
+# 4.9.5
+
+- Remove `zh-CN` as an option to `validationOption.locale` in order to reduce size
+
+# 4.9.4
+
+- Add `decimalSeparator` to `<Textbox>` ```validationOption```. e.g. `decimalSeparator: ','` `'0.5' => '0,5'`
+
+# 4.9.3
+
+- Add `decimalSeparator` to `<Textbox>` ```validationOption```. e.g. `decimalSeparator: ','` `'0.5' => '0,5'`(forgot to compile)
+
+# 4.9.2
+
+- Update readme and for cdnjs updating
+
 # 4.9.1
 
 - Remove classname hash

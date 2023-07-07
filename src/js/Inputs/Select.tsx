@@ -269,7 +269,7 @@ const component: React.FC<Props> = ({
       return;
     }
     onChange && onChange(item, e);
-  }, []);
+  }, [disabled]);
   const check = useCallback(() => {
     const { name, check, locale, required, msgOnSuccess } = option;
     if (!check) {
@@ -386,7 +386,7 @@ const component: React.FC<Props> = ({
   const handleOnItemClick = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
     handleOnChange(item, e);
     stateKeyword[1]('');
-  }, []);
+  }, [disabled]);
   const handleOnItemMouseOver = useCallback((index: number) => {
     globalVariableCurrentFocus = index;
     addActive();
@@ -404,7 +404,9 @@ const component: React.FC<Props> = ({
       if (globalVariableCurrentFocus === null) return;
       if (globalVariableCurrentFocus >= $children.length) globalVariableCurrentFocus = 0;
       if (globalVariableCurrentFocus < 0) globalVariableCurrentFocus = $children.length - 1;
-      if ($children[globalVariableCurrentFocus]) $children[globalVariableCurrentFocus].className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
+      setTimeout(() => {
+        if ($children[globalVariableCurrentFocus]) $children[globalVariableCurrentFocus].className += ` ${reactInputsValidationCss[`${TYPE}__hover-active`]}`;
+      }, 0);
     }
   }, []);
   const removeActive = useCallback(() => {
@@ -747,7 +749,7 @@ export const Option: React.FC<OptionProps> = memo(
       onMouseOut();
     }, []);
     return (
-      <a id={id} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
+      <a id={id} title={item.name} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
         {item.icon && <img src={item.icon} className={reactInputsValidationCss[`${TYPE}__optionItem_icon`]} />}
         {<span className={reactInputsValidationCss[`${TYPE}__optionItem_name`]}>{item.name}</span>}
       </a>

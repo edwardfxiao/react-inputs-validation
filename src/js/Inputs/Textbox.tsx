@@ -16,6 +16,7 @@ interface DefaultValidationOption {
   type?: string;
   numberType?: string;
   mantissa?: number;
+  decimalSeparator?: string;
   name?: string;
   check?: boolean;
   showMsg?: boolean;
@@ -29,7 +30,8 @@ interface DefaultValidationOption {
   shouldRenderMsgAsHtml?: boolean;
 }
 const getDefaultValidationOption = (obj: DefaultValidationOption) => {
-  let { reg, min, max, type, numberType, mantissa, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc, shouldRenderMsgAsHtml } = obj;
+  let { reg, min, max, type, numberType, mantissa, decimalSeparator, name, check, length, regMsg, compare, required, showMsg, locale, msgOnError, msgOnSuccess, customFunc, shouldRenderMsgAsHtml } =
+    obj;
   locale = typeof locale !== 'undefined' ? locale : DEFAULT_LOCALE;
   reg = typeof reg !== 'undefined' ? reg : '';
   min = typeof min !== 'undefined' ? min : 0;
@@ -37,6 +39,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
   type = typeof type !== 'undefined' ? type : 'string';
   numberType = typeof numberType !== 'undefined' ? numberType : 'string';
   mantissa = typeof mantissa !== 'undefined' ? mantissa : -1;
+  decimalSeparator = typeof decimalSeparator !== 'undefined' ? decimalSeparator : '.';
   name = typeof name !== 'undefined' ? name : '';
   check = typeof check !== 'undefined' ? check : true;
   showMsg = typeof showMsg !== 'undefined' ? showMsg : true;
@@ -55,6 +58,7 @@ const getDefaultValidationOption = (obj: DefaultValidationOption) => {
     type,
     numberType,
     mantissa,
+    decimalSeparator,
     name,
     check,
     length,
@@ -122,51 +126,51 @@ interface Props {
   onKeyUp?: (e: React.KeyboardEvent<HTMLElement>) => void;
   validationCallback?: (res: boolean) => void;
 }
-const autoFormatNumber = (v: number | string, numberType: string, mantissa: number) => {
-  const DOT = '.';
+const autoFormatNumber = (v: number | string, numberType: string, mantissa: number, decimalSeparator: string) => {
+  const DEFAULT_DECIMAL = '.';
   const ZERO = '0';
   let res = '';
-  let hasDot = false;
-  const splitStr = String(v).split('');
-  const startedWithZero = splitStr[0] === '0';
+  let hasDecimalSeparator = false;
+  const splitStr = utils.replaceSeparator(String(v), decimalSeparator, DEFAULT_DECIMAL).split('');
+  // const startedWithZero = splitStr[0] === ZERO;
   if (numberType === VALIDATE_NUMBER_TYPE_LIST[2] && splitStr[0] === ZERO && splitStr[1] === ZERO) {
     splitStr.shift();
   }
-  splitStr.forEach(i => {
+  splitStr.forEach((i: string) => {
     const charCode = i.toLowerCase().charCodeAt(0);
-    if ((charCode >= 48 && charCode <= 57) || (charCode === 46 && !hasDot)) {
+    if ((charCode >= 48 && charCode <= 57) || (i === DEFAULT_DECIMAL && !hasDecimalSeparator)) {
       if (charCode === 46) {
         if (numberType === VALIDATE_NUMBER_TYPE_LIST[1]) {
           return;
         }
-        hasDot = true;
+        hasDecimalSeparator = true;
       }
       res += i;
     }
   });
-  if (hasDot && mantissa >= 0) {
-    const resArr = res.split(DOT);
+  if (hasDecimalSeparator && mantissa >= 0) {
+    const resArr = res.split(DEFAULT_DECIMAL);
     if (mantissa === 0) {
       res = resArr[0];
     } else {
       resArr[1] = resArr[1].slice(0, mantissa);
-      res = resArr.join('.');
+      res = resArr.join(DEFAULT_DECIMAL);
     }
   }
   if (numberType === VALIDATE_NUMBER_TYPE_LIST[0] || numberType === VALIDATE_NUMBER_TYPE_LIST[2]) {
-    if (res.length && res[0] === DOT) {
-      res = `0${res}`;
+    if (res.length && res[0] === DEFAULT_DECIMAL) {
+      res = `${ZERO}${res}`;
     }
   }
   // if (numberType === VALIDATE_NUMBER_TYPE_LIST[2]) {
   //   if (startedWithZero) {
-  //     if (hasDot) {
-  //       const resArr = res.split(DOT);
-  //       res = `${Number(resArr[0])}${DOT}${resArr[1]}`;
+  //     if (hasDecimalSeparator) {
+  //       const resArr = res.split(DECIMAL_SEPARATOR);
+  //       res = `${Number(resArr[0])}${DECIMAL_SEPARATOR}${resArr[1]}`;
   //     }
   //   }
   // }
-  return res;
+  return utils.replaceSeparator(res, DEFAULT_DECIMAL, decimalSeparator);
 };
 const component: React.FC<Props> = ({
   attributesWrapper = {},
@@ -244,9 +248,9 @@ const component: React.FC<Props> = ({
           }
         }
       }
-      const { type, numberType, mantissa } = option;
+      const { type, numberType, mantissa, decimalSeparator } = option;
       if (type === VALIDATE_OPTION_TYPE_LIST[1]) {
-        v = String(autoFormatNumber(v, VALIDATE_NUMBER_TYPE_LIST.indexOf(numberType) >= 0 ? numberType : VALIDATE_NUMBER_TYPE_LIST[0], mantissa));
+        v = String(autoFormatNumber(v, VALIDATE_NUMBER_TYPE_LIST.indexOf(numberType) >= 0 ? numberType : VALIDATE_NUMBER_TYPE_LIST[0], mantissa, decimalSeparator));
       }
       if (type === VALIDATE_OPTION_TYPE_LIST[2]) {
         v = utils.getAlphanumeric(v);

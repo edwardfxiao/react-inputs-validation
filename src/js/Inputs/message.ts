@@ -8,17 +8,6 @@ const getEnglishName = (name: string) => {
   return res;
 };
 
-const TEXT_BOX_VALIDATION_ZH_CN = {
-  empty: (name: string) => `${name}不能为空`,
-  invalid: (name: string) => `${name}格式有误`,
-  invalidFormat: (name: string) => `${name}不是数字`,
-  inBetween: (name: string) => (min: number) => (max: number) => `${name}必须在${min}-${max}之间`,
-  lessThan: (name: string) => (min: number) => `${name}不可少于${min}`,
-  greaterThan: (name: string) => (max: number) => `${name}不可大于${max}`,
-  lengthEqual: (name: string) => (length: number) => `${name}长度必须为${length}`,
-  twoInputsNotEqual: () => `两次输入不一致`,
-};
-
 const TEXT_BOX_VALIDATION_EN_US = {
   empty: (name: string) => `${getEnglishName(name)}cannot be empty`,
   invalid: (name: string) => `${getEnglishName(name)}invalid format`,
@@ -28,17 +17,6 @@ const TEXT_BOX_VALIDATION_EN_US = {
   greaterThan: (name: string) => (max: number) => `${getEnglishName(name)}cannot greater than ${max}`,
   lengthEqual: (name: string) => (length: number) => `${getEnglishName(name)}length must be ${length}`,
   twoInputsNotEqual: () => `two inputs are not equal`,
-};
-
-const TEXT_AREA_VALIDATION_ZH_CN = {
-  empty: (name: string) => `${name}不能为空`,
-  invalid: (name: string) => `${name}格式有误`,
-  invalidFormat: (name: string) => `${name}不是数字`,
-  inBetween: (name: string) => (min: number) => (max: number) => `${name}必须在${min}-${max}之间`,
-  lessThan: (name: string) => (min: number) => `${name}不可少于${min}`,
-  greaterThan: (name: string) => (max: number) => `${name}不可大于${max}`,
-  lengthEqual: (name: string) => (length: number) => `${name}长度必须为${length}`,
-  twoInputsNotEqual: () => `两次输入不一致`,
 };
 
 const TEXT_AREA_VALIDATION_EN_US = {
@@ -52,24 +30,12 @@ const TEXT_AREA_VALIDATION_EN_US = {
   twoInputsNotEqual: () => `two inputs are not equal`,
 };
 
-const SELECT_VALIDATION_ZH_CN = {
-  empty: (name: string) => `请选择一个${name}`,
-};
-
 const SELECT_VALIDATION_EN_US = {
   empty: (name: string) => `Please select a ${getEnglishName(name)}`,
 };
 
-const CHECK_BOX_VALIDATION_ZH_CN = {
-  unchecked: (name: string) => `${name}必须勾选`,
-};
-
 const CHECK_BOX_VALIDATION_EN_US = {
   unchecked: (name: string) => `${getEnglishName(name)}must be checked`,
-};
-
-const RADIO_BOX_VALIDATION_ZH_CN = {
-  empty: (name: string) => `必须勾选一个${name}`,
 };
 
 const RADIO_BOX_VALIDATION_EN_US = {
@@ -89,13 +55,6 @@ interface Func {
 }
 
 let message: Message = {
-  'zh-CN': {
-    textbox: TEXT_BOX_VALIDATION_ZH_CN,
-    radiobox: RADIO_BOX_VALIDATION_ZH_CN,
-    checkbox: CHECK_BOX_VALIDATION_ZH_CN,
-    select: SELECT_VALIDATION_ZH_CN,
-    textarea: TEXT_AREA_VALIDATION_ZH_CN,
-  },
   'en-US': {
     textbox: TEXT_BOX_VALIDATION_EN_US,
     radiobox: RADIO_BOX_VALIDATION_EN_US,

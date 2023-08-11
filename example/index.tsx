@@ -1111,6 +1111,7 @@ const Index: React.FC<Props> = memo(({}) => {
                     customStyleSelect={{}} // Optional.[Object].Default: {}.
                     customStyleWrapper={{}} // Optional.[Object].Default: {}.
                     customStyleContainer={{}} // Optional.[Object].Default: {}.
+                    customStyleOptionListWrapper={{}} // Optional.[Object].Default: {}.
                     customStyleOptionListContainer={{ maxHeight: '200px', overflow: 'auto', fontSize: '14px' }} // Optional.[Object].Default: {}.
                     customStyleOptionListItem={{}} // Optional.[Object].Default: {}.
                     onChange={(res, e) => {

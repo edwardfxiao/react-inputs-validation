@@ -143,6 +143,7 @@ interface Props {
   customStyleWrapper?: React.CSSProperties;
   customStyleContainer?: React.CSSProperties;
   customStyleSelect?: React.CSSProperties;
+  customStyleOptionListWrapper?: React.CSSProperties;
   customStyleOptionListContainer?: React.CSSProperties;
   customStyleDropdownIcon?: React.CSSProperties;
   customStyleOptionListItem?: React.CSSProperties;
@@ -176,6 +177,7 @@ const component: React.FC<Props> = ({
   customStyleContainer = {},
   customStyleSelect = {},
   customStyleOptionListItem = {},
+  customStyleOptionListWrapper = {},
   customStyleOptionListContainer = {},
   customStyleDropdownIcon = {},
   validationOption = {},
@@ -264,12 +266,15 @@ const component: React.FC<Props> = ({
       onClick(e);
     }
   }, []);
-  const handleOnChange = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
-    if (disabled) {
-      return;
-    }
-    onChange && onChange(item, e);
-  }, [disabled]);
+  const handleOnChange = useCallback(
+    (item: object, e: React.MouseEvent<HTMLElement>) => {
+      if (disabled) {
+        return;
+      }
+      onChange && onChange(item, e);
+    },
+    [disabled],
+  );
   const check = useCallback(() => {
     const { name, check, locale, required, msgOnSuccess } = option;
     if (!check) {
@@ -383,10 +388,13 @@ const component: React.FC<Props> = ({
       }
     }
   }, []);
-  const handleOnItemClick = useCallback((item: object, e: React.MouseEvent<HTMLElement>) => {
-    handleOnChange(item, e);
-    stateKeyword[1]('');
-  }, [disabled]);
+  const handleOnItemClick = useCallback(
+    (item: object, e: React.MouseEvent<HTMLElement>) => {
+      handleOnChange(item, e);
+      stateKeyword[1]('');
+    },
+    [disabled],
+  );
   const handleOnItemMouseOver = useCallback((index: number) => {
     globalVariableCurrentFocus = index;
     addActive();
@@ -666,7 +674,7 @@ const component: React.FC<Props> = ({
           <div className={selectClass} style={customStyleSelect}>
             {selectorHtml}
           </div>
-          <div className={selectOptionListWrapperClass}>
+          <div className={selectOptionListWrapperClass} style={customStyleOptionListWrapper}>
             {showSearch && (
               <div ref={$searchInputWrapper}>
                 <div className={reactInputsValidationCss[`${TYPE}__searchInputWrapper`]}>
@@ -749,7 +757,16 @@ export const Option: React.FC<OptionProps> = memo(
       onMouseOut();
     }, []);
     return (
-      <a id={id} title={item.name} onMouseOver={handleOnMouseOver} onMouseMove={handleOnMouseMove} onMouseOut={handleOnMouseOut} className={className} style={customStyleOptionListItem} onClick={handleOnClick}>
+      <a
+        id={id}
+        title={item.name}
+        onMouseOver={handleOnMouseOver}
+        onMouseMove={handleOnMouseMove}
+        onMouseOut={handleOnMouseOut}
+        className={className}
+        style={customStyleOptionListItem}
+        onClick={handleOnClick}
+      >
         {item.icon && <img src={item.icon} className={reactInputsValidationCss[`${TYPE}__optionItem_icon`]} />}
         {<span className={reactInputsValidationCss[`${TYPE}__optionItem_name`]}>{item.name}</span>}
       </a>

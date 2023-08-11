@@ -1,3 +1,7 @@
+# 4.9.9
+
+- `customStyleOptionListWrapper` for `<Select/>`
+
 # 4.9.8
 
 - `classNameInputBoxItem` for `<Checkbox/>`

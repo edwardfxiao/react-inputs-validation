@@ -198,7 +198,7 @@ describe('Select component', () => {
     const $el = wrapper.find(`#react-inputs-validation__select_option-${OPTION_LIST[2].id}`).hostNodes();
     $el.simulate('mouseover');
     setTimeout(() => {
-      expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false select__hover-active');
+      expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false   select__hover-active');
       done()
     }, 0);
   });
@@ -212,7 +212,7 @@ describe('Select component', () => {
     $el.simulate('mouseover');
     $el.simulate('mousemove');
     setTimeout(() => {
-      expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false select__hover-active');
+      expect($el.instance().className).toEqual('button select__options-item-show-cursor  select__options-item false false false   select__hover-active');
       done()
     }, 0);
   });

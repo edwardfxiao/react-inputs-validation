@@ -341,7 +341,7 @@ import 'react-inputs-validation/lib/react-inputs-validation.min.css';
 |keyword                           |  Opt  |  Str   |Show a keyword for search box.               |  ''        |
 |**validate**                      |**Opt**|**Bool**|                                             |**false**   |
 |**validationCallback**           |**Opt**|**Func**|                                             |**none**    |
-|**optionList**                    |**Req**|**Array**|**[{id: '1', name: 'Twin Peaks', icon: 'optional']**              |**[]**          |
+|**optionList**                    |**Req**|**Array**|**[{id: '1', name: 'Twin Peaks', icon: 'optional', hidden: false, disabled: false}]**              |**[]**          |
 |classNameSelect                   |  Opt  |  Str   |                                             |  ""        |
 |classNameWrapper                  |  Opt  |  Str   |                                             |  ""        |
 |classNameContainer                |  Opt  |  Str   |                                             |  ""        |

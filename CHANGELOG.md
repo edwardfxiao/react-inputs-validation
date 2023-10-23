@@ -1,3 +1,7 @@
+# 4.9.10
+
+- enable `hidden`, `disabled` props in OptionListItem for `<Select/>`
+
 # 4.9.9
 
 - `customStyleOptionListWrapper` for `<Select/>`

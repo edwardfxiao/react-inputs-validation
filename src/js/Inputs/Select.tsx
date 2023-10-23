@@ -105,6 +105,8 @@ interface OptionListItem {
   id: string;
   name: string;
   icon?: string;
+  hidden?: boolean;
+  disabled?: boolean;
 }
 interface Props {
   attributesWrapper?: React.HTMLAttributes<HTMLButtonElement>;
@@ -213,7 +215,7 @@ const component: React.FC<Props> = ({
   const $elItemsWrapper: { [key: string]: any } | null = $itemsWrapper;
   const $itemsRef: { [key: string]: any } = [];
   const filteredOptionList = useMemo(() => {
-    let res = optionList;
+    let res = optionList.filter(i => !i.hidden);
     if (res.length) {
       if (stateKeyword[0]) {
         res = optionList.filter(i => i.name.toLowerCase().includes(stateKeyword[0].toLowerCase()));
@@ -389,7 +391,10 @@ const component: React.FC<Props> = ({
     }
   }, []);
   const handleOnItemClick = useCallback(
-    (item: object, e: React.MouseEvent<HTMLElement>) => {
+    (item: OptionListItem, e: React.MouseEvent<HTMLElement>) => {
+      if (item.disabled) {
+        return;
+      }
       handleOnChange(item, e);
       stateKeyword[1]('');
     },
@@ -603,20 +608,25 @@ const component: React.FC<Props> = ({
   let optionListHtml;
   const item = getItem(optionList, String(value));
   if (filteredOptionList.length) {
-    optionListHtml = filteredOptionList.map((i, k) => (
-      <Option
-        key={k}
-        index={k}
-        id={`react-inputs-validation__select_option-${i.id}`}
-        className={String(i.id) === String(value) ? `${selectOptionListItemClass} ${reactInputsValidationCss['active']}` : `${selectOptionListItemClass}`}
-        item={i}
-        customStyleOptionListItem={customStyleOptionListItem}
-        onClick={handleOnItemClick}
-        onMouseOver={handleOnItemMouseOver}
-        onMouseMove={handleOnItemMouseMove}
-        onMouseOut={handleOnItemMouseOut}
-      />
-    ));
+    optionListHtml = filteredOptionList.map((i, k) => {
+      const activeClassName = String(i.id) === String(value) ? reactInputsValidationCss['active'] : '';
+      const disabledClassName = i.disabled ? reactInputsValidationCss['disabled'] : '';
+      const itemclassName = `${selectOptionListItemClass} ${activeClassName} ${disabledClassName}`;
+      return (
+        <Option
+          key={k}
+          index={k}
+          id={`react-inputs-validation__select_option-${i.id}`}
+          className={itemclassName}
+          item={i}
+          customStyleOptionListItem={customStyleOptionListItem}
+          onClick={handleOnItemClick}
+          onMouseOver={handleOnItemMouseOver}
+          onMouseMove={handleOnItemMouseMove}
+          onMouseOut={handleOnItemMouseOut}
+        />
+      );
+    });
   } else {
     if (showSearch) {
       optionListHtml = (
@@ -724,7 +734,7 @@ interface OptionProps {
   className?: string;
   item?: OptionListItem;
   customStyleOptionListItem?: React.CSSProperties;
-  onClick?: (res: object, e: React.MouseEvent<HTMLElement>) => void;
+  onClick?: (res: OptionListItem, e: React.MouseEvent<HTMLElement>) => void;
   onMouseOver?: (res: number) => void;
   onMouseMove?: () => void;
   onMouseOut?: () => void;

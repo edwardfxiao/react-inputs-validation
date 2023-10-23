@@ -429,6 +429,12 @@ input[type='checkbox'] {
   display: block;
 }
 
+.select__options-item.disabled{
+  color: #ccc !important;
+  background: #f8f8f8 !important;
+  cursor: not-allowed;
+}
+
 .select__options-item span {
   padding: 0 10px;
 }
